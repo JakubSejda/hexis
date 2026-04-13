@@ -156,6 +156,7 @@ export async function seedPlans(db: DB): Promise<void> {
       })
       .$returningId()
 
+    if (!plan) throw new Error(`Failed to insert plan: ${p.name}`)
     const planId = plan.id
 
     for (let i = 0; i < p.exercises.length; i++) {

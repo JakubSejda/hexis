@@ -20,5 +20,5 @@ export const MUSCLE_GROUPS = [
 ] as const
 
 export async function seedMuscleGroups(db: DB): Promise<void> {
-  await db.insert(muscleGroups).values(MUSCLE_GROUPS)
+  await db.insert(muscleGroups).values([...MUSCLE_GROUPS])
 }
