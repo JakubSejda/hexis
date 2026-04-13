@@ -7,7 +7,6 @@ import mysql from 'mysql2/promise'
 import * as schema from './schema'
 import { seedMuscleGroups } from './seed/muscle-groups'
 import { seedExercises } from './seed/exercises'
-import { seedPlans } from './seed/plans'
 
 async function main() {
   const url = process.env.DATABASE_URL
@@ -31,10 +30,7 @@ async function main() {
   console.log('Seeding exercises + muscle group mapping...')
   await seedExercises(db)
 
-  console.log('Seeding plans (UA/UB/LA/LB)...')
-  await seedPlans(db)
-
-  console.log('Seed complete.')
+  console.log('Seed complete (plans se vytvoří v bootstrap pro reálného usera).')
   await connection.end()
 }
 

@@ -7,7 +7,8 @@ import { eq } from 'drizzle-orm'
 import mysql from 'mysql2/promise'
 import * as readline from 'node:readline/promises'
 import * as schema from './schema'
-import { users, plans } from './schema'
+import { users } from './schema'
+import { seedPlans } from './seed/plans'
 import { hashPassword } from '../lib/password'
 import { newUlid } from '../lib/ulid'
 import { emailSchema, passwordSchema } from '../lib/validation'
@@ -74,11 +75,8 @@ async function main() {
 
     console.log(`\n✓ User vytvořen (id: ${userId})`)
 
-    // Re-assign placeholder-seeded plans onto this user
-    const PLACEHOLDER = '00000000000000000000000001'
-    await db.update(plans).set({ userId }).where(eq(plans.userId, PLACEHOLDER))
-
-    console.log(`✓ Plány (UA/UB/LA/LB) re-assigned z placeholder na ${userId}`)
+    await seedPlans(db, userId)
+    console.log(`✓ Plány (UA/UB/LA/LB) vytvořeny pro ${userId}`)
   } finally {
     rl.close()
     await connection.end()

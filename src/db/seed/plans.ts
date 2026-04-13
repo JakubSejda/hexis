@@ -2,9 +2,8 @@ import { isNull } from 'drizzle-orm'
 import type { DB } from '../client'
 import { plans, planExercises, exercises } from '../schema'
 
-// Seed plány jsou vázané na konkrétního uživatele. Pro M0 (pre-auth) použijeme
-// placeholder userId. M1 zavede reálného usera a re-seed nebo update těchto plánů.
-export const SEED_USER_ID = '00000000000000000000000001' // ULID placeholder
+// Seed plány jsou vázané na konkrétního uživatele. Plans se seedují v bootstrap
+// (po vytvoření reálného usera), ne v obecném `db:seed`.
 
 type PlanExerciseSeed = {
   exerciseName: string
@@ -140,7 +139,7 @@ export const PLANS: PlanSeed[] = [
   },
 ]
 
-export async function seedPlans(db: DB): Promise<void> {
+export async function seedPlans(db: DB, userId: string): Promise<void> {
   // Načíst map name → exercise.id (curated cviky)
   const allExercises = await db.select().from(exercises).where(isNull(exercises.userId))
   const exMap = new Map(allExercises.map((e) => [e.name, e.id]))
@@ -149,7 +148,7 @@ export async function seedPlans(db: DB): Promise<void> {
     const [plan] = await db
       .insert(plans)
       .values({
-        userId: SEED_USER_ID,
+        userId,
         name: p.name,
         slug: p.slug,
         order: p.order,
