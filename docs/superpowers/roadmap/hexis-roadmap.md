@@ -17,8 +17,8 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] Docker Compose s MySQL 8 (dev + test instance)
 - [x] Drizzle schema + migrace
 - [x] Seed script (katalog ~50 cviků + UA/UB/LA/LB plány)
-- [ ] NextAuth v5 (credentials + Google OAuth)
-- [ ] Middleware: security headers + rate limit
+- [~] NextAuth v5 (credentials hotovo; Google OAuth odložen na pozdější setup)
+- [x] Middleware: security headers + rate limit
 - [x] Tailwind 4 + Radix primitivy + design tokens
 
 ### Workout flow
