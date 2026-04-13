@@ -26,13 +26,13 @@ async function main() {
   }
 
   console.log('Seeding muscle_groups...')
-  await seedMuscleGroups(db as any)
+  await seedMuscleGroups(db)
 
   console.log('Seeding exercises + muscle group mapping...')
-  await seedExercises(db as any)
+  await seedExercises(db)
 
   console.log('Seeding plans (UA/UB/LA/LB)...')
-  await seedPlans(db as any)
+  await seedPlans(db)
 
   console.log('Seed complete.')
   await connection.end()

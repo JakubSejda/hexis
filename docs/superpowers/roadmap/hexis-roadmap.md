@@ -13,13 +13,13 @@
 Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 
 ### Core
-- [ ] Next.js 15 projekt setup + TypeScript strict
-- [ ] Docker Compose s MySQL 8 (dev + test instance)
-- [ ] Drizzle schema + migrace
-- [ ] Seed script (katalog ~50 cviků + UA/UB/LA/LB plány)
+- [x] Next.js 15 projekt setup + TypeScript strict
+- [x] Docker Compose s MySQL 8 (dev + test instance)
+- [x] Drizzle schema + migrace
+- [x] Seed script (katalog ~50 cviků + UA/UB/LA/LB plány)
 - [ ] NextAuth v5 (credentials + Google OAuth)
 - [ ] Middleware: security headers + rate limit
-- [ ] Tailwind 4 + Radix primitivy + design tokens
+- [x] Tailwind 4 + Radix primitivy + design tokens
 
 ### Workout flow
 - [ ] Dashboard s "dnes na řadě" suggestion
@@ -63,7 +63,7 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [ ] PWA install test iOS + Chrome
 
 ### Testing
-- [ ] Vitest setup + unit testy lib funkcí
+- [x] Vitest setup + unit testy lib funkcí
 - [ ] Integration testy API routes s testovací DB
 - [ ] Playwright setup + 4 happy-path E2E
 - [ ] CI: typecheck + lint + test (pre-push hook)
