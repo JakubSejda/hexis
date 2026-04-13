@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Uploads (body photos) — pouze lokální dev data
+uploads/
+
+# MySQL data (Docker volume)
+mysql-data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
