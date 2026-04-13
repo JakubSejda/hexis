@@ -5,7 +5,7 @@ import { exercises, muscleGroups, exerciseMuscleGroups } from '../schema'
 type ExerciseSeed = {
   name: string
   type: 'barbell' | 'db' | 'cable' | 'machine' | 'bodyweight' | 'smith'
-  primary: string      // muscle_groups.slug
+  primary: string // muscle_groups.slug
   secondary?: string[] // muscle_groups.slug[]
 }
 
@@ -14,7 +14,12 @@ export const EXERCISES: ExerciseSeed[] = [
   { name: 'Incline DB Press', type: 'db', primary: 'chest', secondary: ['shoulders', 'triceps'] },
   { name: 'Lat Pulldown (wide grip)', type: 'cable', primary: 'back-lats', secondary: ['biceps'] },
   { name: 'Seated DB Shoulder Press', type: 'db', primary: 'shoulders', secondary: ['triceps'] },
-  { name: 'Seated Cable Row (neutral)', type: 'cable', primary: 'back-mid', secondary: ['biceps', 'back-rear-delt'] },
+  {
+    name: 'Seated Cable Row (neutral)',
+    type: 'cable',
+    primary: 'back-mid',
+    secondary: ['biceps', 'back-rear-delt'],
+  },
   { name: 'Cable Lateral Raises', type: 'cable', primary: 'shoulders' },
   { name: 'Barbell Curl', type: 'barbell', primary: 'biceps', secondary: ['forearms'] },
   { name: 'EZ Bar Curl', type: 'barbell', primary: 'biceps', secondary: ['forearms'] },
@@ -28,23 +33,43 @@ export const EXERCISES: ExerciseSeed[] = [
   { name: 'Chest Supported Cable Row', type: 'cable', primary: 'back-mid', secondary: ['biceps'] },
   { name: 'Cable Chest Fly (low)', type: 'cable', primary: 'chest' },
   { name: 'Neutral Grip Pulldown', type: 'cable', primary: 'back-lats', secondary: ['biceps'] },
-  { name: 'Cable Single Arm High Row', type: 'cable', primary: 'back-mid', secondary: ['back-rear-delt'] },
+  {
+    name: 'Cable Single Arm High Row',
+    type: 'cable',
+    primary: 'back-mid',
+    secondary: ['back-rear-delt'],
+  },
   { name: 'Cable Curl', type: 'cable', primary: 'biceps' },
   { name: 'Hammer Curl (DB)', type: 'db', primary: 'biceps', secondary: ['forearms'] },
   { name: 'Single Arm Triceps Pushdown', type: 'cable', primary: 'triceps' },
 
   // LA — Lower A (quad důraz)
   { name: 'Leg Press', type: 'machine', primary: 'quads', secondary: ['glutes', 'hamstrings'] },
-  { name: 'Smith Machine Squat', type: 'smith', primary: 'quads', secondary: ['glutes', 'hamstrings'] },
+  {
+    name: 'Smith Machine Squat',
+    type: 'smith',
+    primary: 'quads',
+    secondary: ['glutes', 'hamstrings'],
+  },
   { name: 'Leg Extension', type: 'machine', primary: 'quads' },
-  { name: 'Romanian Deadlift (DB)', type: 'db', primary: 'hamstrings', secondary: ['glutes', 'back-mid'] },
+  {
+    name: 'Romanian Deadlift (DB)',
+    type: 'db',
+    primary: 'hamstrings',
+    secondary: ['glutes', 'back-mid'],
+  },
   { name: 'Standing Calf Raises', type: 'machine', primary: 'calves' },
   { name: 'Cable Crunch', type: 'cable', primary: 'abs' },
   { name: 'Plank', type: 'bodyweight', primary: 'abs', secondary: ['obliques'] },
   { name: 'Ab Wheel Rollout', type: 'bodyweight', primary: 'abs' },
 
   // LB — Lower B (hamstring důraz)
-  { name: 'Romanian Deadlift (Barbell)', type: 'barbell', primary: 'hamstrings', secondary: ['glutes', 'back-mid'] },
+  {
+    name: 'Romanian Deadlift (Barbell)',
+    type: 'barbell',
+    primary: 'hamstrings',
+    secondary: ['glutes', 'back-mid'],
+  },
   { name: 'Lying Leg Curl', type: 'machine', primary: 'hamstrings' },
   { name: 'Goblet Squat', type: 'db', primary: 'quads', secondary: ['glutes'] },
   { name: 'Hip Thrust', type: 'barbell', primary: 'glutes', secondary: ['hamstrings'] },

@@ -66,14 +66,7 @@ export const exercises = mysqlTable(
     id: int('id').primaryKey().autoincrement(),
     userId: varchar('user_id', { length: 26 }),
     name: varchar('name', { length: 128 }).notNull(),
-    type: mysqlEnum('type', [
-      'barbell',
-      'db',
-      'cable',
-      'machine',
-      'bodyweight',
-      'smith',
-    ]).notNull(),
+    type: mysqlEnum('type', ['barbell', 'db', 'cable', 'machine', 'bodyweight', 'smith']).notNull(),
     videoUrl: varchar('video_url', { length: 500 }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
@@ -156,10 +149,7 @@ export const sessionSets = mysqlTable(
   },
   (t) => ({
     bySession: index('idx_session_sets_session').on(t.sessionId),
-    byExercise: index('idx_session_sets_exercise_completed').on(
-      t.exerciseId,
-      t.completedAt
-    ),
+    byExercise: index('idx_session_sets_exercise_completed').on(t.exerciseId, t.completedAt),
   })
 )
 
