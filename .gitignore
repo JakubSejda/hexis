@@ -28,16 +28,15 @@ Thumbs.db
 *.pem
 
 # Debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Env files
-.env
-.env.local
-.env.*.local
+# Env files (only commit .env.example as template)
 .env*
+!.env.example
 
 # Vercel
 .vercel
