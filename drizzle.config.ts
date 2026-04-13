@@ -1,5 +1,9 @@
 import { defineConfig } from 'drizzle-kit'
-import 'dotenv/config'
+import * as dotenv from 'dotenv'
+
+// Load .env.local first (overrides), then .env as fallback
+dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
 
 export default defineConfig({
   schema: './src/db/schema.ts',
