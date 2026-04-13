@@ -56,3 +56,6 @@ mysql-data/
 .idea/
 *.swp
 *.swo
+
+# Brainstorming / visual companion (ephemeral mockups)
+.superpowers/
