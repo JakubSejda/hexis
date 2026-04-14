@@ -1,7 +1,9 @@
+import { z } from 'zod'
 import { asc, eq, inArray } from 'drizzle-orm'
 import { db } from '@/db/client'
 import { sessions, sessionSets, planExercises, exercises, plans } from '@/db/schema'
 import { getSessionUser, requireOwnership } from '@/lib/auth-helpers'
+import { awardXp } from '@/lib/xp'
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const user = await getSessionUser()
@@ -106,6 +108,63 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     exercises: allExercises,
   })
 }
+
+// ── PATCH ───────────────────────────────────────────────────────────
+
+const patchSchema = z.object({
+  finishedAt: z.boolean().optional(),
+  note: z.string().max(2000).nullable().optional(),
+})
+
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const user = await getSessionUser()
+  if (!user) return unauth()
+  const { id } = await params
+  const sessionId = Number(id)
+  const body = await req.json().catch(() => null)
+  const parsed = patchSchema.safeParse(body)
+  if (!parsed.success) {
+    return new Response(JSON.stringify({ error: 'Invalid body' }), { status: 400 })
+  }
+
+  const owned = await requireOwnership(
+    db.query.sessions.findFirst({ where: eq(sessions.id, sessionId) }),
+    user.id
+  )
+  if (owned instanceof Response) return owned
+
+  const updates: Record<string, unknown> = {}
+  let xpAward: Awaited<ReturnType<typeof awardXp>> | null = null
+
+  if (parsed.data.note !== undefined) updates.note = parsed.data.note
+  if (parsed.data.finishedAt === true && !owned.finishedAt) {
+    updates.finishedAt = new Date()
+  }
+
+  if (Object.keys(updates).length > 0) {
+    await db.update(sessions).set(updates).where(eq(sessions.id, sessionId))
+  }
+
+  if (updates.finishedAt) {
+    xpAward = await awardXp({
+      event: 'session_complete',
+      db,
+      userId: user.id,
+      sessionId,
+    })
+  }
+
+  return Response.json({
+    id: sessionId,
+    finishedAt: (updates.finishedAt as Date | undefined) ?? owned.finishedAt,
+    note: (parsed.data.note ?? owned.note) as string | null,
+    xpDelta: xpAward?.xpDelta ?? 0,
+    newTotalXp: xpAward?.newTotalXp ?? null,
+    levelUp: xpAward?.levelUp ?? false,
+  })
+}
+
+// ── helpers ─────────────────────────────────────────────────────────
 
 function unauth() {
   return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
