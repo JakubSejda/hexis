@@ -1,0 +1,115 @@
+import { asc, eq, inArray } from 'drizzle-orm'
+import { db } from '@/db/client'
+import { sessions, sessionSets, planExercises, exercises, plans } from '@/db/schema'
+import { getSessionUser, requireOwnership } from '@/lib/auth-helpers'
+
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const user = await getSessionUser()
+  if (!user) return unauth()
+  const { id } = await params
+  const sessionId = Number(id)
+  if (!Number.isFinite(sessionId)) return notFound()
+
+  const owned = await requireOwnership(
+    db.query.sessions.findFirst({ where: eq(sessions.id, sessionId) }),
+    user.id
+  )
+  if (owned instanceof Response) return owned
+
+  const plan = owned.planId
+    ? await db.query.plans.findFirst({ where: eq(plans.id, owned.planId) })
+    : null
+
+  const planRows = owned.planId
+    ? await db
+        .select({
+          exerciseId: planExercises.exerciseId,
+          order: planExercises.order,
+          targetSets: planExercises.targetSets,
+          repMin: planExercises.repMin,
+          repMax: planExercises.repMax,
+          restSec: planExercises.restSec,
+          name: exercises.name,
+          type: exercises.type,
+        })
+        .from(planExercises)
+        .leftJoin(exercises, eq(exercises.id, planExercises.exerciseId))
+        .where(eq(planExercises.planId, owned.planId!))
+        .orderBy(asc(planExercises.order))
+    : []
+
+  const sets = await db
+    .select()
+    .from(sessionSets)
+    .where(eq(sessionSets.sessionId, sessionId))
+    .orderBy(asc(sessionSets.completedAt))
+
+  // Collect ad-hoc exercises (in sets but not in plan)
+  const planIds = new Set(planRows.map((r) => r.exerciseId))
+  const adhocIds = [...new Set(sets.map((s) => s.exerciseId).filter((eid) => !planIds.has(eid)))]
+  const adhocExercises =
+    adhocIds.length > 0
+      ? await db.select().from(exercises).where(inArray(exercises.id, adhocIds))
+      : []
+
+  const allExercises = [
+    ...planRows.map((r) => ({
+      exerciseId: r.exerciseId,
+      name: r.name ?? '—',
+      type: r.type,
+      order: r.order,
+      targetSets: r.targetSets,
+      repMin: r.repMin,
+      repMax: r.repMax,
+      restSec: r.restSec,
+      sets: sets
+        .filter((s) => s.exerciseId === r.exerciseId)
+        .map(({ id, setIndex, weightKg, reps, rpe, completedAt }) => ({
+          id,
+          setIndex,
+          weightKg,
+          reps,
+          rpe,
+          completedAt,
+        })),
+    })),
+    ...adhocExercises.map((ex, idx) => ({
+      exerciseId: ex.id,
+      name: ex.name,
+      type: ex.type,
+      order: 100 + idx,
+      targetSets: 0,
+      repMin: 0,
+      repMax: 0,
+      restSec: 0,
+      sets: sets
+        .filter((s) => s.exerciseId === ex.id)
+        .map(({ id, setIndex, weightKg, reps, rpe, completedAt }) => ({
+          id,
+          setIndex,
+          weightKg,
+          reps,
+          rpe,
+          completedAt,
+        })),
+    })),
+  ]
+
+  return Response.json({
+    id: owned.id,
+    planId: owned.planId,
+    planSlug: plan?.slug ?? null,
+    planName: plan?.name ?? null,
+    startedAt: owned.startedAt,
+    finishedAt: owned.finishedAt,
+    note: owned.note,
+    exercises: allExercises,
+  })
+}
+
+function unauth() {
+  return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+}
+function notFound() {
+  return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 })
+}
