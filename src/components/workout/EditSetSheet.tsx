@@ -1,0 +1,62 @@
+'use client'
+import { useState } from 'react'
+import { BottomSheet } from '@/components/ui/BottomSheet'
+import { NumberInput } from '@/components/ui/NumberInput'
+import { useToast } from '@/components/ui/Toast'
+
+type Props = {
+  sessionId: number
+  setId: number
+  onClose: () => void
+  onChanged: () => void
+}
+
+export function EditSetSheet({ setId, onClose, onChanged }: Props) {
+  const [weight, setWeight] = useState<number | null>(null)
+  const [reps, setReps] = useState<number | null>(null)
+  const [rpe, setRpe] = useState<number | null>(null)
+  const toast = useToast()
+
+  const save = async () => {
+    const res = await fetch(`/api/sets/${setId}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ weightKg: weight, reps, rpe }),
+    })
+    if (!res.ok) toast.show('Uložení selhalo', 'error')
+    else onChanged()
+  }
+
+  const del = async () => {
+    if (!confirm('Smazat sérii?')) return
+    const res = await fetch(`/api/sets/${setId}`, { method: 'DELETE' })
+    if (!res.ok) toast.show('Mazání selhalo', 'error')
+    else onChanged()
+  }
+
+  return (
+    <BottomSheet open={true} onOpenChange={(v) => !v && onClose()} title="Upravit sérii">
+      <div className="flex flex-col gap-3">
+        <NumberInput value={weight} onChange={setWeight} step={2.5} suffix="kg" />
+        <NumberInput value={reps} onChange={setReps} step={1} suffix="reps" />
+        <NumberInput value={rpe} onChange={setRpe} step={1} min={1} max={10} suffix="RPE" />
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={save}
+            className="h-11 flex-1 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14]"
+          >
+            Uložit
+          </button>
+          <button
+            type="button"
+            onClick={del}
+            className="h-11 rounded-lg border border-[#EF4444] px-4 text-[#EF4444]"
+          >
+            Smazat
+          </button>
+        </div>
+      </div>
+    </BottomSheet>
+  )
+}
