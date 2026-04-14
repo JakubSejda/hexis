@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 
@@ -8,14 +9,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <header className="border-border border-b px-6 py-3">
-        <div className="flex items-center justify-between">
-          <span className="text-muted text-sm">Hexis</span>
-          <span className="text-muted text-sm">{session.user.email}</span>
-        </div>
-      </header>
-      <main className="p-6">{children}</main>
+    <div className="flex min-h-screen flex-col bg-[#0A0E14] text-[#E5E7EB]">
+      <main className="flex-1 pb-16">{children}</main>
+      <nav className="fixed right-0 bottom-0 left-0 flex h-16 border-t border-[#1F2733] bg-[#141A22]">
+        <TabLink href="/dashboard" label="Dashboard" />
+        <TabLink href="/workout" label="Trénink" />
+        <TabLink href="/settings/plates" label="Nastavení" />
+      </nav>
     </div>
+  )
+}
+
+function TabLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="flex flex-1 items-center justify-center text-sm text-[#E5E7EB] transition-colors hover:text-[#10B981]"
+    >
+      {label}
+    </Link>
   )
 }
