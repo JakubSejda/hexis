@@ -21,18 +21,25 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] Middleware: security headers + rate limit
 - [x] Tailwind 4 + Radix primitivy + design tokens
 
-### Workout flow
-- [ ] Dashboard s "dnes na řadě" suggestion
-- [ ] Active workout UI (velké tap targety, auto-focus)
-- [ ] POST /api/sets + double progression suggestion
-- [ ] Rest timer v Service Workeru
-- [ ] Session complete flow + XP award
+### Workout flow (M2 — hotovo 2026-04-14)
+- [x] Dashboard s level, streak, CTA
+- [x] /workout picker s plan rotací + resume banner + historie
+- [x] Active workout stepper (one-exercise-at-a-time, per-set re-eval)
+- [x] POST /api/sessions/[id]/sets + XP award + PR detection
+- [x] Rest timer (localStorage + Screen Wake Lock, SW = M8)
+- [x] Session complete flow + XP award (append-only ledger)
+- [x] Edit/delete set v finished sessions s XP reversal
+- [x] 12h lazy session auto-finish
+- [x] Ad-hoc exercise přidání během session
+- [x] Plate calculator (greedy fill + user plate inventory)
+- [x] /settings/plates CRUD
+- [x] Bottom tab bar layout
 
 ### Smart coach
-- [ ] `src/lib/1rm.ts` — Epley + Brzycki s testy
-- [ ] `src/lib/progression.ts` — double progression logika
+- [x] `src/lib/1rm.ts` — Epley + Brzycki s testy
+- [x] `src/lib/progression.ts` — double progression logika + per-set re-eval
 - [ ] `src/lib/stagnation.ts` — 2+ týdny detekce
-- [ ] `src/lib/plates.ts` — plate calculator
+- [x] `src/lib/plates.ts` — plate calculator
 - [ ] Grafy per cvik (1RM v čase, Recharts)
 - [ ] Grafy per svalová skupina (týdenní objem stacked bar)
 - [ ] Export dat do ZIP (CSV)
@@ -44,9 +51,9 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [ ] Photo views: Grid / Timeline / Před×Po / Timelapse
 
 ### Avatar (B1)
-- [ ] `src/lib/leveling.ts` — XP curve + tier mapping
-- [ ] `src/lib/xp.ts` — event → delta mapping
-- [ ] xp_events ledger + aggregace
+- [x] `src/lib/xp-events.ts` — XP deltas + xpToLevel + xpForNextLevel
+- [x] `src/lib/xp.ts` — awardXp + reverseXp + getTotalXp (append-only ledger)
+- [x] xp_events ledger + aggregace
 - [ ] Placeholder SVG pro 5 tierů (`public/avatars/tier-{1-5}.svg`)
 - [ ] Avatar komponenta + XP bar v dashboard
 - [ ] Levelup toast + mini animace
@@ -64,8 +71,8 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 
 ### Testing
 - [x] Vitest setup + unit testy lib funkcí
-- [ ] Integration testy API routes s testovací DB
-- [ ] Playwright setup + 4 happy-path E2E
+- [x] Integration testy (xp, session-auto-finish) s testovací DB (port 3308)
+- [x] Playwright setup + 3 E2E specs (workout flow, ad-hoc, edit)
 - [ ] CI: typecheck + lint + test (pre-push hook)
 
 ## Fáze 2 — Hostinger deploy + multi-user
