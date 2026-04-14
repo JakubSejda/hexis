@@ -9,6 +9,7 @@ import * as readline from 'node:readline/promises'
 import * as schema from './schema'
 import { users } from './schema'
 import { seedPlans } from './seed/plans'
+import { seedPlateInventory } from './seed/plate-inventory'
 import { hashPassword } from '../lib/password'
 import { newUlid } from '../lib/ulid'
 import { emailSchema, passwordSchema } from '../lib/validation'
@@ -77,6 +78,9 @@ async function main() {
 
     await seedPlans(db, userId)
     console.log(`✓ Plány (UA/UB/LA/LB) vytvořeny pro ${userId}`)
+
+    await seedPlateInventory(db, userId)
+    console.log('✓ Default plate inventory seeded')
   } finally {
     rl.close()
     await connection.end()
