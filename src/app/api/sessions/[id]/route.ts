@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { asc, eq, inArray } from 'drizzle-orm'
+import { and, asc, eq, inArray } from 'drizzle-orm'
 import { db } from '@/db/client'
-import { sessions, sessionSets, planExercises, exercises, plans } from '@/db/schema'
+import { sessions, sessionSets, planExercises, exercises, plans, xpEvents } from '@/db/schema'
 import { getSessionUser, requireOwnership } from '@/lib/auth-helpers'
 import { awardXp } from '@/lib/xp'
 
@@ -162,6 +162,42 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     newTotalXp: xpAward?.newTotalXp ?? null,
     levelUp: xpAward?.levelUp ?? false,
   })
+}
+
+// ── DELETE ───────────────────────────────────────────────────────────
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const user = await getSessionUser()
+  if (!user) return unauth()
+  const { id } = await params
+  const sessionId = Number(id)
+
+  const owned = await requireOwnership(
+    db.query.sessions.findFirst({ where: eq(sessions.id, sessionId) }),
+    user.id
+  )
+  if (owned instanceof Response) return owned
+
+  // Reversal: sum all xp_events with this sessionId -> append one event with -sum
+  const events = await db
+    .select()
+    .from(xpEvents)
+    .where(and(eq(xpEvents.userId, user.id), eq(xpEvents.sessionId, sessionId)))
+  const netXp = events.reduce((acc, e) => acc + e.xpDelta, 0)
+  if (netXp !== 0) {
+    await db.insert(xpEvents).values({
+      userId: user.id,
+      eventType: 'session_complete',
+      xpDelta: -netXp,
+      sessionId,
+      meta: { reason: 'session_deleted' },
+    })
+  }
+
+  await db.delete(sessionSets).where(eq(sessionSets.sessionId, sessionId))
+  await db.delete(sessions).where(eq(sessions.id, sessionId))
+
+  return new Response(null, { status: 204 })
 }
 
 // ── helpers ─────────────────────────────────────────────────────────
