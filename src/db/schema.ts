@@ -132,6 +132,7 @@ export const sessions = mysqlTable(
   },
   (t) => ({
     byUserStarted: index('idx_sessions_user_started').on(t.userId, t.startedAt),
+    byUserFinished: index('idx_sessions_user_finished').on(t.userId, t.finishedAt),
   })
 )
 
@@ -246,3 +247,14 @@ export const xpEvents = mysqlTable(
     byUserCreated: index('idx_xp_events_user_created').on(t.userId, t.createdAt),
   })
 )
+
+// ═══════════════════════════════════════════════════════════════════
+// PLATE INVENTORY (per-user equipment config)
+// ═══════════════════════════════════════════════════════════════════
+
+export const plateInventories = mysqlTable('plate_inventories', {
+  userId: varchar('user_id', { length: 26 }).primaryKey(),
+  barKg: decimal('bar_kg', { precision: 4, scale: 1 }).default('20').notNull(),
+  plates: json('plates').$type<{ weightKg: number; pairs: number }[]>().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+})

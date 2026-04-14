@@ -8,6 +8,13 @@
       "when": 1776078009976,
       "tag": "0000_numerous_epoch",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1776153379805,
+      "tag": "0001_m2_plate_inventory",
+      "breakpoints": true
     }
   ]
 }

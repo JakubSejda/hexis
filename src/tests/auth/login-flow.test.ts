@@ -22,6 +22,7 @@ async function truncateAll(db: MySql2Database<typeof schema>) {
     'exercise_muscle_groups',
     'exercises',
     'muscle_groups',
+    'plate_inventories',
     'accounts',
     'users',
   ]) {
