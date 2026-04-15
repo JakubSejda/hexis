@@ -113,3 +113,38 @@ describe('PUT /api/nutrition', () => {
     expect(res.status).toBe(400)
   })
 })
+
+const { DELETE } = await import('@/app/api/nutrition/[id]/route')
+
+describe('DELETE /api/nutrition/[id]', () => {
+  it('deletes and reverses XP', async () => {
+    const putRes = await PUT(
+      new Request('http://localhost/api/nutrition', {
+        method: 'PUT',
+        body: JSON.stringify({ date: '2026-04-15', kcalActual: 1800 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    const { id } = await putRes.json()
+    const res = await DELETE(
+      new Request(`http://localhost/api/nutrition/${id}`, { method: 'DELETE' }),
+      {
+        params: Promise.resolve({ id: String(id) }),
+      }
+    )
+    expect(res.status).toBe(204)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, TEST_USER_ID))
+    const sum = xp.reduce((acc, e) => acc + e.xpDelta, 0)
+    expect(sum).toBe(0)
+  })
+
+  it('returns 404 for foreign id', async () => {
+    const res = await DELETE(
+      new Request('http://localhost/api/nutrition/999999', { method: 'DELETE' }),
+      {
+        params: Promise.resolve({ id: '999999' }),
+      }
+    )
+    expect(res.status).toBe(404)
+  })
+})
