@@ -37,8 +37,7 @@ afterAll(async () => {
   await clean()
 })
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic after mock
-const { GET } = await import('@/app/api/measurements/route')
+const { GET, PUT } = await import('@/app/api/measurements/route')
 
 describe('GET /api/measurements', () => {
   it('returns empty list for new user', async () => {
@@ -57,5 +56,56 @@ describe('GET /api/measurements', () => {
     const res = await GET(new Request('http://localhost/api/measurements'))
     const body = await res.json()
     expect(body.items.some((i: { weekStart: string }) => i.weekStart === '2026-04-13')).toBe(true)
+  })
+})
+
+describe('PUT /api/measurements', () => {
+  it('inserts a new week and awards 20 XP', async () => {
+    const res = await PUT(
+      new Request('http://localhost/api/measurements', {
+        method: 'PUT',
+        body: JSON.stringify({ weekStart: '2026-04-13', weightKg: 67.5 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(201)
+    const body = await res.json()
+    expect(body.id).toBeGreaterThan(0)
+    expect(body.xpDelta).toBe(20)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, TEST_USER_ID))
+    expect(xp).toHaveLength(1)
+    expect(xp[0]!.eventType).toBe('measurement_added')
+    expect(xp[0]!.xpDelta).toBe(20)
+  })
+
+  it('updates existing week without awarding XP', async () => {
+    await PUT(
+      new Request('http://localhost/api/measurements', {
+        method: 'PUT',
+        body: JSON.stringify({ weekStart: '2026-04-13', weightKg: 67.5 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    const res = await PUT(
+      new Request('http://localhost/api/measurements', {
+        method: 'PUT',
+        body: JSON.stringify({ weekStart: '2026-04-13', weightKg: 67.4 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.xpDelta).toBe(0)
+  })
+
+  it('rejects non-Monday weekStart', async () => {
+    const res = await PUT(
+      new Request('http://localhost/api/measurements', {
+        method: 'PUT',
+        body: JSON.stringify({ weekStart: '2026-04-15', weightKg: 67.5 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(400)
   })
 })
