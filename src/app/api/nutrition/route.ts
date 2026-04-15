@@ -1,6 +1,8 @@
+import { z } from 'zod'
 import { db } from '@/db/client'
 import { getSessionUser } from '@/lib/auth-helpers'
-import { fetchRange, monthBounds } from '@/lib/queries/nutrition'
+import { fetchRange, monthBounds, upsertDay } from '@/lib/queries/nutrition'
+import { awardXp } from '@/lib/xp'
 
 export async function GET(req: Request) {
   const user = await getSessionUser()
@@ -15,6 +17,40 @@ export async function GET(req: Request) {
   return Response.json({ items })
 }
 
+const putSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  kcalActual: z.number().int().min(0).max(15000).nullable().optional(),
+  proteinG: z.number().int().min(0).max(2000).nullable().optional(),
+  carbsG: z.number().int().min(0).max(2000).nullable().optional(),
+  fatG: z.number().int().min(0).max(1000).nullable().optional(),
+  sugarG: z.number().int().min(0).max(2000).nullable().optional(),
+  note: z.string().max(500).nullable().optional(),
+})
+
+export async function PUT(req: Request) {
+  const user = await getSessionUser()
+  if (!user) return unauth()
+  const body = await req.json().catch(() => ({}))
+  const parsed = putSchema.safeParse(body)
+  if (!parsed.success) return badRequest(parsed.error)
+  const { affectedRows, id } = await upsertDay(db, user.id, parsed.data)
+  let xpDelta = 0
+  if (affectedRows === 1) {
+    const xp = await awardXp({
+      event: 'nutrition_logged',
+      db,
+      userId: user.id,
+      meta: { nutritionId: id },
+    })
+    xpDelta = xp.xpDelta
+  }
+  return Response.json({ id, xpDelta }, { status: affectedRows === 1 ? 201 : 200 })
+}
+
 function unauth() {
   return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+}
+
+function badRequest(err: unknown) {
+  return new Response(JSON.stringify({ error: 'Invalid body', details: err }), { status: 400 })
 }

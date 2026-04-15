@@ -39,7 +39,7 @@ afterAll(async () => {
   await clean()
 })
 
-const { GET } = await import('@/app/api/nutrition/route')
+const { GET, PUT } = await import('@/app/api/nutrition/route')
 
 describe('GET /api/nutrition', () => {
   it('rejects without month query', async () => {
@@ -61,5 +61,55 @@ describe('GET /api/nutrition', () => {
     const res = await GET(new Request('http://localhost/api/nutrition?month=2026-04'))
     const body = await res.json()
     expect(body.items).toHaveLength(2)
+  })
+})
+
+describe('PUT /api/nutrition', () => {
+  it('inserts a new day and awards 10 XP', async () => {
+    const res = await PUT(
+      new Request('http://localhost/api/nutrition', {
+        method: 'PUT',
+        body: JSON.stringify({ date: '2026-04-15', kcalActual: 1800, proteinG: 140 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(201)
+    const body = await res.json()
+    expect(body.xpDelta).toBe(10)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, TEST_USER_ID))
+    expect(xp).toHaveLength(1)
+    expect(xp[0]!.eventType).toBe('nutrition_logged')
+    expect(xp[0]!.xpDelta).toBe(10)
+  })
+
+  it('updates existing day without XP', async () => {
+    await PUT(
+      new Request('http://localhost/api/nutrition', {
+        method: 'PUT',
+        body: JSON.stringify({ date: '2026-04-15', kcalActual: 1800 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    const res = await PUT(
+      new Request('http://localhost/api/nutrition', {
+        method: 'PUT',
+        body: JSON.stringify({ date: '2026-04-15', kcalActual: 1900 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.xpDelta).toBe(0)
+  })
+
+  it('rejects missing date', async () => {
+    const res = await PUT(
+      new Request('http://localhost/api/nutrition', {
+        method: 'PUT',
+        body: '{}',
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    expect(res.status).toBe(400)
   })
 })
