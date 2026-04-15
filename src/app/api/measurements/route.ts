@@ -10,7 +10,11 @@ export async function GET(req: Request) {
   if (!user) return unauth()
   const url = new URL(req.url)
   const beforeWeek = url.searchParams.get('beforeWeek')
-  const limit = Math.min(Number(url.searchParams.get('limit') ?? 8), 52)
+  if (beforeWeek && !/^\d{4}-\d{2}-\d{2}$/.test(beforeWeek)) {
+    return new Response(JSON.stringify({ error: 'Invalid beforeWeek format' }), { status: 400 })
+  }
+  const rawLimit = Number(url.searchParams.get('limit') ?? 8)
+  const limit = Math.min(Number.isFinite(rawLimit) && rawLimit > 0 ? Math.floor(rawLimit) : 8, 52)
 
   if (beforeWeek) {
     const items = await fetchOlder(db, user.id, beforeWeek, limit)

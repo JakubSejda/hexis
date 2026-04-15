@@ -48,6 +48,18 @@ describe('GET /api/measurements', () => {
     expect(body.items).toEqual([])
   })
 
+  it('handles invalid limit gracefully (falls back to default)', async () => {
+    const res = await GET(new Request('http://localhost/api/measurements?limit=garbage'))
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(Array.isArray(body.items)).toBe(true)
+  })
+
+  it('rejects invalid beforeWeek format', async () => {
+    const res = await GET(new Request('http://localhost/api/measurements?beforeWeek=not-a-date'))
+    expect(res.status).toBe(400)
+  })
+
   it('returns measurements within default 8-week window', async () => {
     await db.insert(measurements).values({
       userId: TEST_USER_ID,
