@@ -15,6 +15,13 @@
       "when": 1776153379805,
       "tag": "0001_m2_plate_inventory",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1776355200000,
+      "tag": "0002_m3_macros",
+      "breakpoints": true
     }
   ]
 }

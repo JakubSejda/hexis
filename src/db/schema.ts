@@ -26,6 +26,7 @@ export const users = mysqlTable('users', {
   passwordHash: varchar('password_hash', { length: 255 }),
   name: varchar('name', { length: 100 }),
   level: tinyint('level').default(1).notNull(),
+  trackedMacros: json('tracked_macros').$type<string[]>().notNull().default(['kcal', 'protein']),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
@@ -170,10 +171,15 @@ export const measurements = mysqlTable(
     thighCm: decimal('thigh_cm', { precision: 4, scale: 1 }),
     bicepsCm: decimal('biceps_cm', { precision: 4, scale: 1 }),
     targetKcal: smallint('target_kcal'),
+    targetProteinG: smallint('target_protein_g'),
+    targetCarbsG: smallint('target_carbs_g'),
+    targetFatG: smallint('target_fat_g'),
+    targetSugarG: smallint('target_sugar_g'),
     note: text('note'),
   },
   (t) => ({
     uniq: unique('uniq_user_week').on(t.userId, t.weekStart),
+    idxUserWeek: index('idx_measurements_user_week').on(t.userId, t.weekStart),
   })
 )
 
@@ -189,10 +195,14 @@ export const nutritionDays = mysqlTable(
     date: date('date').notNull(),
     kcalActual: smallint('kcal_actual'),
     proteinG: smallint('protein_g'),
+    carbsG: smallint('carbs_g'),
+    fatG: smallint('fat_g'),
+    sugarG: smallint('sugar_g'),
     note: text('note'),
   },
   (t) => ({
     uniq: unique('uniq_user_date').on(t.userId, t.date),
+    idxUserDate: index('idx_nutrition_user_date').on(t.userId, t.date),
   })
 )
 
