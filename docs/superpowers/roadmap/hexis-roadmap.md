@@ -45,8 +45,8 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [ ] Export dat do ZIP (CSV)
 
 ### Progres tracking
-- [ ] Weekly measurements grid (inline edit, save on blur)
-- [ ] Nutrition kalendář s heat map + daily modal
+- [x] Weekly measurements grid (inline edit, save on blur)
+- [x] Nutrition kalendář s heat map + daily modal
 - [ ] Body photos upload (HEIC konverze, EXIF strip, thumbnail)
 - [ ] Photo views: Grid / Timeline / Před×Po / Timelapse
 
