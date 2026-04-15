@@ -38,6 +38,7 @@ afterAll(async () => {
 })
 
 const { GET, PUT } = await import('@/app/api/measurements/route')
+const { DELETE } = await import('@/app/api/measurements/[id]/route')
 
 describe('GET /api/measurements', () => {
   it('returns empty list for new user', async () => {
@@ -107,5 +108,39 @@ describe('PUT /api/measurements', () => {
       })
     )
     expect(res.status).toBe(400)
+  })
+})
+
+describe('DELETE /api/measurements/[id]', () => {
+  it('deletes and reverses XP', async () => {
+    const putRes = await PUT(
+      new Request('http://localhost/api/measurements', {
+        method: 'PUT',
+        body: JSON.stringify({ weekStart: '2026-04-13', weightKg: 67.5 }),
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    const { id } = await putRes.json()
+    const res = await DELETE(
+      new Request(`http://localhost/api/measurements/${id}`, { method: 'DELETE' }),
+      { params: Promise.resolve({ id: String(id) }) }
+    )
+    expect(res.status).toBe(204)
+    const remaining = await db
+      .select()
+      .from(measurements)
+      .where(eq(measurements.userId, TEST_USER_ID))
+    expect(remaining).toHaveLength(0)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, TEST_USER_ID))
+    const sum = xp.reduce((acc, e) => acc + e.xpDelta, 0)
+    expect(sum).toBe(0)
+  })
+
+  it('returns 404 for foreign id', async () => {
+    const res = await DELETE(
+      new Request('http://localhost/api/measurements/999999', { method: 'DELETE' }),
+      { params: Promise.resolve({ id: '999999' }) }
+    )
+    expect(res.status).toBe(404)
   })
 })
