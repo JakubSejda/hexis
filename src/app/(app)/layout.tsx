@@ -17,6 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <nav className="fixed right-0 bottom-0 left-0 flex h-16 border-t border-[#1F2733] bg-[#141A22]">
         <TabLink href="/dashboard" label="Dashboard" />
         <TabLink href="/workout" label="Trénink" />
+        <TabLink href="/progress/body" label="Progres" />
         <TabLink href="/settings/plates" label="Nastavení" />
       </nav>
     </div>
