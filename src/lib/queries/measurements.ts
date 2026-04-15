@@ -35,8 +35,8 @@ export async function fetchRange(
     .where(
       and(
         eq(measurements.userId, userId),
-        gte(measurements.weekStart, new Date(fromWeek)),
-        lte(measurements.weekStart, new Date(toWeek))
+        gte(measurements.weekStart, fromWeek),
+        lte(measurements.weekStart, toWeek)
       )
     )
     .orderBy(asc(measurements.weekStart))
@@ -95,10 +95,7 @@ export async function upsertWeek(
   let id = result[0].insertId
   if (id === 0) {
     const existing = await db.query.measurements.findFirst({
-      where: and(
-        eq(measurements.userId, userId),
-        eq(measurements.weekStart, new Date(input.weekStart))
-      ),
+      where: and(eq(measurements.userId, userId), eq(measurements.weekStart, input.weekStart)),
       columns: { id: true },
     })
     id = existing?.id ?? 0

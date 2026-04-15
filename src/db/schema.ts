@@ -166,7 +166,7 @@ export const measurements = mysqlTable(
   {
     id: int('id').primaryKey().autoincrement(),
     userId: varchar('user_id', { length: 26 }).notNull(),
-    weekStart: date('week_start').notNull(),
+    weekStart: date('week_start', { mode: 'string' }).notNull(),
     weightKg: decimal('weight_kg', { precision: 5, scale: 2 }),
     waistCm: decimal('waist_cm', { precision: 4, scale: 1 }),
     chestCm: decimal('chest_cm', { precision: 4, scale: 1 }),
@@ -196,7 +196,7 @@ export const nutritionDays = mysqlTable(
   {
     id: int('id').primaryKey().autoincrement(),
     userId: varchar('user_id', { length: 26 }).notNull(),
-    date: date('date').notNull(),
+    date: date('date', { mode: 'string' }).notNull(),
     kcalActual: smallint('kcal_actual'),
     proteinG: smallint('protein_g'),
     carbsG: smallint('carbs_g'),
@@ -221,8 +221,8 @@ export const bodyPhotos = mysqlTable(
   {
     id: int('id').primaryKey().autoincrement(),
     userId: varchar('user_id', { length: 26 }).notNull(),
-    takenAt: date('taken_at').notNull(),
-    weekStart: date('week_start'),
+    takenAt: date('taken_at', { mode: 'string' }).notNull(),
+    weekStart: date('week_start', { mode: 'string' }),
     pose: mysqlEnum('pose', ['front', 'side', 'back', 'other']).notNull(),
     storageKey: varchar('storage_key', { length: 255 }).notNull(),
     widthPx: smallint('width_px'),

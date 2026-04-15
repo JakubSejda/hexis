@@ -29,8 +29,8 @@ export async function fetchRange(
     .where(
       and(
         eq(nutritionDays.userId, userId),
-        gte(nutritionDays.date, new Date(fromDate)),
-        lte(nutritionDays.date, new Date(toDate))
+        gte(nutritionDays.date, fromDate),
+        lte(nutritionDays.date, toDate)
       )
     )
     .orderBy(asc(nutritionDays.date))
@@ -70,7 +70,7 @@ export async function upsertDay(
   let id = result[0].insertId
   if (id === 0) {
     const existing = await db.query.nutritionDays.findFirst({
-      where: and(eq(nutritionDays.userId, userId), eq(nutritionDays.date, new Date(input.date))),
+      where: and(eq(nutritionDays.userId, userId), eq(nutritionDays.date, input.date)),
       columns: { id: true },
     })
     id = existing?.id ?? 0
