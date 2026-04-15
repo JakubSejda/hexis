@@ -135,10 +135,10 @@ export function MeasurementGrid({ initialRows }: Props) {
       </table>
       <div className="py-3 text-center text-xs text-[#6b7280]">
         {done ? (
-          'Zadne starsi tydny.'
+          'Žádné starší týdny.'
         ) : (
           <button onClick={loadMore} disabled={loadingMore}>
-            {loadingMore ? 'Nacitani...' : '\u2193 Nacist starsi tydny'}
+            {loadingMore ? 'Načítání…' : '↓ Načíst starší týdny'}
           </button>
         )}
       </div>

@@ -112,7 +112,7 @@ export function MeasurementRow({
               value={draftNote}
               onChange={(e) => setDraftNote(e.target.value)}
               onBlur={() => void onCommitNote(draftNote.trim() === '' ? null : draftNote)}
-              placeholder="Poznamka k tydnu..."
+              placeholder="Poznámka k týdnu…"
               className="w-full rounded border border-[#1f2733] bg-[#0a0e14] p-2 text-sm text-[#e5e7eb] outline-none"
               rows={2}
             />
