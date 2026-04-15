@@ -16,6 +16,8 @@ import {
   unique,
 } from 'drizzle-orm/mysql-core'
 
+export type MacroKey = 'kcal' | 'protein' | 'carbs' | 'fat' | 'sugar'
+
 // ═══════════════════════════════════════════════════════════════════
 // USERS + ACCOUNTS (auth — plné využití až v M1)
 // ═══════════════════════════════════════════════════════════════════
@@ -26,7 +28,7 @@ export const users = mysqlTable('users', {
   passwordHash: varchar('password_hash', { length: 255 }),
   name: varchar('name', { length: 100 }),
   level: tinyint('level').default(1).notNull(),
-  trackedMacros: json('tracked_macros').$type<string[]>().notNull().default(['kcal', 'protein']),
+  trackedMacros: json('tracked_macros').$type<MacroKey[]>().notNull().default(['kcal', 'protein']),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
@@ -179,6 +181,8 @@ export const measurements = mysqlTable(
   },
   (t) => ({
     uniq: unique('uniq_user_week').on(t.userId, t.weekStart),
+    // NOTE: SQL migration creates this with `week_start DESC`; Drizzle's index API
+    // cannot express sort order, but the actual database index is DESC.
     idxUserWeek: index('idx_measurements_user_week').on(t.userId, t.weekStart),
   })
 )
@@ -202,6 +206,8 @@ export const nutritionDays = mysqlTable(
   },
   (t) => ({
     uniq: unique('uniq_user_date').on(t.userId, t.date),
+    // NOTE: SQL migration creates this with `date DESC`; Drizzle's index API
+    // cannot express sort order, but the actual database index is DESC.
     idxUserDate: index('idx_nutrition_user_date').on(t.userId, t.date),
   })
 )
