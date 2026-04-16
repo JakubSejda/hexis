@@ -1,3 +1,9 @@
+import {
+  notifySwRestTimer,
+  cancelSwRestTimer,
+  requestNotificationPermission,
+} from './sw-rest-timer'
+
 const KEY = 'hexis:rest-timer'
 
 export type TimerState = {
@@ -39,9 +45,13 @@ function writeStorage(state: TimerState) {
 export const restTimerStore = {
   start(durationSec: number) {
     writeStorage({ startedAt: Date.now(), durationMs: durationSec * 1000 })
+    requestNotificationPermission().then((granted) => {
+      if (granted) notifySwRestTimer(durationSec)
+    })
   },
   stop() {
     writeStorage(null)
+    cancelSwRestTimer()
   },
   getSnapshot(): TimerState {
     return readStorage()
