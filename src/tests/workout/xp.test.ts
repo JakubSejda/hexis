@@ -86,4 +86,26 @@ describe('awardXp + reverseXp (DB integration)', () => {
     await awardXp({ event: 'session_complete', db, userId })
     expect(await getTotalXp(db, userId)).toBe(110)
   })
+
+  it('flags tierUp when crossing tier boundary', async () => {
+    // Seed to 2400 XP → L5 (tier 1). +100 → 2500 → L6 (tier 2).
+    await db.insert(xpEvents).values({ userId, eventType: 'session_complete', xpDelta: 2400 })
+    await db.update(users).set({ level: 5 }).where(eq(users.id, userId))
+    const result = await awardXp({ event: 'session_complete', db, userId })
+    expect(result.levelUp).toBe(true)
+    expect(result.tierUp).toBe(true)
+    expect(result.tierBefore).toBe(1)
+    expect(result.tierAfter).toBe(2)
+    expect(result.levelAfter).toBe(6)
+  })
+
+  it('does not flag tierUp within same tier', async () => {
+    // Seed to 100 XP → L2 (tier 1). +100 → 200 → L2 (tier 1).
+    await db.insert(xpEvents).values({ userId, eventType: 'session_complete', xpDelta: 100 })
+    await db.update(users).set({ level: 2 }).where(eq(users.id, userId))
+    const result = await awardXp({ event: 'session_complete', db, userId })
+    expect(result.tierUp).toBe(false)
+    expect(result.tierBefore).toBe(1)
+    expect(result.tierAfter).toBe(1)
+  })
 })

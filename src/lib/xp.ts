@@ -3,6 +3,7 @@ import { eq, sql } from 'drizzle-orm'
 import * as schema from '@/db/schema'
 import { users, xpEvents } from '@/db/schema'
 import { XP_DELTAS, xpToLevel, type XpEventType } from './xp-events'
+import { levelToTier, type Tier } from './tiers'
 
 type DB = MySql2Database<typeof schema>
 
@@ -54,10 +55,17 @@ async function appendXpEvent(args: {
   if (levelAfter !== levelBefore) {
     await args.db.update(users).set({ level: levelAfter }).where(eq(users.id, args.userId))
   }
+  const tierBefore = levelToTier(levelBefore)
+  const tierAfter = levelToTier(levelAfter)
   return {
     xpDelta: args.xpDelta,
     newTotalXp: totalAfter,
+    levelBefore,
+    levelAfter,
     levelUp: levelAfter > levelBefore,
+    tierBefore,
+    tierAfter,
+    tierUp: tierAfter > tierBefore,
   }
 }
 
