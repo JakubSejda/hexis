@@ -17,6 +17,8 @@ import { getMacros } from '@/lib/queries/user-prefs'
 import { calcStreak } from '@/lib/nutrition-streak'
 import { classifyDay, type DayClass } from '@/lib/nutrition-classify'
 import { toWeekStart, weekRange } from '@/lib/week'
+import { StagnationWarning } from '@/components/dashboard/StagnationWarning'
+import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
 
 export default async function DashboardPage() {
   const user = await requireSessionUser()
@@ -69,6 +71,8 @@ export default async function DashboardPage() {
       return fetchNutrition(db, user.id, fromDateStr, todayDate)
     })(),
   ])
+
+  const stagnation = await fetchStagnatingExercises(db, user.id, new Date())
 
   const byWeek = new Map(measurementsRows.map((m) => [m.weekStart, m]))
   const thisWeekRow = byWeek.get(thisWeekStart) ?? null
@@ -133,6 +137,7 @@ export default async function DashboardPage() {
         <div className="text-2xl">{streak}</div>
         <div className="text-xs text-[#6B7280]">denni streak</div>
       </div>
+      <StagnationWarning items={stagnation} />
       {active ? (
         <Link
           href={`/workout/${active.id}`}
