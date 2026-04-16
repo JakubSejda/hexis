@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/Toast'
 import { restTimerStore } from '@/lib/rest-timer'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 import type { Suggestion } from '@/lib/progression'
+import { StagnationBadge } from './StagnationBadge'
 
 type ApiSet = {
   id: number
@@ -34,6 +35,7 @@ type Props = {
   initialSuggestion: Suggestion
   onSetLogged: () => void
   onEditSet: (setId: number) => void
+  stagnation?: { weeksSincePr: number; suggestion: 'deload' | 'variation' } | null
 }
 
 export function ExerciseCard({
@@ -43,6 +45,7 @@ export function ExerciseCard({
   initialSuggestion,
   onSetLogged,
   onEditSet,
+  stagnation,
 }: Props) {
   const [submitting, setSubmitting] = useState(false)
   const [suggestion, setSuggestion] = useState(initialSuggestion)
@@ -90,6 +93,12 @@ export function ExerciseCard({
     <div className="flex flex-col gap-3">
       <header>
         <h3 className="text-lg font-semibold text-[#E5E7EB]">{exercise.name}</h3>
+        {stagnation ? (
+          <StagnationBadge
+            weeksSincePr={stagnation.weeksSincePr}
+            suggestion={stagnation.suggestion}
+          />
+        ) : null}
         <p className="text-xs text-[#6B7280]">Cíl: {targetRange}</p>
         {historyLabel ? <p className="mt-1 text-xs text-[#6B7280]">{historyLabel}</p> : null}
       </header>
