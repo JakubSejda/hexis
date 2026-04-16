@@ -47,8 +47,8 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 ### Progres tracking
 - [x] Weekly measurements grid (inline edit, save on blur)
 - [x] Nutrition kalendář s heat map + daily modal
-- [ ] Body photos upload (HEIC konverze, EXIF strip, thumbnail)
-- [ ] Photo views: Grid / Timeline / Před×Po / Timelapse
+- [x] Body photos upload (HEIC konverze, EXIF strip, thumbnail)
+- [x] Photo views: Grid / Timeline / Před×Po (Timelapse deferred)
 
 ### Avatar (B1)
 - [x] `src/lib/xp-events.ts` — XP deltas + xpToLevel + xpForNextLevel
