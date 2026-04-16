@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
   sessionId: number
@@ -18,16 +19,21 @@ export function SessionSummary({
   note: initialNote,
 }: Props) {
   const router = useRouter()
+  const { notifyXp } = useXpFeedback()
   const [note, setNote] = useState(initialNote ?? '')
   const [saving, setSaving] = useState(false)
 
   const finish = async () => {
     setSaving(true)
-    await fetch(`/api/sessions/${sessionId}`, {
+    const res = await fetch(`/api/sessions/${sessionId}`, {
       method: 'PATCH',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ finishedAt: true, note: note || null }),
     })
+    if (res.ok) {
+      const body = await res.json()
+      notifyXp(body)
+    }
     router.push('/dashboard')
   }
 

@@ -6,6 +6,7 @@ import { SuggestionHint } from './SuggestionHint'
 import { RestTimer } from './RestTimer'
 import { useToast } from '@/components/ui/Toast'
 import { restTimerStore } from '@/lib/rest-timer'
+import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 import type { Suggestion } from '@/lib/progression'
 
 type ApiSet = {
@@ -46,6 +47,7 @@ export function ExerciseCard({
   const [submitting, setSubmitting] = useState(false)
   const [suggestion, setSuggestion] = useState(initialSuggestion)
   const toast = useToast()
+  const { notifyXp } = useXpFeedback()
 
   const handleSubmit = async (v: {
     weightKg: number | null
@@ -67,6 +69,7 @@ export function ExerciseCard({
       })
       if (!res.ok) throw new Error(`${res.status}`)
       const body = await res.json()
+      notifyXp(body)
       toast.show(`+${body.xpDelta} XP${body.levelUp ? ' · LEVEL UP!' : ''}`, 'success')
       if (exercise.restSec > 0) restTimerStore.start(exercise.restSec)
       if (body.nextSuggestion) setSuggestion(body.nextSuggestion)

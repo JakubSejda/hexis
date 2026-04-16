@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { MeasurementRow, type MeasurementValues } from './MeasurementRow'
 import { toWeekStart, weekRange } from '@/lib/week'
+import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type ApiRow = {
   id: number
@@ -27,6 +28,7 @@ export function MeasurementGrid({ initialRows }: Props) {
   const [loadingMore, setLoadingMore] = useState(false)
   const [done, setDone] = useState(false)
   const todayWeek = toWeekStart(new Date())
+  const { notifyXp } = useXpFeedback()
 
   const displayWeeks = useMemo(() => {
     const set = new Set(rows.map((r) => r.weekStart))
@@ -47,7 +49,8 @@ export function MeasurementGrid({ initialRows }: Props) {
         body: JSON.stringify(merged),
       })
       if (!res.ok) return
-      const body = (await res.json()) as { id: number }
+      const body = await res.json()
+      notifyXp(body)
       const next: ApiRow = {
         id: existing?.id ?? body.id,
         weekStart,
@@ -73,7 +76,7 @@ export function MeasurementGrid({ initialRows }: Props) {
         return [...filtered, next].sort((a, b) => (a.weekStart < b.weekStart ? 1 : -1))
       })
     },
-    [byWeek]
+    [byWeek, notifyXp]
   )
 
   async function loadMore() {

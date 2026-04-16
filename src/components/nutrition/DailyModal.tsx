@@ -5,6 +5,7 @@ import { BottomSheet } from '@/components/ui/BottomSheet'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { NumberInput } from '@/components/ui/NumberInput'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
+import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type DayRow = {
   date: string
@@ -43,6 +44,7 @@ export function DailyModal({
   onClose,
   onSaved,
 }: Props) {
+  const { notifyXp } = useXpFeedback()
   const [draft, setDraft] = useState<DayRow | null>(initial)
 
   useEffect(() => {
@@ -80,6 +82,8 @@ export function DailyModal({
       }),
     })
     if (res.ok) {
+      const result = await res.json()
+      notifyXp(result)
       onSaved(draft)
       onClose()
     }
