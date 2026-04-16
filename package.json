@@ -26,6 +26,7 @@
     "@auth/drizzle-adapter": "^1.11.1",
     "@node-rs/argon2": "^2.0.2",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@serwist/next": "^9.5.7",
     "drizzle-orm": "^0.45.2",
     "file-saver": "^2.0.5",
     "heic2any": "^0.0.4",
@@ -36,6 +37,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
+    "serwist": "^9.5.7",
     "sharp": "^0.34.5",
     "ulid": "^3.0.2",
     "zod": "^4.3.6"
