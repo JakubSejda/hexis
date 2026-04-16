@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { Providers } from './providers'
 import { XpFeedbackProvider } from '@/components/xp/XpFeedbackProvider'
+import { InstallPrompt } from '@/components/pwa/InstallPrompt'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -23,6 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <TabLink href="/progress/body" label="Progres" />
         <TabLink href="/settings/plates" label="Nastavení" />
       </nav>
+      <InstallPrompt />
     </div>
   )
 }

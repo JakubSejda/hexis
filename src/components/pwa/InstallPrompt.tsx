@@ -1,0 +1,77 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
+const DISMISSED_KEY = 'hexis:pwa-install-dismissed'
+
+export function InstallPrompt() {
+  const [show, setShow] = useState(false)
+  const [isIos, setIsIos] = useState(false)
+  const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
+
+  useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) return
+    if (localStorage.getItem(DISMISSED_KEY) === 'true') return
+
+    const ua = navigator.userAgent
+    const isIosDevice =
+      /iPad|iPhone|iPod/.test(ua) && !(window as unknown as { MSStream?: unknown }).MSStream
+    if (isIosDevice && !(navigator as unknown as { standalone?: boolean }).standalone) {
+      setIsIos(true)
+      setShow(true)
+      return
+    }
+
+    const handler = (e: Event) => {
+      e.preventDefault()
+      deferredPrompt.current = e as BeforeInstallPromptEvent
+      setShow(true)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  const handleInstall = async () => {
+    if (deferredPrompt.current) {
+      await deferredPrompt.current.prompt()
+      const { outcome } = await deferredPrompt.current.userChoice
+      if (outcome === 'accepted') setShow(false)
+      deferredPrompt.current = null
+    }
+  }
+
+  const handleDismiss = () => {
+    localStorage.setItem(DISMISSED_KEY, 'true')
+    setShow(false)
+  }
+
+  if (!show) return null
+
+  return (
+    <div className="fixed right-0 bottom-16 left-0 z-40 border-t border-[#1f2733] bg-[#141a22] px-4 py-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-[#e5e7eb]">
+          {isIos ? 'Otevři Share → Přidat na plochu' : 'Přidej Hexis na plochu'}
+        </p>
+        <div className="flex gap-2">
+          {!isIos ? (
+            <button
+              onClick={handleInstall}
+              className="rounded-md bg-[#10b981] px-3 py-1.5 text-sm font-semibold text-[#0a0e14]"
+            >
+              Přidat
+            </button>
+          ) : null}
+          <button onClick={handleDismiss} className="rounded-md px-3 py-1.5 text-sm text-[#6b7280]">
+            Zavřít
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
