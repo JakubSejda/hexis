@@ -59,10 +59,10 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] Levelup toast + mini animace
 
 ### Muscle heatmap
-- [ ] SVG silueta (front + back) s identifikovatelnými svaly
-- [ ] Mapování cvik → svaly (seed `exercise_muscle_groups`)
-- [ ] Overlay v workout UI (planned / done / rest barvy)
-- [ ] Weekly heatmap na dashboardu
+- [x] SVG silueta (front + back) s identifikovatelnými svaly
+- [x] Mapování cvik → svaly (seed `exercise_muscle_groups`)
+- [x] Overlay v workout UI (planned / done / rest barvy)
+- [x] Weekly heatmap na dashboardu
 
 ### PWA
 - [ ] manifest.json + iOS splash screens + apple-touch-icon
