@@ -19,6 +19,8 @@ import { classifyDay, type DayClass } from '@/lib/nutrition-classify'
 import { toWeekStart, weekRange } from '@/lib/week'
 import { StagnationWarning } from '@/components/dashboard/StagnationWarning'
 import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
+import { MuscleWidget } from '@/components/dashboard/MuscleWidget'
+import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
 
 export default async function DashboardPage() {
   const user = await requireSessionUser()
@@ -73,6 +75,7 @@ export default async function DashboardPage() {
   ])
 
   const stagnation = await fetchStagnatingExercises(db, user.id, new Date())
+  const heatmapData = await fetchMuscleVolumes(db, user.id, 7)
 
   const byWeek = new Map(measurementsRows.map((m) => [m.weekStart, m]))
   const thisWeekRow = byWeek.get(thisWeekStart) ?? null
@@ -182,6 +185,7 @@ export default async function DashboardPage() {
         weightSeries={weightSeries}
       />
       <NutritionStreakCard streak={nutritionStreak} thisWeekDays={weekDots} />
+      <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
     </div>
   )
 }
