@@ -21,3 +21,9 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
 }
+
+@keyframes tier-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
+  50% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8)); }
+}
+.animate-tier-glow { animation: tier-glow 1.5s ease-in-out infinite; }
