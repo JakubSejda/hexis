@@ -44,12 +44,15 @@ export function ProgressSegmentControl() {
   const pathname = usePathname()
   const active = pathname?.startsWith('/progress/nutrition')
     ? '/progress/nutrition'
-    : '/progress/body'
+    : pathname?.startsWith('/progress/strength')
+      ? '/progress/strength'
+      : '/progress/body'
   return (
     <SegmentControl
       segments={[
         { href: '/progress/body', label: 'Tělo' },
         { href: '/progress/nutrition', label: 'Výživa' },
+        { href: '/progress/strength', label: 'Síla' },
       ]}
       active={active}
     />
