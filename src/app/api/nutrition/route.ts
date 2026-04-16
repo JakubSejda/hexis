@@ -8,6 +8,12 @@ export async function GET(req: Request) {
   const user = await getSessionUser()
   if (!user) return unauth()
   const url = new URL(req.url)
+  const all = url.searchParams.get('all') === 'true'
+  if (all) {
+    const { fetchAllNutrition } = await import('@/lib/queries/export-helpers')
+    const items = await fetchAllNutrition(db, user.id)
+    return Response.json({ items })
+  }
   const month = url.searchParams.get('month')
   if (!month || !/^\d{4}-\d{2}$/.test(month)) {
     return new Response(JSON.stringify({ error: 'month=YYYY-MM required' }), { status: 400 })

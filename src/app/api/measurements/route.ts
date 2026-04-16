@@ -9,6 +9,12 @@ export async function GET(req: Request) {
   const user = await getSessionUser()
   if (!user) return unauth()
   const url = new URL(req.url)
+  const all = url.searchParams.get('all') === 'true'
+  if (all) {
+    const { fetchAllMeasurements } = await import('@/lib/queries/export-helpers')
+    const items = await fetchAllMeasurements(db, user.id)
+    return Response.json({ items })
+  }
   const beforeWeek = url.searchParams.get('beforeWeek')
   if (beforeWeek && !/^\d{4}-\d{2}-\d{2}$/.test(beforeWeek)) {
     return new Response(JSON.stringify({ error: 'Invalid beforeWeek format' }), { status: 400 })
