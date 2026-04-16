@@ -54,9 +54,9 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] `src/lib/xp-events.ts` — XP deltas + xpToLevel + xpForNextLevel
 - [x] `src/lib/xp.ts` — awardXp + reverseXp + getTotalXp (append-only ledger)
 - [x] xp_events ledger + aggregace
-- [ ] Placeholder SVG pro 5 tierů (`public/avatars/tier-{1-5}.svg`)
-- [ ] Avatar komponenta + XP bar v dashboard
-- [ ] Levelup toast + mini animace
+- [x] Placeholder SVG pro 5 tierů (`public/avatars/tier-{1-5}.svg`)
+- [x] Avatar komponenta + XP bar v dashboard
+- [x] Levelup toast + mini animace
 
 ### Muscle heatmap
 - [ ] SVG silueta (front + back) s identifikovatelnými svaly
