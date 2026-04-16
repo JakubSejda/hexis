@@ -65,9 +65,9 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] Weekly heatmap na dashboardu
 
 ### PWA
-- [ ] manifest.json + iOS splash screens + apple-touch-icon
-- [ ] Service Worker (Serwist): precache + network-first API
-- [ ] PWA install test iOS + Chrome
+- [x] manifest.json + apple-touch-icon + iOS meta tags
+- [x] Service Worker (Serwist): precache + network-first API + rest timer notification
+- [x] PWA install prompt (Chrome beforeinstallprompt + iOS guidance)
 
 ### Testing
 - [x] Vitest setup + unit testy lib funkcí
