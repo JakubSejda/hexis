@@ -27,3 +27,7 @@ body {
   50% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8)); }
 }
 .animate-tier-glow { animation: tier-glow 1.5s ease-in-out infinite; }
+
+@keyframes confetti-fall {
+  to { transform: translateY(110vh) rotate(720deg); }
+}
