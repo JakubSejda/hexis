@@ -38,11 +38,11 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 ### Smart coach
 - [x] `src/lib/1rm.ts` — Epley + Brzycki s testy
 - [x] `src/lib/progression.ts` — double progression logika + per-set re-eval
-- [ ] `src/lib/stagnation.ts` — 2+ týdny detekce
+- [x] `src/lib/stagnation.ts` — 2+ týdny detekce
 - [x] `src/lib/plates.ts` — plate calculator
-- [ ] Grafy per cvik (1RM v čase, Recharts)
-- [ ] Grafy per svalová skupina (týdenní objem stacked bar)
-- [ ] Export dat do ZIP (CSV)
+- [x] Grafy per cvik (1RM v čase, Recharts)
+- [x] Grafy per svalová skupina (týdenní objem stacked bar)
+- [x] Export dat do ZIP (CSV)
 
 ### Progres tracking
 - [x] Weekly measurements grid (inline edit, save on blur)
