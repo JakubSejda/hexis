@@ -1,8 +1,17 @@
 import { redirect } from 'next/navigation'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { db } from '@/db/client'
-import { sessions, sessionSets, planExercises, exercises, plans } from '@/db/schema'
+import {
+  sessions,
+  sessionSets,
+  planExercises,
+  exercises,
+  plans,
+  exerciseMuscleGroups,
+  muscleGroups,
+} from '@/db/schema'
 import { and, asc, desc, eq, inArray, ne } from 'drizzle-orm'
+import { WorkoutHeatmap } from '@/components/heatmap/WorkoutHeatmap'
 import { WorkoutSessionClient } from '@/components/workout/WorkoutSessionClient'
 import { SessionSummary } from '@/components/workout/SessionSummary'
 import { SessionDetailView } from '@/components/workout/SessionDetailView'
@@ -106,6 +115,35 @@ export default async function WorkoutSessionPage({
     })),
   ]
 
+  const allExIds = allExercises.map((e) => e.exerciseId)
+  const exerciseMuscles =
+    allExIds.length > 0
+      ? await db
+          .select({ exerciseId: exerciseMuscleGroups.exerciseId, slug: muscleGroups.slug })
+          .from(exerciseMuscleGroups)
+          .innerJoin(muscleGroups, eq(muscleGroups.id, exerciseMuscleGroups.muscleGroupId))
+          .where(inArray(exerciseMuscleGroups.exerciseId, allExIds))
+      : []
+
+  const exerciseToMuscles = new Map<number, string[]>()
+  for (const row of exerciseMuscles) {
+    const arr = exerciseToMuscles.get(row.exerciseId) ?? []
+    arr.push(row.slug)
+    exerciseToMuscles.set(row.exerciseId, arr)
+  }
+
+  const doneExIds = new Set(allExercises.filter((e) => e.sets.length > 0).map((e) => e.exerciseId))
+  const plannedMuscles: string[] = []
+  const doneMuscles: string[] = []
+  for (const ex of allExercises) {
+    const muscles = exerciseToMuscles.get(ex.exerciseId) ?? []
+    if (doneExIds.has(ex.exerciseId)) {
+      doneMuscles.push(...muscles)
+    } else {
+      plannedMuscles.push(...muscles)
+    }
+  }
+
   // Finished session -> readonly view
   if (session.finishedAt) {
     return (
@@ -194,6 +232,12 @@ export default async function WorkoutSessionPage({
 
   return (
     <>
+      <details className="rounded-lg border border-[#1F2733] p-3">
+        <summary className="cursor-pointer text-sm text-[#6B7280]">Svalová mapa</summary>
+        <div className="mt-2">
+          <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />
+        </div>
+      </details>
       <WorkoutSessionClient
         sessionId={sessionId}
         exercises={exercisesWithSuggestions}
