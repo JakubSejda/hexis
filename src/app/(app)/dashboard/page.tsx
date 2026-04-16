@@ -4,9 +4,10 @@ import { sessions, plans } from '@/db/schema'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import { getTotalXp } from '@/lib/xp'
-import { xpToLevel, xpForNextLevel } from '@/lib/xp-events'
+import { xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
 import Link from 'next/link'
+import { AvatarHero } from '@/components/dashboard/AvatarHero'
 import { TodayNutritionCard } from '@/components/dashboard/TodayNutritionCard'
 import { WeekMeasurementCard } from '@/components/dashboard/WeekMeasurementCard'
 import { NutritionStreakCard } from '@/components/dashboard/NutritionStreakCard'
@@ -25,7 +26,6 @@ export default async function DashboardPage() {
 
   const totalXp = await getTotalXp(db, user.id)
   const level = xpToLevel(totalXp)
-  const nextThreshold = xpForNextLevel(level)
 
   const [active] = await db
     .select({ id: sessions.id, planName: plans.name, startedAt: sessions.startedAt })
@@ -123,24 +123,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-[#6B7280]">
-            {new Date().toLocaleDateString('cs-CZ', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-            })}
-          </p>
-          <h1 className="text-xl">Ahoj, {user.name ?? user.email}</h1>
-        </div>
-        <div className="text-right text-xs">
-          <div className="text-lg font-bold text-[#10B981]">L{level}</div>
-          <div className="text-[#6B7280]">
-            {totalXp}/{nextThreshold} XP
-          </div>
-        </div>
-      </div>
+      <AvatarHero
+        level={level}
+        totalXp={totalXp}
+        userName={user.name ?? null}
+        userEmail={user.email ?? ''}
+      />
       <div className="rounded-lg border border-[#1F2733] p-3 text-center">
         <div className="text-2xl">{streak}</div>
         <div className="text-xs text-[#6B7280]">denni streak</div>
