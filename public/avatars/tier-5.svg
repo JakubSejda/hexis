@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="56" height="56">
+  <circle cx="28" cy="28" r="24" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="2"/>
+  <circle cx="28" cy="28" r="16" fill="#0c4a6e"/>
+  <text x="28" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="700" fill="#f0f9ff">V</text>
+</svg>
