@@ -105,6 +105,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const totalXpDelta = xpSet.xpDelta + (xpPr?.xpDelta ?? 0)
   const newTotalXp = xpPr?.newTotalXp ?? xpSet.newTotalXp
   const levelUp = xpSet.levelUp || (xpPr?.levelUp ?? false)
+  const tierUp = xpSet.tierUp || (xpPr?.tierUp ?? false)
+  const latest = xpPr ?? xpSet
+  const levelAfter = latest.levelAfter
+  const tierAfter = latest.tierAfter
 
   return Response.json(
     {
@@ -113,6 +117,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       xpDelta: totalXpDelta,
       newTotalXp,
       levelUp,
+      tierUp,
+      levelAfter,
+      tierAfter,
       nextSuggestion,
     },
     { status: 201 }

@@ -52,7 +52,6 @@ export async function PUT(req: Request) {
   }
 
   const { affectedRows, id } = await upsertWeek(db, user.id, parsed.data)
-  let xpDelta = 0
   if (affectedRows === 1) {
     const xp = await awardXp({
       event: 'measurement_added',
@@ -60,9 +59,19 @@ export async function PUT(req: Request) {
       userId: user.id,
       meta: { measurementId: id },
     })
-    xpDelta = xp.xpDelta
+    return Response.json(
+      {
+        id,
+        xpDelta: xp.xpDelta,
+        levelUp: xp.levelUp,
+        tierUp: xp.tierUp,
+        levelAfter: xp.levelAfter,
+        tierAfter: xp.tierAfter,
+      },
+      { status: 201 }
+    )
   }
-  return Response.json({ id, xpDelta }, { status: affectedRows === 1 ? 201 : 200 })
+  return Response.json({ id, xpDelta: 0 }, { status: 200 })
 }
 
 function unauth() {

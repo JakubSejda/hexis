@@ -161,6 +161,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     xpDelta: xpAward?.xpDelta ?? 0,
     newTotalXp: xpAward?.newTotalXp ?? null,
     levelUp: xpAward?.levelUp ?? false,
+    tierUp: xpAward?.tierUp ?? false,
+    levelAfter: xpAward?.levelAfter ?? null,
+    tierAfter: xpAward?.tierAfter ?? null,
   })
 }
 
