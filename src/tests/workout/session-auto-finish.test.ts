@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import { drizzle, type MySql2Database } from 'drizzle-orm/mysql2'
 import mysql from 'mysql2/promise'
-import { and, eq, isNull } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import * as schema from '@/db/schema'
 import { users, sessions, sessionSets, xpEvents } from '@/db/schema'
 import { hashPassword } from '@/lib/password'

@@ -2,8 +2,6 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { eq } from 'drizzle-orm'
 import { db } from '@/db/client'
 import { users } from '@/db/schema'
-import { newUlid } from '@/lib/ulid'
-
 const { TEST_USER_ID } = vi.hoisted(() => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { ulid } = require('ulid')

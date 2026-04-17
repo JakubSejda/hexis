@@ -6,7 +6,6 @@ import {
   sessionSets,
   planExercises,
   exercises,
-  plans,
   exerciseMuscleGroups,
   muscleGroups,
 } from '@/db/schema'
@@ -242,11 +241,7 @@ export default async function WorkoutSessionPage({
           <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />
         </div>
       </details>
-      <WorkoutSessionClient
-        sessionId={sessionId}
-        exercises={exercisesWithSuggestions}
-        skippedIds={[]}
-      />
+      <WorkoutSessionClient sessionId={sessionId} exercises={exercisesWithSuggestions} />
       <SessionSummary
         sessionId={sessionId}
         totalSets={totalSets}
