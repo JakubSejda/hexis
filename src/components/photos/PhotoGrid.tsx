@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { PoseBadge } from './PoseBadge'
 
 type PhotoItem = {
@@ -40,11 +41,14 @@ export function PhotoGrid({ photos, onPhotoTap }: Props) {
                 onClick={() => onPhotoTap(p.globalIdx)}
                 className="relative aspect-square overflow-hidden rounded-lg"
               >
-                <img
+                <Image
                   src={p.thumbUrl}
                   alt={`${p.pose} ${p.takenAt}`}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 33vw, 200px"
+                  className="object-cover"
                   loading="lazy"
+                  unoptimized
                 />
                 <PoseBadge pose={p.pose} />
               </button>

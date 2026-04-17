@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 
 type PhotoItem = { id: number; takenAt: string; pose: string; fullUrl: string; thumbUrl: string }
@@ -75,19 +76,25 @@ export function BeforeAfter({ photos, dates }: Props) {
       </div>
       {beforePhoto && afterPhoto ? (
         <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
-          <img
+          <Image
             src={afterPhoto.fullUrl}
             alt={`After ${afterDate}`}
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 600px"
+            className="object-cover"
+            unoptimized
           />
           <div
             className="absolute inset-0 overflow-hidden"
             style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
           >
-            <img
+            <Image
               src={beforePhoto.fullUrl}
               alt={`Before ${beforeDate}`}
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 600px"
+              className="object-cover"
+              unoptimized
             />
           </div>
           <div className="absolute top-0 bottom-0 w-0.5 bg-white" style={{ left: `${sliderPos}%` }}>

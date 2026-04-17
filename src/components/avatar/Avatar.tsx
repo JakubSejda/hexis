@@ -1,10 +1,11 @@
+import Image from 'next/image'
 import type { Tier } from '@/lib/tiers'
 
 type Props = { tier: Tier; size?: number; className?: string; ringPulse?: boolean }
 
 export function Avatar({ tier, size = 56, className, ringPulse }: Props) {
   return (
-    <img
+    <Image
       src={`/avatars/tier-${tier}.svg`}
       width={size}
       height={size}
@@ -14,6 +15,9 @@ export function Avatar({ tier, size = 56, className, ringPulse }: Props) {
       }
       style={{ width: size, height: size }}
       draggable={false}
+      // SVGs don't benefit from Next's raster optimiser.
+      unoptimized
+      priority
     />
   )
 }
