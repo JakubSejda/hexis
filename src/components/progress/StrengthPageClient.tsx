@@ -28,14 +28,15 @@ export function StrengthPageClient() {
   const [stagnation, setStagnation] = useState<StagnationResult[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Load exercise list once
+  // Load exercise list once. Functional setter for selectedExId avoids
+  // reading it from closure, so [] is an honest dep array.
   useEffect(() => {
     fetch('/api/exercises?trained=true')
       .then((r) => r.json())
       .then((data) => {
         const list = (data.exercises ?? []) as TrainedExercise[]
         setExercises(list)
-        if (list.length > 0 && !selectedExId) setSelectedExId(list[0]!.id)
+        setSelectedExId((current) => current ?? list[0]?.id ?? null)
       })
   }, [])
 
