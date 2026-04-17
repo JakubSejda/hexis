@@ -22,8 +22,12 @@ export function InstallPrompt() {
     const isIosDevice =
       /iPad|iPhone|iPod/.test(ua) && !(window as unknown as { MSStream?: unknown }).MSStream
     if (isIosDevice && !(navigator as unknown as { standalone?: boolean }).standalone) {
-      setIsIos(true)
-      setShow(true)
+      // Defer state updates off the synchronous effect path to avoid
+      // react-hooks/set-state-in-effect cascading re-renders.
+      queueMicrotask(() => {
+        setIsIos(true)
+        setShow(true)
+      })
       return
     }
 

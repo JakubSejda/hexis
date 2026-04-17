@@ -228,6 +228,10 @@ export default async function WorkoutSessionPage({
     (a, e) => a + e.sets.reduce((b, s) => b + Number(s.weightKg ?? 0) * (s.reps ?? 0), 0),
     0
   )
+  // Server component — Date.now() evaluates once per request on the server,
+  // no render-purity or hydration concern. The lint rule can't distinguish
+  // server components from client ones.
+  // eslint-disable-next-line react-hooks/purity
   const durationMin = Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 60000)
 
   return (

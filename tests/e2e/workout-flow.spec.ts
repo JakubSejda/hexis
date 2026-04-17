@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 // Precondition: the test user from M1 bootstrap is seeded. Credentials come from env.
 
 const EMAIL = process.env.E2E_EMAIL ?? 'jakub@test.com'
 const PASSWORD = process.env.E2E_PASSWORD ?? 'ChangeMe1'
 
-async function login(page: any) {
+async function login(page: Page) {
   await page.goto('/login')
   await page.getByLabel(/email/i).fill(EMAIL)
   await page.getByLabel(/heslo/i).fill(PASSWORD)

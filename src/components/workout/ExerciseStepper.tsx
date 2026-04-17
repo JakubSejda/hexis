@@ -44,6 +44,13 @@ function StepperInner({
   }
 
   const current = exercises[idx]
+  // Hook must be called unconditionally — guard inside the callback instead
+  // of after an early return.
+  const longPress = useLongPress(() => {
+    if (!current) return
+    if (confirm(`Přeskočit ${current.name}?`)) onSkip(current.exerciseId)
+  })
+
   if (!current) {
     return (
       <div className="flex flex-col gap-3 p-4">
@@ -52,10 +59,6 @@ function StepperInner({
       </div>
     )
   }
-
-  const longPress = useLongPress(() => {
-    if (confirm(`Přeskočit ${current.name}?`)) onSkip(current.exerciseId)
-  })
 
   return (
     <div className="flex flex-col gap-4 p-4">

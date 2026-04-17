@@ -11,13 +11,21 @@ type Active = {
 
 export function ResumeBanner() {
   const [active, setActive] = useState<Active>(null)
+  const [minutes, setMinutes] = useState<number | null>(null)
   useEffect(() => {
     fetch('/api/workout/active')
       .then((r) => r.json())
       .then((d) => setActive(d.active))
   }, [])
-  if (!active) return null
-  const minutes = Math.floor((Date.now() - new Date(active.startedAt).getTime()) / 60000)
+  useEffect(() => {
+    if (!active) return
+    const recompute = () =>
+      setMinutes(Math.floor((Date.now() - new Date(active.startedAt).getTime()) / 60000))
+    recompute()
+    const id = window.setInterval(recompute, 30_000)
+    return () => window.clearInterval(id)
+  }, [active])
+  if (!active || minutes === null) return null
   return (
     <Link
       href={`/workout/${active.id}`}

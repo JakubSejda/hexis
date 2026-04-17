@@ -47,9 +47,26 @@ export function PhotosPageClient() {
     setLoading(false)
   }, [])
 
+  // Initial mount fetch. Inlined (not delegated to loadPhotos) so no setState
+  // runs synchronously inside the effect body — the rule cascading-renders
+  // check fires when an effect directly or indirectly calls setState before
+  // awaiting.
   useEffect(() => {
-    loadPhotos()
-  }, [loadPhotos])
+    let alive = true
+    ;(async () => {
+      const [photosRes, datesRes] = await Promise.all([
+        fetch('/api/photos?limit=200').then((r) => r.json()),
+        fetch('/api/photos/dates').then((r) => r.json()),
+      ])
+      if (!alive) return
+      setPhotos(photosRes.items ?? [])
+      setDates(datesRes.dates ?? [])
+      setLoading(false)
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
 
   return (
     <div className="flex flex-col gap-3">

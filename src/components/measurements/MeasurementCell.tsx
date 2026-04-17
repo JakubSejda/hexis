@@ -11,12 +11,16 @@ type Props = {
 
 export function MeasurementCell({ value, precision, align = 'right', onCommit }: Props) {
   const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState<string>(value == null ? '' : value.toFixed(precision))
+  const formatted = value == null ? '' : value.toFixed(precision)
+  const [draft, setDraft] = useState<string>(formatted)
+  // Render-phase sync: reset draft when the parent-supplied value/precision
+  // change. Preferred over useEffect+setState, which the react-hooks rules flag.
+  const [lastFormatted, setLastFormatted] = useState(formatted)
+  if (formatted !== lastFormatted) {
+    setLastFormatted(formatted)
+    setDraft(formatted)
+  }
   const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    setDraft(value == null ? '' : value.toFixed(precision))
-  }, [value, precision])
 
   useEffect(() => {
     if (editing) inputRef.current?.focus()

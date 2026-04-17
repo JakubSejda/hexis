@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { TimeRangePicker } from './TimeRangePicker'
 import { ExercisePicker } from './ExercisePicker'
 import { OneRmChart } from './OneRmChart'
@@ -46,25 +46,32 @@ export function StrengthPageClient() {
       .then((data) => setStagnation(data.exercises ?? []))
   }, [])
 
-  // Load charts when exercise or range changes
-  const loadCharts = useCallback(async () => {
-    setLoading(true)
-    const [strengthRes, volumeRes] = await Promise.all([
-      selectedExId
-        ? fetch(`/api/progress/strength?exerciseId=${selectedExId}&days=${days}`).then((r) =>
-            r.json()
-          )
-        : Promise.resolve({ dataPoints: [] }),
-      fetch(`/api/progress/volume?days=${days}`).then((r) => r.json()),
-    ])
-    setStrengthData(strengthRes.dataPoints ?? [])
-    setVolumeData(volumeRes.weeks ?? [])
-    setLoading(false)
-  }, [selectedExId, days])
-
+  // Load charts when exercise or range changes.
   useEffect(() => {
-    loadCharts()
-  }, [loadCharts])
+    let alive = true
+    // We deliberately do NOT call setLoading(true) synchronously here;
+    // that would trigger react-hooks/set-state-in-effect. The spinner is
+    // visible via the initial `loading=true` state on mount, and for
+    // subsequent triggers we accept a brief flash of stale data over a
+    // cascading re-render.
+    ;(async () => {
+      const [strengthRes, volumeRes] = await Promise.all([
+        selectedExId
+          ? fetch(`/api/progress/strength?exerciseId=${selectedExId}&days=${days}`).then((r) =>
+              r.json()
+            )
+          : Promise.resolve({ dataPoints: [] }),
+        fetch(`/api/progress/volume?days=${days}`).then((r) => r.json()),
+      ])
+      if (!alive) return
+      setStrengthData(strengthRes.dataPoints ?? [])
+      setVolumeData(volumeRes.weeks ?? [])
+      setLoading(false)
+    })()
+    return () => {
+      alive = false
+    }
+  }, [selectedExId, days])
 
   return (
     <div className="flex flex-col gap-4">

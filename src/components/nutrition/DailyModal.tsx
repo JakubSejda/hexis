@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { BottomSheet } from '@/components/ui/BottomSheet'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { NumberInput } from '@/components/ui/NumberInput'
@@ -45,24 +45,26 @@ export function DailyModal({
   onSaved,
 }: Props) {
   const { notifyXp } = useXpFeedback()
-  const [draft, setDraft] = useState<DayRow | null>(initial)
-
-  useEffect(() => {
-    setDraft(
-      initial ??
-        (date
-          ? {
-              date,
-              kcalActual: null,
-              proteinG: null,
-              carbsG: null,
-              fatG: null,
-              sugarG: null,
-              note: null,
-            }
-          : null)
-    )
-  }, [initial, date])
+  const derivedDraft: DayRow | null =
+    initial ??
+    (date
+      ? {
+          date,
+          kcalActual: null,
+          proteinG: null,
+          carbsG: null,
+          fatG: null,
+          sugarG: null,
+          note: null,
+        }
+      : null)
+  const [draft, setDraft] = useState<DayRow | null>(derivedDraft)
+  // Render-phase sync: reset local draft whenever the parent switches day.
+  const [lastKey, setLastKey] = useState<string | null>(date)
+  if (lastKey !== date) {
+    setLastKey(date)
+    setDraft(derivedDraft)
+  }
 
   if (!open || !date || !draft) return null
 

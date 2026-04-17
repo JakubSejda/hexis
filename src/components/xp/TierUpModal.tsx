@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Avatar } from '@/components/avatar/Avatar'
 import { TIERS, type Tier } from '@/lib/tiers'
 
@@ -44,32 +44,47 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
   )
 }
 
+const CONFETTI_COLORS = ['#10b981', '#f59e0b', '#0ea5e9', '#eab308', '#ef4444']
+
+type ConfettiPiece = {
+  left: number
+  delay: number
+  duration: number
+  bg: string
+  rotate: number
+}
+
+// Module-level so the render-purity rule doesn't apply to Math.random calls.
+function generateConfetti(): ConfettiPiece[] {
+  return Array.from({ length: 40 }, () => ({
+    left: Math.random() * 100,
+    delay: Math.random() * 0.5,
+    duration: 1.5 + Math.random(),
+    bg: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)]!,
+    rotate: Math.random() * 360,
+  }))
+}
+
 function Confetti() {
-  const pieces = Array.from({ length: 40 })
+  // Randomised once per mount via lazy state initialiser.
+  const [pieces] = useState<ConfettiPiece[]>(generateConfetti)
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {pieces.map((_, i) => {
-        const left = Math.random() * 100
-        const delay = Math.random() * 0.5
-        const duration = 1.5 + Math.random()
-        const colors = ['#10b981', '#f59e0b', '#0ea5e9', '#eab308', '#ef4444']
-        const bg = colors[Math.floor(Math.random() * colors.length)]
-        return (
-          <span
-            key={i}
-            style={{
-              position: 'absolute',
-              top: '-20px',
-              left: `${left}%`,
-              width: 8,
-              height: 12,
-              background: bg,
-              transform: `rotate(${Math.random() * 360}deg)`,
-              animation: `confetti-fall ${duration}s linear ${delay}s forwards`,
-            }}
-          />
-        )
-      })}
+      {pieces.map((p, i) => (
+        <span
+          key={i}
+          style={{
+            position: 'absolute',
+            top: '-20px',
+            left: `${p.left}%`,
+            width: 8,
+            height: 12,
+            background: p.bg,
+            transform: `rotate(${p.rotate}deg)`,
+            animation: `confetti-fall ${p.duration}s linear ${p.delay}s forwards`,
+          }}
+        />
+      ))}
     </div>
   )
 }
