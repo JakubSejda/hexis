@@ -8,7 +8,7 @@
 - `[~]` — rozpracováno
 - `[x]` — hotovo
 
-## Fáze 1 — MVP (aktuální)
+## Fáze 1 — MVP ✅ hotovo (2026-04-17)
 
 Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 
@@ -73,7 +73,7 @@ Pro detail viz `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md`.
 - [x] Vitest setup + unit testy lib funkcí
 - [x] Integration testy (xp, session-auto-finish) s testovací DB (port 3308)
 - [x] Playwright setup + 3 E2E specs (workout flow, ad-hoc, edit)
-- [ ] CI: typecheck + lint + test (pre-push hook)
+- [x] CI: typecheck + lint + test (pre-push hook)
 
 ## Fáze 2 — Hostinger deploy + multi-user
 
