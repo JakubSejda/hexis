@@ -65,6 +65,10 @@ npm run db:seed       # Seed data (idempotent)
 npm run db:studio     # Drizzle Studio (DB GUI)
 ```
 
+> **Pre-push hook:** při každém `git push` se spouští `typecheck + lint + vitest` (viz `.husky/pre-push`).
+> Vyžaduje běžící test DB (`docker compose up -d mysql-test`).
+> Bypass v nouzi: `git push --no-verify`.
+
 ### Reset DB
 
 ```bash
