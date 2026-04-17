@@ -77,7 +77,7 @@ export function ExerciseCard({
       if (exercise.restSec > 0) restTimerStore.start(exercise.restSec)
       if (body.nextSuggestion) setSuggestion(body.nextSuggestion)
       onSetLogged()
-    } catch (e) {
+    } catch {
       toast.show('Set se neuložil, zkus znovu', 'error')
     } finally {
       setSubmitting(false)

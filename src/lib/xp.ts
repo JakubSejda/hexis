@@ -3,7 +3,7 @@ import { eq, sql } from 'drizzle-orm'
 import * as schema from '@/db/schema'
 import { users, xpEvents } from '@/db/schema'
 import { XP_DELTAS, xpToLevel, type XpEventType } from './xp-events'
-import { levelToTier, type Tier } from './tiers'
+import { levelToTier } from './tiers'
 
 type DB = MySql2Database<typeof schema>
 

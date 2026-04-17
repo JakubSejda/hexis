@@ -13,22 +13,13 @@ type Exercise = React.ComponentProps<typeof ExerciseCard>['exercise']
 type Props = {
   sessionId: number
   exercises: Array<Exercise & { historyLabel: string | null; suggestion: Suggestion }>
-  skipped: Set<number>
   onRefresh: () => void
   onSkip: (exerciseId: number) => void
   onAdHoc: (exerciseId: number) => void
   onFinish: () => void
 }
 
-function StepperInner({
-  sessionId,
-  exercises,
-  skipped,
-  onRefresh,
-  onSkip,
-  onAdHoc,
-  onFinish,
-}: Props) {
+function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFinish }: Props) {
   const router = useRouter()
   const search = useSearchParams()
   const exParam = search.get('ex')
