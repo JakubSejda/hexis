@@ -97,6 +97,9 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           className="text-sm text-[#6b7280] file:mr-2 file:rounded file:border-0 file:bg-[#1f2733] file:px-3 file:py-1.5 file:text-sm file:text-[#e5e7eb]"
         />
         {preview ? (
+          // next/image does not support blob: / data: URLs used for client-side
+          // previews before upload. Native <img> is intentional here.
+          // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="Preview" className="mx-auto h-48 rounded-lg object-contain" />
         ) : null}
         <div className="flex gap-2">

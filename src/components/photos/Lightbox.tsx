@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/Toast'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
@@ -80,11 +81,15 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
           </button>
         </div>
       </div>
-      <div className="flex flex-1 items-center justify-center overflow-hidden">
-        <img
+      <div className="relative flex flex-1 items-center justify-center overflow-hidden">
+        <Image
           src={photo.fullUrl}
           alt={`${photo.pose} ${photo.takenAt}`}
-          className="max-h-full max-w-full object-contain"
+          fill
+          sizes="100vw"
+          className="object-contain"
+          unoptimized
+          priority
         />
       </div>
       <div className="flex justify-between p-4">

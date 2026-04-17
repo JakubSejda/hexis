@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 type PhotoItem = {
   id: number
   takenAt: string
@@ -28,11 +30,14 @@ export function PhotoTimeline({ photos, onPhotoTap }: Props) {
           onClick={() => onPhotoTap(i)}
           className="flex gap-3 rounded-lg border border-[#1f2733] bg-[#141a22] p-2 text-left"
         >
-          <img
+          <Image
             src={p.thumbUrl}
             alt={`${p.pose} ${p.takenAt}`}
+            width={96}
+            height={96}
             className="h-24 w-24 rounded-md object-cover"
             loading="lazy"
+            unoptimized
           />
           <div className="flex flex-col justify-center">
             <span className="text-sm font-medium text-[#e5e7eb]">{formatDate(p.takenAt)}</span>
