@@ -10,7 +10,7 @@ export function TierLadder({ currentTier }: Props) {
   const [open, setOpen] = useState<Tier | null>(null)
   return (
     <div className="space-y-2">
-      <h2 className="text-sm font-semibold text-[#e5e7eb]">Tier ladder</h2>
+      <h2 className="text-foreground text-sm font-semibold">Tier ladder</h2>
       <div className="flex justify-around">
         {TIERS.map((t) => (
           <button
@@ -19,18 +19,16 @@ export function TierLadder({ currentTier }: Props) {
             onClick={() => setOpen(open === t.tier ? null : t.tier)}
             className="flex flex-col items-center"
           >
-            <div
-              className={t.tier === currentTier ? 'rounded-full p-0.5 ring-2 ring-[#10b981]' : ''}
-            >
+            <div className={t.tier === currentTier ? 'ring-primary rounded-full p-0.5 ring-2' : ''}>
               <TierBadge tier={t.tier} size={48} dim={t.tier > currentTier} label />
             </div>
           </button>
         ))}
       </div>
       {open != null && (
-        <div className="rounded-lg border border-[#1F2733] bg-[#0a0e14] p-3 text-sm text-[#e5e7eb]">
+        <div className="border-border bg-background text-foreground rounded-lg border p-3 text-sm">
           <div className="font-semibold">{TIERS[open - 1]!.name}</div>
-          <div className="text-xs text-[#6b7280]">
+          <div className="text-muted text-xs">
             Level {TIERS[open - 1]!.levelMin}–
             {TIERS[open - 1]!.levelMax === 999 ? '∞' : TIERS[open - 1]!.levelMax}
           </div>

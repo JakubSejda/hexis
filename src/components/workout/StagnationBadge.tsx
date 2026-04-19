@@ -6,7 +6,7 @@ type Props = {
 export function StagnationBadge({ weeksSincePr, suggestion }: Props) {
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-md bg-[#f59e0b]/10 px-2 py-0.5 text-xs text-[#f59e0b]"
+      className="bg-accent/10 text-accent inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs"
       title={
         suggestion === 'deload'
           ? `${weeksSincePr} t. bez PR — zkus deload`

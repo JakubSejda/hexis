@@ -21,7 +21,7 @@ export function Switch({ checked, onChange, disabled, label, id }: Props) {
       className={
         'relative inline-flex h-6 w-10 items-center rounded-full transition-colors ' +
         (disabled ? 'cursor-not-allowed opacity-50 ' : 'cursor-pointer ') +
-        (checked ? 'bg-[#10b981]' : 'bg-[#1f2733]')
+        (checked ? 'bg-primary' : 'bg-border')
       }
     >
       <span

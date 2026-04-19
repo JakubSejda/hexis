@@ -26,7 +26,7 @@ function formatDate(dateStr: string) {
 
 export function OneRmChart({ data }: Props) {
   if (data.length === 0) {
-    return <p className="py-8 text-center text-sm text-[#6b7280]">Žádná data</p>
+    return <p className="text-muted py-8 text-center text-sm">Žádná data</p>
   }
 
   const globalMax = Math.max(...data.map((d) => d.best1rm))

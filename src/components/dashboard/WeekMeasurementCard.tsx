@@ -27,7 +27,7 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
     return (
       <Card>
         <Header cta="Zadat měření →" />
-        <p className="text-sm text-[#6b7280]">Žádná měření tento týden.</p>
+        <p className="text-muted text-sm">Žádná měření tento týden.</p>
       </Card>
     )
   }
@@ -38,9 +38,9 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
       <Header cta="Měřit →" />
       <div className="flex items-end gap-3">
         <div className="flex-1">
-          <div className="text-[11px] text-[#6b7280]">Váha</div>
+          <div className="text-muted text-[11px]">Váha</div>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-bold text-[#e5e7eb]">
+            <span className="text-foreground text-3xl font-bold">
               {thisWeek?.weightKg?.toFixed(1) ?? '—'}
             </span>
             <span className="text-sm font-semibold" style={{ color: COLOR[weightDir] }}>
@@ -51,7 +51,7 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
                   : `↓ ${Math.abs(weightDelta).toFixed(1)}`}
             </span>
           </div>
-          <div className="mt-0.5 text-[11px] text-[#6b7280]">kg</div>
+          <div className="text-muted mt-0.5 text-[11px]">kg</div>
         </div>
         <div className="flex-1">
           <Sparkline
@@ -61,10 +61,10 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
             color={COLOR[weightDir]}
             className="block"
           />
-          <div className="text-right text-[10px] text-[#6b7280]">8 týdnů</div>
+          <div className="text-muted text-right text-[10px]">8 týdnů</div>
         </div>
       </div>
-      <div className="mt-3 grid grid-cols-4 gap-3 border-t border-[#1f2733] pt-3">
+      <div className="border-border mt-3 grid grid-cols-4 gap-3 border-t pt-3">
         <Mini
           label="Pas"
           actual={thisWeek?.waistCm ?? null}
@@ -96,17 +96,15 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-1 rounded-xl border border-[#1f2733] bg-[#141a22] p-3.5">
-      {children}
-    </div>
+    <div className="border-border bg-surface space-y-1 rounded-xl border p-3.5">{children}</div>
   )
 }
 
 function Header({ cta }: { cta: string }) {
   return (
     <div className="mb-2 flex items-center justify-between">
-      <span className="text-sm font-semibold text-[#e5e7eb]">Tento týden</span>
-      <Link href="/progress/body" className="text-xs text-[#10b981]">
+      <span className="text-foreground text-sm font-semibold">Tento týden</span>
+      <Link href="/progress/body" className="text-primary text-xs">
         {cta}
       </Link>
     </div>
@@ -128,8 +126,8 @@ function Mini({
   const dir = deltaDirection(d, goal)
   return (
     <div className="text-center">
-      <div className="text-[11px] text-[#6b7280]">{label}</div>
-      <div className="text-base font-semibold text-[#e5e7eb]">{actual?.toFixed(1) ?? '—'}</div>
+      <div className="text-muted text-[11px]">{label}</div>
+      <div className="text-foreground text-base font-semibold">{actual?.toFixed(1) ?? '—'}</div>
       <div className="text-[11px]" style={{ color: COLOR[dir] }}>
         {d == null ? '—' : d > 0 ? `↑ ${d.toFixed(1)}` : `↓ ${Math.abs(d).toFixed(1)}`}
       </div>

@@ -94,11 +94,11 @@ export function MeasurementGrid({ initialRows }: Props) {
     <div className="overflow-x-auto p-4">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-[#1f2733]">
+          <tr className="border-border border-b">
             {HEADERS.map((h) => (
               <th
                 key={h}
-                className="px-1.5 py-2 text-right text-[11px] font-medium text-[#6b7280] first:text-left"
+                className="text-muted px-1.5 py-2 text-right text-[11px] font-medium first:text-left"
               >
                 {h}
               </th>
@@ -136,7 +136,7 @@ export function MeasurementGrid({ initialRows }: Props) {
           })}
         </tbody>
       </table>
-      <div className="py-3 text-center text-xs text-[#6b7280]">
+      <div className="text-muted py-3 text-center text-xs">
         {done ? (
           'Žádné starší týdny.'
         ) : (

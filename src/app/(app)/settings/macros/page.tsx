@@ -41,19 +41,19 @@ export default function MacrosPage() {
     setSaving(false)
   }
 
-  if (loading) return <div className="p-4 text-[#6b7280]">Načítání…</div>
+  if (loading) return <div className="text-muted p-4">Načítání…</div>
 
   return (
     <div className="space-y-4 p-4">
       <h1 className="text-xl font-semibold">Sledovaná makra</h1>
-      <p className="text-sm text-[#6b7280]">Kalorie a protein jsou vždy zapnuté.</p>
+      <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
       <ul className="space-y-2">
         {ALL.map((m) => (
           <li
             key={m.key}
-            className="flex items-center justify-between rounded-lg border border-[#1f2733] bg-[#141a22] p-3"
+            className="border-border bg-surface flex items-center justify-between rounded-lg border p-3"
           >
-            <span className="text-[#e5e7eb]">{m.label}</span>
+            <span className="text-foreground">{m.label}</span>
             <Switch
               checked={macros.includes(m.key)}
               disabled={m.required || saving}

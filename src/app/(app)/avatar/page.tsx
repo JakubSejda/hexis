@@ -24,22 +24,22 @@ export default async function AvatarPage() {
 
   return (
     <div className="space-y-4 p-4">
-      <div className="flex flex-col items-center gap-2 rounded-xl border border-[#1F2733] bg-[#141A22] p-6">
-        <h1 className="mb-2 text-lg font-semibold text-[#e5e7eb]">Tvůj avatar</h1>
+      <div className="border-border bg-surface flex flex-col items-center gap-2 rounded-xl border p-6">
+        <h1 className="text-foreground mb-2 text-lg font-semibold">Tvůj avatar</h1>
         <Avatar tier={tierMeta.tier} size={160} />
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-2xl font-bold" style={{ color: tierMeta.color }}>
             Level {level}
           </span>
-          <span className="text-base text-[#6b7280]">· {tierMeta.name}</span>
+          <span className="text-muted text-base">· {tierMeta.name}</span>
         </div>
-        <div className="text-xs text-[#6b7280]">
+        <div className="text-muted text-xs">
           Tier {tierMeta.tier} (L{tierMeta.levelMin}–
           {tierMeta.levelMax === 999 ? '∞' : tierMeta.levelMax})
         </div>
         <div className="mt-2 w-full max-w-md">
           <ProgressBar value={progress.current} max={progress.max} tone="primary" height={10} />
-          <div className="mt-1 flex justify-between text-xs text-[#6b7280]">
+          <div className="text-muted mt-1 flex justify-between text-xs">
             <span>{totalXp.toLocaleString('cs-CZ')} XP</span>
             <span>
               {(progress.max - progress.current).toLocaleString('cs-CZ')} do L{level + 1}

@@ -18,21 +18,19 @@ export function SessionHistoryList({ items }: { items: Item[] }) {
         <li key={s.id}>
           <Link
             href={`/workout/${s.id}`}
-            className="flex items-center justify-between rounded-md bg-[#141A22] px-3 py-2 text-sm"
+            className="bg-surface flex items-center justify-between rounded-md px-3 py-2 text-sm"
           >
             <span>
               {new Date(s.startedAt).toLocaleDateString('cs-CZ')}{' '}
-              {s.planSlug ? <span className="text-[#10B981]">{s.planSlug}</span> : 'ad-hoc'}
+              {s.planSlug ? <span className="text-primary">{s.planSlug}</span> : 'ad-hoc'}
             </span>
-            <span className="text-xs text-[#6B7280]">
+            <span className="text-muted text-xs">
               {s.setCount} sérií · {Number(s.volumeKg).toFixed(0)} kg
             </span>
           </Link>
         </li>
       ))}
-      {items.length === 0 ? (
-        <li className="text-xs text-[#6B7280]">Zatím žádné tréninky.</li>
-      ) : null}
+      {items.length === 0 ? <li className="text-muted text-xs">Zatím žádné tréninky.</li> : null}
     </ul>
   )
 }

@@ -24,18 +24,18 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
     >
       <Confetti />
       <div
-        className="relative mx-4 rounded-2xl border border-[#1F2733] bg-[#141A22] p-8 text-center shadow-2xl"
+        className="border-border bg-surface relative mx-4 rounded-2xl border p-8 text-center shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <Avatar tier={tier} size={120} ringPulse />
         <div className="mt-4 text-2xl font-bold" style={{ color: meta.color }}>
           Tier {tier}: {meta.name} odemknuty!
         </div>
-        <div className="mt-1 text-sm text-[#6b7280]">Dosahl jsi Level {levelAfter}</div>
+        <div className="text-muted mt-1 text-sm">Dosahl jsi Level {levelAfter}</div>
         <button
           type="button"
           onClick={onDismiss}
-          className="mt-6 rounded-lg bg-[#10b981] px-6 py-2 text-sm font-semibold text-[#0a0e14]"
+          className="bg-primary text-background mt-6 rounded-lg px-6 py-2 text-sm font-semibold"
         >
           Pokracovat
         </button>

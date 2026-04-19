@@ -117,14 +117,14 @@ export function ExportClient() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <h1 className="text-xl font-semibold">Export dat</h1>
-      <p className="text-sm text-[#6b7280]">
+      <p className="text-muted text-sm">
         Stáhne ZIP archiv se všemi tvými daty ve formátu CSV (sessions, sets, measurements,
         nutrition).
       </p>
       <button
         onClick={handleExport}
         disabled={status === 'fetching' || status === 'zipping'}
-        className="flex h-12 items-center justify-center rounded-lg bg-[#10b981] font-semibold text-[#0a0e14] disabled:opacity-50"
+        className="bg-primary text-background flex h-12 items-center justify-center rounded-lg font-semibold disabled:opacity-50"
       >
         {label[status]}
       </button>

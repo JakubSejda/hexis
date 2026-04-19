@@ -25,7 +25,7 @@ export function BeforeAfter({ photos, dates }: Props) {
 
   if (dates.length < 2) {
     return (
-      <p className="py-8 text-center text-sm text-[#6b7280]">
+      <p className="text-muted py-8 text-center text-sm">
         Potřebuješ alespoň fotky ze 2 různých dní
       </p>
     )
@@ -41,8 +41,8 @@ export function BeforeAfter({ photos, dates }: Props) {
             className={
               'flex-1 rounded-md px-2 py-1.5 text-xs transition-colors ' +
               (poseFilter === p.value
-                ? 'bg-[#10b981] font-semibold text-[#0a0e14]'
-                : 'bg-[#1f2733] text-[#6b7280]')
+                ? 'bg-primary text-background font-semibold'
+                : 'bg-border text-muted')
             }
           >
             {p.label}
@@ -53,7 +53,7 @@ export function BeforeAfter({ photos, dates }: Props) {
         <select
           value={beforeDate}
           onChange={(e) => setBeforeDate(e.target.value)}
-          className="flex-1 rounded-lg border border-[#1f2733] bg-[#141a22] px-2 py-1.5 text-sm text-[#e5e7eb]"
+          className="border-border bg-surface text-foreground flex-1 rounded-lg border px-2 py-1.5 text-sm"
         >
           {dates.map((d) => (
             <option key={d} value={d}>
@@ -61,11 +61,11 @@ export function BeforeAfter({ photos, dates }: Props) {
             </option>
           ))}
         </select>
-        <span className="self-center text-sm text-[#6b7280]">→</span>
+        <span className="text-muted self-center text-sm">→</span>
         <select
           value={afterDate}
           onChange={(e) => setAfterDate(e.target.value)}
-          className="flex-1 rounded-lg border border-[#1f2733] bg-[#141a22] px-2 py-1.5 text-sm text-[#e5e7eb]"
+          className="border-border bg-surface text-foreground flex-1 rounded-lg border px-2 py-1.5 text-sm"
         >
           {dates.map((d) => (
             <option key={d} value={d}>
@@ -116,9 +116,7 @@ export function BeforeAfter({ photos, dates }: Props) {
           </span>
         </div>
       ) : (
-        <p className="py-8 text-center text-sm text-[#6b7280]">
-          Žádná fotka pro vybranou kombinaci
-        </p>
+        <p className="text-muted py-8 text-center text-sm">Žádná fotka pro vybranou kombinaci</p>
       )}
     </div>
   )

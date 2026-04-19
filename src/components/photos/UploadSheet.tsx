@@ -94,7 +94,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           accept="image/*"
           capture="environment"
           onChange={handleFile}
-          className="text-sm text-[#6b7280] file:mr-2 file:rounded file:border-0 file:bg-[#1f2733] file:px-3 file:py-1.5 file:text-sm file:text-[#e5e7eb]"
+          className="text-muted file:bg-border file:text-foreground text-sm file:mr-2 file:rounded file:border-0 file:px-3 file:py-1.5 file:text-sm"
         />
         {preview ? (
           // next/image does not support blob: / data: URLs used for client-side
@@ -110,8 +110,8 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
               className={
                 'flex-1 rounded-md px-2 py-1.5 text-sm transition-colors ' +
                 (pose === p.value
-                  ? 'bg-[#10b981] font-semibold text-[#0a0e14]'
-                  : 'bg-[#1f2733] text-[#6b7280]')
+                  ? 'bg-primary text-background font-semibold'
+                  : 'bg-border text-muted')
               }
             >
               {p.label}
@@ -122,12 +122,12 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           type="date"
           value={takenAt}
           onChange={(e) => setTakenAt(e.target.value)}
-          className="rounded-lg border border-[#1f2733] bg-[#141a22] px-3 py-2 text-sm text-[#e5e7eb] outline-none"
+          className="border-border bg-surface text-foreground rounded-lg border px-3 py-2 text-sm outline-none"
         />
         <button
           onClick={handleUpload}
           disabled={!file || uploading}
-          className="flex h-12 items-center justify-center rounded-lg bg-[#10b981] font-semibold text-[#0a0e14] disabled:opacity-50"
+          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg font-semibold disabled:opacity-50"
         >
           {uploading ? 'Nahrávám…' : 'Nahrát'}
         </button>

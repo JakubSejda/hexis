@@ -25,11 +25,11 @@ export function MuscleHeatmap({ data, maxVolume }: Props) {
     <div className="flex items-center justify-center gap-2">
       <div className="flex flex-col items-center">
         <BodySvg view="front" fills={frontFills} className="h-48 w-auto" />
-        <span className="mt-1 text-[10px] text-[#6b7280]">Zepředu</span>
+        <span className="text-muted mt-1 text-[10px]">Zepředu</span>
       </div>
       <div className="flex flex-col items-center">
         <BodySvg view="back" fills={backFills} className="h-48 w-auto" />
-        <span className="mt-1 text-[10px] text-[#6b7280]">Zezadu</span>
+        <span className="text-muted mt-1 text-[10px]">Zezadu</span>
       </div>
     </div>
   )

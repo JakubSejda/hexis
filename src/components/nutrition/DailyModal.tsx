@@ -133,8 +133,8 @@ export function DailyModal({
         {(trackedMacros.includes('carbs') ||
           trackedMacros.includes('fat') ||
           trackedMacros.includes('sugar')) && (
-          <div className="rounded-lg bg-[#0a0e14] p-3">
-            <div className="mb-2 text-[11px] text-[#6b7280]">Volitelná makra</div>
+          <div className="bg-background rounded-lg p-3">
+            <div className="text-muted mb-2 text-[11px]">Volitelná makra</div>
             <div className="grid grid-cols-2 gap-2">
               {trackedMacros.includes('carbs') && (
                 <SimpleMacro
@@ -165,11 +165,11 @@ export function DailyModal({
         )}
 
         <div>
-          <div className="mb-1.5 text-xs text-[#6b7280]">Poznámka</div>
+          <div className="text-muted mb-1.5 text-xs">Poznámka</div>
           <textarea
             value={draft.note ?? ''}
             onChange={(e) => setDraft({ ...draft, note: e.target.value || null })}
-            className="min-h-[40px] w-full rounded-lg border border-[#1f2733] bg-[#0a0e14] p-2.5 text-sm text-[#e5e7eb]"
+            className="border-border bg-background text-foreground min-h-[40px] w-full rounded-lg border p-2.5 text-sm"
             rows={2}
           />
         </div>
@@ -177,7 +177,7 @@ export function DailyModal({
         <button
           type="button"
           onClick={save}
-          className="w-full rounded-lg bg-[#10b981] py-2.5 font-semibold text-[#0a0e14]"
+          className="bg-primary text-background w-full rounded-lg py-2.5 font-semibold"
         >
           Uložit
         </button>
@@ -206,7 +206,7 @@ function Field({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-xs text-[#6b7280]">{label}</span>
+        <span className="text-muted text-xs">{label}</span>
         <NumberInput
           value={value}
           onChange={onChange}
@@ -234,7 +234,7 @@ function SimpleMacro({
 }) {
   return (
     <div>
-      <div className="text-[11px] text-[#6b7280]">{label}</div>
+      <div className="text-muted text-[11px]">{label}</div>
       <NumberInput value={value} onChange={onChange} step={1} min={0} max={max} suffix=" g" />
     </div>
   )

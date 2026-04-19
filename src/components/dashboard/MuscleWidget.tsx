@@ -8,12 +8,12 @@ type Props = {
 export function MuscleWidget({ data, maxVolume }: Props) {
   const hasData = Object.keys(data).length > 0
   return (
-    <div className="rounded-lg border border-[#1F2733] p-3">
-      <h3 className="mb-2 text-center text-xs text-[#6B7280]">Posledních 7 dní</h3>
+    <div className="border-border rounded-lg border p-3">
+      <h3 className="text-muted mb-2 text-center text-xs">Posledních 7 dní</h3>
       {hasData ? (
         <MuscleHeatmap data={data} maxVolume={maxVolume} />
       ) : (
-        <p className="py-4 text-center text-xs text-[#6b7280]">Žádný trénink</p>
+        <p className="text-muted py-4 text-center text-xs">Žádný trénink</p>
       )}
     </div>
   )

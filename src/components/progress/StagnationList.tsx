@@ -10,13 +10,13 @@ export function StagnationList({ items }: Props) {
   if (items.length === 0) return null
 
   return (
-    <div className="rounded-lg border border-[#f59e0b]/30 bg-[#f59e0b]/5 p-3">
-      <h3 className="mb-2 text-sm font-semibold text-[#f59e0b]">Stagnace</h3>
+    <div className="border-accent/30 bg-accent/5 rounded-lg border p-3">
+      <h3 className="text-accent mb-2 text-sm font-semibold">Stagnace</h3>
       <ul className="flex flex-col gap-1.5">
         {items.map((item) => (
-          <li key={item.exerciseId} className="text-sm text-[#e5e7eb]">
+          <li key={item.exerciseId} className="text-foreground text-sm">
             <span className="font-medium">{item.exerciseName}</span>
-            <span className="text-[#6b7280]">
+            <span className="text-muted">
               {' '}
               — {item.weeksSincePr} t. bez PR
               {item.suggestion === 'deload' ? ' · zkus deload' : ' · zkus jinou variantu'}

@@ -35,18 +35,18 @@ export function PlateCalculatorSheet({
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <NumberInput value={target} onChange={setTarget} step={2.5} suffix="kg" />
-          <span className="text-xs text-[#6B7280]">bar: {bar} kg</span>
+          <span className="text-muted text-xs">bar: {bar} kg</span>
         </div>
         {result ? (
           <>
-            <div className="rounded-md bg-[#1F2733] p-3 text-sm">
+            <div className="bg-border rounded-md p-3 text-sm">
               Per stranu:{' '}
               {result.perSide.length === 0
                 ? 'žádné'
                 : result.perSide.map((p) => `${p.weightKg}×${p.count}`).join(' + ')}
             </div>
             {result.missingKg > 0 ? (
-              <div className="rounded-md bg-[#EF4444]/20 p-2 text-xs text-[#EF4444]">
+              <div className="bg-danger/20 text-danger rounded-md p-2 text-xs">
                 Chybí {result.missingKg} kg v inventáři
               </div>
             ) : null}

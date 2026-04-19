@@ -51,16 +51,16 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
   const ss = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0')
 
   return (
-    <div className="rounded-lg bg-[#1F2733] p-3 text-center tabular-nums">
+    <div className="bg-border rounded-lg p-3 text-center tabular-nums">
       {state ? (
         <>
-          <div className="text-xs tracking-wider text-[#6B7280] uppercase">Rest</div>
-          <div className="text-2xl font-bold text-[#F59E0B]">
+          <div className="text-muted text-xs tracking-wider uppercase">Rest</div>
+          <div className="text-accent text-2xl font-bold">
             {mm}:{ss}
           </div>
           <button
             type="button"
-            className="mt-1 text-xs text-[#6B7280] underline"
+            className="text-muted mt-1 text-xs underline"
             onClick={() => restTimerStore.stop()}
           >
             Přeskočit
@@ -69,7 +69,7 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
       ) : (
         <button
           type="button"
-          className="text-sm text-[#10B981]"
+          className="text-primary text-sm"
           onClick={() => restTimerStore.start(defaultDurationSec)}
         >
           ▶ Spustit rest ({defaultDurationSec} s)

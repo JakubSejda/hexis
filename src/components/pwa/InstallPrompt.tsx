@@ -57,21 +57,21 @@ export function InstallPrompt() {
   if (!show) return null
 
   return (
-    <div className="fixed right-0 bottom-16 left-0 z-40 border-t border-[#1f2733] bg-[#141a22] px-4 py-3">
+    <div className="border-border bg-surface fixed right-0 bottom-16 left-0 z-40 border-t px-4 py-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#e5e7eb]">
+        <p className="text-foreground text-sm">
           {isIos ? 'Otevři Share → Přidat na plochu' : 'Přidej Hexis na plochu'}
         </p>
         <div className="flex gap-2">
           {!isIos ? (
             <button
               onClick={handleInstall}
-              className="rounded-md bg-[#10b981] px-3 py-1.5 text-sm font-semibold text-[#0a0e14]"
+              className="bg-primary text-background rounded-md px-3 py-1.5 text-sm font-semibold"
             >
               Přidat
             </button>
           ) : null}
-          <button onClick={handleDismiss} className="rounded-md px-3 py-1.5 text-sm text-[#6b7280]">
+          <button onClick={handleDismiss} className="text-muted rounded-md px-3 py-1.5 text-sm">
             Zavřít
           </button>
         </div>

@@ -35,8 +35,8 @@ export function XpHistoryChart({ daily, days }: Props) {
   const barW = width / days - 1
 
   return (
-    <div className="rounded-lg border border-[#1F2733] bg-[#141A22] p-4">
-      <h2 className="mb-3 text-sm font-semibold text-[#e5e7eb]">XP za {days} dní</h2>
+    <div className="border-border bg-surface rounded-lg border p-4">
+      <h2 className="text-foreground mb-3 text-sm font-semibold">XP za {days} dní</h2>
       <svg
         width={width}
         height={height}
@@ -58,7 +58,7 @@ export function XpHistoryChart({ daily, days }: Props) {
           )
         })}
       </svg>
-      <div className="mt-2 text-xs text-[#6b7280]">
+      <div className="text-muted mt-2 text-xs">
         Celkem: {cells.reduce((a, c) => a + c.totalXp, 0).toLocaleString('cs-CZ')} XP
       </div>
     </div>

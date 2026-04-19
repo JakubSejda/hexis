@@ -136,29 +136,29 @@ export default async function DashboardPage() {
         userName={user.name ?? null}
         userEmail={user.email ?? ''}
       />
-      <div className="rounded-lg border border-[#1F2733] p-3 text-center">
+      <div className="border-border rounded-lg border p-3 text-center">
         <div className="text-2xl">{streak}</div>
-        <div className="text-xs text-[#6B7280]">denni streak</div>
+        <div className="text-muted text-xs">denni streak</div>
       </div>
       <StagnationWarning items={stagnation} />
       {active ? (
         <Link
           href={`/workout/${active.id}`}
-          className="flex h-12 items-center justify-center rounded-lg bg-[#10B981] text-center font-semibold text-[#0A0E14]"
+          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
         >
           Pokracuj v {active.planName ?? 'treninku'} ›
         </Link>
       ) : nextPlan ? (
         <Link
           href="/workout"
-          className="flex h-12 items-center justify-center rounded-lg bg-[#10B981] text-center font-semibold text-[#0A0E14]"
+          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
         >
           Zacit {nextPlan.name} ›
         </Link>
       ) : (
         <Link
           href="/workout"
-          className="flex h-12 items-center justify-center rounded-lg border border-[#1F2733] text-center text-sm"
+          className="border-border flex h-12 items-center justify-center rounded-lg border text-center text-sm"
         >
           Do treninku
         </Link>

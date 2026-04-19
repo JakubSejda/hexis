@@ -77,10 +77,10 @@ export function NutritionPageClient({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between px-4">
-        <button onClick={() => changeMonth(-1)} className="text-2xl text-[#6b7280]">
+        <button onClick={() => changeMonth(-1)} className="text-muted text-2xl">
           ‹
         </button>
-        <button onClick={() => changeMonth(1)} className="text-2xl text-[#6b7280]">
+        <button onClick={() => changeMonth(1)} className="text-muted text-2xl">
           ›
         </button>
       </div>

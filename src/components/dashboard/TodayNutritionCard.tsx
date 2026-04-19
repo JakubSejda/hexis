@@ -25,7 +25,7 @@ export function TodayNutritionCard({ today, targets, trackedMacros }: Props) {
     return (
       <Card>
         <Header label="Dnešní výživa" cta="Zalogovat →" />
-        <p className="text-sm text-[#6b7280]">Zatím žádná data pro dnešek.</p>
+        <p className="text-muted text-sm">Zatím žádná data pro dnešek.</p>
       </Card>
     )
   }
@@ -90,17 +90,15 @@ export function TodayNutritionCard({ today, targets, trackedMacros }: Props) {
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="space-y-2.5 rounded-xl border border-[#1f2733] bg-[#141a22] p-3.5">
-      {children}
-    </div>
+    <div className="border-border bg-surface space-y-2.5 rounded-xl border p-3.5">{children}</div>
   )
 }
 
 function Header({ label, cta }: { label: string; cta: string }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm font-semibold text-[#e5e7eb]">{label}</span>
-      <Link href="/progress/nutrition" className="text-xs text-[#10b981]">
+      <span className="text-foreground text-sm font-semibold">{label}</span>
+      <Link href="/progress/nutrition" className="text-primary text-xs">
         {cta}
       </Link>
     </div>
@@ -125,8 +123,8 @@ function Stat({
   return (
     <div>
       <div className="mb-1 flex justify-between">
-        <span className="text-xs text-[#6b7280]">{label}</span>
-        <span className="text-xs font-semibold text-[#e5e7eb]">
+        <span className="text-muted text-xs">{label}</span>
+        <span className="text-foreground text-xs font-semibold">
           {actual ?? '—'} / {target ?? '—'} {unit}
         </span>
       </div>
@@ -149,8 +147,8 @@ function Mini({
   return (
     <div>
       <div className="mb-0.5 flex justify-between">
-        <span className="text-[11px] text-[#6b7280]">{label}</span>
-        <span className="text-[11px] text-[#6b7280]">
+        <span className="text-muted text-[11px]">{label}</span>
+        <span className="text-muted text-[11px]">
           {actual ?? '—'} {unit}
         </span>
       </div>
