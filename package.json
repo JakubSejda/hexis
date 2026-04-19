@@ -29,6 +29,7 @@
     "@serwist/next": "^9.5.7",
     "drizzle-orm": "^0.45.2",
     "file-saver": "^2.0.5",
+    "geist": "^1.7.0",
     "heic2any": "^0.0.4",
     "jszip": "^3.10.1",
     "mysql2": "^3.22.0",
