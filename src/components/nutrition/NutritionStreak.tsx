@@ -13,13 +13,13 @@ const BG: Record<DayClass, string> = {
 
 export function NutritionStreak({ streak, thisWeek }: Props) {
   return (
-    <div className="rounded-xl border border-[#1f2733] bg-[#141a22] p-3.5">
+    <div className="border-border bg-surface rounded-xl border p-3.5">
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-sm font-semibold text-[#e5e7eb]">Výživa streak</div>
-          <div className="text-xs text-[#6b7280]">Dní v řadě s hitem</div>
+          <div className="text-foreground text-sm font-semibold">Výživa streak</div>
+          <div className="text-muted text-xs">Dní v řadě s hitem</div>
         </div>
-        <div className="text-3xl font-bold text-[#f59e0b]">{streak}</div>
+        <div className="text-accent text-3xl font-bold">{streak}</div>
       </div>
       <div className="mt-2.5 flex justify-center gap-1.5">
         {thisWeek.map((d, i) => (
@@ -27,7 +27,7 @@ export function NutritionStreak({ streak, thisWeek }: Props) {
             key={i}
             className={
               'flex h-6 w-6 items-center justify-center rounded text-[10px] font-semibold ' +
-              (d.klass === 'empty' ? 'text-[#6b7280]' : 'text-white')
+              (d.klass === 'empty' ? 'text-muted' : 'text-white')
             }
             style={{ background: BG[d.klass] }}
           >

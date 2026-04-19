@@ -70,7 +70,7 @@ export function PhotosPageClient() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div role="tablist" className="flex gap-1 rounded-lg bg-[#141a22] p-1">
+      <div role="tablist" className="bg-surface flex gap-1 rounded-lg p-1">
         {VIEW_OPTIONS.map((o) => (
           <button
             key={o.value}
@@ -80,8 +80,8 @@ export function PhotosPageClient() {
             className={
               'flex-1 rounded-md px-3 py-1.5 text-center text-sm transition-colors ' +
               (view === o.value
-                ? 'bg-[#10b981] font-semibold text-[#0a0e14]'
-                : 'text-[#6b7280] hover:text-[#e5e7eb]')
+                ? 'bg-primary text-background font-semibold'
+                : 'text-muted hover:text-foreground')
             }
           >
             {o.label}
@@ -90,7 +90,7 @@ export function PhotosPageClient() {
       </div>
 
       {loading ? (
-        <p className="py-8 text-center text-sm text-[#6b7280]">Načítám...</p>
+        <p className="text-muted py-8 text-center text-sm">Načítám...</p>
       ) : view === 'grid' ? (
         <PhotoGrid photos={photos} onPhotoTap={setLightboxIndex} />
       ) : view === 'timeline' ? (
@@ -101,7 +101,7 @@ export function PhotosPageClient() {
 
       <button
         onClick={() => setUploadOpen(true)}
-        className="fixed right-4 bottom-20 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#10b981] text-2xl font-bold text-[#0a0e14] shadow-lg"
+        className="bg-primary text-background fixed right-4 bottom-20 z-30 flex h-14 w-14 items-center justify-center rounded-full text-2xl font-bold shadow-lg"
         aria-label="Nahrát fotku"
       >
         +

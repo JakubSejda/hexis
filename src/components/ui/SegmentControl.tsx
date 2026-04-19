@@ -15,7 +15,7 @@ type Props = {
 
 export function SegmentControl({ segments, active }: Props) {
   return (
-    <div role="tablist" className="flex gap-1 rounded-lg bg-[#141a22] p-1">
+    <div role="tablist" className="bg-surface flex gap-1 rounded-lg p-1">
       {segments.map((s) => {
         const isActive = s.href === active
         return (
@@ -27,8 +27,8 @@ export function SegmentControl({ segments, active }: Props) {
             className={
               'flex-1 rounded-md px-3 py-2 text-center text-sm transition-colors ' +
               (isActive
-                ? 'bg-[#10b981] font-semibold text-[#0a0e14]'
-                : 'text-[#6b7280] hover:text-[#e5e7eb]')
+                ? 'bg-primary text-background font-semibold'
+                : 'text-muted hover:text-foreground')
             }
           >
             {s.label}

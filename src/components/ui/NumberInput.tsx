@@ -31,7 +31,7 @@ export function NumberInput({
       <button
         type="button"
         aria-label="snížit"
-        className="h-11 w-11 rounded-lg bg-[#1F2733] text-[#E5E7EB] active:bg-[#10B981]"
+        className="bg-border text-foreground active:bg-primary h-11 w-11 rounded-lg"
         onClick={() => handle(-step)}
       >
         −
@@ -46,16 +46,16 @@ export function NumberInput({
           const v = e.target.value
           onChange(v === '' ? null : Number(v))
         }}
-        className="h-11 w-20 rounded-lg border border-[#1F2733] bg-[#0A0E14] text-center text-[#E5E7EB]"
+        className="border-border bg-background text-foreground h-11 w-20 rounded-lg border text-center"
         step={step}
         min={min}
         max={max}
       />
-      {suffix ? <span className="text-xs text-[#6B7280]">{suffix}</span> : null}
+      {suffix ? <span className="text-muted text-xs">{suffix}</span> : null}
       <button
         type="button"
         aria-label="zvýšit"
-        className="h-11 w-11 rounded-lg bg-[#1F2733] text-[#E5E7EB] active:bg-[#10B981]"
+        className="bg-border text-foreground active:bg-primary h-11 w-11 rounded-lg"
         onClick={() => handle(step)}
       >
         +

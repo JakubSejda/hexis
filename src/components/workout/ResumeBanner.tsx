@@ -29,7 +29,7 @@ export function ResumeBanner() {
   return (
     <Link
       href={`/workout/${active.id}`}
-      className="mb-3 flex items-center justify-between rounded-lg bg-[#F59E0B] px-3 py-2 text-sm font-semibold text-[#0A0E14]"
+      className="bg-accent text-background mb-3 flex items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold"
     >
       <span>
         Pokračuj v {active.planName ?? 'tréninku'} · {minutes} min

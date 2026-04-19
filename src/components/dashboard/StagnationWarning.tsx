@@ -10,14 +10,14 @@ export function StagnationWarning({ items }: Props) {
   return (
     <Link
       href="/progress/strength"
-      className="block rounded-lg border border-[#f59e0b]/30 bg-[#f59e0b]/5 p-3"
+      className="border-accent/30 bg-accent/5 block rounded-lg border p-3"
     >
-      <p className="text-sm font-semibold text-[#f59e0b]">
+      <p className="text-accent text-sm font-semibold">
         {items.length === 1
           ? `${items[0]!.exerciseName}: ${items[0]!.weeksSincePr} t. bez PR`
           : `${items.length} cviky stagnují`}
       </p>
-      <p className="mt-0.5 text-xs text-[#6b7280]">Tap pro detail</p>
+      <p className="text-muted mt-0.5 text-xs">Tap pro detail</p>
     </Link>
   )
 }

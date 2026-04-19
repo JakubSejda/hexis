@@ -22,10 +22,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={t.id}
             className={`pointer-events-auto rounded-lg px-4 py-2 text-sm shadow-lg ${
               t.tone === 'success'
-                ? 'bg-[#10B981] text-[#0A0E14]'
+                ? 'bg-primary text-background'
                 : t.tone === 'error'
-                  ? 'bg-[#EF4444] text-white'
-                  : 'border border-[#1F2733] bg-[#141A22] text-[#E5E7EB]'
+                  ? 'bg-danger text-white'
+                  : 'border-border bg-surface text-foreground border'
             }`}
           >
             {t.message}

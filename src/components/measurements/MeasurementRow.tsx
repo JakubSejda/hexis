@@ -45,15 +45,11 @@ export function MeasurementRow({
 
   return (
     <>
-      <tr
-        className={
-          isCurrent ? 'border-b border-[#1f2733] bg-[#141a22]' : 'border-b border-[#1f2733]'
-        }
-      >
+      <tr className={isCurrent ? 'border-border bg-surface border-b' : 'border-border border-b'}>
         <td
           className={
             'px-1.5 py-2.5 text-xs whitespace-nowrap ' +
-            (isCurrent ? 'font-semibold text-[#10b981]' : 'text-[#6b7280]')
+            (isCurrent ? 'text-primary font-semibold' : 'text-muted')
           }
         >
           <button onClick={() => setShowNote((s) => !s)}>{dateLabel}</button>
@@ -106,14 +102,14 @@ export function MeasurementRow({
         </td>
       </tr>
       {showNote && (
-        <tr className="border-b border-[#1f2733]">
+        <tr className="border-border border-b">
           <td colSpan={8} className="px-3 py-2">
             <textarea
               value={draftNote}
               onChange={(e) => setDraftNote(e.target.value)}
               onBlur={() => void onCommitNote(draftNote.trim() === '' ? null : draftNote)}
               placeholder="Poznámka k týdnu…"
-              className="w-full rounded border border-[#1f2733] bg-[#0a0e14] p-2 text-sm text-[#e5e7eb] outline-none"
+              className="border-border bg-background text-foreground w-full rounded border p-2 text-sm outline-none"
               rows={2}
             />
           </td>

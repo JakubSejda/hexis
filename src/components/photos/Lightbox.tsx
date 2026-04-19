@@ -70,8 +70,7 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
             onClick={handleDelete}
             disabled={deleting}
             className={
-              'rounded px-3 py-1 text-sm ' +
-              (confirming ? 'bg-[#ef4444] text-white' : 'text-[#ef4444]')
+              'rounded px-3 py-1 text-sm ' + (confirming ? 'bg-danger text-white' : 'text-danger')
             }
           >
             {confirming ? 'Opravdu smazat?' : 'Smazat'}

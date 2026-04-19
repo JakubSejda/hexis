@@ -28,11 +28,11 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
     <div className="flex flex-col gap-4 p-4">
       <h1 className="text-xl">Plate Inventory</h1>
       <div>
-        <label className="text-xs text-[#6B7280]">Bar</label>
+        <label className="text-muted text-xs">Bar</label>
         <NumberInput value={barKg} onChange={setBarKg} step={2.5} min={5} max={50} suffix="kg" />
       </div>
       <div className="flex flex-col gap-2">
-        <label className="text-xs text-[#6B7280]">Talire (parove)</label>
+        <label className="text-muted text-xs">Talire (parove)</label>
         {plates.map((p, i) => (
           <div key={i} className="flex items-center gap-2">
             <NumberInput
@@ -50,7 +50,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
             <button
               type="button"
               onClick={() => setPlates((prev) => prev.filter((_, j) => j !== i))}
-              className="text-xs text-[#EF4444]"
+              className="text-danger text-xs"
             >
               smaz
             </button>
@@ -59,7 +59,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
         <button
           type="button"
           onClick={() => setPlates((prev) => [...prev, { weightKg: 10, pairs: 1 }])}
-          className="self-start text-sm text-[#10B981]"
+          className="text-primary self-start text-sm"
         >
           + Pridat talir
         </button>
@@ -67,7 +67,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
       <button
         type="button"
         onClick={save}
-        className="h-12 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14]"
+        className="bg-primary text-background h-12 rounded-lg font-semibold"
       >
         Ulozit
       </button>

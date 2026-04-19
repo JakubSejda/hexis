@@ -45,7 +45,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
   if (!current) {
     return (
       <div className="flex flex-col gap-3 p-4">
-        <p className="text-sm text-[#6B7280]">Žádné cviky v této session.</p>
+        <p className="text-muted text-sm">Žádné cviky v této session.</p>
         <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       </div>
     )
@@ -77,7 +77,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
         <button
           type="button"
           onClick={onFinish}
-          className="h-12 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14]"
+          className="bg-primary text-background h-12 rounded-lg font-semibold"
         >
           Dokončit trénink
         </button>
@@ -100,7 +100,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
 
 export function ExerciseStepper(props: Props) {
   return (
-    <Suspense fallback={<div className="p-4 text-[#6B7280]">Načítám...</div>}>
+    <Suspense fallback={<div className="text-muted p-4">Načítám...</div>}>
       <StepperInner {...props} />
     </Suspense>
   )

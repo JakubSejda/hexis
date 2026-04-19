@@ -13,8 +13,7 @@ type PhotoItem = {
 type Props = { photos: PhotoItem[]; onPhotoTap: (index: number) => void }
 
 export function PhotoGrid({ photos, onPhotoTap }: Props) {
-  if (photos.length === 0)
-    return <p className="py-8 text-center text-sm text-[#6b7280]">Žádné fotky</p>
+  if (photos.length === 0) return <p className="text-muted py-8 text-center text-sm">Žádné fotky</p>
 
   const groups = new Map<string, { photos: (PhotoItem & { globalIdx: number })[] }>()
   photos.forEach((p, i) => {
@@ -31,9 +30,7 @@ export function PhotoGrid({ photos, onPhotoTap }: Props) {
     <div className="flex flex-col gap-4">
       {Array.from(groups.entries()).map(([weekStart, group]) => (
         <div key={weekStart}>
-          <h3 className="mb-2 text-xs font-medium text-[#6b7280]">
-            Týden od {formatDate(weekStart)}
-          </h3>
+          <h3 className="text-muted mb-2 text-xs font-medium">Týden od {formatDate(weekStart)}</h3>
           <div className="grid grid-cols-3 gap-1.5">
             {group.photos.map((p) => (
               <button

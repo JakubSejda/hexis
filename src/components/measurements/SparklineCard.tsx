@@ -28,10 +28,10 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
   const sign =
     delta == null ? '—' : delta > 0 ? `+${delta.toFixed(precision)}` : delta.toFixed(precision)
   return (
-    <div className="min-w-[140px] rounded-lg border border-[#1f2733] bg-[#141a22] p-3">
-      <div className="text-xs text-[#6b7280]">{label}</div>
+    <div className="border-border bg-surface min-w-[140px] rounded-lg border p-3">
+      <div className="text-muted text-xs">{label}</div>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-xl font-bold text-[#e5e7eb]">
+        <span className="text-foreground text-xl font-bold">
           {last == null ? '—' : last.toFixed(precision)}
         </span>
         <span className="text-xs" style={{ color }}>
@@ -39,7 +39,7 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
         </span>
       </div>
       <Sparkline values={values} width={120} height={32} color={color} className="mt-1.5 block" />
-      {unit && <div className="text-[10px] text-[#6b7280]">{unit}</div>}
+      {unit && <div className="text-muted text-[10px]">{unit}</div>}
     </div>
   )
 }

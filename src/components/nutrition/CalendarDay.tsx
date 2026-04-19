@@ -46,10 +46,10 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
         className={
           'text-sm ' +
           (isToday
-            ? 'font-bold text-[#10b981]'
+            ? 'text-primary font-bold'
             : klass === 'empty'
-              ? 'text-[#6b7280]'
-              : 'font-semibold text-[#e5e7eb]')
+              ? 'text-muted'
+              : 'text-foreground font-semibold')
         }
       >
         {dayNumber}

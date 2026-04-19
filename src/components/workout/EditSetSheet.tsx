@@ -44,14 +44,14 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
           <button
             type="button"
             onClick={save}
-            className="h-11 flex-1 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14]"
+            className="bg-primary text-background h-11 flex-1 rounded-lg font-semibold"
           >
             Uložit
           </button>
           <button
             type="button"
             onClick={del}
-            className="h-11 rounded-lg border border-[#EF4444] px-4 text-[#EF4444]"
+            className="border-danger text-danger h-11 rounded-lg border px-4"
           >
             Smazat
           </button>

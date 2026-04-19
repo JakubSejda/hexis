@@ -10,11 +10,11 @@ export function AvatarHero({ level, totalXp, userName, userEmail }: Props) {
   const progress = xpToProgress(totalXp, level)
   const toNext = progress.max - progress.current
   return (
-    <div className="flex flex-col items-center gap-2 rounded-xl border border-[#1F2733] bg-[#141A22] p-4">
-      <p className="text-xs text-[#6b7280]">
+    <div className="border-border bg-surface flex flex-col items-center gap-2 rounded-xl border p-4">
+      <p className="text-muted text-xs">
         {new Date().toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}
       </p>
-      <h1 className="text-base text-[#e5e7eb]">Ahoj, {userName ?? userEmail}</h1>
+      <h1 className="text-foreground text-base">Ahoj, {userName ?? userEmail}</h1>
       <Link href="/avatar" className="mt-1">
         <Avatar tier={tierMeta.tier} size={80} />
       </Link>
@@ -22,11 +22,11 @@ export function AvatarHero({ level, totalXp, userName, userEmail }: Props) {
         <span className="text-xl font-bold" style={{ color: tierMeta.color }}>
           Level {level}
         </span>
-        <span className="text-sm text-[#6b7280]">&middot; {tierMeta.name}</span>
+        <span className="text-muted text-sm">&middot; {tierMeta.name}</span>
       </div>
       <div className="w-full max-w-xs">
         <ProgressBar value={progress.current} max={progress.max} tone="primary" height={8} />
-        <div className="mt-1 flex justify-between text-xs text-[#6b7280]">
+        <div className="text-muted mt-1 flex justify-between text-xs">
           <span>{progress.current} XP</span>
           <span>
             {toNext} do L{level + 1}

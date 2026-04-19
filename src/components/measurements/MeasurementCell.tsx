@@ -41,9 +41,9 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
         type="button"
         onClick={() => setEditing(true)}
         className={
-          'block w-full rounded px-1 py-1 text-sm hover:bg-[#1f2733] ' +
+          'hover:bg-border block w-full rounded px-1 py-1 text-sm ' +
           (align === 'right' ? 'text-right ' : 'text-left ') +
-          (value == null ? 'text-[#6b7280]' : 'text-[#e5e7eb]')
+          (value == null ? 'text-muted' : 'text-foreground')
         }
       >
         {value == null ? '—' : value.toFixed(precision)}
@@ -68,7 +68,7 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
         }
       }}
       className={
-        'block w-full rounded border border-[#10b981] bg-[#0a0e14] px-1 py-1 text-sm text-[#e5e7eb] outline-none ' +
+        'border-primary bg-background text-foreground block w-full rounded border px-1 py-1 text-sm outline-none ' +
         (align === 'right' ? 'text-right' : 'text-left')
       }
     />

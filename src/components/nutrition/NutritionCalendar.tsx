@@ -116,12 +116,12 @@ export function NutritionCalendar({
 
   return (
     <div className="space-y-2">
-      <div className="px-4 text-center text-base font-semibold text-[#e5e7eb]">
+      <div className="text-foreground px-4 text-center text-base font-semibold">
         {MONTH_NAMES[m! - 1]} {y}
       </div>
       <div className="grid grid-cols-7 gap-1 px-4">
         {DAY_HEADERS.map((h) => (
-          <div key={h} className="py-1 text-center text-[11px] text-[#6b7280]">
+          <div key={h} className="text-muted py-1 text-center text-[11px]">
             {h}
           </div>
         ))}

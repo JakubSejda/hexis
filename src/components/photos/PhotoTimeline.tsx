@@ -19,8 +19,7 @@ const POSE_LABELS: Record<string, string> = {
 }
 
 export function PhotoTimeline({ photos, onPhotoTap }: Props) {
-  if (photos.length === 0)
-    return <p className="py-8 text-center text-sm text-[#6b7280]">Žádné fotky</p>
+  if (photos.length === 0) return <p className="text-muted py-8 text-center text-sm">Žádné fotky</p>
 
   return (
     <div className="flex flex-col gap-3">
@@ -28,7 +27,7 @@ export function PhotoTimeline({ photos, onPhotoTap }: Props) {
         <button
           key={p.id}
           onClick={() => onPhotoTap(i)}
-          className="flex gap-3 rounded-lg border border-[#1f2733] bg-[#141a22] p-2 text-left"
+          className="border-border bg-surface flex gap-3 rounded-lg border p-2 text-left"
         >
           <Image
             src={p.thumbUrl}
@@ -40,9 +39,9 @@ export function PhotoTimeline({ photos, onPhotoTap }: Props) {
             unoptimized
           />
           <div className="flex flex-col justify-center">
-            <span className="text-sm font-medium text-[#e5e7eb]">{formatDate(p.takenAt)}</span>
-            <span className="text-xs text-[#6b7280]">{POSE_LABELS[p.pose] ?? p.pose}</span>
-            {p.note ? <span className="mt-1 text-xs text-[#6b7280]">{p.note}</span> : null}
+            <span className="text-foreground text-sm font-medium">{formatDate(p.takenAt)}</span>
+            <span className="text-muted text-xs">{POSE_LABELS[p.pose] ?? p.pose}</span>
+            {p.note ? <span className="text-muted mt-1 text-xs">{p.note}</span> : null}
           </div>
         </button>
       ))}

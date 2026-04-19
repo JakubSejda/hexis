@@ -92,15 +92,15 @@ export function ExerciseCard({
   return (
     <div className="flex flex-col gap-3">
       <header>
-        <h3 className="text-lg font-semibold text-[#E5E7EB]">{exercise.name}</h3>
+        <h3 className="text-foreground text-lg font-semibold">{exercise.name}</h3>
         {stagnation ? (
           <StagnationBadge
             weeksSincePr={stagnation.weeksSincePr}
             suggestion={stagnation.suggestion}
           />
         ) : null}
-        <p className="text-xs text-[#6B7280]">Cíl: {targetRange}</p>
-        {historyLabel ? <p className="mt-1 text-xs text-[#6B7280]">{historyLabel}</p> : null}
+        <p className="text-muted text-xs">Cíl: {targetRange}</p>
+        {historyLabel ? <p className="text-muted mt-1 text-xs">{historyLabel}</p> : null}
       </header>
       <SuggestionHint suggestion={suggestion} />
       <SetInput

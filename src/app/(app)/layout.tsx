@@ -12,13 +12,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0A0E14] text-[#E5E7EB]">
+    <div className="bg-background text-foreground flex min-h-screen flex-col">
       <main className="flex-1 pb-16">
         <Providers>
           <XpFeedbackProvider>{children}</XpFeedbackProvider>
         </Providers>
       </main>
-      <nav className="fixed right-0 bottom-0 left-0 flex h-16 border-t border-[#1F2733] bg-[#141A22]">
+      <nav className="border-border bg-surface fixed right-0 bottom-0 left-0 flex h-16 border-t">
         <TabLink href="/dashboard" label="Dashboard" />
         <TabLink href="/workout" label="Trénink" />
         <TabLink href="/progress/body" label="Progres" />
@@ -33,7 +33,7 @@ function TabLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="flex flex-1 items-center justify-center text-sm text-[#E5E7EB] transition-colors hover:text-[#10B981]"
+      className="text-foreground hover:text-primary flex flex-1 items-center justify-center text-sm transition-colors"
     >
       {label}
     </Link>

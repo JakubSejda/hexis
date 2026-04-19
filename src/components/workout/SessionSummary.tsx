@@ -49,13 +49,13 @@ export function SessionSummary({
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Poznamka (volitelne)"
-        className="min-h-[80px] rounded-lg border border-[#1F2733] bg-[#0A0E14] p-2 text-sm"
+        className="border-border bg-background min-h-[80px] rounded-lg border p-2 text-sm"
       />
       <button
         type="button"
         onClick={finish}
         disabled={saving}
-        className="h-12 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14]"
+        className="bg-primary text-background h-12 rounded-lg font-semibold"
       >
         {saving ? 'Ukladam...' : 'Dokoncit trenink'}
       </button>
@@ -65,9 +65,9 @@ export function SessionSummary({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md bg-[#141A22] p-2">
-      <div className="text-lg font-bold text-[#10B981]">{value}</div>
-      <div className="text-xs text-[#6B7280]">{label}</div>
+    <div className="bg-surface rounded-md p-2">
+      <div className="text-primary text-lg font-bold">{value}</div>
+      <div className="text-muted text-xs">{label}</div>
     </div>
   )
 }

@@ -17,21 +17,21 @@ export function XpBreakdown({ byEventTotal, total }: Props) {
     .map(([event, v]) => ({ event, xp: v!.xp, count: v!.count }))
     .sort((a, b) => b.xp - a.xp)
   return (
-    <div className="rounded-lg border border-[#1F2733] bg-[#141A22] p-4">
-      <h2 className="mb-3 text-sm font-semibold text-[#e5e7eb]">Rozpis podle aktivity</h2>
+    <div className="border-border bg-surface rounded-lg border p-4">
+      <h2 className="text-foreground mb-3 text-sm font-semibold">Rozpis podle aktivity</h2>
       {rows.length === 0 ? (
-        <p className="text-sm text-[#6b7280]">Zatím žádná aktivita.</p>
+        <p className="text-muted text-sm">Zatím žádná aktivita.</p>
       ) : (
         <table className="w-full text-sm">
           <tbody>
             {rows.map((r) => (
-              <tr key={r.event} className="border-b border-[#1f2733] last:border-0">
-                <td className="py-2 text-[#e5e7eb]">{LABELS[r.event] ?? r.event}</td>
-                <td className="py-2 text-right text-[#6b7280]">{r.count}×</td>
-                <td className="py-2 text-right font-semibold text-[#e5e7eb]">
+              <tr key={r.event} className="border-border border-b last:border-0">
+                <td className="text-foreground py-2">{LABELS[r.event] ?? r.event}</td>
+                <td className="text-muted py-2 text-right">{r.count}×</td>
+                <td className="text-foreground py-2 text-right font-semibold">
                   {r.xp.toLocaleString('cs-CZ')} XP
                 </td>
-                <td className="py-2 pl-3 text-right text-xs text-[#6b7280]">
+                <td className="text-muted py-2 pl-3 text-right text-xs">
                   {total > 0 ? Math.round((r.xp / total) * 100) : 0}%
                 </td>
               </tr>

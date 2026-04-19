@@ -32,7 +32,7 @@ export function ExercisePicker({
         placeholder="Hledej..."
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        className="mb-3 h-11 w-full rounded-lg border border-[#1F2733] bg-[#0A0E14] px-3 text-[#E5E7EB]"
+        className="border-border bg-background text-foreground mb-3 h-11 w-full rounded-lg border px-3"
       />
       <ul className="max-h-[50vh] overflow-y-auto">
         {items.map((ex) => (
@@ -40,16 +40,14 @@ export function ExercisePicker({
             <button
               type="button"
               onClick={() => onPicked(ex.id, ex.name)}
-              className="flex w-full items-center justify-between py-3 text-left text-sm text-[#E5E7EB]"
+              className="text-foreground flex w-full items-center justify-between py-3 text-left text-sm"
             >
               <span>{ex.name}</span>
-              <span className="text-xs text-[#6B7280]">{ex.type}</span>
+              <span className="text-muted text-xs">{ex.type}</span>
             </button>
           </li>
         ))}
-        {items.length === 0 ? (
-          <li className="py-3 text-xs text-[#6B7280]">Nic nenalezeno</li>
-        ) : null}
+        {items.length === 0 ? <li className="text-muted py-3 text-xs">Nic nenalezeno</li> : null}
       </ul>
     </BottomSheet>
   )

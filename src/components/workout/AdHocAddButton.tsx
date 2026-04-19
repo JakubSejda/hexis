@@ -13,7 +13,7 @@ export function AdHocAddButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="h-10 rounded-lg border border-dashed border-[#1F2733] text-sm text-[#6B7280]"
+        className="border-border text-muted h-10 rounded-lg border border-dashed text-sm"
       >
         + Přidat cvik
       </button>

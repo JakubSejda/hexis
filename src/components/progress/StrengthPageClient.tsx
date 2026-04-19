@@ -80,11 +80,11 @@ export function StrengthPageClient() {
       <StagnationList items={stagnation} />
 
       <section>
-        <h2 className="mb-2 text-base font-semibold text-[#e5e7eb]">Estimated 1RM</h2>
+        <h2 className="text-foreground mb-2 text-base font-semibold">Estimated 1RM</h2>
         <ExercisePicker exercises={exercises} value={selectedExId} onChange={setSelectedExId} />
         <div className="mt-2">
           {loading ? (
-            <p className="py-8 text-center text-sm text-[#6b7280]">Načítám...</p>
+            <p className="text-muted py-8 text-center text-sm">Načítám...</p>
           ) : (
             <OneRmChart data={strengthData} />
           )}
@@ -92,9 +92,9 @@ export function StrengthPageClient() {
       </section>
 
       <section>
-        <h2 className="mb-2 text-base font-semibold text-[#e5e7eb]">Objem per svalovou skupinu</h2>
+        <h2 className="text-foreground mb-2 text-base font-semibold">Objem per svalovou skupinu</h2>
         {loading ? (
-          <p className="py-8 text-center text-sm text-[#6b7280]">Načítám...</p>
+          <p className="text-muted py-8 text-center text-sm">Načítám...</p>
         ) : (
           <VolumeChart data={volumeData} />
         )}

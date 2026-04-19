@@ -47,7 +47,7 @@ export default async function WorkoutPage() {
       <ResumeBanner />
       <h1 className="text-xl">Vyber trenink</h1>
       <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
-      <h2 className="mt-4 text-sm text-[#6B7280]">Historie</h2>
+      <h2 className="text-muted mt-4 text-sm">Historie</h2>
       <SessionHistoryList
         items={history.map((h) => ({
           ...h,

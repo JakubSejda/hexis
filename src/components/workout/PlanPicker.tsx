@@ -33,24 +33,24 @@ export function PlanPicker({
           type="button"
           onClick={() => start(p.id)}
           className={`flex items-center justify-between rounded-lg border p-3 text-left ${
-            p.id === recommendedId ? 'border-[#10B981]' : 'border-[#1F2733]'
+            p.id === recommendedId ? 'border-primary' : 'border-border'
           }`}
         >
           <span>
             <strong>{p.name}</strong>{' '}
             {p.id === recommendedId ? (
-              <span className="ml-2 rounded-full bg-[#1F2733] px-2 py-0.5 text-xs text-[#10B981]">
+              <span className="bg-border text-primary ml-2 rounded-full px-2 py-0.5 text-xs">
                 doporučeno
               </span>
             ) : null}
           </span>
-          <span className="text-xs text-[#6B7280]">{p.slug}</span>
+          <span className="text-muted text-xs">{p.slug}</span>
         </button>
       ))}
       <button
         type="button"
         onClick={() => start(null)}
-        className="rounded-lg border border-dashed border-[#1F2733] p-3 text-sm text-[#6B7280]"
+        className="border-border text-muted rounded-lg border border-dashed p-3 text-sm"
       >
         + Ad-hoc trénink
       </button>

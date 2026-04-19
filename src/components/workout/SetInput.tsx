@@ -38,7 +38,7 @@ export function SetInput({
         type="button"
         disabled={submitting || reps === null}
         onClick={() => onSubmit({ weightKg: weight, reps, rpe })}
-        className="h-12 rounded-lg bg-[#10B981] font-semibold text-[#0A0E14] disabled:opacity-50"
+        className="bg-primary text-background h-12 rounded-lg font-semibold disabled:opacity-50"
       >
         {submitting ? 'Ukládám…' : '✓ Zapsat sérii'}
       </button>

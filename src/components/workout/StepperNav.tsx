@@ -10,7 +10,7 @@ type Props = {
 
 export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
   return (
-    <div className="flex items-center justify-between text-xs text-[#6B7280]">
+    <div className="text-muted flex items-center justify-between text-xs">
       <button
         type="button"
         onClick={onPrev}
@@ -23,7 +23,7 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
         {Array.from({ length: total }).map((_, i) => (
           <span
             key={i}
-            className={`h-2 w-2 rounded-full ${i === current ? 'bg-[#10B981]' : 'bg-[#1F2733]'}`}
+            className={`h-2 w-2 rounded-full ${i === current ? 'bg-primary' : 'bg-border'}`}
           />
         ))}
       </div>

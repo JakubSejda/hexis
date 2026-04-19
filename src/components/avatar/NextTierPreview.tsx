@@ -8,8 +8,8 @@ export function NextTierPreview({ currentLevel, totalXp }: Props) {
   if (!next) return null
   const xpNeeded = Math.pow(next.levelMin - 1, 2) * 100 - totalXp
   return (
-    <div className="rounded-lg border border-[#1F2733] bg-[#141A22] p-4">
-      <h2 className="mb-3 text-sm font-semibold text-[#e5e7eb]">Další tier</h2>
+    <div className="border-border bg-surface rounded-lg border p-4">
+      <h2 className="text-foreground mb-3 text-sm font-semibold">Další tier</h2>
       <div className="flex items-center gap-3">
         <div className="opacity-40">
           <Avatar tier={next.tier} size={64} />
@@ -18,8 +18,8 @@ export function NextTierPreview({ currentLevel, totalXp }: Props) {
           <div className="text-lg font-bold" style={{ color: next.color }}>
             {next.name}
           </div>
-          <div className="text-xs text-[#6b7280]">Odemkneš v Level {next.levelMin}</div>
-          <div className="text-xs text-[#6b7280]">
+          <div className="text-muted text-xs">Odemkneš v Level {next.levelMin}</div>
+          <div className="text-muted text-xs">
             Zbývá {Math.max(0, xpNeeded).toLocaleString('cs-CZ')} XP
           </div>
         </div>
