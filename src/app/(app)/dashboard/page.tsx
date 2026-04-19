@@ -7,6 +7,7 @@ import { getTotalXp } from '@/lib/xp'
 import { xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
 import Link from 'next/link'
+import { Stack } from '@/components/ui/layout'
 import { AvatarHero } from '@/components/dashboard/AvatarHero'
 import { TodayNutritionCard } from '@/components/dashboard/TodayNutritionCard'
 import { WeekMeasurementCard } from '@/components/dashboard/WeekMeasurementCard'
@@ -129,7 +130,7 @@ export default async function DashboardPage() {
       : null
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <Stack gap={4} className="p-4">
       <AvatarHero
         level={level}
         totalXp={totalXp}
@@ -186,7 +187,7 @@ export default async function DashboardPage() {
       />
       <NutritionStreakCard streak={nutritionStreak} thisWeekDays={weekDots} />
       <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
-    </div>
+    </Stack>
   )
 }
 
