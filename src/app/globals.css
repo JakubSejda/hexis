@@ -1,18 +1,46 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-background: #0a0e14;
-  --color-surface: #141a22;
-  --color-border: #1f2733;
-  --color-foreground: #e5e7eb;
-  --color-muted: #6b7280;
-  --color-primary: #10b981;
-  --color-accent: #f59e0b;
-  --color-danger: #ef4444;
+  /* Surfaces */
+  --color-background:       #0a0e14;
+  --color-surface:          #141a22;
+  --color-surface-raised:   #1a2230;
+  --color-surface-sunken:   #070b10;
+  --color-border:           #1f2733;
+  --color-foreground:       #e5e7eb;
+  --color-muted:            #6b7280;
 
+  /* Brand — emerald (completion/success) */
+  --color-primary:          #10b981;
+  --color-primary-soft:     #064e3b;
+  --color-primary-muted:    #34d399;
+
+  /* Brand — amber (action/CTA/XP/movement) */
+  --color-accent:           #f59e0b;
+  --color-accent-soft:      #78350f;
+  --color-accent-muted:     #fbbf24;
+
+  /* Status */
+  --color-danger:           #ef4444;
+  --color-success:          #10b981;
+  --color-warning:          #f59e0b;
+  --color-info:             #38bdf8;
+
+  /* Focus ring — amber */
+  --color-ring:             #f59e0b;
+
+  /* Fonts */
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Inter', sans-serif;
+  --font-mono:
+    var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
 }
 
 html,
