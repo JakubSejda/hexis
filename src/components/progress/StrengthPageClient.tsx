@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Stack } from '@/components/ui/layout'
 import { TimeRangePicker } from './TimeRangePicker'
 import { ExercisePicker } from './ExercisePicker'
 import { OneRmChart } from './OneRmChart'
@@ -75,7 +76,7 @@ export function StrengthPageClient() {
   }, [selectedExId, days])
 
   return (
-    <div className="flex flex-col gap-4">
+    <Stack gap={4}>
       <TimeRangePicker value={days} onChange={setDays} />
       <StagnationList items={stagnation} />
 
@@ -99,6 +100,6 @@ export function StrengthPageClient() {
           <VolumeChart data={volumeData} />
         )}
       </section>
-    </div>
+    </Stack>
   )
 }
