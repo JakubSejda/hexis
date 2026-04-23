@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { Tabs } from '@/components/ui'
 import { PhotoGrid } from './PhotoGrid'
 import { PhotoTimeline } from './PhotoTimeline'
 import { BeforeAfter } from './BeforeAfter'
@@ -21,12 +22,6 @@ type PhotoItem = {
 }
 
 type ViewMode = 'grid' | 'timeline' | 'compare'
-
-const VIEW_OPTIONS = [
-  { value: 'grid', label: 'Grid' },
-  { value: 'timeline', label: 'Timeline' },
-  { value: 'compare', label: 'Před×Po' },
-] as const
 
 export function PhotosPageClient() {
   const [view, setView] = useState<ViewMode>('grid')
@@ -70,34 +65,28 @@ export function PhotosPageClient() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div role="tablist" className="bg-surface flex gap-1 rounded-lg p-1">
-        {VIEW_OPTIONS.map((o) => (
-          <button
-            key={o.value}
-            role="tab"
-            aria-selected={view === o.value}
-            onClick={() => setView(o.value)}
-            className={
-              'flex-1 rounded-md px-3 py-1.5 text-center text-sm transition-colors ' +
-              (view === o.value
-                ? 'bg-primary text-background font-semibold'
-                : 'text-muted hover:text-foreground')
-            }
-          >
-            {o.label}
-          </button>
-        ))}
-      </div>
-
-      {loading ? (
-        <p className="text-muted py-8 text-center text-sm">Načítám...</p>
-      ) : view === 'grid' ? (
-        <PhotoGrid photos={photos} onPhotoTap={setLightboxIndex} />
-      ) : view === 'timeline' ? (
-        <PhotoTimeline photos={photos} onPhotoTap={setLightboxIndex} />
-      ) : (
-        <BeforeAfter photos={photos} dates={dates} />
-      )}
+      <Tabs.Root value={view} onValueChange={(v) => setView(v as ViewMode)}>
+        <Tabs.List>
+          <Tabs.Trigger value="grid">Grid</Tabs.Trigger>
+          <Tabs.Trigger value="timeline">Timeline</Tabs.Trigger>
+          <Tabs.Trigger value="compare">Před×Po</Tabs.Trigger>
+        </Tabs.List>
+        {loading ? (
+          <p className="text-muted py-8 text-center text-sm">Načítám...</p>
+        ) : (
+          <>
+            <Tabs.Content value="grid">
+              <PhotoGrid photos={photos} onPhotoTap={setLightboxIndex} />
+            </Tabs.Content>
+            <Tabs.Content value="timeline">
+              <PhotoTimeline photos={photos} onPhotoTap={setLightboxIndex} />
+            </Tabs.Content>
+            <Tabs.Content value="compare">
+              <BeforeAfter photos={photos} dates={dates} />
+            </Tabs.Content>
+          </>
+        )}
+      </Tabs.Root>
 
       <button
         onClick={() => setUploadOpen(true)}
