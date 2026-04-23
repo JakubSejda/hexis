@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { BottomSheet, useToast } from '@/components/ui'
+import { BottomSheet, Input, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
@@ -117,12 +117,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
             </button>
           ))}
         </div>
-        <input
-          type="date"
-          value={takenAt}
-          onChange={(e) => setTakenAt(e.target.value)}
-          className="border-border bg-surface text-foreground rounded-lg border px-3 py-2 text-sm outline-none"
-        />
+        <Input type="date" value={takenAt} onChange={(e) => setTakenAt(e.target.value)} />
         <button
           onClick={handleUpload}
           disabled={!file || uploading}
