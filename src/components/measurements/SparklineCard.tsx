@@ -8,6 +8,8 @@ const COLOR: Record<Direction, string> = {
   neutral: '#6b7280',
 }
 
+const TONE = { good: 'primary', bad: 'danger', neutral: 'muted' } as const
+
 type Props = {
   label: string
   values: (number | null)[]
@@ -38,7 +40,13 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
           {sign}
         </span>
       </div>
-      <Sparkline values={values} width={120} height={32} color={color} className="mt-1.5 block" />
+      <Sparkline
+        values={values}
+        width={120}
+        height={32}
+        tone={TONE[direction]}
+        className="mt-1.5 block"
+      />
       {unit && <div className="text-muted text-[10px]">{unit}</div>}
     </div>
   )
