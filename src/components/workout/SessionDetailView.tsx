@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Button } from '@/components/ui'
 import { SetRow } from './SetRow'
 import { EditSetSheet } from './EditSetSheet'
 import { useRouter } from 'next/navigation'
@@ -37,9 +38,9 @@ export function SessionDetailView({
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <button type="button" onClick={toggleEdit} className="text-primary self-end text-xs">
+      <Button variant="ghost" size="sm" onClick={toggleEdit} className="text-primary self-end">
         {editMode ? 'Hotovo' : 'Upravit'}
-      </button>
+      </Button>
       {exercises.map((ex) => (
         <div key={ex.exerciseId} className="flex flex-col gap-1">
           <h3 className="text-sm font-semibold">{ex.name}</h3>

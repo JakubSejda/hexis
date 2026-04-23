@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { useToast } from '@/components/ui'
+import { Button, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Photo = {
@@ -66,18 +66,18 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
           {photo.takenAt} · {photo.pose}
         </span>
         <div className="flex gap-3">
-          <button
+          <Button
+            variant={confirming ? 'danger' : 'ghost'}
+            size="sm"
             onClick={handleDelete}
             disabled={deleting}
-            className={
-              'rounded px-3 py-1 text-sm ' + (confirming ? 'bg-danger text-white' : 'text-danger')
-            }
+            className={confirming ? undefined : 'text-danger'}
           >
             {confirming ? 'Opravdu smazat?' : 'Smazat'}
-          </button>
-          <button onClick={onClose} className="text-white/70">
+          </Button>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-white/70">
             ✕
-          </button>
+          </Button>
         </div>
       </div>
       <div className="relative flex flex-1 items-center justify-center overflow-hidden">
@@ -92,23 +92,25 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
         />
       </div>
       <div className="flex justify-between p-4">
-        <button
+        <Button
+          variant="ghost"
           onClick={prev}
           disabled={index === 0}
-          className="rounded px-4 py-2 text-white disabled:opacity-30"
+          className="text-white disabled:opacity-30"
         >
           ‹ Předchozí
-        </button>
+        </Button>
         <span className="self-center text-sm text-white/50">
           {index + 1} / {photos.length}
         </span>
-        <button
+        <Button
+          variant="ghost"
           onClick={next}
           disabled={index === photos.length - 1}
-          className="rounded px-4 py-2 text-white disabled:opacity-30"
+          className="text-white disabled:opacity-30"
         >
           Další ›
-        </button>
+        </Button>
       </div>
     </div>
   )

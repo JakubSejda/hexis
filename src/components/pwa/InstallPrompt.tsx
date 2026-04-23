@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { Button } from '@/components/ui'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
@@ -64,16 +65,13 @@ export function InstallPrompt() {
         </p>
         <div className="flex gap-2">
           {!isIos ? (
-            <button
-              onClick={handleInstall}
-              className="bg-primary text-background rounded-md px-3 py-1.5 text-sm font-semibold"
-            >
+            <Button variant="success" size="sm" onClick={handleInstall}>
               Přidat
-            </button>
+            </Button>
           ) : null}
-          <button onClick={handleDismiss} className="text-muted rounded-md px-3 py-1.5 text-sm">
+          <Button variant="ghost" size="sm" onClick={handleDismiss}>
             Zavřít
-          </button>
+          </Button>
         </div>
       </div>
     </div>
