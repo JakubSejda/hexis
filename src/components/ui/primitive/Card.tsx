@@ -1,5 +1,5 @@
 import { forwardRef, type ElementType, type ReactNode, type AllHTMLAttributes } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Variant = 'default' | 'interactive' | 'flush'
 type Padding = 'none' | 'sm' | 'md' | 'lg'

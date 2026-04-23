@@ -1,6 +1,6 @@
 import { forwardRef, useId, type ReactNode, type SelectHTMLAttributes } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Size = 'sm' | 'md' | 'lg'
 

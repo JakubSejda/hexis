@@ -1,6 +1,6 @@
 import { forwardRef, type ReactNode, type HTMLAttributes, type MouseEvent } from 'react'
 import { X } from 'lucide-react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Variant = 'neutral' | 'success' | 'warning' | 'danger' | 'accent'
 type Size = 'sm' | 'md'

@@ -1,5 +1,5 @@
 import { forwardRef, type ReactNode, type HTMLAttributes } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Level = 1 | 2 | 3
 type As = 'h1' | 'h2' | 'h3' | 'div'
