@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Avatar } from '@/components/avatar/Avatar'
-import { ProgressBar } from '@/components/ui/ProgressBar'
+import { ProgressBar } from '@/components/ui'
 import { levelToTierMeta, xpToProgress } from '@/lib/tiers'
 
 type Props = { level: number; totalXp: number; userName: string | null; userEmail: string }

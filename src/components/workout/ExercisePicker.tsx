@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { BottomSheet } from '@/components/ui/BottomSheet'
+import { BottomSheet } from '@/components/ui'
 
 type Exercise = { id: number; name: string; type: string; userId: string | null }
 

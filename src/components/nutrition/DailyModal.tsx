@@ -1,9 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { BottomSheet } from '@/components/ui/BottomSheet'
-import { ProgressBar } from '@/components/ui/ProgressBar'
-import { NumberInput } from '@/components/ui/NumberInput'
+import { BottomSheet, NumberInput, ProgressBar } from '@/components/ui'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 

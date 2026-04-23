@@ -1,8 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { BottomSheet } from '@/components/ui/BottomSheet'
-import { NumberInput } from '@/components/ui/NumberInput'
-import { useToast } from '@/components/ui/Toast'
+import { BottomSheet, NumberInput, useToast } from '@/components/ui'
 
 type Props = {
   sessionId: number

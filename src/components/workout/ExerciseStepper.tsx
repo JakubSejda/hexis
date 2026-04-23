@@ -1,6 +1,6 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { useLongPress } from '@/components/ui/LongPress'
+import { useLongPress } from '@/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ExerciseCard } from './ExerciseCard'
 import { StepperNav } from './StepperNav'

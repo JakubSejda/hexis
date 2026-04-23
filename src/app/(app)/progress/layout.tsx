@@ -1,4 +1,4 @@
-import { ProgressSegmentControl } from '@/components/ui/SegmentControl'
+import { ProgressSegmentControl } from '@/components/ui'
 
 export default function ProgressLayout({ children }: { children: React.ReactNode }) {
   return (
