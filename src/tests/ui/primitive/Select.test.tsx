@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Select } from '@/components/ui/primitive/Select'
+import { Select } from '@/components/ui'
 
 describe('Select', () => {
   it('renders a <select> with options', () => {

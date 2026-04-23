@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Stack } from '@/components/ui/layout/Stack'
+import { Stack } from '@/components/ui'
 
 describe('Stack', () => {
   it('applies flex-col and default gap-4', () => {

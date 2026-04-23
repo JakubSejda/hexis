@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Heading } from '@/components/ui/primitive/Heading'
+import { Heading } from '@/components/ui'
 
 describe('Heading', () => {
   it('renders <h1> when level=1 by default', () => {

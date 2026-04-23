@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Button } from '@/components/ui/primitive/Button'
+import { Button } from '@/components/ui'
 
 describe('Button', () => {
   it('renders children inside a <button> by default', () => {
