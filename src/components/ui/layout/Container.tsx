@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode, HTMLAttributes } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Size = 'sm' | 'md' | 'lg' | 'full'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Stack } from '@/components/ui/layout'
+import { Stack } from '@/components/ui'
 import { TimeRangePicker } from './TimeRangePicker'
 import { ExercisePicker } from './ExercisePicker'
 import { OneRmChart } from './OneRmChart'

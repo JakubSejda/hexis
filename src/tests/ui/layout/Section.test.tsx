@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Section } from '@/components/ui/layout/Section'
+import { Section } from '@/components/ui'
 
 describe('Section', () => {
   it('renders children', () => {

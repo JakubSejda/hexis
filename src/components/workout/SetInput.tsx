@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 import { NumberInput } from '@/components/ui'
 
 type Props = {
@@ -38,9 +39,16 @@ export function SetInput({
         type="button"
         disabled={submitting || reps === null}
         onClick={() => onSubmit({ weightKg: weight, reps, rpe })}
-        className="bg-primary text-background h-12 rounded-lg font-semibold disabled:opacity-50"
+        className="bg-primary text-background inline-flex h-12 items-center justify-center gap-1 rounded-lg font-semibold disabled:opacity-50"
       >
-        {submitting ? 'Ukládám…' : '✓ Zapsat sérii'}
+        {submitting ? (
+          'Ukládám…'
+        ) : (
+          <>
+            <Check size={14} aria-hidden />
+            Zapsat sérii
+          </>
+        )}
       </button>
     </div>
   )

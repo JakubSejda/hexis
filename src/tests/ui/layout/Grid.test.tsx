@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Grid } from '@/components/ui/layout/Grid'
+import { Grid } from '@/components/ui'
 
 describe('Grid', () => {
   it('applies grid with default cols=2 and gap-4', () => {

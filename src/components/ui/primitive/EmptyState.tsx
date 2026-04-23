@@ -1,7 +1,7 @@
 import type { ReactNode, HTMLAttributes } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { cn } from '@/components/ui/utils/cn'
-import { Heading } from '@/components/ui/primitive/Heading'
+import { cn } from '../utils/cn'
+import { Heading } from './Heading'
 
 type Props = {
   icon: LucideIcon

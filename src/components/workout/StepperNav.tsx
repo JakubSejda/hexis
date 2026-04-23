@@ -1,5 +1,7 @@
 'use client'
 
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 type Props = {
   total: number
   current: number
@@ -15,9 +17,10 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
         type="button"
         onClick={onPrev}
         disabled={current === 0}
-        className="px-2 disabled:opacity-30"
+        className="inline-flex items-center gap-1 px-2 disabled:opacity-30"
       >
-        ‹ {labels.prev}
+        <ChevronLeft size={14} aria-hidden />
+        {labels.prev}
       </button>
       <div className="flex gap-1">
         {Array.from({ length: total }).map((_, i) => (
@@ -31,9 +34,10 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
         type="button"
         onClick={onNext}
         disabled={current === total - 1}
-        className="px-2 disabled:opacity-30"
+        className="inline-flex items-center gap-1 px-2 disabled:opacity-30"
       >
-        {labels.next} ›
+        {labels.next}
+        <ChevronRight size={14} aria-hidden />
       </button>
     </div>
   )

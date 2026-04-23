@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '@/components/ui'
 
 describe('cn', () => {
   it('joins truthy class strings', () => {

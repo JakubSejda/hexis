@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Card } from '@/components/ui/primitive/Card'
+import { Card } from '@/components/ui'
 
 describe('Card', () => {
   it('renders children inside a <div> by default', () => {

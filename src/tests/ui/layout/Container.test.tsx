@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Container } from '@/components/ui/layout/Container'
+import { Container } from '@/components/ui'
 
 describe('Container', () => {
   it('renders children inside a div by default', () => {

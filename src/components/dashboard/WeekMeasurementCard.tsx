@@ -1,6 +1,23 @@
 import Link from 'next/link'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 import { Sparkline } from '@/components/ui'
 import { calcDelta, deltaDirection, type Goal } from '@/lib/measurement-delta'
+
+function renderDelta(d: number | null, precision: number) {
+  if (d == null) return ''
+  const up = d > 0
+  const abs = up ? d : Math.abs(d)
+  return (
+    <>
+      {up ? (
+        <ArrowUp size={12} aria-hidden className="inline" />
+      ) : (
+        <ArrowDown size={12} aria-hidden className="inline" />
+      )}
+      {abs.toFixed(precision)}
+    </>
+  )
+}
 
 type Props = {
   thisWeek: {
@@ -44,12 +61,11 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
             <span className="text-foreground text-3xl font-bold">
               {thisWeek?.weightKg?.toFixed(1) ?? '—'}
             </span>
-            <span className="text-sm font-semibold" style={{ color: COLOR[weightDir] }}>
-              {weightDelta == null
-                ? ''
-                : weightDelta > 0
-                  ? `↑ ${weightDelta.toFixed(1)}`
-                  : `↓ ${Math.abs(weightDelta).toFixed(1)}`}
+            <span
+              className="inline-flex items-center gap-0.5 text-sm font-semibold"
+              style={{ color: COLOR[weightDir] }}
+            >
+              {renderDelta(weightDelta, 1)}
             </span>
           </div>
           <div className="text-muted mt-0.5 text-[11px]">kg</div>
@@ -129,8 +145,11 @@ function Mini({
     <div className="text-center">
       <div className="text-muted text-[11px]">{label}</div>
       <div className="text-foreground text-base font-semibold">{actual?.toFixed(1) ?? '—'}</div>
-      <div className="text-[11px]" style={{ color: COLOR[dir] }}>
-        {d == null ? '—' : d > 0 ? `↑ ${d.toFixed(1)}` : `↓ ${Math.abs(d).toFixed(1)}`}
+      <div
+        className="inline-flex items-center justify-center gap-0.5 text-[11px]"
+        style={{ color: COLOR[dir] }}
+      >
+        {d == null ? '—' : renderDelta(d, 1)}
       </div>
     </div>
   )

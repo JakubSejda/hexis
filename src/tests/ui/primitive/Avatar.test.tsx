@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Avatar } from '@/components/ui/primitive/Avatar'
+import { Avatar } from '@/components/ui'
 
 describe('Avatar', () => {
   it('renders an <img> with given src and alt', () => {

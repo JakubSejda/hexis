@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { NumberInput } from '@/components/ui/primitive/NumberInput'
+import { NumberInput } from '@/components/ui'
 
 describe('NumberInput', () => {
   it('renders - button, input, + button', () => {

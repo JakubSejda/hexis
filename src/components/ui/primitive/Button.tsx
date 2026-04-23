@@ -6,7 +6,7 @@ import {
   type MouseEvent,
 } from 'react'
 import { Loader2 } from 'lucide-react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success'
 type Size = 'sm' | 'md' | 'lg'

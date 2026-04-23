@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
+import { ArrowDown } from 'lucide-react'
 import { MeasurementRow, type MeasurementValues } from './MeasurementRow'
 import { toWeekStart, weekRange } from '@/lib/week'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
@@ -140,8 +141,19 @@ export function MeasurementGrid({ initialRows }: Props) {
         {done ? (
           'Žádné starší týdny.'
         ) : (
-          <button onClick={loadMore} disabled={loadingMore}>
-            {loadingMore ? 'Načítání…' : '↓ Načíst starší týdny'}
+          <button
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="inline-flex items-center gap-1"
+          >
+            {loadingMore ? (
+              'Načítání…'
+            ) : (
+              <>
+                <ArrowDown size={14} aria-hidden />
+                Načíst starší týdny
+              </>
+            )}
           </button>
         )}
       </div>

@@ -1,6 +1,6 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react'
 import { Search } from 'lucide-react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Variant = 'default' | 'search'
 type Size = 'sm' | 'md' | 'lg'

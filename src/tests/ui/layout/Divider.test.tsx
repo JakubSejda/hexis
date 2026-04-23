@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Divider } from '@/components/ui/layout/Divider'
+import { Divider } from '@/components/ui'
 
 describe('Divider', () => {
   it('renders an hr with border-border class when no label', () => {

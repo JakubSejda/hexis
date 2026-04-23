@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Inbox } from 'lucide-react'
-import { EmptyState } from '@/components/ui/primitive/EmptyState'
+import { EmptyState } from '@/components/ui'
 
 describe('EmptyState', () => {
   it('renders icon, title', () => {
