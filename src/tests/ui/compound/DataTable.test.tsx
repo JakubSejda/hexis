@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { DataTable } from '@/components/ui/compound/DataTable'
+import { DataTable } from '@/components/ui'
 
 type Row = { id: number; name: string; count: number }
 const rows: Row[] = [

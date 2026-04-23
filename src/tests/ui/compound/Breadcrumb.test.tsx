@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { Breadcrumb } from '@/components/ui/compound/Breadcrumb'
+import { Breadcrumb } from '@/components/ui'
 
 describe('Breadcrumb', () => {
   it('renders a nav with role and aria-label', () => {

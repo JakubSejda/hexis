@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Tooltip } from '@/components/ui/compound/Tooltip'
+import { Tooltip } from '@/components/ui'
 
 describe('Tooltip', () => {
   it('renders trigger children', () => {

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Align = 'left' | 'right' | 'center'
 

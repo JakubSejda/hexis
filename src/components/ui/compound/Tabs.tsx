@@ -1,7 +1,7 @@
 'use client'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import type { ComponentProps } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 function Root(props: ComponentProps<typeof TabsPrimitive.Root>) {
   return <TabsPrimitive.Root {...props} />

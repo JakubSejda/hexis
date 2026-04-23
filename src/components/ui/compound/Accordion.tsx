@@ -2,7 +2,7 @@
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDown } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 function Root(props: ComponentProps<typeof AccordionPrimitive.Root>) {
   return <AccordionPrimitive.Root {...props} />

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Image from 'next/image'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Height = 'sm' | 'md' | 'lg'
 type Overlay = 'dark' | 'gradient' | 'none'

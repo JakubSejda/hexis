@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/react'
-import { Sparkline } from '@/components/ui/primitive/Sparkline'
+import { Sparkline } from '@/components/ui'
 
 describe('Sparkline', () => {
   it('renders an empty <svg> when all values are null', () => {
