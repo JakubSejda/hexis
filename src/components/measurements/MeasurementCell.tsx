@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { Input } from '@/components/ui'
 
 type Props = {
   value: number | null
@@ -52,7 +53,7 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
   }
 
   return (
-    <input
+    <Input
       ref={inputRef}
       type="number"
       inputMode="decimal"
@@ -67,10 +68,7 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
           setEditing(false)
         }
       }}
-      className={
-        'border-primary bg-background text-foreground block w-full rounded border px-1 py-1 text-sm outline-none ' +
-        (align === 'right' ? 'text-right' : 'text-left')
-      }
+      className={'px-1 py-1 ' + (align === 'right' ? 'text-right' : 'text-left')}
     />
   )
 }
