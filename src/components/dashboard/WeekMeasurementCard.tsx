@@ -21,6 +21,7 @@ type Props = {
 }
 
 const COLOR = { good: '#10b981', bad: '#ef4444', neutral: '#6b7280' }
+const TONE = { good: 'primary', bad: 'danger', neutral: 'muted' } as const
 
 export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props) {
   if (!thisWeek && !prevWeek) {
@@ -58,7 +59,7 @@ export function WeekMeasurementCard({ thisWeek, prevWeek, weightSeries }: Props)
             values={weightSeries}
             width={140}
             height={48}
-            color={COLOR[weightDir]}
+            tone={TONE[weightDir]}
             className="block"
           />
           <div className="text-muted text-right text-[10px]">8 týdnů</div>

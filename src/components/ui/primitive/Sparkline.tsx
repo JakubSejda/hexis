@@ -1,22 +1,33 @@
 import { sparklinePath } from '@/lib/sparkline'
 
+type Tone = 'primary' | 'success' | 'warn' | 'danger' | 'muted'
+
 type Props = {
   values: (number | null)[]
   width?: number
   height?: number
-  color?: string
+  tone?: Tone
   showEndDot?: boolean
   className?: string
+}
+
+const TONE: Record<Tone, string> = {
+  primary: '#10b981',
+  success: '#10b981',
+  warn: '#f59e0b',
+  danger: '#ef4444',
+  muted: '#6b7280',
 }
 
 export function Sparkline({
   values,
   width = 120,
   height = 32,
-  color = 'currentColor',
+  tone = 'muted',
   showEndDot = true,
   className,
 }: Props) {
+  const stroke = TONE[tone]
   const path = sparklinePath(values, width, height)
   if (!path) return <svg width={width} height={height} className={className} aria-hidden />
   let endIdx = -1
@@ -47,12 +58,12 @@ export function Sparkline({
       <path
         d={path}
         fill="none"
-        stroke={color}
+        stroke={stroke}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {showEndDot && endIdx >= 0 && <circle cx={endX} cy={endY} r={3} fill={color} />}
+      {showEndDot && endIdx >= 0 && <circle cx={endX} cy={endY} r={3} fill={stroke} />}
     </svg>
   )
 }
