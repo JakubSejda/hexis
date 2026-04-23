@@ -5,10 +5,11 @@ type Props = {
   open: boolean
   onOpenChange: (v: boolean) => void
   title?: string
+  description?: string
   children: React.ReactNode
 }
 
-export function BottomSheet({ open, onOpenChange, title, children }: Props) {
+export function BottomSheet({ open, onOpenChange, title, description, children }: Props) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -16,7 +17,12 @@ export function BottomSheet({ open, onOpenChange, title, children }: Props) {
         <Dialog.Content className="data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom border-border bg-surface text-foreground fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl border-t p-4 pb-8 focus:outline-none">
           <div className="bg-border mx-auto mb-3 h-1 w-10 rounded-full" />
           {title ? (
-            <Dialog.Title className="mb-3 text-base font-semibold">{title}</Dialog.Title>
+            <Dialog.Title className="mb-1 text-base font-semibold">{title}</Dialog.Title>
+          ) : null}
+          {description ? (
+            <Dialog.Description className="text-muted mb-3 text-sm">
+              {description}
+            </Dialog.Description>
           ) : null}
           {children}
         </Dialog.Content>
