@@ -35,4 +35,38 @@ describe('Section', () => {
     render(<Section>body</Section>)
     expect(screen.queryByRole('heading')).toBeNull()
   })
+
+  it('uses region variant by default (font-mono uppercase tracking)', () => {
+    render(<Section title="Life Areas">x</Section>)
+    const header = screen.getByRole('heading', { level: 2 })
+    expect(header).toHaveClass('font-mono')
+    expect(header.className).toMatch(/tracking-/)
+    expect(header.className).toMatch(/uppercase/)
+    expect(header).not.toHaveClass('text-foreground')
+  })
+
+  it('applies default variant styling when variant="default"', () => {
+    render(
+      <Section title="Estimated 1RM" variant="default">
+        x
+      </Section>
+    )
+    const header = screen.getByRole('heading', { level: 2 })
+    expect(header).toHaveClass('text-base')
+    expect(header).toHaveClass('font-semibold')
+    expect(header).toHaveClass('text-foreground')
+    expect(header).not.toHaveClass('font-mono')
+    expect(header).not.toHaveClass('uppercase')
+  })
+
+  it('accepts variant="region" explicitly and matches default behavior', () => {
+    render(
+      <Section title="Life Areas" variant="region">
+        x
+      </Section>
+    )
+    const header = screen.getByRole('heading', { level: 2 })
+    expect(header).toHaveClass('font-mono')
+    expect(header).toHaveClass('uppercase')
+  })
 })
