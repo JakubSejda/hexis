@@ -1,6 +1,6 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { useLongPress } from '@/components/ui'
+import { Dialog, useLongPress } from '@/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ExerciseCard } from './ExerciseCard'
 import { StepperNav } from './StepperNav'
@@ -26,6 +26,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
   const initialIdx = exercises.findIndex((e) => String(e.exerciseId) === exParam)
   const [idx, setIdx] = useState(initialIdx >= 0 ? initialIdx : 0)
   const [editSetId, setEditSetId] = useState<number | null>(null)
+  const [skipOpen, setSkipOpen] = useState(false)
 
   const navigate = (newIdx: number) => {
     setIdx(newIdx)
@@ -39,8 +40,14 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
   // of after an early return.
   const longPress = useLongPress(() => {
     if (!current) return
-    if (confirm(`Přeskočit ${current.name}?`)) onSkip(current.exerciseId)
+    setSkipOpen(true)
   })
+
+  const doSkip = () => {
+    if (!current) return
+    setSkipOpen(false)
+    onSkip(current.exerciseId)
+  }
 
   if (!current) {
     return (
@@ -94,6 +101,29 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
           }}
         />
       ) : null}
+      <Dialog
+        open={skipOpen}
+        onOpenChange={setSkipOpen}
+        title={current ? `Přeskočit ${current.name}?` : 'Přeskočit cvik?'}
+        dismissible={false}
+      >
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setSkipOpen(false)}
+            className="border-border text-foreground h-11 flex-1 rounded-lg border font-semibold"
+          >
+            Zrušit
+          </button>
+          <button
+            type="button"
+            onClick={doSkip}
+            className="bg-accent text-background h-11 flex-1 rounded-lg font-semibold"
+          >
+            Přeskočit
+          </button>
+        </div>
+      </Dialog>
     </div>
   )
 }
