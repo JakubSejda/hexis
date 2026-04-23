@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { BottomSheet } from '@/components/ui/primitive/BottomSheet'
+import { BottomSheet } from '@/components/ui'
 
 describe('BottomSheet', () => {
   it('does not render content when open=false', () => {

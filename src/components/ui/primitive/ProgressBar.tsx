@@ -1,4 +1,4 @@
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 type Tone = 'primary' | 'success' | 'warn' | 'danger' | 'muted'
 type Variant = 'default' | 'xp'

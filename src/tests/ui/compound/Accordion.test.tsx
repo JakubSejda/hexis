@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Accordion } from '@/components/ui/compound/Accordion'
+import { Accordion } from '@/components/ui'
 
 describe('Accordion', () => {
   it('renders triggers with collapsed content by default (type=single)', () => {

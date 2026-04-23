@@ -1,7 +1,7 @@
 'use client'
 import * as MenuPrimitive from '@radix-ui/react-dropdown-menu'
 import type { ComponentProps } from 'react'
-import { cn } from '@/components/ui/utils/cn'
+import { cn } from '../utils/cn'
 
 function Root(props: ComponentProps<typeof MenuPrimitive.Root>) {
   return <MenuPrimitive.Root {...props} />

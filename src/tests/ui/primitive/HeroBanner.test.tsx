@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { HeroBanner } from '@/components/ui/primitive/HeroBanner'
+import { HeroBanner } from '@/components/ui'
 
 describe('HeroBanner', () => {
   it('renders children inside a section', () => {
