@@ -7,6 +7,7 @@ import { ResumeBanner } from '@/components/workout/ResumeBanner'
 import { PlanPicker } from '@/components/workout/PlanPicker'
 import { SessionHistoryList } from '@/components/workout/SessionHistoryList'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
+import { Heading } from '@/components/ui'
 
 export default async function WorkoutPage() {
   const user = await requireSessionUser()
@@ -45,7 +46,7 @@ export default async function WorkoutPage() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <ResumeBanner />
-      <h1 className="text-xl">Vyber trenink</h1>
+      <Heading level={1}>Vyber trenink</Heading>
       <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
       <h2 className="text-muted mt-4 text-sm">Historie</h2>
       <SessionHistoryList
