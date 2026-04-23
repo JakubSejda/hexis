@@ -52,6 +52,7 @@ export type ButtonProps = ButtonAsButton | ButtonAsAnchor
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   function Button(props, ref) {
     const {
+      as,
       variant = 'primary',
       size = 'md',
       loading = false,
@@ -77,10 +78,8 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       </>
     )
 
-    if (props.as === 'a') {
-      const { as: _as, ...anchorRest } = rest as AnchorHTMLAttributes<HTMLAnchorElement> & {
-        as?: 'a'
-      }
+    if (as === 'a') {
+      const anchorRest = rest as AnchorHTMLAttributes<HTMLAnchorElement>
       return (
         <a
           ref={ref as React.Ref<HTMLAnchorElement>}
@@ -94,11 +93,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     }
 
     const {
-      as: _as,
       onClick,
       disabled: userDisabled,
       ...buttonRest
-    } = rest as ButtonHTMLAttributes<HTMLButtonElement> & { as?: 'button' }
+    } = rest as ButtonHTMLAttributes<HTMLButtonElement>
     const handleClick = loading
       ? undefined
       : (onClick as ((e: MouseEvent<HTMLButtonElement>) => void) | undefined)
