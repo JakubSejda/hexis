@@ -13,3 +13,6 @@ export { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent }
 export { Tabs } from './Tabs'
 export { Menu } from './Menu'
 export { Accordion } from './Accordion'
+export { Breadcrumb } from './Breadcrumb'
+export { DataTable } from './DataTable'
+export type { DataTableColumn } from './DataTable'
