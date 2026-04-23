@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Switch } from '@/components/ui'
+import { Heading, Switch } from '@/components/ui'
 
 const ALL: { key: string; label: string; required?: boolean }[] = [
   { key: 'kcal', label: 'Kalorie', required: true },
@@ -45,7 +45,7 @@ export default function MacrosPage() {
 
   return (
     <div className="space-y-4 p-4">
-      <h1 className="text-xl font-semibold">Sledovaná makra</h1>
+      <Heading level={1}>Sledovaná makra</Heading>
       <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
       <ul className="space-y-2">
         {ALL.map((m) => (

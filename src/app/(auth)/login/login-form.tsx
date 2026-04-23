@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
+import { Heading } from '@/components/ui'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -37,7 +38,9 @@ export default function LoginForm() {
 
   return (
     <>
-      <h1 className="mb-6 text-2xl font-semibold">Hexis — Login</h1>
+      <Heading level={1} className="mb-6">
+        Hexis — Login
+      </Heading>
 
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
