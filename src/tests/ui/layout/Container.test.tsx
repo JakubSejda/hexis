@@ -53,4 +53,39 @@ describe('Container', () => {
     )
     expect(screen.getByTestId('c')).toHaveClass('custom')
   })
+
+  it('applies w-full without max-width when size=full', () => {
+    render(
+      <Container size="full" data-testid="c">
+        x
+      </Container>
+    )
+    const el = screen.getByTestId('c')
+    expect(el).toHaveClass('w-full')
+    expect(el).not.toHaveClass('max-w-md')
+    expect(el).not.toHaveClass('max-w-2xl')
+    expect(el).not.toHaveClass('max-w-4xl')
+  })
+
+  it('omits mx-auto when size=full (edge-to-edge)', () => {
+    render(
+      <Container size="full" data-testid="c">
+        x
+      </Container>
+    )
+    expect(screen.getByTestId('c')).not.toHaveClass('mx-auto')
+  })
+
+  it('applies mx-auto when size is sm|md|lg', () => {
+    const sizes = ['sm', 'md', 'lg'] as const
+    for (const size of sizes) {
+      const { unmount } = render(
+        <Container size={size} data-testid={`c-${size}`}>
+          x
+        </Container>
+      )
+      expect(screen.getByTestId(`c-${size}`)).toHaveClass('mx-auto')
+      unmount()
+    }
+  })
 })
