@@ -7,7 +7,7 @@ import { getTotalXp } from '@/lib/xp'
 import { xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
 import Link from 'next/link'
-import { Stack } from '@/components/ui/layout'
+import { Container, Stack } from '@/components/ui/layout'
 import { AvatarHero } from '@/components/dashboard/AvatarHero'
 import { TodayNutritionCard } from '@/components/dashboard/TodayNutritionCard'
 import { WeekMeasurementCard } from '@/components/dashboard/WeekMeasurementCard'
@@ -130,64 +130,66 @@ export default async function DashboardPage() {
       : null
 
   return (
-    <Stack gap={4} className="p-4">
-      <AvatarHero
-        level={level}
-        totalXp={totalXp}
-        userName={user.name ?? null}
-        userEmail={user.email ?? ''}
-      />
-      <div className="border-border rounded-lg border p-3 text-center">
-        <div className="text-2xl">{streak}</div>
-        <div className="text-muted text-xs">denni streak</div>
-      </div>
-      <StagnationWarning items={stagnation} />
-      {active ? (
-        <Link
-          href={`/workout/${active.id}`}
-          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
-        >
-          Pokracuj v {active.planName ?? 'treninku'} ›
-        </Link>
-      ) : nextPlan ? (
-        <Link
-          href="/workout"
-          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
-        >
-          Zacit {nextPlan.name} ›
-        </Link>
-      ) : (
-        <Link
-          href="/workout"
-          className="border-border flex h-12 items-center justify-center rounded-lg border text-center text-sm"
-        >
-          Do treninku
-        </Link>
-      )}
+    <Container size="full">
+      <Stack gap={4} className="py-4">
+        <AvatarHero
+          level={level}
+          totalXp={totalXp}
+          userName={user.name ?? null}
+          userEmail={user.email ?? ''}
+        />
+        <div className="border-border rounded-lg border p-3 text-center">
+          <div className="text-2xl">{streak}</div>
+          <div className="text-muted text-xs">denni streak</div>
+        </div>
+        <StagnationWarning items={stagnation} />
+        {active ? (
+          <Link
+            href={`/workout/${active.id}`}
+            className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
+          >
+            Pokracuj v {active.planName ?? 'treninku'} ›
+          </Link>
+        ) : nextPlan ? (
+          <Link
+            href="/workout"
+            className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
+          >
+            Zacit {nextPlan.name} ›
+          </Link>
+        ) : (
+          <Link
+            href="/workout"
+            className="border-border flex h-12 items-center justify-center rounded-lg border text-center text-sm"
+          >
+            Do treninku
+          </Link>
+        )}
 
-      <TodayNutritionCard
-        today={
-          todayRow
-            ? {
-                kcalActual: todayRow.kcalActual ?? null,
-                proteinG: todayRow.proteinG ?? null,
-                carbsG: todayRow.carbsG ?? null,
-                fatG: todayRow.fatG ?? null,
-                sugarG: todayRow.sugarG ?? null,
-              }
-            : null
-        }
-        targets={measurementToTargets(thisWeekRow)}
-        trackedMacros={macros}
-      />
-      <WeekMeasurementCard
-        thisWeek={measurementToValues(thisWeekRow)}
-        prevWeek={measurementToValues(prevWeekRow)}
-        weightSeries={weightSeries}
-      />
-      <NutritionStreakCard streak={nutritionStreak} thisWeekDays={weekDots} />
-      <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
-    </Stack>
+        <TodayNutritionCard
+          today={
+            todayRow
+              ? {
+                  kcalActual: todayRow.kcalActual ?? null,
+                  proteinG: todayRow.proteinG ?? null,
+                  carbsG: todayRow.carbsG ?? null,
+                  fatG: todayRow.fatG ?? null,
+                  sugarG: todayRow.sugarG ?? null,
+                }
+              : null
+          }
+          targets={measurementToTargets(thisWeekRow)}
+          trackedMacros={macros}
+        />
+        <WeekMeasurementCard
+          thisWeek={measurementToValues(thisWeekRow)}
+          prevWeek={measurementToValues(prevWeekRow)}
+          weightSeries={weightSeries}
+        />
+        <NutritionStreakCard streak={nutritionStreak} thisWeekDays={weekDots} />
+        <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
+      </Stack>
+    </Container>
   )
 }
 
