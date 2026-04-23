@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ProgressBar } from '@/components/ui/ProgressBar'
+import { ProgressBar } from '@/components/ui'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
 
 type Props = {

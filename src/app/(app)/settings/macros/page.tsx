@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Switch } from '@/components/ui/Switch'
+import { Switch } from '@/components/ui'
 
 const ALL: { key: string; label: string; required?: boolean }[] = [
   { key: 'kcal', label: 'Kalorie', required: true },

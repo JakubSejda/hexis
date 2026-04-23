@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { NumberInput } from '@/components/ui/NumberInput'
-import { useToast } from '@/components/ui/Toast'
+import { NumberInput, useToast } from '@/components/ui'
 
 type Plate = { weightKg: number; pairs: number }
 

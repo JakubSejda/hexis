@@ -1,4 +1,4 @@
-import { Sparkline } from '@/components/ui/Sparkline'
+import { Sparkline } from '@/components/ui'
 import type { Goal, Direction } from '@/lib/measurement-delta'
 import { calcDelta, deltaDirection } from '@/lib/measurement-delta'
 

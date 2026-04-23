@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkline } from '@/components/ui/Sparkline'
+import { Sparkline } from '@/components/ui'
 import { calcDelta, deltaDirection, type Goal } from '@/lib/measurement-delta'
 
 type Props = {

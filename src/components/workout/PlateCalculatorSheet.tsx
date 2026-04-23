@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { BottomSheet } from '@/components/ui/BottomSheet'
-import { NumberInput } from '@/components/ui/NumberInput'
+import { BottomSheet, NumberInput } from '@/components/ui'
 import { calculatePlates } from '@/lib/plates'
 
 export function PlateCalculatorSheet({

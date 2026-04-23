@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { BottomSheet } from '@/components/ui/BottomSheet'
-import { useToast } from '@/components/ui/Toast'
+import { BottomSheet, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {

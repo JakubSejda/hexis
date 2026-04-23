@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { NumberInput } from '@/components/ui/NumberInput'
+import { NumberInput } from '@/components/ui'
 
 type Props = {
   initialWeightKg: number | null
