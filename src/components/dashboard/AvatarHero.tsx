@@ -25,7 +25,7 @@ export function AvatarHero({ level, totalXp, userName, userEmail }: Props) {
         <span className="text-muted text-sm">&middot; {tierMeta.name}</span>
       </div>
       <div className="w-full max-w-xs">
-        <ProgressBar value={progress.current} max={progress.max} tone="primary" height={8} />
+        <ProgressBar value={progress.current} max={progress.max} variant="xp" height={8} />
         <div className="text-muted mt-1 flex justify-between text-xs">
           <span>{progress.current} XP</span>
           <span>

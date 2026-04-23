@@ -38,7 +38,7 @@ export default async function AvatarPage() {
           {tierMeta.levelMax === 999 ? '∞' : tierMeta.levelMax})
         </div>
         <div className="mt-2 w-full max-w-md">
-          <ProgressBar value={progress.current} max={progress.max} tone="primary" height={10} />
+          <ProgressBar value={progress.current} max={progress.max} variant="xp" height={10} />
           <div className="text-muted mt-1 flex justify-between text-xs">
             <span>{totalXp.toLocaleString('cs-CZ')} XP</span>
             <span>
