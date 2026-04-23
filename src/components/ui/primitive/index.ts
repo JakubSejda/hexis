@@ -1,4 +1,7 @@
 export { BottomSheet } from './BottomSheet'
+export { Button } from './Button'
+export { Card } from './Card'
+export { Heading } from './Heading'
 export { NumberInput } from './NumberInput'
 export { ProgressBar } from './ProgressBar'
 export { SegmentControl, ProgressSegmentControl } from './SegmentControl'
