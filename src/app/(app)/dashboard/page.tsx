@@ -8,6 +8,7 @@ import { xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
 import Link from 'next/link'
 import { Container, Stack } from '@/components/ui/layout'
+import { Card } from '@/components/ui'
 import { AvatarHero } from '@/components/dashboard/AvatarHero'
 import { TodayNutritionCard } from '@/components/dashboard/TodayNutritionCard'
 import { WeekMeasurementCard } from '@/components/dashboard/WeekMeasurementCard'
@@ -138,10 +139,10 @@ export default async function DashboardPage() {
           userName={user.name ?? null}
           userEmail={user.email ?? ''}
         />
-        <div className="border-border rounded-lg border p-3 text-center">
+        <Card padding="sm" className="text-center">
           <div className="text-2xl">{streak}</div>
           <div className="text-muted text-xs">denni streak</div>
-        </div>
+        </Card>
         <StagnationWarning items={stagnation} />
         {active ? (
           <Link
