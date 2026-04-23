@@ -81,6 +81,7 @@ npm run db:seed
 
 ## Docs
 
+- [Design System](docs/design-system/README.md) — component reference (tokens, ~30 component docs)
 - `docs/superpowers/specs/2026-04-13-hexis-pwa-design.md` — MVP design spec
 - `docs/superpowers/roadmap/hexis-roadmap.md` — living roadmap
 - `docs/superpowers/plans/` — implementation plans per milestone
