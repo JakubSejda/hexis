@@ -12,3 +12,4 @@ export {
 export { Tooltip, TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent } from './Tooltip'
 export { Tabs } from './Tabs'
 export { Menu } from './Menu'
+export { Accordion } from './Accordion'
