@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { Button, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
@@ -75,8 +76,14 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
           >
             {confirming ? 'Opravdu smazat?' : 'Smazat'}
           </Button>
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-white/70">
-            ✕
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="text-white/70"
+            aria-label="Zavřít"
+          >
+            <X size={16} aria-hidden />
           </Button>
         </div>
       </div>
@@ -96,9 +103,10 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
           variant="ghost"
           onClick={prev}
           disabled={index === 0}
-          className="text-white disabled:opacity-30"
+          className="inline-flex items-center gap-1 text-white disabled:opacity-30"
         >
-          ‹ Předchozí
+          <ChevronLeft size={14} aria-hidden />
+          Předchozí
         </Button>
         <span className="self-center text-sm text-white/50">
           {index + 1} / {photos.length}
@@ -107,9 +115,10 @@ export function Lightbox({ photos, initialIndex, onClose, onDeleted }: Props) {
           variant="ghost"
           onClick={next}
           disabled={index === photos.length - 1}
-          className="text-white disabled:opacity-30"
+          className="inline-flex items-center gap-1 text-white disabled:opacity-30"
         >
-          Další ›
+          Další
+          <ChevronRight size={14} aria-hidden />
         </Button>
       </div>
     </div>

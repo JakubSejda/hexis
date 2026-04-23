@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { ChevronRight } from 'lucide-react'
 
 type Active = {
   id: number
@@ -34,7 +35,7 @@ export function ResumeBanner() {
       <span>
         Pokračuj v {active.planName ?? 'tréninku'} · {minutes} min
       </span>
-      <span>›</span>
+      <ChevronRight size={14} aria-hidden />
     </Link>
   )
 }

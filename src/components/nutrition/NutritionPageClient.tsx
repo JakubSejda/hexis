@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { NutritionCalendar } from './NutritionCalendar'
 import { DailyModal } from './DailyModal'
 import { MonthStats } from './MonthStats'
@@ -77,11 +78,11 @@ export function NutritionPageClient({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between px-4">
-        <button onClick={() => changeMonth(-1)} className="text-muted text-2xl">
-          ‹
+        <button onClick={() => changeMonth(-1)} className="text-muted" aria-label="Předchozí měsíc">
+          <ChevronLeft size={24} aria-hidden />
         </button>
-        <button onClick={() => changeMonth(1)} className="text-muted text-2xl">
-          ›
+        <button onClick={() => changeMonth(1)} className="text-muted" aria-label="Další měsíc">
+          <ChevronRight size={24} aria-hidden />
         </button>
       </div>
       <NutritionCalendar

@@ -23,6 +23,7 @@ import { StagnationWarning } from '@/components/dashboard/StagnationWarning'
 import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
 import { MuscleWidget } from '@/components/dashboard/MuscleWidget'
 import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
+import { ChevronRight } from 'lucide-react'
 
 export default async function DashboardPage() {
   const user = await requireSessionUser()
@@ -147,16 +148,18 @@ export default async function DashboardPage() {
         {active ? (
           <Link
             href={`/workout/${active.id}`}
-            className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
+            className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
-            Pokracuj v {active.planName ?? 'treninku'} ›
+            Pokracuj v {active.planName ?? 'treninku'}
+            <ChevronRight size={14} aria-hidden />
           </Link>
         ) : nextPlan ? (
           <Link
             href="/workout"
-            className="bg-primary text-background flex h-12 items-center justify-center rounded-lg text-center font-semibold"
+            className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
-            Zacit {nextPlan.name} ›
+            Zacit {nextPlan.name}
+            <ChevronRight size={14} aria-hidden />
           </Link>
         ) : (
           <Link
