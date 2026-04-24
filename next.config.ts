@@ -8,7 +8,16 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      { source: '/workout', destination: '/training', permanent: true },
+      { source: '/workout/:path*', destination: '/training/:path*', permanent: true },
+      { source: '/avatar', destination: '/stats', permanent: true },
+      { source: '/progress/body', destination: '/progress', permanent: true },
+      { source: '/progress/nutrition', destination: '/nutrition', permanent: true },
+      { source: '/progress/strength', destination: '/stats/strength', permanent: true },
+    ]
+  },
 }
 
 export default withSerwist(nextConfig)
