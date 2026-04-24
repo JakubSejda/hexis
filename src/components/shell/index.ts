@@ -9,3 +9,4 @@ export {
 export type { Area, PlaceholderArea } from './area-meta'
 export { useActiveArea } from './use-active-area'
 export { BottomNav } from './BottomNav'
+export { Sidebar } from './Sidebar'
