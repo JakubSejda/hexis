@@ -1,9 +1,12 @@
 import { desc, eq } from 'drizzle-orm'
+import type { MySql2Database } from 'drizzle-orm/mysql2'
+import * as schema from '@/db/schema'
 import { sessions } from '@/db/schema'
-import type { db as DbClient } from '@/db/client'
 import { computeWorkoutStreak } from '@/lib/workout-streak'
 
-export async function fetchWorkoutStreak(db: typeof DbClient, userId: string): Promise<number> {
+type DB = MySql2Database<typeof schema>
+
+export async function fetchWorkoutStreak(db: DB, userId: string): Promise<number> {
   const rows = await db
     .select({ startedAt: sessions.startedAt })
     .from(sessions)
