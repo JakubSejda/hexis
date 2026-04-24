@@ -141,7 +141,7 @@ export default async function DashboardPage() {
         <StagnationWarning items={stagnation} />
         {active ? (
           <Link
-            href={`/workout/${active.id}`}
+            href={`/training/${active.id}`}
             className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
             Pokracuj v {active.planName ?? 'treninku'}
@@ -149,7 +149,7 @@ export default async function DashboardPage() {
           </Link>
         ) : nextPlan ? (
           <Link
-            href="/workout"
+            href="/training"
             className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
             Zacit {nextPlan.name}
@@ -157,7 +157,7 @@ export default async function DashboardPage() {
           </Link>
         ) : (
           <Link
-            href="/workout"
+            href="/training"
             className="border-border flex h-12 items-center justify-center rounded-lg border text-center text-sm"
           >
             Do treninku

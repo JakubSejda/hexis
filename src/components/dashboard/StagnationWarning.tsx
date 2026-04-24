@@ -9,7 +9,7 @@ export function StagnationWarning({ items }: Props) {
   if (items.length === 0) return null
   return (
     <Link
-      href="/progress/strength"
+      href="/stats/strength"
       className="border-accent/30 bg-accent/5 block rounded-lg border p-3"
     >
       <p className="text-accent text-sm font-semibold">

@@ -15,7 +15,7 @@ export function AvatarHero({ level, totalXp, userName, userEmail }: Props) {
         {new Date().toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}
       </p>
       <h1 className="text-foreground text-base">Ahoj, {userName ?? userEmail}</h1>
-      <Link href="/avatar" className="mt-1">
+      <Link href="/stats" className="mt-1">
         <Avatar tier={tierMeta.tier} size={80} />
       </Link>
       <div className="flex items-baseline gap-2">

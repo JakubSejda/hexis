@@ -15,7 +15,7 @@ export function WorkoutSessionClient(props: StepperProps & { sessionId: number }
       onRefresh={() => router.refresh()}
       onSkip={() => router.refresh()}
       onAdHoc={() => router.refresh()}
-      onFinish={() => router.push(`/workout/${props.sessionId}#summary`)}
+      onFinish={() => router.push(`/training/${props.sessionId}#summary`)}
     />
   )
 }

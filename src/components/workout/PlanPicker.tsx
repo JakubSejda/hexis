@@ -19,11 +19,11 @@ export function PlanPicker({
     })
     if (res.status === 409) {
       const body = await res.json()
-      router.push(`/workout/${body.activeSessionId}`)
+      router.push(`/training/${body.activeSessionId}`)
       return
     }
     const body = await res.json()
-    router.push(`/workout/${body.id}`)
+    router.push(`/training/${body.id}`)
   }
   return (
     <div className="flex flex-col gap-2">

@@ -17,7 +17,7 @@ export function SessionHistoryList({ items }: { items: Item[] }) {
       {items.map((s) => (
         <li key={s.id}>
           <Link
-            href={`/workout/${s.id}`}
+            href={`/training/${s.id}`}
             className="bg-surface flex items-center justify-between rounded-md px-3 py-2 text-sm"
           >
             <span>
