@@ -15,9 +15,9 @@ async function login(page: Page) {
 
 test('start workout, log 3 sets, finish', async ({ page }) => {
   await login(page)
-  await page.goto('/workout')
+  await page.goto('/training')
   await page.getByRole('button', { name: /upper a/i }).click()
-  await expect(page).toHaveURL(/\/workout\/\d+/)
+  await expect(page).toHaveURL(/\/training\/\d+/)
   // Log 3 sets
   for (let i = 0; i < 3; i++) {
     await page.getByLabel('zvýšit').first().click()
@@ -30,7 +30,7 @@ test('start workout, log 3 sets, finish', async ({ page }) => {
 
 test('add ad-hoc exercise in active session', async ({ page }) => {
   await login(page)
-  await page.goto('/workout')
+  await page.goto('/training')
   await page.getByRole('button', { name: /upper a/i }).click()
   await page.getByRole('button', { name: /\+ přidat cvik/i }).click()
   await page.getByPlaceholder('Hledej...').fill('curl')
@@ -45,8 +45,8 @@ test('add ad-hoc exercise in active session', async ({ page }) => {
 test('edit set in finished session', async ({ page }) => {
   await login(page)
   // Navigate to most recent finished session via history list
-  await page.goto('/workout')
-  const first = page.locator('a[href^="/workout/"]').first()
+  await page.goto('/training')
+  const first = page.locator('a[href^="/training/"]').first()
   await first.click()
   await page.getByRole('button', { name: /upravit/i }).click()
   const firstSet = page.locator('button:has-text("Série")').first()

@@ -23,6 +23,7 @@ import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
 import { MuscleWidget } from '@/components/dashboard/MuscleWidget'
 import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
 import { ChevronRight } from 'lucide-react'
+import { fetchWorkoutStreak } from '@/lib/queries/workout-streak'
 
 export default async function DashboardPage() {
   const user = await requireSessionUser()
@@ -40,13 +41,7 @@ export default async function DashboardPage() {
     .where(and(eq(sessions.userId, user.id), isNull(sessions.finishedAt)))
     .limit(1)
 
-  const last7 = await db
-    .select({ startedAt: sessions.startedAt })
-    .from(sessions)
-    .where(eq(sessions.userId, user.id))
-    .orderBy(desc(sessions.startedAt))
-    .limit(30)
-  const streak = computeStreak(last7.map((r) => r.startedAt))
+  const streak = await fetchWorkoutStreak(db, user.id)
 
   const userPlans = await db.select().from(plans).where(eq(plans.userId, user.id))
   const lastFinished = await db
@@ -146,7 +141,7 @@ export default async function DashboardPage() {
         <StagnationWarning items={stagnation} />
         {active ? (
           <Link
-            href={`/workout/${active.id}`}
+            href={`/training/${active.id}`}
             className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
             Pokracuj v {active.planName ?? 'treninku'}
@@ -154,7 +149,7 @@ export default async function DashboardPage() {
           </Link>
         ) : nextPlan ? (
           <Link
-            href="/workout"
+            href="/training"
             className="bg-primary text-background flex h-12 items-center justify-center gap-1 rounded-lg text-center font-semibold"
           >
             Zacit {nextPlan.name}
@@ -162,7 +157,7 @@ export default async function DashboardPage() {
           </Link>
         ) : (
           <Link
-            href="/workout"
+            href="/training"
             className="border-border flex h-12 items-center justify-center rounded-lg border text-center text-sm"
           >
             Do treninku
@@ -194,22 +189,4 @@ export default async function DashboardPage() {
       </Stack>
     </Container>
   )
-}
-
-function computeStreak(startedAts: Date[]): number {
-  if (startedAts.length === 0) return 0
-  const days = new Set(startedAts.map((d) => d.toISOString().slice(0, 10)))
-  let streak = 0
-  const cursor = new Date()
-  cursor.setHours(0, 0, 0, 0)
-  const todayKey = cursor.toISOString().slice(0, 10)
-  if (!days.has(todayKey)) {
-    cursor.setDate(cursor.getDate() - 1)
-    if (!days.has(cursor.toISOString().slice(0, 10))) return 0
-  }
-  while (days.has(cursor.toISOString().slice(0, 10))) {
-    streak += 1
-    cursor.setDate(cursor.getDate() - 1)
-  }
-  return streak
 }

@@ -98,7 +98,7 @@ function Header({ label, cta }: { label: string; cta: string }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-foreground text-sm font-semibold">{label}</span>
-      <Link href="/progress/nutrition" className="text-primary text-xs">
+      <Link href="/nutrition" className="text-primary text-xs">
         {cta}
       </Link>
     </div>

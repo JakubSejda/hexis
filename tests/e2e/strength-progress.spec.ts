@@ -10,14 +10,14 @@ test.describe('Strength progress page', () => {
   })
 
   test('navigates to strength tab and renders charts', async ({ page }) => {
-    await page.goto('/progress/strength')
+    await page.goto('/stats/strength')
     await expect(page.getByRole('tab', { name: 'Síla' })).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByText('Estimated 1RM')).toBeVisible()
     await expect(page.getByText('Objem per svalovou skupinu')).toBeVisible()
   })
 
   test('time range picker switches range', async ({ page }) => {
-    await page.goto('/progress/strength')
+    await page.goto('/stats/strength')
     await page.getByRole('tab', { name: '30d' }).click()
     await expect(page.getByText('Estimated 1RM')).toBeVisible()
   })

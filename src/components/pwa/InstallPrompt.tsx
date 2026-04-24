@@ -11,13 +11,17 @@ interface BeforeInstallPromptEvent extends Event {
 const DISMISSED_KEY = 'hexis:pwa-install-dismissed'
 
 export function InstallPrompt() {
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem(DISMISSED_KEY) === 'true'
+  })
   const [show, setShow] = useState(false)
   const [isIos, setIsIos] = useState(false)
   const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
+    if (dismissed) return
     if (window.matchMedia('(display-mode: standalone)').matches) return
-    if (localStorage.getItem(DISMISSED_KEY) === 'true') return
 
     const ua = navigator.userAgent
     const isIosDevice =
@@ -39,7 +43,7 @@ export function InstallPrompt() {
     }
     window.addEventListener('beforeinstallprompt', handler)
     return () => window.removeEventListener('beforeinstallprompt', handler)
-  }, [])
+  }, [dismissed])
 
   const handleInstall = async () => {
     if (deferredPrompt.current) {
@@ -52,10 +56,11 @@ export function InstallPrompt() {
 
   const handleDismiss = () => {
     localStorage.setItem(DISMISSED_KEY, 'true')
+    setDismissed(true)
     setShow(false)
   }
 
-  if (!show) return null
+  if (dismissed || !show) return null
 
   return (
     <div className="border-border bg-surface fixed right-0 bottom-16 left-0 z-40 border-t px-4 py-3">

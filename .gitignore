@@ -60,6 +60,9 @@ mysql-data/
 # Brainstorming / visual companion (ephemeral mockups)
 .superpowers/
 
+# Git worktrees
+.worktrees/
+
 # Serwist generated SW
 public/sw.js
 public/sw.js.map

@@ -121,7 +121,7 @@ function Header({ cta }: { cta: string }) {
   return (
     <div className="mb-2 flex items-center justify-between">
       <span className="text-foreground text-sm font-semibold">Tento týden</span>
-      <Link href="/progress/body" className="text-primary text-xs">
+      <Link href="/progress" className="text-primary text-xs">
         {cta}
       </Link>
     </div>
