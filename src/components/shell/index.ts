@@ -8,3 +8,4 @@ export {
 } from './area-meta'
 export type { Area, PlaceholderArea } from './area-meta'
 export { useActiveArea } from './use-active-area'
+export { BottomNav } from './BottomNav'
