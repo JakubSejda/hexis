@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { AREA_META } from './area-meta'
 import { useActiveArea } from './use-active-area'
@@ -16,12 +17,14 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
   const initial = (userName ?? userEmail).trim().charAt(0).toUpperCase() || '?'
 
   return (
-    <header className="border-border bg-surface-sunken flex h-14 items-center justify-between border-b px-4 md:h-14 md:px-6">
+    <header className="border-border bg-surface-sunken flex h-14 items-center justify-between border-b px-4 md:px-6">
       <div className="flex items-center gap-3">
         <span className="text-muted hidden text-xs tracking-[0.25em] uppercase md:inline">
           Life
         </span>
-        <span className="text-muted hidden text-xs md:inline">·</span>
+        <span aria-hidden="true" className="text-muted hidden text-xs md:inline">
+          ·
+        </span>
         <span className="text-accent text-xs font-medium tracking-[0.25em] uppercase">{label}</span>
       </div>
       <div className="flex items-center gap-3">
@@ -40,22 +43,14 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
           <Menu.Content align="end">
             <div className="text-muted px-2 py-1.5 text-xs">{userName ?? userEmail}</div>
             <Menu.Separator />
-            <Menu.Item
-              onSelect={() => {
-                window.location.href = '/nutrition'
-              }}
-            >
-              Nutrition
+            <Menu.Item asChild>
+              <Link href="/nutrition">Nutrition</Link>
             </Menu.Item>
-            <Menu.Item
-              onSelect={() => {
-                window.location.href = '/settings'
-              }}
-            >
-              Settings
+            <Menu.Item asChild>
+              <Link href="/settings">Settings</Link>
             </Menu.Item>
             <Menu.Separator />
-            <Menu.Item variant="danger" onSelect={() => signOut()}>
+            <Menu.Item variant="danger" onSelect={() => signOut({ callbackUrl: '/login' })}>
               Sign out
             </Menu.Item>
           </Menu.Content>
