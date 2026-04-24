@@ -13,7 +13,7 @@ async function login(page: Page) {
 
 test('navigate to body progress and edit a weight cell', async ({ page }) => {
   await login(page)
-  await page.goto('/progress/body')
+  await page.goto('/progress')
   await expect(page.getByRole('tab', { name: 'Tělo' })).toHaveAttribute('aria-selected', 'true')
   // First row = current week. Second cell = weight.
   const weightCell = page.locator('table tbody tr').first().locator('td').nth(1).locator('button')
@@ -30,7 +30,7 @@ test('navigate to body progress and edit a weight cell', async ({ page }) => {
 
 test('segment control navigates to nutrition', async ({ page }) => {
   await login(page)
-  await page.goto('/progress/body')
+  await page.goto('/progress')
   await page.getByRole('tab', { name: 'Výživa' }).click()
-  await expect(page).toHaveURL(/\/progress\/nutrition/)
+  await expect(page).toHaveURL(/\/nutrition/)
 })

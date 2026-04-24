@@ -13,7 +13,7 @@ async function login(page: Page) {
 
 test('open today and log nutrition', async ({ page }) => {
   await login(page)
-  await page.goto('/progress/nutrition')
+  await page.goto('/nutrition')
   const today = new Date()
   const dayNum = today.getUTCDate().toString()
   await page.locator(`button[aria-label="Den ${dayNum}"]`).click()

@@ -11,19 +11,19 @@ async function login(page: Page) {
   await expect(page).toHaveURL(/\/dashboard/)
 }
 
-test('dashboard hero shows avatar and navigates to /avatar', async ({ page }) => {
+test('dashboard hero shows avatar and navigates to /stats', async ({ page }) => {
   await login(page)
   await expect(page.getByAltText(/tier \d/i).first()).toBeVisible()
   await page
     .getByAltText(/tier \d/i)
     .first()
     .click()
-  await expect(page).toHaveURL(/\/avatar/)
+  await expect(page).toHaveURL(/\/stats/)
 })
 
-test('/avatar page renders all sections', async ({ page }) => {
+test('/stats page renders all sections', async ({ page }) => {
   await login(page)
-  await page.goto('/avatar')
+  await page.goto('/stats')
   await expect(page.getByText('Tvůj avatar')).toBeVisible()
   await expect(page.getByText('Tier ladder')).toBeVisible()
   await expect(page.getByText(/XP za 30 dní/i)).toBeVisible()
