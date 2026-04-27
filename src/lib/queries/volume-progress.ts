@@ -11,18 +11,24 @@ export type WeeklyVolume = {
 } & Record<VolumeCategory, number>
 
 const SLUG_TO_CATEGORY: Record<string, VolumeCategory> = {
-  chest: 'chest',
-  'back-lats': 'back',
-  'back-mid': 'back',
-  'back-rear-delt': 'back',
-  shoulders: 'shoulders',
+  'chest-upper': 'chest',
+  'chest-mid': 'chest',
+  'chest-lower': 'chest',
+  lats: 'back',
+  'traps-upper': 'back',
+  'traps-mid': 'back',
+  rhomboids: 'back',
+  'delts-front': 'shoulders',
+  'delts-side': 'shoulders',
+  'delts-rear': 'shoulders',
   biceps: 'arms',
   triceps: 'arms',
   forearms: 'arms',
   quads: 'legs',
   hamstrings: 'legs',
   glutes: 'legs',
-  calves: 'legs',
+  'calves-gastroc': 'legs',
+  'calves-soleus': 'legs',
   adductors: 'legs',
 }
 
