@@ -11,7 +11,9 @@ export type WeeklyVolume = {
 } & Record<VolumeCategory, number>
 
 const SLUG_TO_CATEGORY: Record<string, VolumeCategory> = {
-  chest: 'chest',
+  'chest-upper': 'chest',
+  'chest-mid': 'chest',
+  'chest-lower': 'chest',
   'back-lats': 'back',
   'back-mid': 'back',
   'back-rear-delt': 'back',

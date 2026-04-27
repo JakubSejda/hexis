@@ -17,27 +17,25 @@ describe('fetchMuscleVolumes', () => {
   let chestExId: number
 
   beforeAll(async () => {
-    await db
-      .insert(users)
-      .values({
-        id: TEST_USER_ID,
-        email: 'heatmap-test@hexis.local',
-        name: 'Heatmap Test',
-        passwordHash: 'x',
-      })
-    const chestMg = await db.query.muscleGroups.findFirst({ where: eq(muscleGroups.slug, 'chest') })
+    await db.insert(users).values({
+      id: TEST_USER_ID,
+      email: 'heatmap-test@hexis.local',
+      name: 'Heatmap Test',
+      passwordHash: 'x',
+    })
+    const chestMg = await db.query.muscleGroups.findFirst({
+      where: eq(muscleGroups.slug, 'chest-mid'),
+    })
     const [ex] = await db.insert(exercises).values({ name: 'Heatmap Test Bench', type: 'barbell' })
     chestExId = ex.insertId
     await db
       .insert(exerciseMuscleGroups)
       .values({ exerciseId: chestExId, muscleGroupId: chestMg!.id, isPrimary: true })
-    const [s1] = await db
-      .insert(sessions)
-      .values({
-        userId: TEST_USER_ID,
-        startedAt: new Date('2026-04-14T10:00:00Z'),
-        finishedAt: new Date('2026-04-14T11:00:00Z'),
-      })
+    const [s1] = await db.insert(sessions).values({
+      userId: TEST_USER_ID,
+      startedAt: new Date('2026-04-14T10:00:00Z'),
+      finishedAt: new Date('2026-04-14T11:00:00Z'),
+    })
     await db.insert(sessionSets).values([
       {
         sessionId: s1.insertId,
@@ -68,7 +66,7 @@ describe('fetchMuscleVolumes', () => {
 
   it('returns volume per muscle slug', async () => {
     const result = await fetchMuscleVolumes(db, TEST_USER_ID, 30)
-    expect(result.muscles.chest).toBe(1280)
+    expect(result.muscles['chest-mid']).toBe(1280)
     expect(result.maxVolume).toBeGreaterThanOrEqual(1280)
   })
 

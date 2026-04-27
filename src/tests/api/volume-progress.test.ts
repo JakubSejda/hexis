@@ -24,7 +24,7 @@ describe('fetchVolumeProgress', () => {
       passwordHash: 'x',
     })
     const chestMg = await db.query.muscleGroups.findFirst({
-      where: eq(muscleGroups.slug, 'chest'),
+      where: eq(muscleGroups.slug, 'chest-mid'),
     })
 
     const [ex] = await db.insert(exercises).values({
