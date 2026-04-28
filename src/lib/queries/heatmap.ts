@@ -14,10 +14,10 @@ type RawRow = { slug: string; volume: string | number }
 export async function fetchMuscleVolumes(
   db: DB,
   userId: string,
-  days: number
+  daysWindow: number = 7
 ): Promise<MuscleVolumes> {
   const since = new Date()
-  since.setDate(since.getDate() - days)
+  since.setDate(since.getDate() - daysWindow)
   const sinceStr = since.toISOString().slice(0, 10)
 
   const [rows] = await db.execute(sql`

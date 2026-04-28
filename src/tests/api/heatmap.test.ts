@@ -75,4 +75,63 @@ describe('fetchMuscleVolumes', () => {
     expect(Object.keys(result.muscles)).toHaveLength(0)
     expect(result.maxVolume).toBe(0)
   })
+
+  it('respects the daysWindow parameter (excludes sets older than the window)', async () => {
+    // Use an isolated user to avoid interference with the shared beforeAll seed data
+    const windowUserId = 'heatm_window_000000000002'
+    await db.insert(users).values({
+      id: windowUserId,
+      email: 'heatmap-window-test@hexis.local',
+      name: 'Heatmap Window Test',
+      passwordHash: 'x',
+    })
+
+    // seed one set 7 days ago and one 70 days ago, then ask for a 56-day window
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+    const seventyDaysAgo = new Date()
+    seventyDaysAgo.setDate(seventyDaysAgo.getDate() - 70)
+
+    const [s] = await db.insert(sessions).values({
+      userId: windowUserId,
+      startedAt: sevenDaysAgo,
+      finishedAt: sevenDaysAgo,
+    })
+    const recentSessionId = s.insertId
+    const [s2] = await db.insert(sessions).values({
+      userId: windowUserId,
+      startedAt: seventyDaysAgo,
+      finishedAt: seventyDaysAgo,
+    })
+    const oldSessionId = s2.insertId
+
+    await db.insert(sessionSets).values([
+      {
+        sessionId: recentSessionId,
+        exerciseId: chestExId,
+        setIndex: 1,
+        reps: 10,
+        weightKg: '50.00',
+        completedAt: sevenDaysAgo,
+      },
+      {
+        sessionId: oldSessionId,
+        exerciseId: chestExId,
+        setIndex: 1,
+        reps: 10,
+        weightKg: '50.00',
+        completedAt: seventyDaysAgo,
+      },
+    ])
+
+    const result = await fetchMuscleVolumes(db, windowUserId, 56)
+
+    // cleanup
+    await db.delete(sessionSets).where(eq(sessionSets.sessionId, recentSessionId))
+    await db.delete(sessionSets).where(eq(sessionSets.sessionId, oldSessionId))
+    await db.delete(sessions).where(eq(sessions.userId, windowUserId))
+    await db.delete(users).where(eq(users.id, windowUserId))
+
+    expect(result.muscles['chest-mid']).toBe(500)
+  })
 })
