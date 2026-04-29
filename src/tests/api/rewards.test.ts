@@ -189,3 +189,76 @@ describe('DELETE /api/rewards/[id]', () => {
     expect(res.status).toBe(409)
   })
 })
+
+describe('POST /api/rewards/[id]/redeem', () => {
+  it('redeems when balance >= cost: writes row, returns balance + redemption', async () => {
+    await db.insert(xpEvents).values({ userId: USER, eventType: 'session_complete', xpDelta: 200 })
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'sushi', costXp: 100 })
+    const { POST } = await import('@/app/api/rewards/[id]/redeem/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ note: 'večeře' }),
+    })
+    const res = await POST(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(201)
+    const json = await res.json()
+    expect(json.balance).toEqual({ totalXp: 200, spentXp: 100, balanceXp: 100 })
+    expect(json.redemption.costXp).toBe(100)
+    expect(json.redemption.note).toBe('večeře')
+  })
+
+  it('rejects with 402 when balance < cost (no row written)', async () => {
+    await db.insert(xpEvents).values({ userId: USER, eventType: 'session_complete', xpDelta: 50 })
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'sushi', costXp: 100 })
+    const { POST } = await import('@/app/api/rewards/[id]/redeem/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+    const res = await POST(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(402)
+    const after = await db.query.rewardRedemptions.findFirst({
+      where: eq(rewardRedemptions.userId, USER),
+    })
+    expect(after).toBeUndefined()
+  })
+
+  it('rejects with 404 when reward archived', async () => {
+    await db.insert(xpEvents).values({ userId: USER, eventType: 'session_complete', xpDelta: 200 })
+    const [r] = await db.insert(rewards).values({
+      userId: USER,
+      name: 'old',
+      costXp: 50,
+      archivedAt: new Date(),
+    })
+    const { POST } = await import('@/app/api/rewards/[id]/redeem/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+    const res = await POST(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(404)
+  })
+
+  it('freezes costXp from the reward at redeem time even if reward.costXp changes later', async () => {
+    await db.insert(xpEvents).values({ userId: USER, eventType: 'session_complete', xpDelta: 500 })
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'x', costXp: 100 })
+    const { POST } = await import('@/app/api/rewards/[id]/redeem/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}/redeem`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({}),
+    })
+    await POST(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+
+    await db.update(rewards).set({ costXp: 999 }).where(eq(rewards.id, r.insertId))
+
+    const row = await db.query.rewardRedemptions.findFirst({
+      where: eq(rewardRedemptions.rewardId, r.insertId),
+    })
+    expect(row?.costXp).toBe(100)
+  })
+})
