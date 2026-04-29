@@ -11,6 +11,19 @@ vi.mock('@/lib/auth-helpers', () => ({
   requireSessionUser: vi
     .fn()
     .mockResolvedValue({ id: USER, email: `${USER}@hexis.local`, name: 'X' }),
+  requireOwnership: async <T extends { userId: string }>(
+    rowPromise: Promise<T | undefined>,
+    userId: string
+  ): Promise<T | Response> => {
+    const row = await rowPromise
+    if (!row || row.userId !== userId) {
+      return new Response(JSON.stringify({ error: 'Not found' }), {
+        status: 404,
+        headers: { 'content-type': 'application/json' },
+      })
+    }
+    return row
+  },
 }))
 
 beforeAll(async () => {
@@ -99,5 +112,80 @@ describe('POST /api/rewards', () => {
     })
     const res = await POST(req)
     expect(res.status).toBe(400)
+  })
+})
+
+describe('PATCH /api/rewards/[id]', () => {
+  it('updates name and costXp', async () => {
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'sushi', costXp: 100 })
+    const { PATCH } = await import('@/app/api/rewards/[id]/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: 'sushi deluxe', costXp: 150 }),
+    })
+    const res = await PATCH(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    expect(json.name).toBe('sushi deluxe')
+    expect(json.costXp).toBe(150)
+  })
+
+  it('archives a reward (archivedAt = ISO string)', async () => {
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'x', costXp: 1 })
+    const { PATCH } = await import('@/app/api/rewards/[id]/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ archivedAt: new Date().toISOString() }),
+    })
+    const res = await PATCH(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    expect(json.archivedAt).toBeTruthy()
+  })
+
+  it('returns 404 when reward belongs to another user', async () => {
+    const [r] = await db.insert(rewards).values({
+      userId: 'someone_else_0000000000001',
+      name: 'x',
+      costXp: 1,
+    })
+    const { PATCH } = await import('@/app/api/rewards/[id]/route')
+    const req = new Request(`http://localhost/api/rewards/${r.insertId}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: 'hijack' }),
+    })
+    const res = await PATCH(req, { params: Promise.resolve({ id: String(r.insertId) }) })
+    expect(res.status).toBe(404)
+    await db.delete(rewards).where(eq(rewards.id, r.insertId))
+  })
+})
+
+describe('DELETE /api/rewards/[id]', () => {
+  it('deletes a reward with no redemptions (204)', async () => {
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'x', costXp: 1 })
+    const { DELETE } = await import('@/app/api/rewards/[id]/route')
+    const res = await DELETE(undefined as unknown as Request, {
+      params: Promise.resolve({ id: String(r.insertId) }),
+    })
+    expect(res.status).toBe(204)
+    const after = await db.query.rewards.findFirst({ where: eq(rewards.id, r.insertId) })
+    expect(after).toBeUndefined()
+  })
+
+  it('returns 409 when reward has redemptions', async () => {
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'x', costXp: 1 })
+    await db.insert(rewardRedemptions).values({
+      userId: USER,
+      rewardId: r.insertId,
+      costXp: 1,
+    })
+    const { DELETE } = await import('@/app/api/rewards/[id]/route')
+    const res = await DELETE(undefined as unknown as Request, {
+      params: Promise.resolve({ id: String(r.insertId) }),
+    })
+    expect(res.status).toBe(409)
   })
 })
