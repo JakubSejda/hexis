@@ -262,3 +262,43 @@ describe('POST /api/rewards/[id]/redeem', () => {
     expect(row?.costXp).toBe(100)
   })
 })
+
+describe('DELETE /api/rewards/redemptions/[id]', () => {
+  it('deletes a redemption row owned by the user (204)', async () => {
+    const [r] = await db.insert(rewards).values({ userId: USER, name: 'x', costXp: 50 })
+    const [red] = await db.insert(rewardRedemptions).values({
+      userId: USER,
+      rewardId: r.insertId,
+      costXp: 50,
+    })
+    const { DELETE } = await import('@/app/api/rewards/redemptions/[id]/route')
+    const res = await DELETE(undefined as unknown as Request, {
+      params: Promise.resolve({ id: String(red.insertId) }),
+    })
+    expect(res.status).toBe(204)
+    const after = await db.query.rewardRedemptions.findFirst({
+      where: eq(rewardRedemptions.id, red.insertId),
+    })
+    expect(after).toBeUndefined()
+  })
+
+  it('returns 404 when redemption belongs to another user', async () => {
+    const [r] = await db.insert(rewards).values({
+      userId: 'someone_else_0000000000002',
+      name: 'x',
+      costXp: 50,
+    })
+    const [red] = await db.insert(rewardRedemptions).values({
+      userId: 'someone_else_0000000000002',
+      rewardId: r.insertId,
+      costXp: 50,
+    })
+    const { DELETE } = await import('@/app/api/rewards/redemptions/[id]/route')
+    const res = await DELETE(undefined as unknown as Request, {
+      params: Promise.resolve({ id: String(red.insertId) }),
+    })
+    expect(res.status).toBe(404)
+    await db.delete(rewardRedemptions).where(eq(rewardRedemptions.id, red.insertId))
+    await db.delete(rewards).where(eq(rewards.id, r.insertId))
+  })
+})
