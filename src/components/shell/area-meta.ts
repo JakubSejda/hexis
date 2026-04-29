@@ -12,8 +12,15 @@ import {
 } from 'lucide-react'
 import type { ComponentType, SVGProps } from 'react'
 
-export type Area = 'dashboard' | 'training' | 'progress' | 'nutrition' | 'stats' | 'settings'
-export type PlaceholderArea = 'rewards' | 'habits' | 'bio' | 'calendar'
+export type Area =
+  | 'dashboard'
+  | 'training'
+  | 'progress'
+  | 'nutrition'
+  | 'stats'
+  | 'rewards'
+  | 'settings'
+export type PlaceholderArea = 'habits' | 'bio' | 'calendar'
 
 type Meta = {
   label: string
@@ -54,6 +61,12 @@ export const AREA_META: Record<Area, Meta> = {
     icon: User,
     matches: (p) => p === '/stats' || p.startsWith('/stats/'),
   },
+  rewards: {
+    label: 'Rewards',
+    href: '/rewards',
+    icon: Gift,
+    matches: (p) => p === '/rewards' || p.startsWith('/rewards/'),
+  },
   settings: {
     label: 'Settings',
     href: '/settings',
@@ -69,21 +82,16 @@ export const SIDEBAR_AREAS: readonly Area[] = [
   'nutrition',
   'progress',
   'stats',
+  'rewards',
 ] as const
 
 export const PLACEHOLDER_META: Record<
   PlaceholderArea,
   { label: string; icon: ComponentType<SVGProps<SVGSVGElement>> }
 > = {
-  rewards: { label: 'Rewards', icon: Gift },
   habits: { label: 'Habits', icon: ListChecks },
   bio: { label: 'Player Bio', icon: UserCircle2 },
   calendar: { label: 'Quest Calendar', icon: CalendarDays },
 }
 
-export const PLACEHOLDER_ORDER: readonly PlaceholderArea[] = [
-  'rewards',
-  'habits',
-  'bio',
-  'calendar',
-] as const
+export const PLACEHOLDER_ORDER: readonly PlaceholderArea[] = ['habits', 'bio', 'calendar'] as const

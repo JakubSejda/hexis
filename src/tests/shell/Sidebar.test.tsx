@@ -25,13 +25,19 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /^settings$/i })).toBeInTheDocument()
   })
 
-  it('renders 4 disabled SP5 placeholder items with aria-disabled', () => {
+  it('renders 3 disabled SP5 placeholder items with aria-disabled', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<Sidebar />)
-    ;['Rewards', 'Habits', 'Player Bio', 'Quest Calendar'].forEach((label) => {
+    ;['Habits', 'Player Bio', 'Quest Calendar'].forEach((label) => {
       const item = screen.getByText(label).closest('[aria-disabled="true"]')
       expect(item).toBeInTheDocument()
     })
+  })
+
+  it('renders Rewards as an active sidebar link', () => {
+    vi.mocked(usePathname).mockReturnValue('/dashboard')
+    render(<Sidebar />)
+    expect(screen.getByRole('link', { name: /^rewards$/i })).toBeInTheDocument()
   })
 
   it('marks the active Life Area with aria-current on /progress', () => {

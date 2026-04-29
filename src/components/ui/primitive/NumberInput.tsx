@@ -12,6 +12,8 @@ type Props = {
   label?: string
   hint?: string
   error?: string
+  /** Explicit id for the inner <input>; auto-generated when omitted. */
+  id?: string
 }
 
 export function NumberInput({
@@ -25,8 +27,10 @@ export function NumberInput({
   label,
   hint,
   error,
+  id: idProp,
 }: Props) {
-  const id = useId()
+  const autoId = useId()
+  const id = idProp ?? autoId
   const descriptionId = `${id}-desc`
   const handle = (delta: number) => {
     const current = value ?? 0
