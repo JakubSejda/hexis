@@ -274,3 +274,38 @@ export const plateInventories = mysqlTable('plate_inventories', {
   plates: json('plates').$type<{ weightKg: number; pairs: number }[]>().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
 })
+
+// ═══════════════════════════════════════════════════════════════════
+// REWARDS (spend XP — separate ledger; does NOT affect level/tier)
+// ═══════════════════════════════════════════════════════════════════
+
+export const rewards = mysqlTable(
+  'rewards',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    userId: varchar('user_id', { length: 26 }).notNull(),
+    name: varchar('name', { length: 80 }).notNull(),
+    costXp: int('cost_xp').notNull(),
+    description: varchar('description', { length: 280 }),
+    archivedAt: timestamp('archived_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (t) => ({
+    byUserActive: index('idx_rewards_user_active').on(t.userId, t.archivedAt),
+  })
+)
+
+export const rewardRedemptions = mysqlTable(
+  'reward_redemptions',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    userId: varchar('user_id', { length: 26 }).notNull(),
+    rewardId: int('reward_id').notNull(),
+    costXp: int('cost_xp').notNull(),
+    note: varchar('note', { length: 280 }),
+    redeemedAt: timestamp('redeemed_at').defaultNow().notNull(),
+  },
+  (t) => ({
+    byUserRedeemed: index('idx_redemptions_user_redeemed').on(t.userId, t.redeemedAt),
+  })
+)
