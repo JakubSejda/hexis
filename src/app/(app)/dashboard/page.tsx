@@ -24,6 +24,8 @@ import { fetchRange as fetchMeasurements } from '@/lib/queries/measurements'
 import { fetchRange as fetchNutrition } from '@/lib/queries/nutrition'
 import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
 import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
+import { fetchRewardsBalance } from '@/lib/queries/rewards'
+import { RewardsBalanceCard } from '@/components/dashboard/RewardsBalanceCard'
 import { toWeekStart, weekRange } from '@/lib/week'
 import { levelToTierMeta, xpToProgress } from '@/lib/tiers'
 import { resolveTodayQuest } from '@/lib/today-quest'
@@ -47,6 +49,7 @@ export default async function DashboardPage() {
   const last8Weeks = weekRange(today, 8)
 
   const totalXp = await getTotalXp(db, user.id)
+  const rewardsBalance = await fetchRewardsBalance(db, user.id)
   const level = xpToLevel(totalXp)
   const tierMeta = levelToTierMeta(level)
   const progress = xpToProgress(totalXp, level)
@@ -148,6 +151,13 @@ export default async function DashboardPage() {
           tierColor={tierMeta.color}
           streak={streak}
         />
+        {rewardsBalance.totalXp > 0 && (
+          <RewardsBalanceCard
+            balanceXp={rewardsBalance.balanceXp}
+            totalXp={rewardsBalance.totalXp}
+            spentXp={rewardsBalance.spentXp}
+          />
+        )}
         <TodayQuest quest={quest} />
         <section>
           <RegionHeader>Life Areas</RegionHeader>
