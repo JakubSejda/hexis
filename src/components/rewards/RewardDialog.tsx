@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Dialog } from '@/components/ui/compound/Dialog'
-import { Button, Input, NumberInput } from '@/components/ui'
+import { Button, Dialog, Input, NumberInput } from '@/components/ui'
 
 type Initial = { name: string; costXp: number; description?: string | null }
 

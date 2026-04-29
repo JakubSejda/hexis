@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Dialog } from '@/components/ui/compound/Dialog'
-import { Button, Input } from '@/components/ui'
+import { Button, Dialog, Input } from '@/components/ui'
 import type { RewardRow } from '@/lib/queries/rewards'
 
 type Props = {
