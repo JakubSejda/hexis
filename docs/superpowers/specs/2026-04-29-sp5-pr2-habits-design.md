@@ -39,7 +39,7 @@ Etymologie produktu (ἕξις — "stable state acquired through practice") sta
 
 ## 4. Data model
 
-Dvě nové tabulky + jedna nová `xpEvents.source` enum hodnota. Žádný zásah do `users` / `xpEvents` schématu mimo enum extend.
+Dvě nové tabulky + jedna nová `xpEvents.eventType` enum hodnota. Žádný zásah do `users` / `xpEvents` schématu mimo enum extend.
 
 ### 4.1 `habits`
 
@@ -90,9 +90,9 @@ export const habitCompletions = mysqlTable(
 - **Unique `(habit_id, completed_on)`** — DB guard proti dvojímu odškrtnutí (race ze dvou tabů).
 - Uncheck = `DELETE` row (ne soft-delete) — completion je ne-historický fakt.
 
-### 4.3 `xpEvents.source` rozšíření
+### 4.3 `xpEvents.eventType` rozšíření
 
-Existující enum `xpEvents.source` dostane novou hodnotu `'habit_streak'`. `xpEvents.metaJson` ponese `{ habitId: number, milestone: 7 | 30 | 100, weight: 'light' | 'standard' | 'heavy' }` pro audit. Žádná schema změna kromě enum extend (Drizzle migration = single ALTER).
+Existující enum `xpEvents.eventType` dostane novou hodnotu `'habit_streak'`. `xpEvents.meta` ponese `{ habitId: number, milestone: 7 | 30 | 100, weight: 'light' | 'standard' | 'heavy' }` pro audit. Žádná schema změna kromě enum extend (Drizzle migration = single ALTER).
 
 ### 4.4 Streak compute (read-time)
 
