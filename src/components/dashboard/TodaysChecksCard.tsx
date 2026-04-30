@@ -73,7 +73,7 @@ export function TodaysChecksCard({ dailyHabits }: Props) {
       data-todays-checks-card
       className="border-border bg-surface space-y-3 rounded-xl border p-4"
     >
-      <h2 className="text-muted text-xs tracking-[0.2em] uppercase">Today's Checks</h2>
+      <h2 className="text-muted text-xs tracking-[0.2em] uppercase">Today&apos;s Checks</h2>
       <div className="space-y-2">
         {visible.map((h) => (
           <HabitDailyRow
