@@ -18,9 +18,10 @@ export type Area =
   | 'progress'
   | 'nutrition'
   | 'stats'
+  | 'habits'
   | 'rewards'
   | 'settings'
-export type PlaceholderArea = 'habits' | 'bio' | 'calendar'
+export type PlaceholderArea = 'bio' | 'calendar'
 
 type Meta = {
   label: string
@@ -61,6 +62,12 @@ export const AREA_META: Record<Area, Meta> = {
     icon: User,
     matches: (p) => p === '/stats' || p.startsWith('/stats/'),
   },
+  habits: {
+    label: 'Habits',
+    href: '/habits',
+    icon: ListChecks,
+    matches: (p) => p === '/habits' || p.startsWith('/habits/'),
+  },
   rewards: {
     label: 'Rewards',
     href: '/rewards',
@@ -82,6 +89,7 @@ export const SIDEBAR_AREAS: readonly Area[] = [
   'nutrition',
   'progress',
   'stats',
+  'habits',
   'rewards',
 ] as const
 
@@ -89,9 +97,8 @@ export const PLACEHOLDER_META: Record<
   PlaceholderArea,
   { label: string; icon: ComponentType<SVGProps<SVGSVGElement>> }
 > = {
-  habits: { label: 'Habits', icon: ListChecks },
   bio: { label: 'Player Bio', icon: UserCircle2 },
   calendar: { label: 'Quest Calendar', icon: CalendarDays },
 }
 
-export const PLACEHOLDER_ORDER: readonly PlaceholderArea[] = ['habits', 'bio', 'calendar'] as const
+export const PLACEHOLDER_ORDER: readonly PlaceholderArea[] = ['bio', 'calendar'] as const
