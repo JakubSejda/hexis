@@ -5,15 +5,29 @@ import { eq, like } from 'drizzle-orm'
 import { POST, DELETE } from '@/app/api/habits/[id]/check/route'
 
 const PREFIX = 'hbck_'
-const USER = `${PREFIX}user000000000001`
+const USER = 'hbck_user000000000001'
 
-vi.mock('@/lib/auth-helpers', async () => {
-  const real = await vi.importActual<typeof import('@/lib/auth-helpers')>('@/lib/auth-helpers')
-  return {
-    ...real,
-    requireSessionUser: vi.fn().mockResolvedValue({ id: USER, email: 't@t', name: 'T' }),
-  }
-})
+vi.mock('@/lib/auth-helpers', () => ({
+  getSessionUser: vi
+    .fn()
+    .mockResolvedValue({ id: 'hbck_user000000000001', email: 't@t', name: 'T' }),
+  requireSessionUser: vi
+    .fn()
+    .mockResolvedValue({ id: 'hbck_user000000000001', email: 't@t', name: 'T' }),
+  requireOwnership: async <T extends { userId: string }>(
+    rowPromise: Promise<T | undefined>,
+    userId: string
+  ): Promise<T | Response> => {
+    const row = await rowPromise
+    if (!row || row.userId !== userId) {
+      return new Response(JSON.stringify({ error: 'Not found' }), {
+        status: 404,
+        headers: { 'content-type': 'application/json' },
+      })
+    }
+    return row
+  },
+}))
 
 beforeAll(async () => {
   await db.insert(users).values({
