@@ -29,6 +29,13 @@
       "when": 1777455111547,
       "tag": "0003_sp5_pr1_rewards",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1777549709324,
+      "tag": "0004_sp5_pr2_habits",
+      "breakpoints": true
     }
   ]
 }
