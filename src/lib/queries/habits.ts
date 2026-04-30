@@ -3,7 +3,8 @@ import { and, asc, desc, eq, isNull, sql } from 'drizzle-orm'
 import * as schema from '@/db/schema'
 import { habits, habitCompletions, xpEvents } from '@/db/schema'
 import { countConsecutiveDays, countConsecutiveClosedWeeks, isoWeekKey } from '@/lib/habits/streak'
-import type { HabitMilestone } from '@/lib/habits/milestone'
+import { detectMilestone, xpForMilestone, type HabitMilestone } from '@/lib/habits/milestone'
+import { awardXpVariable } from '@/lib/xp'
 
 type DB = MySql2Database<typeof schema>
 
@@ -47,23 +48,42 @@ export async function fetchActiveHabitsWithStreak(
 
   const currentWeekKey = isoWeekKey(today)
 
-  return rows.map((h): HabitWithStreak => {
+  const result: HabitWithStreak[] = []
+  for (const h of rows) {
     const dates = byHabit.get(h.id) ?? []
     if (h.cadence === 'daily') {
-      return {
+      result.push({
         ...h,
         currentStreak: countConsecutiveDays(dates, today),
         completedToday: dates.includes(today),
-      }
+      })
+      continue
     }
     const completedThisWeek = dates.filter((d) => isoWeekKey(d) === currentWeekKey).length
-    return {
+    const currentStreak = countConsecutiveClosedWeeks(dates, h.weeklyTarget ?? 1, today)
+
+    const milestone = detectMilestone(currentStreak)
+    if (milestone) {
+      const already = await hasMilestoneBeenAwarded(db, userId, h.id, milestone)
+      if (!already) {
+        await awardXpVariable({
+          db,
+          userId,
+          event: 'habit_streak',
+          xpDelta: xpForMilestone(milestone, h.weight),
+          meta: { habitId: h.id, milestone, weight: h.weight },
+        })
+      }
+    }
+
+    result.push({
       ...h,
-      currentStreak: countConsecutiveClosedWeeks(dates, h.weeklyTarget ?? 1, today),
+      currentStreak,
       completedToday: dates.includes(today),
       completedThisWeek,
-    }
-  })
+    })
+  }
+  return result
 }
 
 export type HabitWithCompletions = HabitRow & { completionDates: string[] }

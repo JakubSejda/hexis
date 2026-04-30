@@ -183,3 +183,103 @@ describe('hasMilestoneBeenAwarded', () => {
     expect(await hasMilestoneBeenAwarded(db, USER, 99, 7)).toBe(false)
   })
 })
+
+describe('weekly milestone emission inside fetchActiveHabitsWithStreak', () => {
+  it('emits xp_event when weekly streak crosses 7 (standard weight = +50)', async () => {
+    const [h] = await db.insert(habits).values({
+      userId: USER,
+      name: 'Pondělky',
+      cadence: 'weekly',
+      weeklyTarget: 1,
+      weight: 'standard',
+    })
+    const dates = [
+      '2026-04-20',
+      '2026-04-13',
+      '2026-04-06',
+      '2026-03-30',
+      '2026-03-23',
+      '2026-03-16',
+      '2026-03-09',
+    ]
+    await db
+      .insert(habitCompletions)
+      .values(dates.map((d) => ({ habitId: h.insertId, userId: USER, completedOn: d })))
+
+    const result = await fetchActiveHabitsWithStreak(db, USER, TODAY)
+    expect(result[0]?.currentStreak).toBe(7)
+
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, USER))
+    expect(xp).toHaveLength(1)
+    expect(xp[0]?.eventType).toBe('habit_streak')
+    expect(xp[0]?.xpDelta).toBe(50)
+    expect(xp[0]?.meta).toMatchObject({ habitId: h.insertId, milestone: 7, weight: 'standard' })
+  })
+
+  it('does not double-emit weekly milestone on subsequent GET', async () => {
+    const [h] = await db.insert(habits).values({
+      userId: USER,
+      name: 'Pondělky',
+      cadence: 'weekly',
+      weeklyTarget: 1,
+      weight: 'standard',
+    })
+    const dates = [
+      '2026-04-20',
+      '2026-04-13',
+      '2026-04-06',
+      '2026-03-30',
+      '2026-03-23',
+      '2026-03-16',
+      '2026-03-09',
+    ]
+    await db
+      .insert(habitCompletions)
+      .values(dates.map((d) => ({ habitId: h.insertId, userId: USER, completedOn: d })))
+    await fetchActiveHabitsWithStreak(db, USER, TODAY)
+    await fetchActiveHabitsWithStreak(db, USER, TODAY)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, USER))
+    expect(xp).toHaveLength(1)
+  })
+
+  it('does NOT emit when streak is below threshold', async () => {
+    const [h] = await db.insert(habits).values({
+      userId: USER,
+      name: 'P',
+      cadence: 'weekly',
+      weeklyTarget: 1,
+      weight: 'standard',
+    })
+    await db.insert(habitCompletions).values([
+      { habitId: h.insertId, userId: USER, completedOn: '2026-04-20' },
+      { habitId: h.insertId, userId: USER, completedOn: '2026-04-13' },
+    ])
+    await fetchActiveHabitsWithStreak(db, USER, TODAY)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, USER))
+    expect(xp).toHaveLength(0)
+  })
+
+  it('does NOT emit for daily habits (those fire from /check route)', async () => {
+    const [h] = await db.insert(habits).values({
+      userId: USER,
+      name: 'Voda',
+      cadence: 'daily',
+      weight: 'standard',
+    })
+    const dates = [
+      '2026-04-23',
+      '2026-04-24',
+      '2026-04-25',
+      '2026-04-26',
+      '2026-04-27',
+      '2026-04-28',
+      '2026-04-29',
+    ]
+    await db
+      .insert(habitCompletions)
+      .values(dates.map((d) => ({ habitId: h.insertId, userId: USER, completedOn: d })))
+    await fetchActiveHabitsWithStreak(db, USER, TODAY)
+    const xp = await db.select().from(xpEvents).where(eq(xpEvents.userId, USER))
+    expect(xp).toHaveLength(0)
+  })
+})
