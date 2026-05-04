@@ -6,6 +6,7 @@ export const XP_DELTAS = {
   nutrition_logged: 10,
   pr_achieved: 50,
   streak_day: 10,
+  habit_streak: 0,
 } as const
 
 export type XpEventType = keyof typeof XP_DELTAS

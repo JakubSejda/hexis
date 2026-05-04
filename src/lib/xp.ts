@@ -33,6 +33,26 @@ export async function reverseXp(args: ReverseArgs) {
   return appendXpEvent({ ...args, xpDelta: delta })
 }
 
+type AwardVariableArgs = {
+  db: DB
+  userId: string
+  event: XpEventType
+  xpDelta: number
+  sessionId?: number | null
+  meta?: Record<string, unknown>
+}
+
+export async function awardXpVariable(args: AwardVariableArgs) {
+  return appendXpEvent({
+    db: args.db,
+    userId: args.userId,
+    event: args.event,
+    xpDelta: args.xpDelta,
+    sessionId: args.sessionId ?? null,
+    meta: args.meta,
+  })
+}
+
 async function appendXpEvent(args: {
   event: XpEventType
   db: DB

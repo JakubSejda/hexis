@@ -253,6 +253,7 @@ export const xpEvents = mysqlTable(
       'nutrition_logged',
       'pr_achieved',
       'streak_day',
+      'habit_streak',
     ]).notNull(),
     xpDelta: smallint('xp_delta').notNull(),
     sessionId: int('session_id'),
@@ -307,5 +308,41 @@ export const rewardRedemptions = mysqlTable(
   },
   (t) => ({
     byUserRedeemed: index('idx_redemptions_user_redeemed').on(t.userId, t.redeemedAt),
+  })
+)
+
+// ═══════════════════════════════════════════════════════════════════
+// HABITS (streak tracker — milestone hits emit `habit_streak` xp_event)
+// ═══════════════════════════════════════════════════════════════════
+
+export const habits = mysqlTable(
+  'habits',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    userId: varchar('user_id', { length: 26 }).notNull(),
+    name: varchar('name', { length: 80 }).notNull(),
+    cadence: mysqlEnum('cadence', ['daily', 'weekly']).notNull(),
+    weeklyTarget: int('weekly_target'),
+    weight: mysqlEnum('weight', ['light', 'standard', 'heavy']).notNull().default('standard'),
+    archivedAt: timestamp('archived_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (t) => ({
+    byUserActive: index('idx_habits_user_active').on(t.userId, t.archivedAt),
+  })
+)
+
+export const habitCompletions = mysqlTable(
+  'habit_completions',
+  {
+    id: int('id').primaryKey().autoincrement(),
+    habitId: int('habit_id').notNull(),
+    userId: varchar('user_id', { length: 26 }).notNull(),
+    completedOn: date('completed_on', { mode: 'string' }).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (t) => ({
+    byHabitDate: unique('uniq_habit_date').on(t.habitId, t.completedOn),
+    byUserDate: index('idx_completions_user_date').on(t.userId, t.completedOn),
   })
 )

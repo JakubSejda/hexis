@@ -42,12 +42,19 @@ test.describe('SP2 navigation', () => {
   test('SP5 placeholder items exist and are disabled', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await login(page)
-    for (const label of ['Habits', 'Player Bio', 'Quest Calendar']) {
+    for (const label of ['Player Bio', 'Quest Calendar']) {
       const placeholder = page.getByText(label)
       await expect(placeholder).toBeVisible()
       const host = placeholder.locator('xpath=ancestor::*[@aria-disabled="true"][1]')
       await expect(host).toHaveCount(1)
     }
+  })
+
+  test('Habits is an active sidebar link and navigates to /habits', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await login(page)
+    await page.getByRole('link', { name: /^habits$/i }).click()
+    await expect(page).toHaveURL(/\/habits/)
   })
 
   test('Rewards sidebar link navigates to /rewards', async ({ page }) => {

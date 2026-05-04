@@ -1,8 +1,12 @@
 import { and, desc, eq, isNull } from 'drizzle-orm'
+import { headers } from 'next/headers'
 import { db } from '@/db/client'
 import { sessions, plans } from '@/db/schema'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
+import { fetchActiveHabitsWithStreak } from '@/lib/queries/habits'
+import { resolveUserToday } from '@/lib/habits/tz'
+import { TodaysChecksCard } from '@/components/dashboard/TodaysChecksCard'
 import { getTotalXp } from '@/lib/xp'
 import { xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
@@ -115,6 +119,11 @@ export default async function DashboardPage() {
   const stagnation = await fetchStagnatingExercises(db, user.id, today)
   const heatmapData = await fetchMuscleVolumes(db, user.id, 7)
 
+  const reqHeaders = await headers()
+  const userToday = resolveUserToday(reqHeaders.get('x-user-tz-offset'))
+  const habitRows = await fetchActiveHabitsWithStreak(db, user.id, userToday)
+  const dailyHabits = habitRows.filter((r) => r.cadence === 'daily')
+
   const byWeek = new Map(measurementsRows.map((m) => [m.weekStart, m]))
   const thisWeekRow = byWeek.get(thisWeekStart) ?? null
   const todayRow = recentNutrition.find((d) => d.date === todayDate) ?? null
@@ -159,6 +168,7 @@ export default async function DashboardPage() {
           />
         )}
         <TodayQuest quest={quest} />
+        <TodaysChecksCard dailyHabits={dailyHabits} />
         <section>
           <RegionHeader>Life Areas</RegionHeader>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
