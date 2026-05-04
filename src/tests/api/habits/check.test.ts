@@ -29,7 +29,10 @@ vi.mock('@/lib/auth-helpers', () => ({
   },
 }))
 
+const TODAY = '2026-04-29'
+
 beforeAll(async () => {
+  vi.setSystemTime(new Date(`${TODAY}T12:00:00Z`))
   await db.insert(users).values({
     id: USER,
     email: `${PREFIX}u@hexis.local`,
@@ -39,6 +42,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
+  vi.useRealTimers()
   await db.delete(xpEvents).where(eq(xpEvents.userId, USER))
   await db.delete(habitCompletions).where(eq(habitCompletions.userId, USER))
   await db.delete(habits).where(eq(habits.userId, USER))
@@ -60,8 +64,6 @@ function postReq(body: unknown, tz?: string) {
 function delReq(date: string) {
   return new Request(`http://test?date=${date}`, { method: 'DELETE' })
 }
-
-const TODAY = '2026-04-29'
 
 async function makeDailyHabit(weight: 'light' | 'standard' | 'heavy' = 'standard') {
   const [h] = await db.insert(habits).values({
