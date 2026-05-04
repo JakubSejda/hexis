@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    // Sibling git worktrees (e.g. .worktrees/<branch>/) have their own
+    // .next/, node_modules/, etc. — never lint into them.
+    '.worktrees/**',
     // Generated service worker bundle from `next build` (Serwist output):
     'public/sw.js',
     'public/sw.js.map',
