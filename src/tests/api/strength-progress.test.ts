@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 import { db } from '@/db/client'
 import { users, exercises, sessions, sessionSets } from '@/db/schema'
 import { fetchStrengthProgress } from '@/lib/queries/strength-progress'
@@ -8,6 +8,7 @@ const TEST_USER_ID = 'stren_test_000000000001'
 
 describe('fetchStrengthProgress', () => {
   beforeAll(async () => {
+    vi.setSystemTime(new Date('2026-04-15T12:00:00Z'))
     await db.insert(users).values({
       id: TEST_USER_ID,
       email: 'strength-test@hexis.local',
@@ -53,6 +54,7 @@ describe('fetchStrengthProgress', () => {
   })
 
   afterAll(async () => {
+    vi.useRealTimers()
     const ex = await db.query.exercises.findFirst({ where: eq(exercises.name, 'Test Bench') })
     if (ex) {
       await db.delete(sessionSets).where(eq(sessionSets.exerciseId, ex.id))
