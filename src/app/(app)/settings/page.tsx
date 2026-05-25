@@ -1,8 +1,14 @@
 import Link from 'next/link'
 import { Container, Stack, Card, Heading } from '@/components/ui'
-import { Scale, Utensils, Download } from 'lucide-react'
+import { Scale, Utensils, Download, UserCircle2 } from 'lucide-react'
 
 const ITEMS = [
+  {
+    href: '/settings/profile',
+    label: 'Profile',
+    hint: 'Vitals, cíl, datum startu',
+    icon: UserCircle2,
+  },
   {
     href: '/settings/plates',
     label: 'Plates',
