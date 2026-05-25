@@ -25,13 +25,28 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /^settings$/i })).toBeInTheDocument()
   })
 
-  it('renders 2 disabled SP5 placeholder items with aria-disabled', () => {
+  it('renders 1 disabled SP5 placeholder item with aria-disabled', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<Sidebar />)
-    ;['Player Bio', 'Quest Calendar'].forEach((label) => {
+    ;['Quest Calendar'].forEach((label) => {
       const item = screen.getByText(label).closest('[aria-disabled="true"]')
       expect(item).toBeInTheDocument()
     })
+  })
+
+  it('renders Player Bio as an active sidebar link', () => {
+    vi.mocked(usePathname).mockReturnValue('/dashboard')
+    render(<Sidebar />)
+    const link = screen.getByRole('link', { name: /^player bio$/i })
+    expect(link).toHaveAttribute('href', '/bio')
+    expect(link).not.toHaveAttribute('aria-disabled')
+  })
+
+  it('marks Player Bio active on /bio', () => {
+    vi.mocked(usePathname).mockReturnValue('/bio')
+    render(<Sidebar />)
+    const link = screen.getByRole('link', { name: /^player bio$/i })
+    expect(link).toHaveAttribute('aria-current', 'page')
   })
 
   it('renders Habits as an active sidebar link', () => {
