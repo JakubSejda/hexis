@@ -36,6 +36,13 @@
       "when": 1777549709324,
       "tag": "0004_sp5_pr2_habits",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1779730914052,
+      "tag": "0005_sp5_pr3_player_bio",
+      "breakpoints": true
     }
   ]
 }

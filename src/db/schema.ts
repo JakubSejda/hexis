@@ -30,6 +30,12 @@ export const users = mysqlTable('users', {
   level: tinyint('level').default(1).notNull(),
   trackedMacros: json('tracked_macros').$type<MacroKey[]>().notNull().default(['kcal', 'protein']),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  birthDate: date('birth_date', { mode: 'string' }),
+  gender: mysqlEnum('gender', ['male', 'female', 'other']),
+  heightCm: smallint('height_cm'),
+  goalKg: decimal('goal_kg', { precision: 5, scale: 2 }),
+  goalText: varchar('goal_text', { length: 120 }),
+  startedAt: date('started_at', { mode: 'string' }),
 })
 
 export const accounts = mysqlTable(
