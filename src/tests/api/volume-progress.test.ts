@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 import { db } from '@/db/client'
 import {
   users,
@@ -17,6 +17,7 @@ describe('fetchVolumeProgress', () => {
   let chestExId: number
 
   beforeAll(async () => {
+    vi.setSystemTime(new Date('2026-04-20T12:00:00Z'))
     await db.insert(users).values({
       id: TEST_USER_ID,
       email: 'volume-test@hexis.local',
@@ -70,6 +71,7 @@ describe('fetchVolumeProgress', () => {
     await db.delete(exerciseMuscleGroups).where(eq(exerciseMuscleGroups.exerciseId, chestExId))
     await db.delete(exercises).where(eq(exercises.name, 'Vol Test Bench'))
     await db.delete(users).where(eq(users.id, TEST_USER_ID))
+    vi.useRealTimers()
   })
 
   it('returns weekly volume grouped by muscle category', async () => {
