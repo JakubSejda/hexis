@@ -4,7 +4,7 @@ export type Quest =
   | { kind: 'scheduled'; planName: string; exerciseCount: number }
   | { kind: 'no-plan' }
 
-type Plan = { id: number; name: string; order: number }
+export type Plan = { id: number; name: string; order: number }
 
 type Input = {
   activeSession: { id: number; planName: string; completed: number; total: number } | null
@@ -18,7 +18,7 @@ function isSameUtcDay(a: Date, b: Date): boolean {
   return a.toISOString().slice(0, 10) === b.toISOString().slice(0, 10)
 }
 
-function nextPlanAfter(lastFinishedPlanId: number | null, sortedPlans: Plan[]): Plan | null {
+export function nextPlanAfter(lastFinishedPlanId: number | null, sortedPlans: Plan[]): Plan | null {
   if (sortedPlans.length === 0) return null
   if (lastFinishedPlanId == null) return sortedPlans[0] ?? null
   const idx = sortedPlans.findIndex((p) => p.id === lastFinishedPlanId)
