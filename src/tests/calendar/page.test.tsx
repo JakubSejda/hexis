@@ -113,4 +113,19 @@ describe('/calendar page', () => {
       'true'
     )
   })
+
+  it('renders empty-user CTA when user has zero data ever', async () => {
+    const ui = await CalendarPage({ searchParams: Promise.resolve({}) })
+    render(ui)
+    expect(screen.getByText(/začni svoji cestu/i)).toBeInTheDocument()
+  })
+
+  it('hides empty-user CTA when user has any data', async () => {
+    await db
+      .insert(schema.plans)
+      .values([{ userId: USER, name: 'Plán A', order: 0, slug: 'plan-a' }])
+    const ui = await CalendarPage({ searchParams: Promise.resolve({}) })
+    render(ui)
+    expect(screen.queryByText(/začni svoji cestu/i)).not.toBeInTheDocument()
+  })
 })

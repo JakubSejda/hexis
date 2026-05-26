@@ -73,6 +73,7 @@ describe('DayDetailModal', () => {
     )
     render(<DayDetailModal date="2026-05-15" onClose={() => {}} />)
     await waitFor(() => expect(screen.getByText(/^training$/i)).toBeInTheDocument())
+    expect(screen.getByText('90 min')).toBeInTheDocument()
     expect(screen.queryByText(/^návyky$/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/^vážení$/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/^fotky$/i)).not.toBeInTheDocument()

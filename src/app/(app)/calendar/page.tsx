@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, isNotNull } from 'drizzle-orm'
 import { db } from '@/db/client'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { plans, sessions } from '@/db/schema'
@@ -62,12 +62,20 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       db
         .select({ planId: sessions.planId, finishedAt: sessions.finishedAt })
         .from(sessions)
-        .where(and(eq(sessions.userId, user.id)))
-        .orderBy(desc(sessions.startedAt))
+        .where(and(eq(sessions.userId, user.id), isNotNull(sessions.finishedAt)))
+        .orderBy(desc(sessions.finishedAt))
         .limit(1),
     ])
 
-  const lastFinishedPlanId = lastFinishedRow[0]?.finishedAt ? lastFinishedRow[0].planId : null
+  const lastFinishedPlanId = lastFinishedRow[0]?.planId ?? null
+
+  const isEmptyUser =
+    sessionDates.size === 0 &&
+    habitDates.size === 0 &&
+    weighDates.size === 0 &&
+    photoDates.size === 0 &&
+    userPlans.length === 0 &&
+    lastFinishedRow.length === 0
 
   const days = composeCalendarMonth({
     ym,
@@ -86,6 +94,11 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
       <Stack gap={4} className="py-6">
         <CalendarHeader ym={ym} currentYm={currentYm} />
         <CalendarGridClient days={days} />
+        {isEmptyUser && (
+          <p className="text-muted text-center text-sm">
+            Začni svoji cestu — první session, habit nebo váha se tu objeví.
+          </p>
+        )}
         <CalendarLegend />
       </Stack>
     </Container>

@@ -91,8 +91,13 @@ export function DayDetailModal({ date, onClose }: Props) {
                 <h3 className="text-muted text-[10px] tracking-[0.2em] uppercase">Training</h3>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.sessions.map((s) => (
-                    <li key={s.id} className="flex items-center justify-between text-sm">
-                      <span className="text-foreground">{s.planName}</span>
+                    <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-foreground">{s.planName}</span>
+                        {s.durationMin !== null && (
+                          <span className="text-muted text-xs">{s.durationMin} min</span>
+                        )}
+                      </div>
                       <Link
                         href={`/training/${s.id}`}
                         className="text-accent text-xs hover:underline"
