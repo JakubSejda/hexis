@@ -103,6 +103,32 @@ export async function upsertWeek(
   return { affectedRows, id }
 }
 
+export async function fetchLatestMeasurement(
+  db: DB,
+  userId: string
+): Promise<MeasurementRow | null> {
+  const rows = await db
+    .select()
+    .from(measurements)
+    .where(eq(measurements.userId, userId))
+    .orderBy(desc(measurements.weekStart))
+    .limit(1)
+  return rows[0] ?? null
+}
+
+export async function fetchFirstMeasurement(
+  db: DB,
+  userId: string
+): Promise<MeasurementRow | null> {
+  const rows = await db
+    .select()
+    .from(measurements)
+    .where(eq(measurements.userId, userId))
+    .orderBy(asc(measurements.weekStart))
+    .limit(1)
+  return rows[0] ?? null
+}
+
 export async function deleteById(
   db: DB,
   userId: string,

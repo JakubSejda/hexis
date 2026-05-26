@@ -1,0 +1,5 @@
+export { BioHero } from './BioHero'
+export { VitalsStrip } from './VitalsStrip'
+export { GoalCard } from './GoalCard'
+export { LifetimeTotals } from './LifetimeTotals'
+export { TransformationStrip } from './TransformationStrip'
