@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest'
-import { eq, like } from 'drizzle-orm'
+import { like } from 'drizzle-orm'
 import { render, screen } from '@testing-library/react'
 
 vi.mock('@/lib/auth-helpers', () => ({

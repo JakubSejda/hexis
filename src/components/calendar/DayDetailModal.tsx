@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X } from 'lucide-react'
@@ -14,30 +14,34 @@ function formatDate(date: string): string {
   return CS_DATE.format(d)
 }
 
+type FetchState = { loading: boolean; data: DayDetailData | null }
+type FetchAction = { type: 'start' } | { type: 'done'; data: DayDetailData | null }
+
+function fetchReducer(_: FetchState, action: FetchAction): FetchState {
+  if (action.type === 'start') return { loading: true, data: null }
+  return { loading: false, data: action.data }
+}
+
 type Props = {
   date: string | null
   onClose: () => void
 }
 
 export function DayDetailModal({ date, onClose }: Props) {
-  const [data, setData] = useState<DayDetailData | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [{ data, loading }, dispatch] = useReducer(fetchReducer, { loading: false, data: null })
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!date) {
-      setData(null)
-      return
-    }
+    if (!date) return
     let cancelled = false
-    setLoading(true)
+    dispatch({ type: 'start' })
     fetch(`/api/calendar/day?date=${date}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: DayDetailData | null) => {
-        if (!cancelled) setData(d)
+        if (!cancelled) dispatch({ type: 'done', data: d })
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
+      .catch(() => {
+        if (!cancelled) dispatch({ type: 'done', data: null })
       })
     return () => {
       cancelled = true

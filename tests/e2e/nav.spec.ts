@@ -39,15 +39,11 @@ test.describe('SP2 navigation', () => {
     await expect(page).toHaveURL(/\/nutrition/)
   })
 
-  test('SP5 placeholder items exist and are disabled', async ({ page }) => {
+  test('Quest Calendar is an active sidebar link and navigates to /calendar', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await login(page)
-    for (const label of ['Quest Calendar']) {
-      const placeholder = page.getByText(label)
-      await expect(placeholder).toBeVisible()
-      const host = placeholder.locator('xpath=ancestor::*[@aria-disabled="true"][1]')
-      await expect(host).toHaveCount(1)
-    }
+    await page.getByRole('link', { name: /^quest calendar$/i }).click()
+    await expect(page).toHaveURL(/\/calendar$/)
   })
 
   test('Player Bio is an active sidebar link and navigates to /bio', async ({ page }) => {
