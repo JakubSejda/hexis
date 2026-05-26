@@ -21,8 +21,8 @@ export type Area =
   | 'habits'
   | 'rewards'
   | 'bio'
+  | 'calendar'
   | 'settings'
-export type PlaceholderArea = 'calendar'
 
 type Meta = {
   label: string
@@ -81,6 +81,12 @@ export const AREA_META: Record<Area, Meta> = {
     icon: UserCircle2,
     matches: (p) => p === '/bio' || p.startsWith('/bio/'),
   },
+  calendar: {
+    label: 'Quest Calendar',
+    href: '/calendar',
+    icon: CalendarDays,
+    matches: (p) => p === '/calendar' || p.startsWith('/calendar/'),
+  },
   settings: {
     label: 'Settings',
     href: '/settings',
@@ -99,13 +105,5 @@ export const SIDEBAR_AREAS: readonly Area[] = [
   'habits',
   'rewards',
   'bio',
+  'calendar',
 ] as const
-
-export const PLACEHOLDER_META: Record<
-  PlaceholderArea,
-  { label: string; icon: ComponentType<SVGProps<SVGSVGElement>> }
-> = {
-  calendar: { label: 'Quest Calendar', icon: CalendarDays },
-}
-
-export const PLACEHOLDER_ORDER: readonly PlaceholderArea[] = ['calendar'] as const
