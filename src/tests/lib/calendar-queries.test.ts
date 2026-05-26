@@ -10,6 +10,7 @@ import {
   measurements,
   bodyPhotos,
 } from '@/db/schema'
+import * as schema from '@/db/schema'
 import {
   fetchSessionDatesInRange,
   fetchHabitDatesInRange,
@@ -31,6 +32,7 @@ async function cleanup() {
     await db.delete(sessionSets).where(inArray(sessionSets.sessionId, sessionIds))
   }
   await db.delete(sessions).where(like(sessions.userId, `${PREFIX}%`))
+  await db.delete(schema.plans).where(like(schema.plans.userId, `${PREFIX}%`))
   await db.delete(habitCompletions).where(like(habitCompletions.userId, `${PREFIX}%`))
   await db.delete(habits).where(like(habits.userId, `${PREFIX}%`))
   await db.delete(measurements).where(like(measurements.userId, `${PREFIX}%`))
@@ -218,5 +220,98 @@ describe('fetchPhotoDatesInRange', () => {
     })
     const out = await fetchPhotoDatesInRange(db, USER, '2026-05-01', '2026-05-31')
     expect(out).toEqual(new Set())
+  })
+})
+
+import { fetchDayDetail } from '@/lib/queries/calendar'
+
+describe('fetchDayDetail', () => {
+  it('returns empty shape for a day with no signals', async () => {
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out).toEqual({
+      date: '2026-05-15',
+      sessions: [],
+      habits: [],
+      measurement: null,
+      photos: [],
+    })
+  })
+
+  it('returns sessions finished that day with planName + durationMin', async () => {
+    const [planRow] = (await db.insert(schema.plans).values({
+      userId: USER,
+      name: 'Plán A',
+      slug: 'plan-a',
+      order: 0,
+    })) as unknown as [{ insertId: number }]
+    const [s] = (await db.insert(sessions).values({
+      userId: USER,
+      planId: planRow.insertId,
+      startedAt: new Date('2026-05-15T10:00:00Z'),
+      finishedAt: new Date('2026-05-15T11:30:00Z'),
+    })) as unknown as [{ insertId: number }]
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out.sessions.length).toBe(1)
+    expect(out.sessions[0]?.id).toBe(s.insertId)
+    expect(out.sessions[0]?.planName).toBe('Plán A')
+    expect(out.sessions[0]?.durationMin).toBe(90)
+  })
+
+  it('returns habits completed that day', async () => {
+    const [h] = (await db.insert(habits).values({
+      userId: USER,
+      name: 'Voda',
+      cadence: 'daily',
+      weight: 'standard',
+    })) as unknown as [{ insertId: number }]
+    await db.insert(habitCompletions).values({
+      habitId: h.insertId,
+      userId: USER,
+      completedOn: '2026-05-15',
+    })
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out.habits.length).toBe(1)
+    expect(out.habits[0]?.name).toBe('Voda')
+  })
+
+  it('returns measurement keyed by weekStart === date', async () => {
+    await db.insert(measurements).values({
+      userId: USER,
+      weekStart: '2026-05-15',
+      weightKg: '82.50',
+      waistCm: '85.0',
+    })
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out.measurement).not.toBeNull()
+    expect(Number(out.measurement?.weightKg)).toBe(82.5)
+  })
+
+  it('returns photos with API URLs', async () => {
+    const [p] = (await db.insert(bodyPhotos).values({
+      userId: USER,
+      takenAt: '2026-05-15',
+      weekStart: '2026-05-11',
+      pose: 'front',
+      storageKey: `${PREFIX}p1`,
+      widthPx: 100,
+      heightPx: 100,
+      byteSize: 1000,
+    })) as unknown as [{ insertId: number }]
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out.photos.length).toBe(1)
+    expect(out.photos[0]?.id).toBe(p.insertId)
+    expect(out.photos[0]?.fullUrl).toBe(`/api/photos/${p.insertId}`)
+    expect(out.photos[0]?.thumbUrl).toBe(`/api/photos/${p.insertId}/thumb`)
+    expect(out.photos[0]?.pose).toBe('front')
+  })
+
+  it('scopes everything by userId', async () => {
+    await db.insert(sessions).values({
+      userId: OTHER,
+      startedAt: new Date('2026-05-15T10:00:00Z'),
+      finishedAt: new Date('2026-05-15T11:00:00Z'),
+    })
+    const out = await fetchDayDetail(db, USER, '2026-05-15')
+    expect(out.sessions).toEqual([])
   })
 })

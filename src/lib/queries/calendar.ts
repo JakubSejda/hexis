@@ -1,7 +1,8 @@
 import { and, eq, gte, isNotNull, lte, sql } from 'drizzle-orm'
 import type { MySql2Database } from 'drizzle-orm/mysql2'
 import * as schema from '@/db/schema'
-import { sessions, habitCompletions, measurements, bodyPhotos } from '@/db/schema'
+import { sessions, habitCompletions, measurements, bodyPhotos, plans, habits } from '@/db/schema'
+import type { DayDetailData } from '@/lib/calendar/types'
 
 type DB = MySql2Database<typeof schema>
 
@@ -91,4 +92,68 @@ export async function fetchPhotoDatesInRange(
       and(eq(bodyPhotos.userId, userId), gte(bodyPhotos.takenAt, from), lte(bodyPhotos.takenAt, to))
     )
   return setOf(rows)
+}
+
+export async function fetchDayDetail(db: DB, userId: string, date: string): Promise<DayDetailData> {
+  const dayStart = new Date(`${date}T00:00:00Z`)
+  const dayEnd = new Date(`${date}T23:59:59Z`)
+
+  const [sessionRows, habitRows, measurementRow, photoRows] = await Promise.all([
+    db
+      .select({
+        id: sessions.id,
+        planName: plans.name,
+        startedAt: sessions.startedAt,
+        finishedAt: sessions.finishedAt,
+      })
+      .from(sessions)
+      .leftJoin(plans, eq(plans.id, sessions.planId))
+      .where(
+        and(
+          eq(sessions.userId, userId),
+          isNotNull(sessions.finishedAt),
+          gte(sessions.finishedAt, dayStart),
+          lte(sessions.finishedAt, dayEnd)
+        )
+      ),
+    db
+      .select({ id: habits.id, name: habits.name })
+      .from(habitCompletions)
+      .innerJoin(habits, eq(habits.id, habitCompletions.habitId))
+      .where(and(eq(habitCompletions.userId, userId), eq(habitCompletions.completedOn, date))),
+    db
+      .select({ weightKg: measurements.weightKg, waistCm: measurements.waistCm })
+      .from(measurements)
+      .where(and(eq(measurements.userId, userId), eq(measurements.weekStart, date)))
+      .limit(1),
+    db
+      .select({ id: bodyPhotos.id, pose: bodyPhotos.pose })
+      .from(bodyPhotos)
+      .where(and(eq(bodyPhotos.userId, userId), eq(bodyPhotos.takenAt, date))),
+  ])
+
+  return {
+    date,
+    sessions: sessionRows.map((r) => ({
+      id: r.id,
+      planName: r.planName ?? 'trénink',
+      durationMin:
+        r.startedAt && r.finishedAt
+          ? Math.round((r.finishedAt.getTime() - r.startedAt.getTime()) / 60_000)
+          : null,
+    })),
+    habits: habitRows.map((r) => ({ id: r.id, name: r.name })),
+    measurement: measurementRow[0]
+      ? {
+          weightKg: measurementRow[0].weightKg ? Number(measurementRow[0].weightKg) : null,
+          waistCm: measurementRow[0].waistCm ? Number(measurementRow[0].waistCm) : null,
+        }
+      : null,
+    photos: photoRows.map((r) => ({
+      id: r.id,
+      pose: r.pose,
+      fullUrl: `/api/photos/${r.id}`,
+      thumbUrl: `/api/photos/${r.id}/thumb`,
+    })),
+  }
 }
