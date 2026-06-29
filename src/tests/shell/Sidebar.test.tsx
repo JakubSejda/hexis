@@ -25,13 +25,25 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /^settings$/i })).toBeInTheDocument()
   })
 
-  it('renders 1 disabled SP5 placeholder item with aria-disabled', () => {
+  it('renders Quest Calendar as an active sidebar link', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<Sidebar />)
-    ;['Quest Calendar'].forEach((label) => {
-      const item = screen.getByText(label).closest('[aria-disabled="true"]')
-      expect(item).toBeInTheDocument()
-    })
+    const link = screen.getByRole('link', { name: /^quest calendar$/i })
+    expect(link).toHaveAttribute('href', '/calendar')
+    expect(link).not.toHaveAttribute('aria-disabled')
+  })
+
+  it('marks Quest Calendar active on /calendar', () => {
+    vi.mocked(usePathname).mockReturnValue('/calendar')
+    render(<Sidebar />)
+    const link = screen.getByRole('link', { name: /^quest calendar$/i })
+    expect(link).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('renders no SP5 placeholder items', () => {
+    vi.mocked(usePathname).mockReturnValue('/dashboard')
+    render(<Sidebar />)
+    expect(document.querySelector('[aria-disabled="true"]')).toBeNull()
   })
 
   it('renders Player Bio as an active sidebar link', () => {

@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { AREA_META, SIDEBAR_AREAS, PLACEHOLDER_META, PLACEHOLDER_ORDER } from './area-meta'
+import { AREA_META, SIDEBAR_AREAS } from './area-meta'
 import { useActiveArea } from './use-active-area'
 import { cn } from '@/components/ui'
 
@@ -35,26 +35,6 @@ export function Sidebar() {
             <Icon className="h-4 w-4" aria-hidden />
             <span>{meta.label}</span>
           </Link>
-        )
-      })}
-
-      <SectionLabel className="mt-4">Coming soon</SectionLabel>
-      {PLACEHOLDER_ORDER.map((key) => {
-        const meta = PLACEHOLDER_META[key]
-        const Icon = meta.icon
-        return (
-          <div
-            key={key}
-            aria-disabled="true"
-            title="Coming in SP5"
-            className="text-muted flex items-center gap-2.5 px-4 py-2 text-sm italic opacity-50"
-          >
-            <Icon className="h-4 w-4" aria-hidden />
-            <span>{meta.label}</span>
-            <span className="bg-surface text-muted ml-auto rounded px-1.5 py-0.5 text-[9px] tracking-[0.15em]">
-              SP5
-            </span>
-          </div>
         )
       })}
 
