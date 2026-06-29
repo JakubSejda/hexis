@@ -1,0 +1,1498 @@
+{
+  "synthesis": {
+    "verdict": "The owner is right: the app currently reads as default-Tailwind-on-dark, not a premium Easlo-grade product, and the cause is foundational rather than cosmetic. Three root facts poison every screen at once: (1) no webfont is actually loaded — `layout.tsx` only wires `GeistMono.variable` and the `--font-sans` stack falls through to system-ui (Inter is a never-imported fallback), so the whole UI renders in the OS default and looks generic on every device; (2) `--color-muted: #6b7280` fails WCAG AA (~2.8–3.5:1 on surfaces) yet is the workhorse color for labels, section headers, hints and nav, so secondary information is hard to read app-wide; (3) the design-system primitives exist (Card, Button, Container, Stack, Grid, Pill, Input/Select, DataTable) but are inconsistently adopted — pages hand-roll `mx-auto max-w-2xl space-y-6 p-4`, 33+ bespoke buttons, raw checkboxes/selects/textareas, and clashing radii (Card `rounded-2xl` vs Button `rounded-md`). On top of this, the elevation model is border-only with near-invisible borders (no shadows), and mobile navigation strands half the app: `MOBILE_TABS` is hardcoded to 4 tabs while habits, rewards, nutrition, bio, calendar and settings have no bottom-nav entry. None of this is unfixable — most of it is a handful of token and primitive changes plus disciplined adoption — but as it stands the app fails on readability, polish, consistency, flows and mobile simultaneously, exactly as stated.",
+    "crossCuttingThemes": [
+      {
+        "theme": "No real typeface — the whole app renders in the OS system font",
+        "why": "layout.tsx only registers GeistMono; --font-sans (globals.css:33-35) is a system-ui stack with 'Inter' as an unused fallback, so no webfont ever loads. Typography is the single biggest driver of 'premium vs templated', and right now it is entirely platform-dependent (SF on Mac, Segoe on Windows, Roboto on Android), inconsistent and generic.",
+        "affectedScreens": "Every screen.",
+        "fixApproach": "Load a real variable font via next/font (e.g. `import { Inter } from 'next/font/google'; const inter = Inter({ subsets:['latin'], variable:'--font-sans-loaded' })`) and apply its className/variable on <html> in layout.tsx, then point --font-sans at that variable first. Consider a more distinctive display face for headings (Heading primitive) to break out of default-Inter blandness toward the Easlo look. Add `font-variant-numeric: tabular-nums` to numeric/stat displays in the same pass."
+      },
+      {
+        "theme": "Muted color and low-contrast foreground hierarchy fail readability",
+        "why": "--color-muted #6b7280 is used for section headers, labels, hints, timestamps, nav-inactive and disabled states everywhere, but it is ~2.8–3.5:1 on surface/background — below WCAG AA. Combined with tiny ad-hoc sizes (text-[10px]/[11px]) the secondary layer of the UI is genuinely hard to read, which reads as 'cheap'.",
+        "affectedScreens": "Global: dashboard RegionHeader, BottomNav/Sidebar labels, AppHeader breadcrumb, Input labels/hints, all tables, calendar forecast text, habit/reward metadata.",
+        "fixApproach": "Raise --color-muted to ~#9ca3af (≈4.6:1) as a one-line token change; optionally split into two tokens (--color-muted ~#9ca3af for UI labels, --color-muted-strong ~#cbd5e1 for important secondary values). Retire text-[10px]/[11px] in favor of a real text-xs floor. Active nav = text-accent + subtle bg pill; inactive nav = the lightened muted, never #6b7280."
+      },
+      {
+        "theme": "Design-system primitives exist but are bypassed — adoption, not absence, is the problem",
+        "why": "Card, Button, Container, Stack, Grid, Pill, Input, Select, DataTable all exist, yet pages hand-roll layout (`mx-auto max-w-2xl space-y-6 p-4` in habits/page.tsx, raw `space-y-3` in nutrition/progress), 33+ bespoke buttons (`bg-primary text-background h-12 rounded-lg`), raw checkboxes/radios/selects/textareas, and custom badge divs instead of Pill. This produces inconsistent spacing, focus rings, disabled states and accessibility — the visual incoherence the owner feels.",
+        "affectedScreens": "habits, rewards, nutrition, progress/measurements, stats, stats/strength, workout (ExerciseStepper/SetInput/EditSetSheet/SessionSummary), settings/export, photos, login.",
+        "fixApproach": "Make primitives the only sanctioned path: every page wraps in Container>Stack; every button is <Button>; every badge is <Pill>; build the two missing low-level primitives (Checkbox, Radio, Textarea or Input as='textarea') and a NavLink to DRY Sidebar/BottomNav. Add an ESLint guard (or grep CI check) forbidding raw <button>/<input type=checkbox|radio>/<select> in component dirs to prevent regression — fits the user's parked §11.2 CI-guard follow-up."
+      },
+      {
+        "theme": "Inconsistent geometry: radii and spacing scales have no enforced rhythm",
+        "why": "Card is rounded-2xl, Button rounded-md, TodayQuest rounded-xl, inputs rounded-md — 105+ rounded-* uses with no system, so components look like they came from different projects. Spacing is equally ad-hoc: p-2/p-3/p-4/p-6 and gap-2/3/4/6/8 mixed within single pages; Container md=max-w-2xl while dashboard uses size='full' (full bleed), giving no consistent content width.",
+        "affectedScreens": "Global, most visible on dashboard cards, calendar, measurements table, workout, dialogs/sheets.",
+        "fixApproach": "Define and enforce a radius ladder (inputs/buttons = rounded-md, cards/sheets = rounded-xl, hero = rounded-2xl) and change Card base from rounded-2xl to rounded-xl. Document a spacing contract on Stack (gap 2-3 = list items, 4 = card subsections, 6-8 = page sections) and add md:px-6 + responsive gaps to Container/Stack. Pick one default content width (max-w-2xl/3xl) and stop using size='full' on content pages."
+      },
+      {
+        "theme": "Flat, border-only elevation with invisible edges — no depth, no premium feel",
+        "why": "Every Card relies on a single 1px #1f2733 border (~1.3:1 vs surface) and zero shadows; hover only nudges border opacity. Easlo-style polish comes from layered shadow/elevation and clear interactive feedback, all of which is absent. Opacity tints like bg-accent/10 are imperceptible, so quest cards and active states don't read as distinct.",
+        "affectedScreens": "All cards (dashboard StatusWindow/LifeArea/TodayQuest/Checks), menus, skeletons, progress bars, login.",
+        "fixApproach": "Introduce shadow tokens (--shadow-sm/md/lg) and apply shadow-md to Card default, shadow-lg + slight scale on interactive hover via the Card 'interactive' variant (which already exists but is bypassed by TodayQuest/Stagnation). Lighten default border to ~#2d3b4f, use full brand color (not /60 opacity) on hover, and replace bg-accent/10 state tints with a purpose-built solid-ish accent surface token."
+      },
+      {
+        "theme": "Mobile navigation strands half the app + chronic touch-target/safe-area gaps",
+        "why": "MOBILE_TABS (area-meta.ts:98) is hardcoded to dashboard/training/progress/stats; habits, rewards, nutrition, bio, calendar, settings have NO bottom-nav route on mobile — the majority PWA surface — so core daily loops (habit check, meal log, reward redeem) are unreachable without deep navigation. Compounded by sub-44px targets (calendar cells, stepper nav px-2, habit rows py-2.5), grid-cols-7 calendars that collapse on small phones, no safe-area-inset-top, and FAB/bottom-nav overlap.",
+        "affectedScreens": "Global shell (BottomNav, AppShell), calendar, nutrition calendar, measurements table, habits rows, workout StepperNav, photos FAB.",
+        "fixApproach": "Expand BottomNav to 5 tabs + a 'More' sheet covering the orphaned areas (Easlo 5-tab pattern), driven from area-meta. Enforce min-h-11/min-w-11 on all icon/stepper buttons; make grid-cols-7 calendars responsive (vertical day-list or reduced columns under sm); add pt-[env(safe-area-inset-top)] to the shell and safe-area-aware bottom padding to BottomSheet/FAB."
+      }
+    ],
+    "quickWins": [
+      "Load a real webfont via next/font in layout.tsx and point --font-sans at it — single change, instantly lifts every screen out of 'OS default' blandness (the #1 premium-feel lever).",
+      "Change --color-muted from #6b7280 to ~#9ca3af in globals.css (one line) — fixes WCAG-failing labels/hints/nav/headers app-wide in one edit.",
+      "Add font-variant-numeric: tabular-nums globally (or to a .nums utility) so XP, weights, macros and table figures align — cheap, very 'premium-data' looking.",
+      "Add shadow tokens (--shadow-sm/md/lg) and apply shadow-md as Card's default + lighten --color-border to ~#2d3b4f — gives the whole app depth without touching any page.",
+      "Change Card base from rounded-2xl to rounded-xl and standardize Button/Input on rounded-md — removes the cross-component radius discord everywhere at once.",
+      "Add md:px-6 and responsive gap support to Container/Stack — fixes cramped mobile gutters and edge-to-edge desktop bleed across all pages from one primitive edit.",
+      "Add a 5th tab + 'More' sheet to BottomNav fed from area-meta — unlocks habits/nutrition/rewards/bio/calendar on mobile, the biggest functional unblock for the majority of users.",
+      "Bump BottomNav label from text-[10px] to text-xs and icons to h-6 w-6, and enforce min-h-11 on stepper/icon buttons — global tap-target + legibility win."
+    ],
+    "priorityOrder": [
+      {
+        "rank": 1,
+        "package": "Foundation tokens: webfont + muted contrast + tabular-nums + shadow/border elevation",
+        "rationale": "Four globals.css/layout.tsx edits that visibly lift literally every screen — the highest impact-per-effort work and the precondition for the app to read as 'premium'. Do this before any per-screen polish so later work is judged against a correct baseline. Verify font actually loads (DevTools) and re-run a contrast check on muted text."
+      },
+      {
+        "rank": 2,
+        "package": "Geometry + layout primitives: radius ladder, Card rounded-xl, responsive Container/Stack, single content width",
+        "rationale": "Removes the cross-component visual incoherence (radii, gutters, full-bleed dashboard) cheaply by editing the primitives, not the pages. Sets the spacing/width contract that the adoption work in rank 3 will conform to."
+      },
+      {
+        "rank": 3,
+        "package": "Primitive adoption + missing primitives: kill 33+ bespoke buttons, raw form controls, custom badges; add Checkbox/Radio/Textarea/NavLink; wrap every page in Container>Stack; add CI/lint guard",
+        "rationale": "This is the bulk of the consistency/accessibility debt and the largest effort, but it's mechanical once ranks 1-2 set the tokens. The lint/grep guard locks in the gains and directly serves the user's parked §11.2 CI-guard follow-up so regressions can't creep back."
+      },
+      {
+        "rank": 4,
+        "package": "Mobile navigation + touch targets + safe areas: 5-tab BottomNav with 'More' sheet, min-44px targets, responsive calendars, safe-area insets",
+        "rationale": "Biggest functional UX unblock (half the app is currently unreachable on mobile) and the most-used surface for a PWA. Sequenced after the primitive work so NavLink and the shell can be refactored cleanly rather than twice."
+      },
+      {
+        "rank": 5,
+        "package": "Per-screen hierarchy & state polish: RegionHeader/Heading sizing, interactive Card adoption (TodayQuest/Stagnation), workout flow feedback (XP popup, prominent rest timer, visible skip/finish buttons), gamification context, contrast/state tints",
+        "rationale": "With tokens and primitives correct, this targeted pass makes each screen scan well and feel motivating — the difference between 'consistent' and 'polished/Easlo-grade'. Replaces undiscoverable long-press gestures with visible buttons and celebrates XP gains."
+      },
+      {
+        "rank": 6,
+        "package": "First-run onboarding, empty-state CTAs, and global error/loading states (skeletons + error boundaries + retry)",
+        "rationale": "The only P0 (no onboarding) plus the missing safety net. High value for new-user retention and robustness, but deliberately last because it's the largest net-new build and benefits from a stable, consistent UI to onboard into rather than onboarding users into a UI still mid-overhaul."
+      }
+    ]
+  },
+  "dimensionThemes": [
+    {
+      "dimension": "Typography & Readability",
+      "topThemes": [
+        "No real webfont loaded: the app relies entirely on OS system fonts (Inter is only named in fallback but never imported/loaded), creating generic, unpolished appearance that damages premium positioning",
+        "Muted text (#6b7280) has insufficient WCAG contrast (2.8–3.2:1 vs required 4.5:1), making secondary copy and labels hard to read across all screens",
+        "Inconsistent and ad-hoc type scale with no clear hierarchy: arbitrary text sizes (text-[10px], text-[11px], text-xl, text-3xl) scattered throughout components rather than a coherent scale, making information flow unclear",
+        "Missing line-height guidance: Tailwind defaults only on one component (leading-relaxed in HabitDialog), no explicit line-height on body/prose content causing tight, hard-to-scan text",
+        "No max-width on prose content: cards and sections lack line-length constraints, causing text to read in uncomfortably long lines on desktop, especially in DataTable and list components"
+      ]
+    },
+    {
+      "dimension": "Color, Contrast & Visual Polish",
+      "topThemes": [
+        "Contrast failures on secondary text and muted states make the UI hard to read",
+        "Heavy border-only elevation model with almost no shadow-based depth or layering",
+        "Opacity-based semantic highlights (bg-accent/10, bg-accent/15) are too faint to convey state or hierarchy",
+        "Inconsistent border radii (rounded-lg/md/xl mixed without clear system) and absence of premium micro-details (gradients, refined transitions)",
+        "Default Tailwind color palette breaks the curated emerald/amber theme (emerald-500, blue-500, purple-500 in calendar)"
+      ]
+    },
+    {
+      "dimension": "Layout, Spacing & Density",
+      "topThemes": [
+        "No consistent page-level spacing scale — random mixes of p-4, gap-3, gap-6, gap-8 with no clear hierarchy or rhythm",
+        "Pages lack clear focal points and sectioning — long stacks of cards/sections bleed together with insufficient visual separation",
+        "Mobile layout completely ignores safe areas and viewport constraints — top and bottom navs conflict with content, no padding accommodation",
+        "Card padding is arbitrary (p-2, p-3, p-4, p-6 used inconsistently within the same page) — no design token adherence",
+        "Desktop container widths range from no max-width (full bleed), to max-w-2xl (narrow), to max-w-4xl — inconsistent content centering"
+      ]
+    },
+    {
+      "dimension": "Component Consistency & Design-System Adherence",
+      "topThemes": [
+        "Ad-hoc button re-implementations bypass the Button primitive, with 33+ hand-rolled button styles scattered across components using inconsistent rounded values (md/lg/xl) and padding schemes (h-11/h-12/py-2.5)",
+        "Form inputs lack consistent focus/hover states — raw <input>, <textarea>, <select> elements in 9+ components receive focus:border-primary or focus:outline-none without ring-2 states; ExercisePicker and MeasurementRow diverge from Input/Select primitives",
+        "Border radius is wildly inconsistent (rounded-md, rounded-lg, rounded-xl, rounded-2xl scattered freely), breaking the design tokens (--radius-sm/md/lg/xl); Card uses rounded-2xl but buttons use rounded-lg, creating visual discord",
+        "Raw HTML (checkbox, radio, textarea) used in 5+ components (HabitDialog, HabitDailyRow, DailyModal, SessionSummary, MeasurementRow) instead of higher-level primitives, breaking accessibility and styling consistency",
+        "Pages don't consistently use Container/Stack layout primitives — stats/strength pages use raw <div> layouts; section headers hand-rolled (RegionHeader as one-off vs Section primitive available)"
+      ]
+    },
+    {
+      "dimension": "UX Flows, Information Architecture & States",
+      "topThemes": [
+        "Navigation clarity problem: bottom-nav & sidebar restrict mobile tabs to 4 areas, hiding critical flows (habits, rewards, nutrition) from quick access; mobile users must navigate through overflow to reach non-pinned destinations",
+        "Gamification concept ambiguity: XP/level/tier/streak/muscle-rank all exist but lack progressive disclosure and clear cause-effect feedback — user doesn't understand which actions earn XP or why",
+        "Modal/dialog affordance confusion: skip dialogs, edit sheets, confirm dialogs appear without visual cues that they are dismissible; long-press gesture on exercises is undiscoverable (no hint text)",
+        "Empty state & first-run UX completely missing: no onboarding flow, no guided setup for profile/plans, calendar shows 'no data' message but doesn't guide user toward logging first workout",
+        "Muted text & low-contrast labels create cognitive load: section labels, status badges, disabled buttons all use --color-muted (#6b7280) which reads gray-on-dark and is hard to scan at a glance"
+      ]
+    },
+    {
+      "dimension": "Mobile & Responsive",
+      "topThemes": [
+        "Bottom navigation excludes many sections (nutrition, habits, rewards, bio, calendar, settings) — users on mobile must access these via menu/header dropdown or root pages with deep navigation struggles",
+        "Fixed breakpoint at md (768px) with abrupt sidebar hiding causes layout flip; no smooth tablet experience or intermediate states",
+        "Multiple components use hardcoded narrow widths (min-w-[140px], w-[220px], fixed grid-cols-7 for calendar/tables) that don't compress gracefully on very small phones",
+        "Touch targets are frequently too small (calendar cells ~44px, measurement table cells minimal height, stepper nav buttons with px-2, icon-only buttons)"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "screen": "Global / Webfont Loading",
+      "severity": "P1",
+      "location": "src/app/layout.tsx:1-32 and src/app/globals.css:33-35",
+      "problem": "No webfont is actually loaded. The font stack lists 'Inter' as a fallback, but no @import, next/font, or web font declaration exists. App renders in OS default sans-serif (San Francisco on macOS, Segoe on Windows), not Inter.",
+      "impact": "Destroys premium positioning. Generic system fonts feel cheap and unpolished, inconsistent across devices. Users on different OSs see completely different typography, breaking visual coherence. Doesn't align with 'Easlo-style minimal-but-polished' north star.",
+      "fix": "Add `import { Inter } from 'next/font/google'` in layout.tsx and configure: `const inter = Inter({ subsets: ['latin'] })`. Apply to html className: `<html className={inter.className} ...>`. Verify Inter is served from Google Fonts CDN.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Global / Muted Text Contrast",
+      "severity": "P1",
+      "location": "src/app/globals.css:11 (--color-muted: #6b7280)",
+      "problem": "Muted color (#6b7280) on dark backgrounds fails WCAG AA contrast requirements. On --color-background (#0a0e14): ratio is ~3.2:1 (fails; min 4.5:1). On --color-surface (#141a22): ratio is ~2.8:1 (severely fails). Used throughout for labels, hints, secondary text, timestamps, counts.",
+      "impact": "Secondary information is harder to read than accessible design standards allow. Users struggle to scan hints, helper text, and less-critical info. Especially painful for older users or users with mild vision loss. Makes UI feel cluttered because secondary info blends into background.",
+      "fix": "Change --color-muted to #9ca3af or #a8b0bb (achieves ~4.5:1 on both backgrounds). Alternatively, use two muted tones: one for labels/UI (lighter), one for prose (even lighter). Verify with WebAIM contrast checker.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Dashboard / StatusWindow",
+      "severity": "P2",
+      "location": "src/components/dashboard/StatusWindow.tsx:50",
+      "problem": "Tier name (tierName) rendered as text-xs tracking-[0.3em] uppercase on muted color. Text is small, widely spaced (letter-spacing 0.3em is very tight), and low contrast. Eye-catching info (tier name) gets tertiary treatment.",
+      "impact": "Tier name is hard to quickly identify and read, especially on mobile. Tracking makes it harder to parse. Players care about their tier — should be readable.",
+      "fix": "Change to text-sm font-semibold and reduce tracking to [0.1em]. Use --color-foreground or a semi-muted tone instead of pure muted.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Dashboard / RegionHeader",
+      "severity": "P2",
+      "location": "src/components/dashboard/RegionHeader.tsx:6-13",
+      "problem": "Section headers ('Life Areas', 'Muscle Volume', 'This Week', etc.) are text-[10px] (hardcoded, not token-based), muted color, uppercase with 0.2em tracking. Inconsistently sized compared to Heading primitive (which uses text-xs, text-lg, text-2xl). No line-height specified.",
+      "impact": "Section headers are too small and low-contrast. Hard to scan page structure at a glance. Small size + uppercase + tight tracking makes it hard to read multi-word headers. Breaks hierarchy — users don't know where sections begin.",
+      "fix": "Use Heading component with variant='region' consistently. Or create a RegionHeader primitive in ui/primitive/ with standardized sizes (text-xs, text-sm), foreground color, and tracking-wide (not tight). Add gap to create clear visual breaks.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Dashboard / LifeAreaCard",
+      "severity": "P2",
+      "location": "src/components/dashboard/LifeAreaCard.tsx:23-25",
+      "problem": "Card label (TRAINING, NUTRITION, etc.) is text-[10px], secondary value is text-xs, primary value is text-2xl. No visual relationship between sizes; sizes feel random. No line-height applied to any of them.",
+      "impact": "Hierarchy is unclear. The three text elements (label, value, secondary) lack visual coherence and don't establish a clear reading order. Hard to tell at a glance what the number means without reading the label.",
+      "fix": "Define a card heading scale: label = text-xs muted, primary = text-3xl bold (emphasize the big number), secondary = text-sm muted. Ensure text-3xl has line-height-tight (1.2). Establish and use this pattern across all metric cards.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Calendar / CalendarCell",
+      "severity": "P2",
+      "location": "src/components/calendar/CalendarCell.tsx:44, 46",
+      "problem": "Day number (dayNum) is text-sm font-medium. Forecast plan name is text-[10px], muted, with w-full truncate. Forecast text is tiny, low contrast, and truncates without overflow indicator. Grid cells are small (aspect-square p-1) with dense content.",
+      "impact": "Hard to read day numbers in small grid. Forecast plan names are almost invisible and truncate silently (users don't know text was cut off). Users struggling to see what's scheduled. Mobile especially problematic due to tiny cells.",
+      "fix": "Increase day number to text-base font-bold. For forecast: use text-xs (not [10px]), increase contrast, and add ellipsis indicator or expand cell height on mobile. Consider tooltip on truncated text.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Calendar / DayDetailModal",
+      "severity": "P2",
+      "location": "src/components/calendar/DayDetailModal.tsx:70, 91, 115, 128",
+      "problem": "Modal heading (date) is font-semibold with no size specified (defaults to base). Section headers (h3) are text-[10px] tracking-[0.2em] uppercase muted. Inconsistent hierarchy: heading < list items (text-sm) < labels (text-[10px]). No line-height on multi-line content.",
+      "impact": "Modal content feels visually flat. Users cannot quickly scan what information is in each section. Date heading doesn't clearly anchor the modal's purpose. Small uppercase labels are hard to skim.",
+      "fix": "Modal heading: text-lg font-bold, foreground color. Section h3: use Heading variant='region' or adopt text-sm font-semibold muted with tracking-wide. List items: ensure text-sm with line-height-relaxed (1.625) for readability.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Avatar / Stats / Data Tables",
+      "severity": "P2",
+      "location": "src/components/avatar/XpBreakdown.tsx:39-46 and src/components/ui/compound/DataTable.tsx:33-72",
+      "problem": "DataTable cells use text-sm by default with no line-height. Table headers are text-[11px] (hardcoded, no token). No tabular-nums applied to numeric columns (XP counts, percentages). Cell padding is minimal (px-1.5 py-2). Long event names or labels can wrap awkwardly.",
+      "impact": "Numeric data is hard to scan and align. No tabular-nums means numbers don't align vertically (variable-width digit fonts). Headers are too small and low-contrast. Dense spacing makes tables feel cramped and hard to read at a glance, especially on mobile.",
+      "fix": "Add font-feature-settings to table: tabular-nums on numeric columns. Headers: text-xs font-semibold, foreground color, py-3. Cells: text-sm with line-height-relaxed. Increase cell padding to px-3 py-2.5 for breathing room. Consider alternating row background on dense tables.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Rewards / RewardCard",
+      "severity": "P2",
+      "location": "src/components/rewards/RewardCard.tsx:33-35",
+      "problem": "Reward name is text-sm font-semibold with truncate (single line). Description is text-xs muted line-clamp-2. Cost label is text-xs. No clear visual separation between fields. Truncation happens silently on long Czech names (e.g., 'Nový sportovní outfit na příští sezónu').",
+      "impact": "Long reward names are cut off without clear indication. Users can't tell if they're seeing the full name or only partial. Description two-line clamp is arbitrary and may cut off mid-sentence. No visual hierarchy between reward name and cost.",
+      "fix": "Reward name: text-base font-bold foreground, break-words (allow wrapping) instead of truncate, or truncate with explicit ellipsis indicator (text-base → can fit ~20-30 chars per line). Cost label: text-accent font-semibold text-lg to make it stand out. Description: use text-sm muted with natural wrapping (no line-clamp), or expand card on hover to show full description.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Settings / Profile / Bio Hero",
+      "severity": "P2",
+      "location": "src/components/bio/BioHero.tsx:20-22",
+      "problem": "Player name is text-xl font-bold. Tier name is text-xs tracking-[0.2em] uppercase muted. 'Day' count is text-3xl font-bold (right side). No consistent spacing between these elements. Tracking is too wide for readable text.",
+      "impact": "Tier name is too small and low-contrast (muted) relative to name. Day count gets emphasis equal to the player name, which is odd. No clear visual relationship. Hard to see tier at a glance.",
+      "fix": "Name: text-xl font-bold foreground. Tier: text-sm font-semibold semi-muted, tracking-normal. Day count: text-2xl font-bold accent (use tier color from tierMeta). Ensure vertical alignment and consistent spacing (gap-2).",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Training / WorkoutPage heading",
+      "severity": "P2",
+      "location": "src/app/(app)/training/page.tsx:49, 51",
+      "problem": "Page heading is 'Vyber trenink' (Heading level={1}, which is text-2xl font-semibold). Below it, history label is manually styled as text-sm font-medium muted (line 51: `<h2 className=\"text-muted mt-4 text-sm\">Historie</h2>`). Two different heading strategies on same page.",
+      "impact": "Inconsistent heading styling. Manual h2 styling doesn't use Heading component, making maintenance harder. Secondary heading (Historie) is too small and low-contrast relative to main heading.",
+      "fix": "Use Heading component for both: `<Heading level={1}>Vyber trenink</Heading>` and `<Heading level={2}>Historie</Heading>`. Remove manual h2 styling.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Input / Form Labels",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Input.tsx:94-101",
+      "problem": "Form labels are text-xs font-medium muted. Error messages are text-xs, hints are text-xs. All labels, errors, and hints use the same size, making errors not visually distinct. No color differentiation for error state (just text-danger, no background or weight change).",
+      "impact": "Users don't immediately see that a field has an error — all helper text looks the same. Errors should stand out. Error text (text-danger) on background (#0a0e14) has decent contrast (~5:1) but small size (text-xs) means users miss it.",
+      "fix": "Labels: keep text-xs. Error messages: text-sm font-semibold text-danger (larger and heavier to catch eye). Hints: text-xs text-muted. Optionally add red underline or bg-danger/10 around error message.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Header / Streak display",
+      "severity": "P3",
+      "location": "src/components/shell/AppHeader.tsx:22-28, 31-34",
+      "problem": "Navigation breadcrumb ('Life · Dashboard') is text-xs tracking-[0.25em] uppercase. Streak count is text-xs. No visual weight difference between static label and dynamic (current area or streak). All text is same size.",
+      "impact": "Breadcrumb blends with static text. Streak number doesn't pop despite being important motivation. Hard to see current nav location at a glance.",
+      "fix": "Static 'Life' label: text-xs muted. Current area label: text-xs font-semibold text-accent. Streak: text-sm font-bold text-accent to emphasize.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Mobile BottomNav",
+      "severity": "P2",
+      "location": "src/components/shell/BottomNav.tsx:24-29",
+      "problem": "Nav items are text-[10px] (hardcoded, no token). Icons are h-5 w-5. On small screens, text is too small to read comfortably. No line-height specified for wrapping label text.",
+      "impact": "Mobile nav labels are nearly illegible. Users on phones have trouble seeing which tab they're on or which tab to tap. Accessibility issue for visual clarity.",
+      "fix": "Change text-[10px] to text-xs. Increase icon size to h-6 w-6. Add line-height-tight to ensure labels don't wrap awkwardly.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Type scale inconsistency",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Heading.tsx:8-16 and scattered throughout codebase",
+      "problem": "Ad-hoc text sizes used instead of Tailwind defaults or tokens: text-[10px], text-[11px], text-[13px] appear in 20+ components. Heading.tsx defines text-2xl, text-lg, text-base for levels 1–3, but components bypass this and inline custom sizes. No unified type scale.",
+      "impact": "No consistent visual hierarchy. Hard to maintain. If brand ever wants to change body size or adjust scale, it requires editing dozens of components. Feels chaotic and unprofessional.",
+      "fix": "Create a typography scale object or define Tailwind theme with custom text sizes: xs (12px), sm (14px), base (16px), lg (18px), xl (20px), 2xl (24px), 3xl (32px). Replace all text-[10px], text-[11px] with xs or sm from scale. Standardize on this everywhere.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Line-height and readability",
+      "severity": "P2",
+      "location": "src/components (all prose/lists) — minimal leading specified",
+      "problem": "No explicit line-height (leading-*) applied to body text, lists, or prose content. Only one instance: HabitDialog.tsx uses leading-relaxed. Tailwind default line-height is 1.5 (line-normal), which is tight for Czech text with longer words and accents.",
+      "impact": "Text feels cramped, especially Czech language with diacritics (žžžž, ččč, ř). Hard to scan lists and multi-line content. Reduces readability, increases eye fatigue.",
+      "fix": "Add leading-relaxed (1.625) or leading-loose (2) to lists and multi-line prose. For body/paragraph text in cards, use leading-relaxed by default. Headings can keep line-height-tight (1.2).",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Line-length on wide screens",
+      "severity": "P2",
+      "location": "src/components/ui/layout/Container.tsx and page layouts",
+      "problem": "No max-width constraint on main content containers on desktop. Cards and text span full viewport width on widescreen. DataTables, lists, and prose stretch without limit. Makes it hard to read — eye has to travel far left–right.",
+      "impact": "On desktop/tablet, reading long lines of text is tiring. Data tables are harder to parse when columns are spread wide. Users experience longer saccades (eye jumps) between line starts and ends, reducing comprehension.",
+      "fix": "Apply max-w-2xl or max-w-3xl to Container (or conditionally on md/lg breakpoints). For DataTable and card content, ensure max-w-prose (65ch) on desktop. Use prose-invert for dark theme prose styling if available.",
+      "effort": "M",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Numeric data and tabular figures",
+      "severity": "P3",
+      "location": "src/components/ui/compound/DataTable.tsx, avatar/XpBreakdown.tsx, avatar/AvatarHeroCard.tsx",
+      "problem": "Numeric values use default proportional figures. In XpBreakdown, XP counts and percentages don't align vertically because digits have variable width. No font-feature-settings for tabular-nums applied anywhere.",
+      "impact": "Numeric columns are harder to scan visually. Eye has to read each number rather than compare magnitude by position. Reduces usability of data visualization.",
+      "fix": "Apply `font-tabular-nums` (or `font-feature-settings: 'tnum'`) to DataTable numeric columns and any stats/metric display. For CSS: add `font-variant-numeric: tabular-nums;`.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Czech text truncation edge case",
+      "severity": "P2",
+      "location": "src/components/calendar/CalendarCell.tsx:46, rewards/RewardCard.tsx:33, habits/HabitWeeklyRow.tsx",
+      "problem": "Several components truncate text with `truncate` class and no ellipsis indicator or title attribute. Czech plan names like 'Pracovní horní zádové cviky' (work upper back exercises) are long and truncate silently. Users can't tell if they're seeing the full name.",
+      "impact": "Users don't know what's hidden. Especially bad for calendar where schedule context is lost. On mobile, truncation is aggressive and misleading.",
+      "fix": "Add title attribute to truncated text: `<span title={fullName} className=\"truncate\">...`. Or use text-ellipsis with explicit indicator. For calendar specifically, expand cell height on mobile or use horizontal scroll with snap.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Link and interactive text contrast",
+      "severity": "P3",
+      "location": "src/components/dashboard/TodaysChecksCard.tsx:92 and similar link components",
+      "problem": "Links use text-primary (emerald #10b981) on muted/dark backgrounds. Primary color has moderate contrast; links are understandable but not maximally distinct from surrounding text. No color change or weight increase on hover/focus to indicate interactivity.",
+      "impact": "Interactive elements don't clearly signal they're clickable. Users may miss links or hover links and not see visual feedback. On small screens, this is worse.",
+      "fix": "Links: use text-accent (amber #f59e0b) for higher contrast, add font-semibold, and underline. Or use text-primary with underline and font-semibold. On hover: add hover:text-accent or hover:bg-primary/10.",
+      "effort": "S",
+      "dimension": "Typography & Readability"
+    },
+    {
+      "screen": "Global / All Screens",
+      "severity": "P1",
+      "location": "src/app/globals.css @theme, all components using text-muted (#6b7280)",
+      "problem": "Muted text color (#6b7280) has only ~3.5:1 contrast ratio on surface (#141a22), failing WCAG AA for body text and barely passing for large text. Used throughout labels, hints, secondary info across all screens.",
+      "impact": "Makes secondary information hard to read, violates accessibility standards, reduces visual clarity for hints, labels, and less important content. Users with color vision deficiency or low vision struggle significantly.",
+      "fix": "Upgrade --color-muted from #6b7280 to #9ca3af or #a6adba (moves ratio to ~4.8-5.2:1, WCAG AAA compliant). Update all text-muted instances accordingly.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard, Stats, Training",
+      "severity": "P1",
+      "location": "src/components/dashboard/TodayQuest.tsx:18 (and similar), src/components/dashboard/TodayQuest.tsx:54, 67",
+      "problem": "Quest cards use bg-accent/10 (amber #f59e0b at 10% opacity, resulting in ~#16151a with tiny amber tint) and bg-accent/15. The background is nearly imperceptible from surface (#141a22); hover state (bg-accent/15) is similarly subtle. Visual differentiation is lost.",
+      "impact": "Users cannot easily distinguish active quest card from rest day or other sections. State change on hover is invisible. Breaks visual hierarchy and action affordance. Premium feel is lost in favor of a flat, indistinguishable look.",
+      "fix": "Replace bg-accent/10 with bg-accent-soft (#78350f) or a purpose-built token like --color-surface-accent-subtle: #234d2b (dark amber-tinted surface). Ensure minimum 2-3x luminance difference from surface base. Verify hover state is visually distinct (+10-15% brightness shift or border enhancement).",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "All Screens",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Card.tsx, all card-based components (StatusWindow, LifeAreaCard, RewardsBalanceCard, TodaysChecksCard, etc.)",
+      "problem": "All cards rely exclusively on 1px border (--color-border #1f2733) for elevation. Zero shadows. Contrast between border and background is minimal (~1.3:1). Creates flat, undifferentiated stacking with no depth hierarchy.",
+      "impact": "Visual layering is lost; premium apps use shadow progression to create depth. All cards feel equally important with no elevation hierarchy. Looks cheap and flat, not 'Easlo-style minimal-but-polished.' No visual feedback of importance or interactivity.",
+      "fix": "Add shadow elevation tokens: --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.5); --shadow-md: 0 4px 6px rgba(15, 23, 42, 0.6); --shadow-lg: 0 10px 15px rgba(15, 23, 42, 0.7). Apply shadow-md to Card default, shadow-lg to interactive/hover states, shadow-sm to subtle cards. Darken border to #2d3b4f for better definition.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard, All Detail Screens",
+      "severity": "P2",
+      "location": "src/components/dashboard/StatusWindow.tsx:35, src/components/dashboard/LifeAreaCard.tsx:19, src/components/dashboard/TodaysChecksCard.tsx:74, src/components/dashboard/RewardsBalanceCard.tsx:15, src/components/dashboard/WeekPeek.tsx:20",
+      "problem": "Card border color --color-border (#1f2733) is nearly black on dark surface. Provides minimal visual definition. Hover state changes only border-color from border-border to border-accent/60, which is subtle and low-contrast.",
+      "impact": "Cards lack clear edges and visual separation. Hover state is barely noticeable (low visual feedback). Interactive affordance is weak. User doesn't know card is clickable until they hover and look carefully.",
+      "fix": "Use two-tier border system: default border-color: #2d3b4f (elevated from #1f2733), hover border-color: #10b981 or #f59e0b (full color, not opacity-gated). Add subtle shadow on hover (shadow-sm) to reinforce interactivity. Ensure border passes 3:1 ratio minimum.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Calendar",
+      "severity": "P2",
+      "location": "src/components/calendar/CalendarCell.tsx:9-12 (DOT_BG), src/components/calendar/CalendarLegend.tsx:2-5",
+      "problem": "Calendar activity dots use default Tailwind palette: bg-emerald-500, bg-blue-500, bg-purple-500 (hardcoded, not theme tokens). These break the curated emerald/amber brand language and clash with custom dark palette. Blue and purple have zero semantic meaning in the app's gamification model.",
+      "impact": "Visual inconsistency breaks brand coherence. Users see untethered colors (blue, purple) that don't relate to app semantics. Looks like default Tailwind template, not premium custom design. Weak signal for habit/weigh/photo events.",
+      "fix": "Replace with themed variants: habit → bg-primary-muted (#34d399 or custom teal), weigh → bg-info (themed to match design), photo → bg-accent-muted (#fbbf24) or new purple-equivalent from brand palette. Create --color-habit, --color-weigh, --color-photo in globals.css and use consistently.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard",
+      "severity": "P2",
+      "location": "src/components/dashboard/StatusWindow.tsx (level text), src/components/avatar/AvatarHeroCard.tsx:18 (level text), src/components/dashboard/LifeAreaCard.tsx:24",
+      "problem": "Large values (level numbers, XP amounts) use inline style={{ color: tierColor }} with runtime-computed color values (gold, emerald, etc.). No consistent color application or hover/focus states. Creates visual tension with Tailwind color system.",
+      "impact": "Text color hierarchy is broken; tier colors are applied ad-hoc, not systematically. No consistent appearance across screens. Harder to maintain or modify. Looks like inconsistent styling rather than intentional design choice.",
+      "fix": "Create design tokens for each tier: --color-tier-novice, --color-tier-adept, --color-tier-master, --color-tier-legendary in globals.css. Map tierColor to CSS variables, apply via className utilities. Use Tailwind color syntax for consistent override.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Forms (Login, Settings Inputs)",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Input.tsx (all inputs), src/components/app/(auth)/login/login-form.tsx:46-64",
+      "problem": "Input borders use --color-border (#1f2733, nearly black). Focus ring is --color-ring (#f59e0b, amber). Input has no background elevation; sits flat on page. Label is text-muted (#6b7280, low contrast). Overall form feels unfinished and low-effort.",
+      "impact": "Input fields don't stand out; users may miss them. Focus state is amber ring only, no background change. Label is hard to read. Form layout feels like a generic Tailwind template, not premium. No visual hierarchy between label, input, hint, error.",
+      "fix": "Input background: use bg-surface-raised (#1a2230) instead of bg-background, creating visual elevation. Add shadow-sm on focus. Label color: upgrade to text-foreground or new --color-label token. Error message background: use bg-danger/15 instead of bg-danger/10 for better visibility. Border-color on focus: accent (#f59e0b) full color, not opacity.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "All Screens",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Button.tsx (all variants), src/components/dashboard/TodaysChecksCard.tsx:92, src/components/calendar/CalendarHeader.tsx",
+      "problem": "Ghost buttons (text-foreground hover:bg-surface-raised) and secondary buttons have no clear visual affordance until hover. Borders on secondary buttons use text-primary (emerald #10b981) but background is transparent. Button hierarchy unclear.",
+      "impact": "Users can't easily distinguish primary (amber CTA), secondary (emerald outline), and ghost actions. Ghost buttons especially lack affordance; look like text, not buttons. Weak interaction design.",
+      "fix": "Ghost button: add subtle background by default (bg-surface-raised at rest, not on hover, or use data attribute for visual context). Secondary button: add background-color: var(--color-primary-soft) (#064e3b) to indicate it's secondary without primary emphasis. Ensure all button variants have 3+ contrast with text and clear focus ring.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "All Detail Pages (Stats, Training, Progress)",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Skeleton.tsx, src/components/ui/primitive/ProgressBar.tsx (non-xp variant)",
+      "problem": "Skeleton loaders use bg-surface-raised (only 1-2 luminance step above surface). Progress bars (non-xp) use solid fill without depth (shadow on fill only for xp variant). Overall animations and micro-interactions feel flat.",
+      "impact": "Loading states aren't clearly distinguished from static content. Progress bars lack visual polish and glow-effect used only for XP feels inconsistent. Reduces perceived quality during load states.",
+      "fix": "Skeleton: apply subtle gradient (from surface-raised via surface-raised/80 to surface-raised) or soft pulse glow via backdrop-filter. ProgressBar: add shadow-glow to all fill variants, not just xp (tone-specific: --shadow-primary: 0 0 8px rgba(16,185,129,0.3), etc.). Ensure animations are smooth (duration-500 or custom easing).",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard (Muscle Widget, Week Peek)",
+      "severity": "P2",
+      "location": "src/components/dashboard/MuscleWidget.tsx:11 (rounded-lg), src/components/dashboard/WeekPeek.tsx:20 (rounded-xl), src/components/ui/primitive/Card.tsx (rounded-2xl default)",
+      "problem": "Border radii are inconsistent: rounded-lg (0.5rem), rounded-md (0.375rem), rounded-xl (0.75rem), rounded-2xl (1rem) used without clear system. Cards, buttons, and surfaces use different radii arbitrarily. No design system hierarchy.",
+      "impact": "Visual incoherence; looks like components from different projects. No intentional design language. Users perceive lack of care or polish. Premium apps maintain consistent micro-scale decisions.",
+      "fix": "Define clear radius hierarchy in globals.css or Tailwind config: --radius-xs: 0.25rem (minimal, for tight UI), --radius-sm: 0.5rem (buttons, small cards), --radius-md: 0.75rem (medium surfaces), --radius-lg: 1rem (main cards), --radius-xl: 1.5rem (large panels, heroes). Update all components: Card base to rounded-[--radius-lg], buttons to rounded-[--radius-sm], etc. Enforce via component defaults.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Workout / Training Session",
+      "severity": "P2",
+      "location": "src/components/workout/SetRow.tsx:17, src/components/workout/RestTimer.tsx:54, src/components/workout/SessionSummary.tsx:52",
+      "problem": "Workout components mix bg-border (for context) and bg-background (for containers) without semantic reason. SetRow uses bg-border as background; RestTimer uses same. No clear elevation model. Text on bg-border has poor contrast.",
+      "impact": "Confusing visual hierarchy in a critical flow (active workout). User can't distinguish active set, rest timer, summary from each other. Error-prone UX during time-sensitive activity.",
+      "fix": "SetRow active state: use bg-surface-raised (#1a2230) or bg-accent/20 (tinted amber) to show active exercise. RestTimer: bg-surface-raised with bold text-accent for emphasis. SessionSummary: bg-surface base, with summary box using bg-surface-raised to indicate completed state. Apply consistent color semantics: active = accent tint, passive = base surface.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Auth (Login Page)",
+      "severity": "P2",
+      "location": "src/app/(auth)/layout.tsx:4, src/app/(auth)/login/login-form.tsx:72-78",
+      "problem": "Login page wraps form in a card with shadow-lg but no background image, gradient, or visual interest. Submit button is hard-coded primary green (#10b981) without hover/focus states defined in form. Error message box is bg-danger/10 (#ef4444 at 10%, barely visible).",
+      "impact": "Login page feels incomplete and generic. No visual polish or brand identity. Error state is near-invisible. First impression is weak for a premium app.",
+      "fix": "Add HeroBanner or gradient background to auth layout (bg-gradient-to-br from-primary-soft via-surface to-background). Submit button: ensure hover state is primary-muted (#34d399) with smooth transition. Error box: bg-danger/20 or darker, with text-danger bold and icon. Add success toast animation for login completion.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard, All Cards",
+      "severity": "P3",
+      "location": "src/components/dashboard/LifeAreaCard.tsx:20, src/components/dashboard/StatusWindow.tsx:35, src/components/dashboard/TodaysChecksCard.tsx:74",
+      "problem": "Cards use full border (all sides) with opacity-based hover effect (border-accent/60). No background fill on hover to indicate interactivity. Transition is 'transition-colors' but only color changes, no shadow or scale.",
+      "impact": "Hover feedback is minimal and visual. User may not notice they're hovering. Interactive cards feel static and unresponsive. Missing micro-interaction polish.",
+      "fix": "On hover/active state, add: transition-all duration-200 (includes shadow and scale), shadow-md (adds depth), slight scale-[1.02] for press feedback. Ensure border transitions from --color-border to brand color (accent or primary) with no opacity gating. Test on touch devices for active state persistence.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Global / Theme",
+      "severity": "P3",
+      "location": "src/app/globals.css lines 33-36 (font stack)",
+      "problem": "Font stack lists 'Inter' in fallback but no @font-face or link loads Inter. App renders in system default font (Segoe UI on Windows, San Francisco on Mac, Roboto on Android). No consistent typography across platforms.",
+      "impact": "Typography is platform-dependent and inconsistent. Design intent (likely premium sans-serif like Inter) is lost. Users on different OSes see visually different apps. Reduces perceived polish and intentionality.",
+      "fix": "Import Inter webfont from Google Fonts or self-host. Add @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); to globals.css. Remove fallback fonts or keep only system-ui as final fallback. Verify rendering on multiple platforms.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Menu / Dropdowns",
+      "severity": "P3",
+      "location": "src/components/ui/compound/Menu.tsx:32 (shadow-lg)",
+      "problem": "Menu has shadow-lg and border, but content background is bg-surface-raised only 1 luminance step above surface. Menu items use data-[highlighted]:bg-border (very subtle highlight). No clear visual distinction between menu and page.",
+      "impact": "Menu doesn't feel like a floating surface; merges with background. Highlighted items are barely visible. Users may struggle to read menu options, especially on touch.",
+      "fix": "Menu content: use bg-surface or slightly lighter with stronger shadow (shadow-xl). Menu item highlight: bg-accent/20 or bg-primary/20 (tinted, not border gray). Ensure text contrast ≥4.5:1. Add a subtle border around menu for definition.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard, All Screens",
+      "severity": "P3",
+      "location": "src/components/shell/AppHeader.tsx:20, src/components/shell/Sidebar.tsx:12, src/components/shell/BottomNav.tsx:12",
+      "problem": "Shell surfaces (header, sidebar, nav) use bg-surface-sunken (#070b10, nearly pure black) or bg-surface-raised inconsistently. Header is surface-sunken (darkest), sidebar is also sunken. No visual hierarchy between surfaces. Navigation links on sidebar use text-muted for inactive (low contrast on dark bg) and text-accent for active (good contrast but harsh).",
+      "impact": "Navigation hierarchy is unclear. Users can't visually parse which section is active without looking carefully. Dark surfaces merge with black background. Sidebar and header feel disconnected rather than part of coherent shell.",
+      "fix": "Create navigation tier: header = bg-surface-sunken (define, currently too dark), sidebar = bg-surface (lighter, elevated), bottom-nav = bg-surface. Inactive nav links: upgrade text-muted to --color-nav-muted: #9ca3af or use opacity-70 on foreground. Active: text-accent with subtle background pill (bg-accent/20) for affordance. Ensure all nav text ≥4.5:1 contrast.",
+      "effort": "M",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Habits, Progress",
+      "severity": "P3",
+      "location": "src/components/habits/HabitDailyRow.tsx:46, src/components/bio/VitalsStrip.tsx:40",
+      "problem": "Weight/badge pill on habit uses bg-black/5 (black at 5% opacity on dark surface, nearly invisible). VitalsStrip cards use opacity-60 for empty state, making text and label equally dim and unreadable.",
+      "impact": "Weight badges are invisible or nearly so, confusing users about habit importance. Empty state cards are not clearly marked as incomplete, reducing clarity of profile data gaps.",
+      "fix": "Habit weight badge: bg-surface-raised or bg-accent/30 (darker, more visible). Text: text-foreground to ensure readability. VitalsStrip empty state: use opacity-40 on the card (not text), keep label and value text at full opacity but use italic or strikethrough to indicate missing data. Alternatively, use a placeholder color like --color-muted.",
+      "effort": "S",
+      "dimension": "Color, Contrast & Visual Polish"
+    },
+    {
+      "screen": "Dashboard",
+      "severity": "P1",
+      "location": "/src/app/(app)/dashboard/page.tsx, lines 152–219",
+      "problem": "Page uses Container with Stack gap=6, but internal sections use p-4 with no padding/margin around them. Individual cards (StatusWindow, TodayQuest, etc) have inconsistent padding (p-4, p-3). No breathing room between major sections.",
+      "impact": "Visually cramped. Cards appear to float without grouping. Unclear hierarchy of information importance. Desktop reader loses visual rhythm.",
+      "fix": "Use Container size='lg' (not default 'md'), increase Stack gap to 8 for major sections. Standardize all card padding to p-6. Add RegionHeader above each major section (already used in some, missing in others). Wrap Life Areas grid in a Card container with p-6 and explicit gap-4 between cards.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Calendar",
+      "severity": "P1",
+      "location": "/src/app/(app)/calendar/page.tsx, lines 92–104",
+      "problem": "CalendarGrid uses gap-2 on cells (aspect-square, rounded-md, p-1). The entire page wraps in Container then Stack gap=4. No space between header, grid, empty state message, and legend. Grid cells have p-1 padding which is too tight for readability of day numbers.",
+      "impact": "Calendar feels cramped. Day cells are dense and hard to tap on mobile. Legend text and grid blur together. No visual separation between interactive components.",
+      "fix": "Increase CalendarCell padding from p-1 to p-2. Increase calendar grid gap from gap-2 to gap-3. Wrap header, grid, legend in sections with Stack gap=6. Add Card wrapper around entire calendar with p-0 (or let Container handle padding). Increase day number font size in CalendarCell from text-sm to text-base.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Stats/Avatar",
+      "severity": "P2",
+      "location": "/src/app/(app)/stats/page.tsx, lines 27–48",
+      "problem": "Page has hardcoded `space-y-6 p-4` but Container is not used. AvatarHeroCard uses Card with p-6 and flex flex-col items-center (no breathing room). TierLadder, XpHistoryChart, XpBreakdown are bare sections with no visual grouping. No max-width on desktop.",
+      "impact": "On desktop, content stretches edge-to-edge. On mobile, p-4 is adequate but inconsistent with rest of app. Avatar card and tier ladder lack visual separation.",
+      "fix": "Wrap entire page in Container size='md'. Replace `space-y-6 p-4` with Stack gap=6 className='py-6'. Standardize RegionHeader styling before each section (already missing). Each section (Avatar Progress, Muscle Rank, XP History) should have Card wrapper or explicit border-top with gap-6 between.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Training/Workout",
+      "severity": "P1",
+      "location": "/src/app/(app)/training/page.tsx, lines 47–62",
+      "problem": "Page wraps in hardcoded `flex flex-col gap-4 p-4`. ResumeBanner, Heading, PlanPicker, SessionHistoryList are stacked with gap-4 throughout. PlanPicker uses gap-2 internally. SessionHistoryList uses gap-2. Heading has no top margin. No container centering on desktop.",
+      "impact": "Visual hierarchy is flat. No distinction between sections. On desktop, content is too wide. Mobile padding (p-4) conflicts with BottomNav (pb-16 in AppShell), leaving items hidden under nav.",
+      "fix": "Wrap in Container size='md' className='py-4'. Replace `gap-4 p-4` with Stack gap=6. Increase ResumeBanner and Heading gap to gap-6. Make PlanPicker and SessionHistoryList consistent: use Card wrapper with p-4, gap-2 between items is OK for lists but section-level gap should be gap-6. Verify pb-16 in main is adequate for BottomNav clearance.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Bio",
+      "severity": "P1",
+      "location": "/src/app/(app)/bio/page.tsx, lines 54–98",
+      "problem": "Uses Container + Stack gap=6 py-4 (good structure), but sections have RegionHeader with pb-2 followed immediately by component (VitalsStrip, GoalCard, etc). VitalsStrip has grid-cols-2 gap-3 md:grid-cols-4 — gap is too small for spacing balance between cells. BioHero has p-4 but is too dense (flex gap-4). Transformation/Lifetime cards have no padding.",
+      "impact": "Good overall structure but inconsistent card spacing. VitalsStrip cells look cramped at 4 columns. No padding inside Lifetime and Transformation sections.",
+      "fix": "Increase gap in VitalsStrip grid from gap-3 to gap-4. Add Card wrapper to LifetimeTotals and TransformationStrip with p-6. BioHero uses p-4 but Avatar (size=96) + content creates visual imbalance — increase gap from gap-4 to gap-6. RegionHeader pb-2 is too tight; increase to pb-3.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Nutrition",
+      "severity": "P1",
+      "location": "/src/components/nutrition/NutritionPageClient.tsx, lines 78–100",
+      "problem": "Page uses hardcoded `space-y-3` wrapper for entire content (header, calendar, stats, modal). Navigation buttons have no surrounding container. MonthStats, NutritionCalendar, and DailyModal are stacked with gap-3 which is too tight. No Container wrapping.",
+      "impact": "Sections feel cramped together. Month navigation floats without clear bounds. No max-width on desktop — content stretches. Inconsistent with Container+Stack pattern used elsewhere.",
+      "fix": "Wrap entire page in Container size='md'. Replace `space-y-3` with Stack gap=4 or gap=6. Month navigation should be in a Card or explicit section with p-4. NutritionCalendar should have Card wrapper. Gap between major sections (calendar, stats) should be gap-6.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Progress/Measurements",
+      "severity": "P1",
+      "location": "/src/app/(app)/progress/page.tsx, lines 36–76",
+      "problem": "Page uses hardcoded `space-y-3`. First flexbox contains 5 SparklineCard components in horizontal scroll, each with min-w-[140px] and p-3. Gap is flex gap-2 pb-2. MeasurementGrid is hardcoded `overflow-x-auto p-4`. No Container wrapper. SparklineCard has hardcoded styling.",
+      "impact": "Sparkline cards are too cramped (p-3, min-w-[140px] is narrow). Horizontal scroll is hard to discover. MeasurementGrid table padding (p-4) creates inconsistent spacing with sparklines section above.",
+      "fix": "Wrap in Container. Use Stack gap=6. First section (sparklines) should be Card with p-6 containing flex items-start overflow-x-auto gap-4 pb-2. MeasurementGrid should be Card with p-0 (table handles padding internally via th/td px-1.5 py-2). Increase SparklineCard min-w from 140px to 160px and p-3 to p-4.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Habits",
+      "severity": "P1",
+      "location": "/src/app/(app)/habits/page.tsx, lines 39–42",
+      "problem": "Page hardcodes `mx-auto w-full max-w-2xl space-y-6 p-4`. Heading is text-2xl font-bold with no margin. HabitsPageClient renders daily/weekly lists stacked with gap. Tab-switching between habits/archive has no clear visual separation.",
+      "impact": "Heading lacks margin hierarchy. Max-w-2xl is narrower than other pages (inconsistent). space-y-6 is adequate but no use of Container component or Stack. On mobile, p-4 is fine but doesn't follow app's pattern.",
+      "fix": "Replace with Container size='md' + Stack gap=6 py-6. Use Heading level=1 with proper margins. Create explicit sections for 'Active Habits' and 'Archived Habits' with RegionHeader. Add visual separation (Card or border-top) between daily and weekly habit sections.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Rewards",
+      "severity": "P1",
+      "location": "/src/app/(app)/rewards/page.tsx, lines 39–46",
+      "problem": "Page hardcodes `mx-auto w-full max-w-2xl space-y-6 p-4`. Same structure as Habits page. Heading is text-2xl font-bold. RewardsPageClient renders balance card, reward grid, and history with no explicit section wrappers.",
+      "impact": "Identical issues to Habits page. Inconsistent with Container+Stack pattern. On very wide desktop, content is constrained unnecessarily.",
+      "fix": "Replace with Container size='md' + Stack gap=6 py-6. Add RegionHeader before reward grid and before history section. RewardCard grid should use explicit Card wrapper with p-6.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Settings Index",
+      "severity": "P2",
+      "location": "/src/app/(app)/settings/page.tsx, lines 23–44",
+      "problem": "Uses Container + Stack gap=4 py-6 (good). Heading level=1 is present. Settings items are wrapped in Stack gap=3. Each Card has padding='md' (p-4). Structure is clean but gap-4 and gap-3 are small for visual separation.",
+      "impact": "Minor — structure is reasonable. Cards feel slightly cramped at p-4 and gap between sections could be larger.",
+      "fix": "Increase Stack gap from gap-4 to gap-6. Card padding is OK at md (p-4). RegionHeader is missing — add one before settings list.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Login",
+      "severity": "P1",
+      "location": "/src/app/(auth)/layout.tsx, lines 1–9 and /src/app/(auth)/login/login-form.tsx, lines 40–79",
+      "problem": "Auth layout uses `flex min-h-screen items-center justify-center p-6` with hardcoded Card width max-w-sm p-6. Form inside uses space-y-4 (tight spacing for inputs/button). No explicit spacing between form fields and title.",
+      "impact": "Form feels cramped. Input fields are too close together. Title 'Hexis — Login' needs more bottom margin. On mobile, p-6 on outer container might be too aggressive.",
+      "fix": "Keep outer flex layout. Input form should use Stack gap=5 or gap=6 instead of space-y-4. Add explicit mb-6 to Heading (already present, good). Form button padding should be py-3 instead of py-2. Consider responsive padding on auth layout: px-4 md:px-6 (not hardcoded p-6).",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "AppShell/Global",
+      "severity": "P1",
+      "location": "/src/components/shell/AppShell.tsx, lines 15–27",
+      "problem": "AppShell wraps children in `flex-1 pb-16 md:pb-0`. Sidebar is fixed w-[220px] with py-4 but internal padding/spacing between logo, sections, settings is ad-hoc (mb-3, pt-2 pb-1). BottomNav is h-16 (64px). On mobile, pb-16 (64px) is correct for h-16 bottom nav, but leaves no bottom padding/breathing room for content inside.",
+      "impact": "Content scrolls under BottomNav. Mobile pages have no bottom margin — last item touches nav. Sidebar section spacing (py-4, mb-3, pt-2 pb-1, border-t pt-2) is inconsistent.",
+      "fix": "In main, use `flex-1 pb-16 md:pb-0` plus `px-4 md:px-6` (currently pages handle padding). Sidebar SectionLabel should use consistent spacing: pt-3 pb-2 (not pt-2 pb-1). Links should use py-2.5 (not py-2). Border-t before settings should have pt-3 (not pt-2).",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "AppHeader",
+      "severity": "P2",
+      "location": "/src/components/shell/AppHeader.tsx, lines 20–59",
+      "problem": "Header is h-14 (56px) with px-4 md:px-6. Uses flex items-center with gap-3. Streak badge and menu button spacing is tight. No padding-y explicit (flex items-center centers content but leaves no vertical breathing room).",
+      "impact": "Header feels cramped vertically. Avatar button (h-9 w-9) looks squeezed inside h-14. Horizontal gaps (gap-3) are OK but could benefit from gap-4 on desktop.",
+      "fix": "Explicit py-3 on header (not just h-14). Increase gap-3 to gap-4 for header children. Menu button should be h-10 w-10 (not h-9 w-9) for better proportions. Streak text should have tracking spaced out slightly.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "BottomNav",
+      "severity": "P2",
+      "location": "/src/components/shell/BottomNav.tsx, lines 7–35",
+      "problem": "Nav is h-16 (fixed) with flex items-center. Links use flex flex-col items-center justify-center gap-1 and text-[10px]. No explicit padding on nav itself. Gap-1 between icon and label is too tight.",
+      "impact": "Mobile tab icons and labels are cramped. Text-[10px] is very small. On phones with safe-area-inset, pb-[env(...)] is correct but leaves little room for comfortable tapping.",
+      "fix": "Increase gap-1 to gap-1.5 between icon and label. Increase text-[10px] to text-[11px]. Add py-2 to nav (not just h-16) for explicit padding. Ensure safe-area-inset-bottom is applied correctly.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/StatusWindow",
+      "severity": "P2",
+      "location": "/src/components/dashboard/StatusWindow.tsx, lines 33–62",
+      "problem": "StatusWindow is a Link with p-4. Internal flex items-center justify-between has gap-0 (uses flex justify-between). Avatar (size=140) plus tier name/level creates vertical centering mismatch. mt-2 gaps are sparse (mt-2 before avatar section, mt-1 for progress bar).",
+      "impact": "Dense card. Avatar is large (140) but surrounded by tight spacing. Progress bar metrics (mt-1) are crammed below bar. No breathing room around tier name/level display.",
+      "fix": "Increase card padding from p-4 to p-6. Change internal flex gap-2 to gap-3 or gap-4. Tier name text should have mt-3 (not mt-2) below level. Progress bar section should have mt-4 (not mt-2).",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/LifeAreaCard",
+      "severity": "P2",
+      "location": "/src/components/dashboard/LifeAreaCard.tsx, lines 15–29",
+      "problem": "Card has p-4. Internal spacing uses mt-1, mt-0.5, mt-3. Label is text-[10px]. Value is text-2xl. Secondary is text-xs. Visual hierarchy is OK but padding and gaps are small.",
+      "impact": "Card content is compact. mt-0.5 between value and secondary is too tight visually.",
+      "fix": "Increase card padding from p-4 to p-5 or p-6. Change mt-1 (between label and value) to mt-2. Change mt-0.5 to mt-1. Visual element mt-3 is OK.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/TodayQuest",
+      "severity": "P2",
+      "location": "/src/components/dashboard/TodayQuest.tsx, lines 15–74",
+      "problem": "Multiple quest variants use p-4 padding. Label is hardcoded text-[10px]. Internal spacing uses mt-1 between label and title, mt-2 between title and details. Rest day variant also p-4 with mt-1 gaps.",
+      "impact": "Inconsistent padding with other dashboard cards (some p-4, some would benefit from p-6). mt-1 between label and title is too tight for visual weight of title.",
+      "fix": "Standardize padding to p-5 or p-6 across all quest variants. Increase mt-1 to mt-2 or mt-3 between label and quest title.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/TodaysChecksCard",
+      "severity": "P2",
+      "location": "/src/components/dashboard/TodaysChecksCard.tsx, lines 71–98",
+      "problem": "Card has p-4 with space-y-3 for internal sections. Habit rows are space-y-2 inside. Title is text-xs. Overflow text and bottom stats are cramped against edges.",
+      "impact": "Dense card. Habit rows feel tight. Bottom stats line needs more visual separation from habit list.",
+      "fix": "Increase card padding from p-4 to p-5. Change space-y-3 to space-y-4. Add py-3 to habit list section. Border-top pt-3 is OK but could be pt-4.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/RegionHeader",
+      "severity": "P2",
+      "location": "/src/components/dashboard/RegionHeader.tsx, lines 1–14",
+      "problem": "RegionHeader uses px-1 pb-2 text-[10px]. This is too small horizontally (px-1 = 4px) and vertically (pb-2 = 8px) for a section header. Text is tiny at [10px].",
+      "impact": "Section headers are barely visible. Padding is insufficient. Hard to distinguish sections.",
+      "fix": "Change px-1 to px-0 (header inherits container padding), pb-2 to pb-3 or pb-4. Increase text size from text-[10px] to text-xs (12px) or text-sm (14px). Add pt-2 to RegionHeader for top breathing room.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/WeekPeek",
+      "severity": "P2",
+      "location": "/src/components/dashboard/WeekPeek.tsx, lines 16–37",
+      "problem": "Card has p-4. Grid uses gap-2 for day cells. Legend text is text-[10px] with mt-3 above it.",
+      "impact": "Tight spacing between day cells. Legend is tiny and cramped below grid.",
+      "fix": "Increase card padding from p-4 to p-5 or p-6. Change gap-2 to gap-3 for day cell spacing. Increase legend text from text-[10px] to text-xs. Add mt-4 to legend (not mt-3).",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Dashboard/MuscleWidget",
+      "severity": "P2",
+      "location": "/src/components/dashboard/MuscleWidget.tsx, lines 8–20",
+      "problem": "Container has p-3 with mb-2 for header. Uses hardcoded spacing instead of consistent gap.",
+      "impact": "Smaller card than others (p-3 vs p-4–p-6). Header spacing is ad-hoc (mb-2). Empty state padding (py-4) is inconsistent.",
+      "fix": "Increase p-3 to p-4. Change mb-2 to mb-3. Empty state should use py-6 (not py-4) for balanced blank space.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Calendar/CalendarCell",
+      "severity": "P2",
+      "location": "/src/components/calendar/CalendarCell.tsx, lines 14–61",
+      "problem": "Cell padding is p-1. Day number is text-sm. Signal dots use gap-[3px] which is sub-pixel spacing. No vertical breathing room.",
+      "impact": "Cell is cramped. Hard to tap on mobile. Day number is small. Dots are too close together.",
+      "fix": "Increase p-1 to p-2. Increase day number from text-sm to text-base. Change gap-[3px] to gap-1 (4px) for dots. Dots themselves (h-[6px] w-[6px]) are OK.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Measurements/SparklineCard",
+      "severity": "P2",
+      "location": "/src/components/measurements/SparklineCard.tsx, lines 21–53",
+      "problem": "Card has p-3 (too small). Uses text-xs for label, text-xl for value, text-[10px] for unit. Sparkline has mt-1.5. Flex items-baseline gap-1.5.",
+      "impact": "Card is cramped at p-3. Value/sign spacing (gap-1.5) is OK but card padding doesn't match other components.",
+      "fix": "Increase p-3 to p-4. Increase mt-1.5 to mt-2 for sparkline. Value font could be text-2xl instead of text-xl for better hierarchy.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Measurements/MeasurementGrid",
+      "severity": "P1",
+      "location": "/src/components/measurements/MeasurementGrid.tsx, lines 94–162",
+      "problem": "Table wrapper has `overflow-x-auto p-4`. Header row has px-1.5 py-2. Cell padding is px-1.5 py-2. No visual separation between rows. Table is bare with minimal spacing.",
+      "impact": "Table feels cramped. Header is hard to distinguish from data. Horizontal scroll is cramped. No breathing room around data.",
+      "fix": "Wrap table in Card with p-0. Increase header th padding from px-1.5 py-2 to px-2 py-3. Increase cell padding similarly. Add border-b between rows for visual separation. Add bg-surface-raised to header row for contrast.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Bio/VitalsStrip",
+      "severity": "P2",
+      "location": "/src/components/bio/VitalsStrip.tsx, lines 35–46",
+      "problem": "Grid uses grid-cols-2 gap-3 md:grid-cols-4. Cell padding is p-3. Label is text-[10px]. Gap-3 (12px) is adequate for 2 columns but visually small when expanded to 4 columns on desktop.",
+      "impact": "At 4 columns, cells feel cramped horizontally. Gap-3 is too small for desktop layouts.",
+      "fix": "Increase gap-3 to gap-4 for better spacing at 4 columns. Increase cell padding from p-3 to p-4. Label text-[10px] is OK.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Bio/GoalCard",
+      "severity": "P2",
+      "location": "/src/components/bio/GoalCard.tsx, lines 11–46",
+      "problem": "Card padding is p-4. Uses mt-1 and mt-3 for internal spacing. Progress bar styling is bare (bg-surface-raised h-2). Text below progress bar is mt-1 (tight).",
+      "impact": "Goal text might be small (base) but title is text-2xl. mt-1 between title and goal is OK. mt-3 before progress bar could be mt-4 for better spacing.",
+      "fix": "Increase mt-3 to mt-4 before progress bar section. Increase bottom text spacing from mt-1 to mt-2.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Avatar/AvatarHeroCard",
+      "severity": "P2",
+      "location": "/src/components/avatar/AvatarHeroCard.tsx, lines 12–38",
+      "problem": "Card has flex flex-col items-center gap-2 p-6. Heading 'Tvůj avatar' has mb-2 (tight). Avatar (size=160) plus level/tier text creates visual imbalance. Progress bar section has mt-2 before wrapper.",
+      "impact": "Heading is cramped below top padding. Gap-2 between elements is too tight for a hero card. mt-2 before progress bar is small.",
+      "fix": "Increase gap-2 to gap-3 or gap-4 for internal elements. Heading mb-2 is OK but add pt-2 for top breathing room. Progress bar section mt-2 should be mt-4. Progress bar height is 10 which is good.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Avatar/TierLadder",
+      "severity": "P2",
+      "location": "/src/components/avatar/TierLadder.tsx, lines 9–39",
+      "problem": "Container div uses space-y-2. Tier button spacing (flex flex-col items-center gap-y is implicit flex layout). Open state detail box uses p-3. Title is text-sm.",
+      "impact": "Space-y-2 is tight between buttons and detail box. p-3 on detail box is small. Title should be more prominent.",
+      "fix": "Change space-y-2 to space-y-3. Increase detail box padding from p-3 to p-4. Title should be font-semibold (already is) and slightly larger.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Avatar/XpBreakdown",
+      "severity": "P2",
+      "location": "/src/components/avatar/XpBreakdown.tsx, lines 49–59",
+      "problem": "Card has p-4 with mb-3 for heading. DataTable uses py-2 for cell padding (tight). No explicit gap between title and table.",
+      "impact": "Heading spacing is small (mb-3). Table rows are too vertically compact with py-2. No breathing room around data.",
+      "fix": "Increase card padding from p-4 to p-6. Change mb-3 to mb-4. Increase cell py-2 to py-3 for better row height.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Workout/PlanPicker",
+      "severity": "P2",
+      "location": "/src/components/workout/PlanPicker.tsx, lines 28–57",
+      "problem": "Wrapper uses flex flex-col gap-2. Each plan button uses p-3 (too small). Recommended badge has px-2 py-0.5 which is very cramped. Ad-hoc button also p-3 and border-dashed.",
+      "impact": "Plan buttons are too close together (gap-2). Button padding p-3 is small relative to button height. Recommended badge is hard to read at py-0.5.",
+      "fix": "Change gap-2 to gap-3. Increase button padding from p-3 to p-4. Increase badge padding from py-0.5 to py-1 and px-2 to px-3.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Workout/SessionHistoryList",
+      "severity": "P2",
+      "location": "/src/components/workout/SessionHistoryList.tsx, lines 14–36",
+      "problem": "List wrapper uses flex flex-col gap-2. Each list item is a Link with bg-surface px-3 py-2 rounded-md. No explicit gap between sections. Empty state text is text-xs.",
+      "impact": "List items are too close (gap-2). Button padding (px-3 py-2) is tight for readability. Empty state is hard to read (text-xs).",
+      "fix": "Change gap-2 to gap-3. Increase padding from px-3 py-2 to px-4 py-3. Empty state should be text-sm (not text-xs) or have more padding.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Container Component (UI)",
+      "severity": "P1",
+      "location": "/src/components/ui/layout/Container.tsx, lines 19–28",
+      "problem": "Container uses `w-full px-4 mx-auto` plus size class. Sizes are sm (max-w-md), md (max-w-2xl), lg (max-w-4xl), full (max-w-none). px-4 (16px) is tight on mobile. No md breakpoint for px-6.",
+      "impact": "Mobile padding (px-4) leaves 8px margins on each side (32px total padding on 375px mobile = 311px content width). Desktop padding same as mobile. No responsive padding.",
+      "fix": "Change to `w-full px-4 md:px-6 mx-auto` for responsive padding. Keep size classes. Consider md max-w-3xl (between md and lg) for better intermediate sizing.",
+      "effort": "S",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Stack Component (UI)",
+      "severity": "P1",
+      "location": "/src/components/ui/layout/Stack.tsx, lines 3–28",
+      "problem": "Gap options are [2, 3, 4, 6, 8]. Default gap=4. Many pages use gap=3 or gap=4 for major sections, but design calls for hierarchy (smaller gaps within cards, larger gaps between sections). No responsive gap support.",
+      "impact": "Limited spacing flexibility. Pages can't easily express minor vs major section separations without custom classes. No way to increase gap on desktop while keeping mobile compact.",
+      "fix": "Add responsive gap support like Grid component (responsive prop). Document gap semantics: gap=2/3 for list items, gap=4 for card subsections, gap=6/8 for page sections.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Card Component (UI)",
+      "severity": "P1",
+      "location": "/src/components/ui/primitive/Card.tsx, lines 14–44",
+      "problem": "Padding options are [none, sm, md, lg] = [none, p-2, p-4, p-6]. Default padding (md) is p-4. Most cards use p-4 but dashb dashboard components use p-3 or p-4 ad-hoc (not via Card component). Inconsistent padding across app.",
+      "impact": "Cards have inconsistent padding. sm (p-2) is too small for most use cases. No middle ground between p-4 and p-6. Many components hand-roll padding instead of using Card.",
+      "fix": "Add padding='md-plus' = p-5 between md and lg. Document that sm is for dense layouts (like measurement rows), md for standard cards (4-6 per grid), lg for hero/banner sections. Audit all dashboard components to use Card instead of ad-hoc border+padding.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Grid Component (UI)",
+      "severity": "P1",
+      "location": "/src/components/ui/layout/Grid.tsx, lines 45–62",
+      "problem": "Grid has gap=[2,3,4,6,8] and cols=[1,2,3,4] with responsive options. Dashboard Life Areas use grid grid-cols-2 gap-3 md:grid-cols-4 inline (not Grid component). VitalsStrip also uses inline grid. No consistency in grid usage.",
+      "impact": "Grid component exists but not used consistently. Page authors are writing custom grid classes instead of using component. Spacing between grid items varies wildly.",
+      "fix": "Standardize on Grid component with gap=4 (not gap=3) for card grids. Document: gap-2/3 for tight layouts (sparklines), gap-4 for standard card grids. Audit all grid usage (dashboard cards, vitals, etc) to use Grid component.",
+      "effort": "M",
+      "dimension": "Layout, Spacing & Density"
+    },
+    {
+      "screen": "Export Client / Photo Upload / Nutrition Daily Modal / Session Summary",
+      "severity": "P1",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/settings/ExportClient.tsx:124-130, /Users/jakubsejda/SideProjects/hexis/src/components/photos/UploadSheet.tsx:~120, /Users/jakubsejda/SideProjects/hexis/src/components/nutrition/DailyModal.tsx:175-181, /Users/jakubsejda/SideProjects/hexis/src/components/workout/SessionSummary.tsx:54-61",
+      "problem": "Hand-rolled button styles instead of Button primitive: `className=\"bg-primary text-background h-12 rounded-lg font-semibold disabled:opacity-50\"`",
+      "impact": "33+ instances of bespoke buttons bypass the Button primitive's variant/size/loading state logic; inconsistent disabled states (only opacity-50), no focus rings in button implementations",
+      "fix": "Replace all ad-hoc button classNames with `<Button variant=\"primary\" size=\"lg\" loading={saving}>Label</Button>`. Button primitive already supports: primary/secondary/ghost/danger/success variants, sm/md/lg sizes, loading spinners, focus:ring-2 focus-visible:ring-ring, disabled:opacity-50 disabled:pointer-events-none.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Progress (Exercise Picker) / Measurements / Reward Dialog",
+      "severity": "P1",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/progress/ExercisePicker.tsx:19-30, /Users/jakubsejda/SideProjects/hexis/src/components/measurements/MeasurementRow.tsx:107-114, /Users/jakubsejda/SideProjects/hexis/src/components/rewards/RewardDialog.tsx:~82-87",
+      "problem": "Raw <select> and <textarea> elements with inline focus states (`focus:border-primary outline-none` or `focus:outline-none focus-visible:ring-2`) instead of using Input/Select/BottomSheet primitives for text areas",
+      "impact": "ExercisePicker select missing border-border base, uses focus:border-primary which isn't a token. MeasurementRow textarea and RewardDialog textarea both hand-rolled without the Input primitive's label/error/hint structure. Inconsistent focus rings (ring-2 vs outline-none).",
+      "fix": "ExercisePicker: use `<Select><option>` with the Select primitive. Textarea in Reward/Measurement: wrap in `<Input as=\"textarea\" label=\"...\" />` or use BottomSheet for large note inputs like DailyModal does. Use consistent ring-2 ring-ring focus-visible states.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Global (all screens)",
+      "severity": "P2",
+      "location": "Grep results: 105 instances of rounded-* classes across non-primitive components",
+      "problem": "Border radius values inconsistent: rounded-md (0.5rem), rounded-lg (0.75rem), rounded-xl (1rem), rounded-2xl (1.5rem) all used freely; Card primitive uses rounded-2xl but Button uses rounded-md, TodayQuest uses rounded-xl, dialogs/sheets use rounded-xl/rounded-2xl",
+      "impact": "Breaks design token enforcement (--radius-sm/md/lg/xl defined but not used consistently). Creates visual inconsistency: Card padding-4 with rounded-2xl vs buttons rounded-lg with h-12 looks mismatched. Premium finish requires geometric discipline.",
+      "fix": "Standardize: (1) Button → rounded-md (0.5rem), (2) Card/Sheet/Dialog → rounded-lg or rounded-xl (0.75rem or 1rem), (3) Input/Select → rounded-md. Update Card.tsx base from `rounded-2xl` to `rounded-lg`. Audit and replace all non-primitive rounded-* with consistent token usage via Tailwind @theme values.",
+      "effort": "L",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Habits / Daily Checking / Nutrition Daily Modal / Session Summary",
+      "severity": "P1",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/habits/HabitDialog.tsx:84-94 (radio), /Users/jakubsejda/SideProjects/hexis/src/components/habits/HabitDailyRow.tsx:38-44 (checkbox), /Users/jakubsejda/SideProjects/hexis/src/components/nutrition/DailyModal.tsx:167-172 (textarea), /Users/jakubsejda/SideProjects/hexis/src/components/measurements/MeasurementRow.tsx:107-114 (textarea)",
+      "problem": "Raw HTML input elements (radio, checkbox, textarea) without styled wrappers or primitives. HabitDailyRow checkbox is unstyled OS default. HabitDialog radio buttons lack visual styling.",
+      "impact": "Checkboxes and radios render as OS defaults (Windows/Mac native look), breaking the dark Hexis aesthetic. Textarea elements missing consistent border/focus/padding. No accessible label associations for checkboxes (aria-label present but no visual label structure). Reduces polish and breaks accessibility story.",
+      "fix": "(1) Create Checkbox and Radio primitives (or use Radix UI wrappers). (2) HabitDailyRow: wrap `<input type=\"checkbox\">` in a Checkbox primitive with checked/unchecked styling (e.g., border-primary/bg-primary when checked). (3) HabitDialog radios: use Radio primitive with visual pills or cards. (4) Textarea in DailyModal/MeasurementRow: use Input with `as=\"textarea\"` or create Textarea primitive. Follow Radix UI patterns for accessibility.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Stats / Progress / Strength",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/app/(app)/stats/page.tsx (line 27 onwards), /Users/jakubsejda/SideProjects/hexis/src/app/(app)/stats/strength/page.tsx",
+      "problem": "Pages use raw <div className=\"space-y-6 p-4\"> and <section> layouts instead of Container/Stack/Section layout primitives consistently. Stats page doesn't import Stack or Container.",
+      "impact": "Breaks layout consistency: stats page uses raw space-y-6 p-4 instead of Stack/Container, while dashboard uses Container+Stack+Section throughout. Makes it harder to apply global spacing/sizing changes. Stats page has no px/container constraint (assumes full width), vs dashboard's full Container wrapper.",
+      "fix": "Import and use: `<Container><Stack gap={6}>...<section><RegionHeader>Title</RegionHeader>...content...</section></Stack></Container>`. Or create a page layout wrapper. Ensure all pages follow the same Container → Stack → Section pattern.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Today's Quest / Stagnation Warning / Dashboard cards",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/dashboard/TodayQuest.tsx:15-73, /Users/jakubsejda/SideProjects/hexis/src/components/dashboard/StagnationWarning.tsx",
+      "problem": "Interactive cards (TodayQuest, StagnationWarning) use inline border/bg/hover classes (`bg-accent/10 hover:bg-accent/15 border-accent/40 rounded-xl`) instead of Card primitive with interactive variant",
+      "impact": "Card primitive has `interactive` variant (hover:bg-surface-raised, focus-visible:ring-2), but TodayQuest/Stagnation roll their own hover:bg-accent/15. Inconsistent hover feedback across the app. TodayQuest uses rounded-xl but Dialog uses rounded-xl with p-4 (consistent), but other cards use rounded-lg.",
+      "fix": "Replace TodayQuest and StagnationWarning outer divs with `<Card variant=\"interactive\">` and remove inline bg/hover classes. Update Card interactive styles to use accent color variants if needed (e.g., data-active:bg-accent/10). Removes duplicate hover logic.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Nutrition Daily Modal / Reward Dialog / Photos Upload",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/nutrition/DailyModal.tsx:134-162, /Users/jakubsejda/SideProjects/hexis/src/components/rewards/RewardDialog.tsx:80-90, /Users/jakubsejda/SideProjects/hexis/src/components/photos/UploadSheet.tsx:90-120",
+      "problem": "Optional macro toggles and form sections use raw <div> wrappers (e.g., DailyModal optional macros box) and raw input file elements without consistent styling",
+      "impact": "DailyModal optional macros section has `bg-background rounded-lg p-3` (different from p-4 cards), creating subtle spacing inconsistency. Photo upload input has no visual styling. No consistent form-group/fieldset visual hierarchy.",
+      "fix": "Create FormGroup/FieldGroup primitive for consistent label + input + hint/error layouts (used 6+ times). Update DailyModal optional macros to use Card variant=\"flush\" padding=\"sm\". Wrap file input in a styled container.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Shell (Sidebar, BottomNav, AppHeader)",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/shell/Sidebar.tsx:28-38, /Users/jakubsejda/SideProjects/hexis/src/components/shell/BottomNav.tsx:19-31, /Users/jakubsejda/SideProjects/hexis/src/components/shell/AppHeader.tsx",
+      "problem": "Navigation links use conditional classNames (ternary operators) instead of extracting a NavLink primitive; AppHeader has a badge-like div with inline classes `bg-accent text-background flex h-9 w-9 rounded-full`",
+      "impact": "Sidebar and BottomNav nav-item logic is duplicated (isActive ternary with text-accent vs text-muted). AppHeader badge lacks a Pill primitive (which exists but isn't used). Inconsistent active/inactive states across nav elements.",
+      "fix": "Create NavLink primitive: `<NavLink href=\"/dashboard\" isActive={active === 'dashboard'}>Icon + Label</NavLink>` to centralize active/inactive styling. Replace AppHeader badge with `<Pill variant=\"accent\">N</Pill>`. DRY up Sidebar/BottomNav.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Dialog / BottomSheet / EditSetSheet",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/ui/compound/Dialog.tsx:27-28, /Users/jakubsejda/SideProjects/hexis/src/components/ui/primitive/BottomSheet.tsx:17, /Users/jakubsejda/SideProjects/hexis/src/components/workout/EditSetSheet.tsx:68-83 (manual dialog buttons)",
+      "problem": "Dialog has internal full-width button styling, BottomSheet has no button variants. EditSetSheet manually defines dialog action buttons (inline cancel/delete) instead of using Dialog.Actions or Button variant='ghost'.",
+      "impact": "Dialog content area has no pre-styled button row. EditSetSheet dialog footer has to hand-code `border-border text-foreground h-11 flex-1 rounded-lg border font-semibold` instead of using Button ghost variant. No consistency for dialog action layouts.",
+      "fix": "Add DialogActions compound component (or document button usage pattern). EditSetSheet delete confirmation should use Button variant=\"ghost\" for cancel and Button variant=\"danger\" for delete, not raw divs.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Global (form labels)",
+      "severity": "P3",
+      "location": "Input/Select/NumberInput primitives use: `label ? <span className=\"text-muted text-xs font-medium\">{label}</span>`. Raw form labels elsewhere use same or similar.",
+      "problem": "Form label styling is consistent in primitives, but pages and modals sometimes use explicit flex flex-col gap-1 wrappers (e.g., RewardDialog line 68) or RegionHeader variant for section labels, mixing two label styles",
+      "impact": "Minor: some section headers use RegionHeader (text-[10px] uppercase tracking-[0.2em]) vs form labels (text-xs). Subtle visual hierarchy confusion.",
+      "fix": "Create FormLabel primitive or document label patterns. Use Input label prop instead of wrapping with separate <label> elements.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Pill / Badge usage (avatar, anatomy, workout)",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/anatomy/MuscleRankSection.tsx (~line 50), /Users/jakubsejda/SideProjects/hexis/src/components/shell/AppHeader.tsx (~line 80), /Users/jakubsejda/SideProjects/hexis/src/components/rewards/RewardList.tsx",
+      "problem": "Pill primitive exists (5 variants: neutral/success/warning/danger/accent, sizes sm/md), but custom badge HTML used instead: `<div className=\"bg-accent rounded-md px-3 py-1 text-xs font-medium text-white\">` in MuscleRankSection and similar in RewardList",
+      "impact": "MuscleRankSection badge renders as custom div instead of Pill component, losing Pill's semantic variants and consistency. RewardList badges also custom. Breaks design-system adherence.",
+      "fix": "Replace all custom badge/pill divs with `<Pill variant=\"success\" size=\"sm\">Label</Pill>`. MuscleRankSection: `<Pill variant=\"accent\">rank badge</Pill>`. Audit for all className patterns like `bg-*` + `rounded-md` + `text-xs`.",
+      "effort": "S",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Tables (MeasurementRow, Measurements table)",
+      "severity": "P2",
+      "location": "/Users/jakubsejda/SideProjects/hexis/src/components/measurements/MeasurementRow.tsx (table structure), DataTable compound primitive not used",
+      "problem": "MeasurementRow renders <tr><td> structure with inline classNames (`px-1.5 py-2.5 text-xs`). DataTable compound primitive exists but isn't used here.",
+      "impact": "Table styling is inconsistent (inline padding/text-size). No thead/tbody structure shown. DataTable primitive provides consistent table theming but is unused.",
+      "fix": "Use DataTable compound primitive for measurements view. If not applicable, create TableRow/TableCell primitives to DRY up inline padding/text classes.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Focus/hover states (global)",
+      "severity": "P2",
+      "location": "All components: grep shows inconsistent focus patterns. Input/Button use focus-visible:ring-ring focus-visible:outline-none. NumberInput buttons use active:bg-primary. Raw selects use focus:border-primary outline-none.",
+      "problem": "No consistent focus-ring pattern: some use focus:ring-2 focus-visible:ring-ring (correct per Headless UI), others use focus:outline-none, others use active:bg-primary for buttons. NumberInput stepper buttons don't declare focus state at all.",
+      "impact": "Keyboard nav and focus management is visually inconsistent. Some buttons show no focus ring when tabbed (NumberInput stepper buttons, ExercisePicker select). Accessibility concern: WCAG requires visible focus indicator.",
+      "fix": "Standardize focus states across all interactive elements: (1) Buttons: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring` (already in Button base). (2) Inputs: same focus-visible:ring-2. (3) NumberInput stepper buttons: add focus-visible:ring-2 focus-visible:ring-ring. (4) All raw selects/inputs: use Input/Select primitives or add focus-visible:ring-2.",
+      "effort": "M",
+      "dimension": "Component Consistency & Design-System Adherence"
+    },
+    {
+      "screen": "Mobile navigation (global/shell)",
+      "severity": "P1",
+      "location": "src/components/shell/BottomNav.tsx, line 14; src/components/shell/area-meta.ts, line 98",
+      "problem": "Mobile bottom-nav hardcoded to 4 tabs (dashboard, training, progress, stats). Critical flows like habits, rewards, nutrition, calendar, bio are completely hidden on mobile.",
+      "impact": "Mobile users (majority of PWA traffic) cannot access half the app without going through dashboard first. Friction prevents daily habit checking, reward redemption, and meal logging — core engagement loops.",
+      "fix": "Add 5th/6th tabs or implement a 'more' menu (hamburger/pill menu) on bottom-nav. Priority order: Habits (daily engagement), then Training, Progress, Stats, More (nutrition/rewards/calendar/bio). See Easlo's 5-tab pattern.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Dashboard",
+      "severity": "P1",
+      "location": "src/components/dashboard/StatusWindow.tsx, line 35; src/app/(app)/dashboard/page.tsx, line 174",
+      "problem": "Status window shows level + XP bar but doesn't explain what XP is or how the user earned it. Life Area cards show bare numbers (e.g., '3 sets' for training) without context. No visual feedback that these are tappable quick-links.",
+      "impact": "New user lands on dashboard confused: What does level 5 mean? Why is training showing '3 sets'? Where did my XP come from? No call-to-action for first actions. Cards look static, not interactive.",
+      "fix": "Add small '?' affordance next to tier name linking to /stats (avatar progress page). Add '→' chevron or hover lift effect to Life Area cards to signal interactivity. Show '3 sets · Last 7 days' secondary text in training card with temporal context.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Training (start session)",
+      "severity": "P2",
+      "location": "src/components/workout/PlanPicker.tsx, line 31",
+      "problem": "Plan picker buttons styled like plain borders with no visual distinction between disabled/enabled state. Recommended plan shows green border (#10b981) but no label clarity. 'Ad-hoc trénink' button is dashed border with muted text—looks less prominent than actual plans.",
+      "impact": "User scanning plans can't immediately tell which is recommended. Ad-hoc option appears secondary or disabled (gray dashed border) when it should be equally prominent for quick sessions. No hover/focus feedback signals interactivity.",
+      "fix": "Recommended plan: solid border + accent highlight, badge label 'Doporučeno'. Ad-hoc button: solid border, primary background or secondary variant (per Button.tsx style guide), not dashed. Add hover:bg-surface lift effect to all buttons.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Workout session (exercise stepper)",
+      "severity": "P1",
+      "location": "src/components/workout/ExerciseStepper.tsx, line 41; src/components/habits/HabitDailyRow.tsx, line 23",
+      "problem": "Long-press gesture to skip exercise is undiscoverable. No tooltip, no hint text, no visual affordance. User has no way to know this interaction exists. Gesture-based interactions are mobile UX anti-pattern without explicit affordance.",
+      "impact": "Users get stuck if they want to skip an exercise. They must ask for help or abandon the session. Stepper feels trapped/rigid.",
+      "fix": "Replace long-press with visible button: 'Přeskočit cvik' button below exercise card (like 'Přeskočit'/'Pokračovat' in habits). Keep three-dot menu with 'Skip' option on ExerciseStepper for power users. Add hint text in empty state: 'Tap = check, button = skip'.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Workout session (set input & logging)",
+      "severity": "P2",
+      "location": "src/components/workout/SetInput.tsx, line 38; src/components/workout/ExerciseCard.tsx, line 76",
+      "problem": "Primary success feedback is text toast ('Set se neuložil'). User has to read small text at bottom of screen and wait for it to disappear. No XP-earned visual celebration. Rest timer starts but user may not notice it (small component, no announcement).",
+      "impact": "Completing a set feels unmotivating—silent success. Gamification (XP gains) is earned but not celebrated. Rest timer is easy to miss on mobile.",
+      "fix": "Replace toast with animated XP popup (already exists via useXpFeedback but underutilized). Rest timer: make prominent, full-width, large countdown, use accent color. Add haptic feedback cue on submit (navigator.vibrate).",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Workout session (stepper navigation)",
+      "severity": "P2",
+      "location": "src/components/workout/StepperNav.tsx, line 15",
+      "problem": "Prev/next buttons labeled with exercise name abbreviation ('Bench', 'Squat', etc.) but text color is --color-muted and size is xs (tiny). Disabled buttons use opacity-30 (very faint). Dot indicator shows current exercise but user may not realize it's clickable.",
+      "impact": "On mobile during a tiring workout, user can't quickly see 'am I on exercise 2 of 5?'. Button labels are hard to read. Disabled state is too subtle—user might tap a disabled button and think the app froze.",
+      "fix": "Increase button font size to sm. Disabled state: use text-muted/50 + clearer styling (e.g., 'opacity-50'). Add larger, more visible exercise counter '2/5' in center dot section. Show full exercise name in a tooltip on hover (desktop) or in a brief modal (mobile).",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Workout session (finish workflow)",
+      "severity": "P1",
+      "location": "src/components/workout/ExerciseStepper.tsx, line 83; src/components/workout/SessionSummary.tsx (not shown but referenced)",
+      "problem": "Finish button only appears on last exercise. User has to navigate all the way to the end to finish—no visible 'Finish anytime' affordance. SessionSummary component handles post-workout view but is not visible during session (details tag in page.tsx, line 238).",
+      "impact": "User may not realize they can finish early or abandon a session. Modal/dismissible patterns are unclear. Finish-session UX is hidden behind a details toggle.",
+      "fix": "Show 'Finish workout early' button (secondary variant) on all exercises, not just last. Expand SessionSummary details tag by default or move summary to floating card. Add 'Save & Exit' / 'Abandon session' modal options.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Habits (daily/weekly)",
+      "severity": "P2",
+      "location": "src/components/habits/HabitDailyRow.tsx, line 45; src/components/habits/HabitsPageClient.tsx, line 121",
+      "problem": "Weight label ('×0.5', '×1.0', '×2.0') shown as small muted badge. Habit name truncates with no visual hierarchy. Completed streak emoji + number (🔥 5) is appended inline. Empty state shows hint text 'Tap = check, drž = vrátit zpět.' but long-press is not visible/discoverable in the actual habit row.",
+      "impact": "User doesn't understand XP multiplier system (weight). Hint text contradicts missing affordance. No visual difference between checked/unchecked states except checkbox + text fade.",
+      "fix": "Habit name: bold, larger. Weight badge: rename to 'XP ×1.0' with explanation (tooltip on hover). Completed state: add light accent background to row + strikethrough on name. Show visible 'Undo' button on checked state (not long-press). Streak: keep emoji but larger, right-aligned.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Habits (empty state)",
+      "severity": "P2",
+      "location": "src/components/habits/HabitsPageClient.tsx, line 116",
+      "problem": "Empty state text: 'Zatím nemáš žádné návyky.' + 'Tap = check, drž = vrátit zpět.' The second line is a hint for future use but appears before any habit is created. It's confusing and contradicts the lack of UI to tap.",
+      "impact": "New user is confused: 'Tap what?' and 'Hold to undo what?'. Hint is premature and creates cognitive dissonance.",
+      "fix": "Replace hint text with clear CTA: 'Start building better habits — tap below to create your first one.' Only show gesture hints after habits are created (in the actual habit list).",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Habits check/uncheck flow",
+      "severity": "P1",
+      "location": "src/components/habits/HabitsPageClient.tsx, line 42, 61",
+      "problem": "Optimistic UI updates checkbox locally but refreshes entire page (router.refresh()) on success/error. No toast confirmation visible to user—error toast shows but success is silent. Uncheck flow shows 'Vráceno' info toast—that's the only feedback that undo worked.",
+      "impact": "User doesn't know if habit check was saved. Network latency feels like lag. Success is less rewarding than error—error gets a toast, success gets a silent refresh.",
+      "fix": "Keep optimistic UI. Add success toast: 'Hotovo!' or 'Zvládl jsi!' (Czech idiom). Show streak milestone message on first uncheck of the day (if XP awarded), then uncheck. Add haptic feedback.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Rewards page",
+      "severity": "P2",
+      "location": "src/components/rewards/BalanceCard.tsx (not shown), src/components/rewards/RewardCard.tsx, line 25",
+      "problem": "Reward card shows 'Vyzvednout' (redeem) button with disabled state when user doesn't have enough XP. Disabled button shows title='Chybí X XP' on hover but button is styled with reduced opacity (hard to see). No visual indication of how close user is to redemption.",
+      "impact": "User taps 'Vyzvednout' on an expensive reward and gets a silent error or error toast. No progress bar or visual 'X more XP needed' indicator. Feels blocked/uninformed.",
+      "fix": "Replace disabled button with secondary variant button + red text 'Chybí 250 XP'. Add progress bar showing current balance vs. reward cost (e.g., '500 / 750 XP'). Show it on the card, not just on hover.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Rewards (empty state)",
+      "severity": "P2",
+      "location": "src/components/rewards/RewardList.tsx, line 30",
+      "problem": "Empty state shows 'Žádné odměny' with CTA 'Vytvoř si první odměnu' button. But there's also a '+ Nová odměna' button at the top of the page (RewardsPageClient.tsx, line 99). Two CTAs for the same action. Icon is a generic Gift icon, not motivational.",
+      "impact": "User seeing empty state doesn't know if they should use the button on the empty state or the one at the top. Redundant CTAs feel messy. No context about what rewards are for.",
+      "fix": "Remove button from empty state. Instead show: 'Žádné odměny' + description 'Co si chceš dopřát za odvedenou práci? Vytvoř si první odměnu a používej ji jako motivaci.' CTA at top stays. Keep single, clear button placement.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Rewards redeem flow",
+      "severity": "P2",
+      "location": "src/components/rewards/RedeemConfirmDialog.tsx (not shown), src/components/rewards/RewardsPageClient.tsx, line 71",
+      "problem": "Redeem API returns 'Insufficient balance' error but code shows generic alert('Nedostatek XP'). No visual affordance in the dialog to see current balance before confirming. User must cancel, check balance, then retry.",
+      "impact": "User redeems reward, gets error, has to backtrack. Two-tap problem where one tap should suffice. No clear UI showing 'you need X more XP'.",
+      "fix": "RedeemConfirmDialog should show current balance and cost before confirm button. Add a progress indicator: 'Your balance: 500 XP / Cost: 750 XP'. Disable confirm button if insufficient. Show 'You need 250 more XP' message instead of error.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Stats/Avatar page",
+      "severity": "P2",
+      "location": "src/app/(app)/stats/page.tsx, line 30; src/components/avatar/AvatarHeroCard.tsx (not shown)",
+      "problem": "Stats page titled 'Avatar Progress' (line 31) but sections are generic: 'Avatar Progress', 'Muscle Rank', 'XP History'. No clear 'this is your RPG character progression' theme. Avatar card and tier ladder shown but no story/narrative about tiers or muscle ranks.",
+      "impact": "Gamification concept feels disconnected. User doesn't understand tier progression (bronze → silver → gold) or what muscle ranks represent. Stats page feels data-heavy, not motivational.",
+      "fix": "Rename to 'Your Journey' or 'Character Progress'. Add lore/descriptions: 'You are level X — a [Tier Name]. Unlock higher tiers by earning XP.' Show tier benefits on TierLadder (e.g., 'Silver: Unlock advanced stats'). Add muscle rank explanations: 'Chest: Rank 3 — Strong development'.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Progress/Measurements page",
+      "severity": "P2",
+      "location": "src/app/(app)/progress/page.tsx, line 36; src/components/measurements/SparklineCard.tsx (not shown)",
+      "problem": "Sparkline cards shown in horizontal scroll. Labels are generic ('Váha', 'Pas', 'Hrudník'). No clear which goal is 'lower-is-good' (weight) vs 'higher-is-good' (chest). MeasurementGrid is a dense table with all columns visible—hard to scan on mobile.",
+      "impact": "User sees sparklines but doesn't know if trending up or down is good. Dense table is unreadable on phone. No visual guidance on how to interpret trends.",
+      "fix": "SparklineCard: add subtle arrow or color indicator (🟢 down / 🔴 up based on goal). MeasurementGrid: make responsive—show only current week + last week on mobile, full table on desktop. Add 'Goal: lower weight' label in sparkline legend.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Bio/Player page",
+      "severity": "P2",
+      "location": "src/app/(app)/bio/page.tsx, line 54; src/components/bio/BioHero.tsx (not shown)",
+      "problem": "Bio page shows sections but no clear narrative. 'Vitals', 'Goal', 'Lifetime', 'Transformation' are all present but disconnected. No visual progress toward goal (e.g., weight loss target). Transformation strip shows photos but no comparison UI.",
+      "impact": "User sees stats but doesn't feel connected to their progress story. No 'you've come X% toward your goal' celebration. Photos are a feature but not integrated into progress narrative.",
+      "fix": "Add 'Goal Progress' section at top: show current vs goal weight with progress bar + '8kg lost of 15kg goal (53%)'. Show first photo vs recent photo side-by-side on Transformation section. Add 'Milestone: X weeks on journey' badge.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Calendar",
+      "severity": "P2",
+      "location": "src/app/(app)/calendar/page.tsx, line 98; src/components/calendar/CalendarGridClient.tsx (not shown)",
+      "problem": "Calendar legend shown but symbols are not immediately clear. Empty state says 'Začni svoji cestu — první session, habit nebo váha se tu objeví.' No visual affordance or link to create first session/habit/measurement from calendar.",
+      "impact": "New user lands on calendar, sees blank month, reads message, but doesn't know where to click to start. No CTA buttons pointing to training/habits/progress pages.",
+      "fix": "Add three small CTA buttons below empty state: 'Start training' → /training, 'Create habit' → /habits, 'Log weight' → /progress. Show calendar legend prominently above grid with color-coded explanations.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Navigation (sidebar active state clarity)",
+      "severity": "P2",
+      "location": "src/components/shell/Sidebar.tsx, line 28",
+      "problem": "Active sidebar link styled with accent color + left border. Inactive links are muted text. But muted color (#6b7280) is very gray on dark background—hard to distinguish from disabled/inactive state. No hover feedback is visible.",
+      "impact": "User scanning sidebar can't quickly identify current page. Hover state (hover:text-foreground) is there but very subtle. On mobile (bottom-nav), active tab is accent-colored but inactive tabs are hard to see.",
+      "fix": "Active link: keep accent + left border, but also add subtle accent background (e.g., bg-accent/5 or bg-surface-raised). Inactive: keep muted text. Hover: add visible bg-surface lift. Bottom-nav inactive tabs: increase size or add subtle label highlight.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Login page",
+      "severity": "P1",
+      "location": "src/app/(auth)/login/login-form.tsx, line 39",
+      "problem": "Login form is minimal—just email + password inputs and a submit button. No brand identity or context. No password recovery link. Error message is generic ('Neplatný email nebo heslo'). Loading state shows only text ('Přihlašuji…') with no visual feedback (spinner, disabled state clarity).",
+      "impact": "User unsure if they're in the right place. No way to recover lost password. If sign-in takes time, user doesn't know app is responding.",
+      "fix": "Add Hexis logo or title at top. Show 'Forgot password?' link below password field. Add loading spinner to button during sign-in. Keep error message but add password reset CTA: 'Zapomněl jste heslo? Kontaktujte podporu.'",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Global error/loading states",
+      "severity": "P1",
+      "location": "src/components/workout/ExerciseStepper.tsx, line 133; Multiple pages with 'text-muted p-4'",
+      "problem": "Loading fallback is plain text 'Načítám…' (line 133, ExerciseStepper). No skeleton screen, no progress indicator. Error boundaries are missing—if a page crashes, user sees blank or cryptic error (e.g., 'Session nenalezena' on line 38 of workout/[sessionId]/page.tsx). No retry affordance.",
+      "impact": "User sees 'Loading...' with no ETA or sign that something is happening. If data load fails, user is stuck with an error message and no way to recover except refresh.",
+      "fix": "Add skeleton loaders for ExerciseStepper, measurements grid, and other async sections. Show error states with retry button: 'Chyba při načítání. Zkus znovu.' Add global error boundary (ErrorBoundary component) with option to clear data or contact support.",
+      "effort": "L",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "First-run onboarding",
+      "severity": "P0",
+      "location": "src/app/(auth)/login/login-form.tsx → src/app/(app)/dashboard/page.tsx (no onboarding flow)",
+      "problem": "App has no onboarding flow. New user logs in directly to dashboard. No guided setup: profile (name, height, weight goal, gender), no plan selection, no first habit creation. User sees data cards with numbers but no context on how to use them.",
+      "impact": "New user is completely lost. No guidance on 'what should I do first?'. App feels finished/static, not inviting. No hook to create first session or habit. High abandonment rate.",
+      "fix": "Create multi-step onboarding (or use modal wizard): 1) Welcome/intro 2) Profile setup (name, height, goal weight, gender) 3) First plan selection or create ad-hoc session 4) First habit creation 5) Dashboard tour (what is XP, level, tier?). Store onboarding state in user prefs, show once. Consider in-context tooltips on dashboard elements.",
+      "effort": "L",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Text contrast & readability (global)",
+      "severity": "P1",
+      "location": "src/app/globals.css, line 10; Multiple components using --color-muted",
+      "problem": "Muted text is --color-muted #6b7280 on dark background #0a0e14. WCAG contrast ratio ~4:1 (borderline). Small text (xs, 10px) + muted color is hard to read. Section labels, secondary text, disabled buttons, hints—all use this color. Eye strain on prolonged reading.",
+      "impact": "User has to squint to read secondary information. Section titles ('Life Areas', 'Daily Habits') are hard to scan. Accessibility fails WCAG AA standard for normal text. Feels cheap/low-effort design.",
+      "fix": "Increase muted text contrast: use #9CA3AF instead of #6b7280 (contrast ~6:1). For section labels, use text-sm instead of text-xs, keep weight 500. For hints/tertiary text, increase opacity to 70%. Test all text combos for WCAG AA compliance.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Modal/dialog affordance",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Dialog.tsx (not fully shown), ExerciseStepper.tsx line 104",
+      "problem": "Dialog component exists but is used sparingly. Skip dialog in ExerciseStepper is modal but has no close-on-background affordance. No visual cue that it's dismissible. BottomSheet and other overlays may lack consistent styling/affordance.",
+      "impact": "User doesn't know they can tap outside the dialog to close. If they want to cancel without choosing, they have to find the dismiss button. Feels trapping.",
+      "fix": "All dialogs: add semi-transparent scrim, allow scrim tap to dismiss (unless critical action). Add visible X or back button at top-left. Consistent border/shadow treatment. Document in design system.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Toast notifications placement & timing",
+      "severity": "P2",
+      "location": "src/components/ui/compound/Toast.tsx (not shown); multiple API success/error flows",
+      "problem": "Toast notifications appear to dismiss after a few seconds. Success toasts are silent (user doesn't know operation succeeded). Error toasts are shown but are easy to miss/dismiss. No queue behavior—if two toasts fire, they may overlap.",
+      "impact": "User isn't sure if an operation succeeded. Errors disappear before user reads them. Stacked toasts clutter the screen.",
+      "fix": "Success toast: keep visible 3-4 seconds, or show 2-second toast + persistent inline feedback. Error toast: keep visible 5+ seconds, or require explicit dismiss. Show toast queue stack on top-right, max 3 visible. Use distinct colors (green success, red error, blue info).",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Button states & visual hierarchy",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/Button.tsx; src/components/rewards/RewardCard.tsx line 42",
+      "problem": "Primary variant button uses accent color (amber #f59e0b). Secondary is primary border (green #10b981). On dark theme, both colors are bright and equally dominant. Disabled state reduces opacity to 50%—very subtle. No clear visual hierarchy between primary, secondary, danger actions.",
+      "impact": "User can't quickly identify the primary action. Disabled buttons look like they might still be clickable (just less bright). On small screens, button text may wrap awkwardly.",
+      "fix": "Primary button: accent background (current). Secondary: border only, no fill. Danger: red background. Disabled: grayscale + strikethrough or lock icon. Test button hierarchy on mobile with thumb-reachability in mind.",
+      "effort": "S",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Numeric input usability (weights, reps, macros)",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/NumberInput.tsx (not shown); src/components/workout/SetInput.tsx line 31",
+      "problem": "NumberInput likely uses HTML input type='number'. On mobile, opens numeric keyboard. But mobile numeric keyboards don't always include decimal point without extra taps. Increment/decrement buttons (if present) may be tiny on small screens.",
+      "impact": "User entering weight (e.g., 22.5 kg) has to tap extra times to find decimal. Feels clunky. No clear feedback on what step size is (step={2.5} in SetInput).",
+      "fix": "NumberInput: show large +/− buttons on mobile (or up/down swipe). Use inputMode='decimal' for weight/cm inputs. Show step size as label: '22.5 kg (step 2.5)'. For reps, use integer input with clear 1-rep steps.",
+      "effort": "M",
+      "dimension": "UX Flows, Information Architecture & States"
+    },
+    {
+      "screen": "Global/Shell",
+      "severity": "P1",
+      "location": "src/components/shell/BottomNav.tsx, line 12",
+      "problem": "Bottom navigation only shows 4 items (dashboard, training, progress, stats) — 6 major sections (nutrition, habits, rewards, bio, calendar, settings) are completely hidden on mobile with no alternate mobile-friendly navigation",
+      "impact": "Mobile users cannot directly navigate to nutrition tracking, habits, rewards, bio, settings, or calendar. They must drill through the profile menu or guess nested routes. Major app features are essentially invisible on phones.",
+      "fix": "Either: (a) expand MOBILE_TABS to include all or most areas with smaller font/icons, (b) add a 5th/6th tab with submenu, or (c) add a hamburger menu alongside the bottom nav for secondary areas. Current design abandons half the feature set on mobile.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Global/Shell",
+      "severity": "P1",
+      "location": "src/app/(app)/layout.tsx, line 20-22",
+      "problem": "App layout uses md: breakpoint for sidebar with no responsive padding adjustment. Mobile main content has pb-16 (bottom nav), desktop has pb-0, but the jump is abrupt at 768px. No tablet/mid-size phone intermediate state.",
+      "impact": "At 767px (mobile), full width is used. At 768px (tablet), sidebar suddenly appears but desktop assumes mouse + hover states. No smooth transition. Tablet users get desktop layout with touch inefficiency.",
+      "fix": "Add sm: and lg: breakpoints with progressively revealed sidebar. At sm (640px), show collapsed sidebar icon bar. At lg (1024px), show full sidebar. Replace hard md: boundary with incremental reveals.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Dashboard",
+      "severity": "P2",
+      "location": "src/app/(app)/dashboard/page.tsx, line 174; src/components/dashboard/LifeAreaCard.tsx",
+      "problem": "Life Areas section uses grid grid-cols-2 md:grid-cols-4. On mobile, this is 2 columns; on desktop, 4 columns. On a typical iPhone (375px), 2 columns leaves ~160px width per card, forcing text wrapping and cramped layout.",
+      "impact": "Card labels (TRAINING, NUTRITION, etc.) are 2xl bold and compete with small viewport width. Visual hierarchy is flattened. On very narrow phones (320px-375px), text wraps and card feels cluttered.",
+      "fix": "Use responsive text sizes: text-lg sm:text-2xl on value, shrink secondary text to text-[10px] on mobile. Consider grid-cols-1 sm:grid-cols-2 md:grid-cols-4 or allow cards to stack on very narrow screens without losing prominence.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Calendar / Quest Calendar",
+      "severity": "P1",
+      "location": "src/components/calendar/CalendarGrid.tsx, line 19; src/components/calendar/CalendarCell.tsx, line 19",
+      "problem": "Calendar grid is strictly grid-cols-7 with no responsive behavior. Each cell is aspect-square with fixed padding p-1. On mobile ≤375px, each cell is ~50px wide, making text (dayNum class='text-sm') nearly unreadable and signal dots (h-[6px] w-[6px]) invisible.",
+      "impact": "Calendar is functionally broken on small phones. Day numbers are tiny, dots are invisible, tapping small cells is error-prone. Users cannot reliably see which days have workouts or habits.",
+      "fix": "On mobile, show a month view with text-[10px] for day numbers and hide signal dots, or switch to a vertical date list. Alternatively, use responsive padding (p-0.5 on mobile, p-2 on tablet) and make the grid 7 columns only on md+.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Nutrition Calendar",
+      "severity": "P2",
+      "location": "src/components/nutrition/NutritionCalendar.tsx, line 122-129",
+      "problem": "Nutrition calendar is also grid-cols-7 with fixed px-4 padding. Calendar day cells are clickable but offer no size hint. On 320px screens, effective cell width is ~30px, making them ~30x30px — below 44px touch target minimum.",
+      "impact": "Touch targets are too small. Users will miss-tap frequently. Especially problematic on the nutrition tracking page where daily input is core workflow.",
+      "fix": "On mobile, reduce grid columns dynamically or switch to vertical list view of days. If keeping grid, ensure min touch target of 44x44px even if columns reduce to 4–5 on mobile.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Measurements / Progress",
+      "severity": "P2",
+      "location": "src/components/measurements/MeasurementGrid.tsx, line 96-139; src/components/measurements/MeasurementRow.tsx",
+      "problem": "Measurement table is fixed width with no horizontal scroll hint. Table has 8 columns (Tyden, Vaha, Δ, Pas, Hrudnik, Stehno, Biceps, kcal cil). On mobile, the outer div has overflow-x-auto p-4, but no visual cue that the table scrolls. Text in headers is text-[11px] and right-aligned, making it hard to parse. MeasurementCell inputs are likely too cramped horizontally.",
+      "impact": "Table is scrollable but users don't know it. On small screens, most columns are off-screen initially. Cognitive load is high; users must scroll horizontally repeatedly to enter data. Touch target widths for cell inputs are unknown but likely small.",
+      "fix": "Make table visually 'scrollable' with a scroll indicator or gradient fade on right edge. On mobile (<640px), show only 3–4 most important columns (Week, Weight, Δ) and collapse others into a detail view. Or use a card-per-week layout instead of a grid for mobile.",
+      "effort": "L",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Workout / Training Session",
+      "severity": "P2",
+      "location": "src/components/workout/ExerciseStepper.tsx, line 62-92; src/components/workout/ExerciseCard.tsx",
+      "problem": "Workout stepper uses flex flex-col gap-4 p-4 with no max-width constraint. On large phones/tablets, this can stretch to full width, making long exercise names and set displays very wide. NumberInput buttons are h-11 w-11, which is 44x44px (good), but the layout doesn't constrain width, so inputs stretch awkwardly on large screens.",
+      "impact": "On a 700px-wide tablet, the exercise card and input fields stretch full width, reducing visual focus. Long exercise names don't wrap well. The 'Zapsat sérii' button is also full-width and ungainly.",
+      "fix": "Wrap the stepper content in a max-w-md or max-w-lg container on tablet/desktop. On mobile, keep full-width. Add responsive width constraints and ensure SetInput layout is compact on narrow screens (flex-col on mobile, flex-row on tablet).",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Workout Stepper Nav",
+      "severity": "P3",
+      "location": "src/components/workout/StepperNav.tsx, line 14-44",
+      "problem": "Stepper prev/next buttons use only px-2 padding, no minimum height. ChevronLeft/ChevronRight are size 14. Button text is text-xs. Effective button height is likely 24–28px, below 44px standard touch target.",
+      "impact": "Small buttons are hard to tap on mobile. Requires precise finger accuracy during an active workout, which is disruptive.",
+      "fix": "Set minimum height h-10 or h-11 on both nav buttons. Increase icon size to size-5 and add vertical padding (py-2) to reach 44px target.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Photos / Progress Photos",
+      "severity": "P2",
+      "location": "src/components/photos/PhotoGrid.tsx, line 34",
+      "problem": "Photo grid uses grid-cols-3 with no responsive breakpoint. On mobile 320px, each cell is ~100px. Photos are aspect-square with relative sizing; touch target is okay, but text below (PoseBadge) may be cut off or hard to read at small sizes.",
+      "impact": "Photo thumbnails are very small on phones. Pose badges are hard to read. User cannot quickly identify which photos belong to which pose/date without visual clarity.",
+      "fix": "Use responsive grid: grid-cols-2 sm:grid-cols-3 md:grid-cols-4 or add lg: breakpoint. Increase text size for pose badge on mobile (text-[8px] → text-[9px] minimum). Consider full-width card layout on mobile with larger thumbs.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Photos Grid - FAB Overlap",
+      "severity": "P2",
+      "location": "src/components/photos/PhotosPageClient.tsx, line 91-97",
+      "problem": "Upload button is position fixed right-4 bottom-20 z-30. On mobile with bottom nav (h-16 = 64px), bottom-20 (80px) places the FAB 80px from bottom, which is 16px above the nav. This leaves only 16px margin. On landscape (272px height), the FAB may overlap the nav or be inaccessible.",
+      "impact": "FAB may be hidden behind the bottom nav on small screens or landscape. Users cannot easily upload photos on mobile in landscape mode.",
+      "fix": "Adjust bottom offset dynamically: bottom-20 on portrait, bottom-4 md:bottom-20 on landscape. Or use safe-area-inset-bottom: bottom-[calc(1rem+env(safe-area-inset-bottom))] to account for notches and nav.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Nutrition Page Navigation",
+      "severity": "P2",
+      "location": "src/components/nutrition/NutritionPageClient.tsx, line 80-86",
+      "problem": "Month navigation uses ChevronLeft/Right (size 24) in px-4 buttons with no responsive min-width or height. On mobile, the button is likely 24x24 + padding, totaling ~40x40px, below 44px standard.",
+      "impact": "Navigation buttons are slightly undersized. Users may miss-tap, especially in landscape or on older phones with poor touch accuracy.",
+      "fix": "Set minimum button dimensions: h-10 w-10 or h-11 w-11. Ensure ChevronLeft/ChevronRight remain size-6 (24px) within the padded button.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Habits Page / Daily Checks",
+      "severity": "P2",
+      "location": "src/components/habits/HabitDailyRow.tsx, line 35; src/components/dashboard/TodaysChecksCard.tsx, line 71-96",
+      "problem": "HabitDailyRow uses flex items-center gap-3 rounded-lg border px-3 py-2.5. The checkbox is size-5 (20px), and the row height is effectively ~36–40px (py-2.5 = 10px top+bottom, text-sm line-height ~20px). This is below 44px recommended touch target. On TodaysChecksCard, rows are stacked in a space-y-2 gap, so vertical spacing is minimal.",
+      "impact": "Habit checkboxes are small and easy to mis-tap. The 'Otevřít' link at the bottom of TodaysChecksCard is text-primary text-sm, inheriting small touch target from surrounding text.",
+      "fix": "Increase py to py-3 (12px) to reach ~44px row height. Increase checkbox size to size-6. Ensure the 'Otevřít' link is inside a min-height-11 or use a proper Button component with h-10 minimum.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Rewards / Redeem Dialog",
+      "severity": "P2",
+      "location": "src/components/rewards/RewardCard.tsx, src/components/rewards/RedeemConfirmDialog.tsx",
+      "problem": "Reward cards and dialog buttons (if present) use standard button sizing, but the full reward card row may be compressed. No specific responsive behavior for rewards on mobile.",
+      "impact": "Reward cards may look okay at small sizes, but if multiple are shown, the layout could feel crowded. Buttons inside dialogs may be small on mobile.",
+      "fix": "Ensure all buttons in reward dialogs are h-10 or h-11 minimum, and use responsive text sizing (text-base on mobile, text-sm on desktop if needed).",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Bio / Player Bio",
+      "severity": "P2",
+      "location": "src/components/bio/BioHero.tsx, line 17",
+      "problem": "BioHero uses flex items-center gap-4 with Avatar tier=tier size=96. On mobile 320px, a 96px avatar + name + right-aligned 'Day' column compresses significantly. The 'Day' number is text-3xl, but the entire row may wrap or overflow unexpectedly on very narrow screens.",
+      "impact": "Avatar is too large for small phones (96px on a 320px screen is 30% of width). Text may wrap into the Day number or day number may be pushed off-screen.",
+      "fix": "Use responsive avatar size: Avatar size={64} sm:size={96}. Allow Day section to drop below avatar on mobile (flex-col on mobile, flex-row on sm+). Or truncate 'Day' to just the number with text-2xl sm:text-3xl.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Bio / Transformation Photos",
+      "severity": "P2",
+      "location": "src/components/bio/TransformationStrip.tsx, line 45-62",
+      "problem": "TransformationStrip shows Then/Now in grid grid-cols-2 gap-3. Images are set to w-full on mobile (correct), but the outer gap-3 and padding may cause images to be cramped. At 320px width with gap and borders, actual image width is ~140px, making then/now photos very small.",
+      "impact": "Transformation photos are tiny on mobile, defeating their purpose as motivational visual feedback. Hard to see physical changes.",
+      "fix": "On mobile, use grid-cols-1 to stack Then/Now vertically, giving each photo ~280px width. Switch to grid-cols-2 at sm+ breakpoint.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Dialog / Modals",
+      "severity": "P2",
+      "location": "src/components/ui/compound/Dialog.tsx, line 28",
+      "problem": "Dialog uses w-[min(92vw,420px)], which is good, but fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 centers the dialog absolutely. On a small phone in landscape (say 667px width, 375px height), the dialog is centered but may push content off-screen vertically or be visually cramped.",
+      "impact": "Dialogs on landscape phones can be cramped vertically. No consideration for very narrow screens or keyboard pop-up (on iOS, this can shrink viewport by 50%).",
+      "fix": "Use a BottomSheet-style dialog on mobile (md and below), centering only on desktop. Implement responsive positioning: sm:top-1/2 for desktop, relative positioning for mobile. Or ensure Dialog has max-height with overflow-y-auto to stay within viewport.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "BottomSheet / Modal",
+      "severity": "P2",
+      "location": "src/components/ui/primitive/BottomSheet.tsx, line 17",
+      "problem": "BottomSheet is fixed right-0 bottom-0 left-0, which is correct, but uses p-4 pb-8 with no adjustment for mobile keyboard or safe-area-inset-bottom. On iPhone with notch/home indicator, pb-8 (32px) may not be enough space below content.",
+      "impact": "BottomSheet content may be partially hidden under home indicator or keyboard on mobile. Users cannot scroll content fully.",
+      "fix": "Change pb-8 to pb-[max(2rem,env(safe-area-inset-bottom)+1rem)] or use dynamic spacing. Ensure max-height with overflow-y-auto so content is scrollable even if keyboard appears.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Sparkline Cards / Horizontal Scroll",
+      "severity": "P2",
+      "location": "src/app/(app)/progress/page.tsx, line 37-73; src/components/measurements/SparklineCard.tsx, line 33",
+      "problem": "Progress page shows 5 SparklineCard components in a flex gap-2 overflow-x-auto pb-2. Each card is min-w-[140px], so 5 × 140px = 700px total, forcing horizontal scroll on mobile. The scroll is not visually obvious (no scrollbar indicator, no gradient fade). On 320px screen, only ~2.3 cards are visible, and users must discover the scroll.",
+      "impact": "Users don't realize there are more measurements to view. The horizontal scroll pattern is not obvious on mobile without a visual cue (scrollbar, fade gradient, or animated nudge).",
+      "fix": "Add a right-edge gradient fade (using a pseudo-element or overlay div with pointer-events-none) to hint scrollability. Or reduce card min-width on mobile: min-w-[100px] sm:min-w-[140px]. Or make cards stack vertically on mobile (flex-col sm:flex-row).",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Avatar Display / Tier Glow",
+      "severity": "P3",
+      "location": "src/components/avatar/Avatar.tsx, line 6-22",
+      "problem": "Avatar is rendered as inline-block with size={96} sm:size={64} not applied. The size prop is hardcoded per context (e.g., StatusWindow uses size=140), with no responsive adjustment. On large phones in landscape, a 140px avatar is overkill.",
+      "impact": "Avatar is disproportionately large on some screens, taking up too much space. Less impactful but noticeable in compact layouts.",
+      "fix": "Pass a responsive size hint (e.g., size='large' → {mobile: 80, tablet: 120, desktop: 140}) or use inline style with media query logic. Or accept size as a breakpoint object: {mobile: 64, sm: 96, md: 140}.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Top Padding / Safe Area",
+      "severity": "P3",
+      "location": "src/app/layout.tsx, line 28-29; global responsive behavior",
+      "problem": "Root layout applies dark theme and basic styling, but does not account for iOS notch/safe area at the top. Many pages use py-4 or py-6 for padding but no pt-[env(safe-area-inset-top)]. On iPhone with notch, content may touch the notch.",
+      "impact": "On iPhone X/12/14+, content may visually overlap the notch, reducing readability of headers and titles. Low severity but affects premium feel.",
+      "fix": "Add pt-[env(safe-area-inset-top)] to key containers (Container, AppShell main, or header). Or use viewport-fit=cover with inset safety padding.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Stats / Strength Page",
+      "severity": "P2",
+      "location": "src/components/progress/StrengthPageClient.tsx (not shown, assume charting)",
+      "problem": "Based on pattern, strength page likely has charts (OneRmChart, VolumeChart, StagnationList). Charts are often fixed-width (e.g., width: 600px), and on mobile ≤375px, they overflow horizontally without scrolling or responsive sizing.",
+      "impact": "Charts are cut off or illegible on mobile. Users cannot see their strength progress data on phones.",
+      "fix": "Ensure all charts use responsive width: width: min(100%, 600px) or width: 100% with max-width: 600px. Add overflow-x-auto if chart must maintain aspect or data density. Or simplify chart on mobile (fewer data points, smaller font sizes).",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Header Breadcrumb / Label",
+      "severity": "P3",
+      "location": "src/components/shell/AppHeader.tsx, line 20-28",
+      "problem": "Header shows 'Life · <Area Name>' with hidden text on mobile (hidden md:inline). On very narrow phones, even '<Area Name>' may be truncated. The header layout is flex justify-between, so the user menu is pushed to the right. On 320px, the area label may wrap or be cut off.",
+      "impact": "Users don't know which section they're in on mobile. Orientation context is lost.",
+      "fix": "Use responsive text sizes: text-[10px] sm:text-xs for area label. Or ellipsis overflow: <span className='truncate'>{label}</span>. Ensure area label is always visible even on 320px screens, possibly by moving user avatar to a different position or reducing header content.",
+      "effort": "S",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Font & Base Sizing",
+      "severity": "P2",
+      "location": "src/app/globals.css",
+      "problem": "Design uses --font-sans with system fonts, but no webfont is actually loaded (Inter is listed in fallback but not @imported). Rendered font depends on OS default: -apple-system on iOS, Segoe UI on Windows, Roboto on Android. Metric variations between these fonts are significant, potentially breaking tight layouts. Additionally, no responsive font-size scaling is defined at the root level, so text sizes are fixed across all screens.",
+      "impact": "Text rendering differs by device, causing layout shifts. Small text (text-[10px], text-[11px]) may be barely readable on older phones with lower DPI. No baseline font scaling for accessibility.",
+      "fix": "Either load a webfont (e.g., @import 'fonts/inter.css') for consistency, or add responsive font-size scaling: html { font-size: 14px; } @media (min-width: 640px) { font-size: 16px; }. This scales all rem-based sizing proportionally.",
+      "effort": "M",
+      "dimension": "Mobile & Responsive"
+    },
+    {
+      "screen": "Sidebar vs Bottom Nav Toggle",
+      "severity": "P1",
+      "location": "src/components/shell/AppShell.tsx, line 20-24",
+      "problem": "AppShell hardcodes flex min-h-screen flex-col md:pl-[220px]. The sidebar is completely hidden on mobile (hidden md:flex), and users must use the bottom nav. The bottom nav only shows 4 tabs, forcing access to other sections via menu. This is a dead-zone on mobile: the sidebar is invisible, the bottom nav is limited, and header dropdown is the only fallback — poor UX.",
+      "impact": "Critical navigation gap on mobile. Users cannot quickly jump to nutrition, habits, rewards, bio, or calendar. Must use header menu (slow) or know deep links (bad discoverability).",
+      "fix": "Add a mobile-optimized navigation: either expand bottom nav to 5–6 items (with icon-only labels), add a hamburger menu, or create a slide-out drawer from left/right. Bottom nav must provide access to all primary sections or there must be a fallback nav system.",
+      "effort": "L",
+      "dimension": "Mobile & Responsive"
+    }
+  ]
+}
