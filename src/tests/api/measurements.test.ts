@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { eq } from 'drizzle-orm'
 import { db } from '@/db/client'
 import { measurements, users, xpEvents } from '@/db/schema'
@@ -29,11 +29,19 @@ async function clean() {
   await db.delete(users).where(eq(users.id, TEST_USER_ID))
 }
 
+// Seeded measurements sit on 2026-04-13; the GET default window is the last
+// 8 weeks relative to "now". Pin the clock so 2026-04-13 stays inside that
+// window regardless of the real wall-clock date (otherwise it flakes once the
+// real date drifts past ~2026-06-08).
+beforeAll(() => {
+  vi.setSystemTime(new Date('2026-04-20T12:00:00Z'))
+})
 beforeEach(async () => {
   await clean()
   await seedUser()
 })
 afterAll(async () => {
+  vi.useRealTimers()
   await clean()
 })
 
