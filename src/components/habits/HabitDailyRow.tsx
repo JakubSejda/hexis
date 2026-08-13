@@ -32,7 +32,7 @@ export function HabitDailyRow({ habit, onCheck, onUncheck }: Props) {
     <div
       data-habit-row
       data-habit-id={habit.id}
-      className="border-border bg-surface flex items-center gap-3 rounded-lg border px-3 py-2.5"
+      className="border-border bg-surface flex items-center gap-3 rounded-lg border px-3 py-3"
       {...longPress}
     >
       <Checkbox checked={habit.completedToday} onChange={handleClick} aria-label={habit.name} />

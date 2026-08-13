@@ -17,7 +17,7 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
         type="button"
         onClick={onPrev}
         disabled={current === 0}
-        className="inline-flex items-center gap-1 px-2 disabled:opacity-30"
+        className="inline-flex min-h-11 items-center gap-1 px-2 py-2 disabled:opacity-30"
       >
         <ChevronLeft size={14} aria-hidden />
         {labels.prev}
@@ -34,7 +34,7 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
         type="button"
         onClick={onNext}
         disabled={current === total - 1}
-        className="inline-flex items-center gap-1 px-2 disabled:opacity-30"
+        className="inline-flex min-h-11 items-center gap-1 px-2 py-2 disabled:opacity-30"
       >
         {labels.next}
         <ChevronRight size={14} aria-hidden />
