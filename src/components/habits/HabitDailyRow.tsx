@@ -1,5 +1,5 @@
 'use client'
-import { useLongPress } from '@/components/ui'
+import { Checkbox, useLongPress } from '@/components/ui'
 
 type Props = {
   habit: {
@@ -35,13 +35,7 @@ export function HabitDailyRow({ habit, onCheck, onUncheck }: Props) {
       className="border-border bg-surface flex items-center gap-3 rounded-lg border px-3 py-2.5"
       {...longPress}
     >
-      <input
-        type="checkbox"
-        checked={habit.completedToday}
-        onChange={handleClick}
-        aria-label={habit.name}
-        className="size-5 cursor-pointer"
-      />
+      <Checkbox checked={habit.completedToday} onChange={handleClick} aria-label={habit.name} />
       <span className="text-foreground flex-1 truncate text-sm font-medium">{habit.name}</span>
       <span className="text-muted-foreground rounded-full bg-black/5 px-2 py-0.5 text-xs">
         {WEIGHT_LABEL[habit.weight]}

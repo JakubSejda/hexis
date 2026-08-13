@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { Select } from '@/components/ui'
 
 type PhotoItem = { id: number; takenAt: string; pose: string; fullUrl: string; thumbUrl: string }
 type Props = { photos: PhotoItem[]; dates: string[] }
@@ -50,29 +51,25 @@ export function BeforeAfter({ photos, dates }: Props) {
         ))}
       </div>
       <div className="flex gap-2">
-        <select
-          value={beforeDate}
-          onChange={(e) => setBeforeDate(e.target.value)}
-          className="border-border bg-surface text-foreground flex-1 rounded-lg border px-2 py-1.5 text-sm"
-        >
-          {dates.map((d) => (
-            <option key={d} value={d}>
-              {formatDate(d)}
-            </option>
-          ))}
-        </select>
+        <div className="flex-1">
+          <Select size="sm" value={beforeDate} onChange={(e) => setBeforeDate(e.target.value)}>
+            {dates.map((d) => (
+              <option key={d} value={d}>
+                {formatDate(d)}
+              </option>
+            ))}
+          </Select>
+        </div>
         <span className="text-muted self-center text-sm">→</span>
-        <select
-          value={afterDate}
-          onChange={(e) => setAfterDate(e.target.value)}
-          className="border-border bg-surface text-foreground flex-1 rounded-lg border px-2 py-1.5 text-sm"
-        >
-          {dates.map((d) => (
-            <option key={d} value={d}>
-              {formatDate(d)}
-            </option>
-          ))}
-        </select>
+        <div className="flex-1">
+          <Select size="sm" value={afterDate} onChange={(e) => setAfterDate(e.target.value)}>
+            {dates.map((d) => (
+              <option key={d} value={d}>
+                {formatDate(d)}
+              </option>
+            ))}
+          </Select>
+        </div>
       </div>
       {beforePhoto && afterPhoto ? (
         <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
