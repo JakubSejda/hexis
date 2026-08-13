@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/*
+ * Do not scan docs/ for utility candidates. Specs, plans, and audit reports
+ * routinely quote Tailwind-class-like strings (e.g. a literal `pb-[env(...)]`
+ * in an audit finding) which Tailwind v4 auto-detection would otherwise turn
+ * into invalid generated CSS, breaking the whole stylesheet build.
+ */
+@source not "../../docs";
+
 @theme {
   /* Surfaces */
   --color-background:       #0a0e14;
