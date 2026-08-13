@@ -1,8 +1,7 @@
 'use client'
-import Link from 'next/link'
 import { AREA_META, MOBILE_TABS } from './area-meta'
 import { useActiveArea } from './use-active-area'
-import { cn } from '@/components/ui'
+import { NavLink } from '@/components/ui'
 
 export function BottomNav() {
   const active = useActiveArea()
@@ -13,21 +12,16 @@ export function BottomNav() {
     >
       {MOBILE_TABS.map((area) => {
         const meta = AREA_META[area]
-        const Icon = meta.icon
-        const isActive = active === area
         return (
-          <Link
+          <NavLink
             key={area}
             href={meta.href}
-            aria-current={isActive ? 'page' : undefined}
-            className={cn(
-              'flex flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors',
-              isActive ? 'text-accent' : 'text-muted hover:text-foreground'
-            )}
+            active={active === area}
+            variant="bottom"
+            icon={meta.icon}
           >
-            <Icon className="h-6 w-6" aria-hidden />
-            <span>{meta.label}</span>
-          </Link>
+            {meta.label}
+          </NavLink>
         )
       })}
     </nav>
