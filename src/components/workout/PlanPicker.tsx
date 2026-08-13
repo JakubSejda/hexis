@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { Button, Pill } from '@/components/ui'
 
 type Plan = { id: number; slug: string; name: string; order: number }
 
@@ -39,21 +40,17 @@ export function PlanPicker({
           <span>
             <strong>{p.name}</strong>{' '}
             {p.id === recommendedId ? (
-              <span className="bg-border text-primary ml-2 rounded-full px-2 py-0.5 text-xs">
+              <Pill variant="neutral" size="sm" className="text-primary ml-2">
                 doporučeno
-              </span>
+              </Pill>
             ) : null}
           </span>
           <span className="text-muted text-xs">{p.slug}</span>
         </button>
       ))}
-      <button
-        type="button"
-        onClick={() => start(null)}
-        className="border-border text-muted rounded-lg border border-dashed p-3 text-sm"
-      >
+      <Button variant="dashed" size="lg" className="w-full" onClick={() => start(null)}>
         + Ad-hoc trénink
-      </button>
+      </Button>
     </div>
   )
 }

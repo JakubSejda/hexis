@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Button } from '@/components/ui'
 import { ExercisePicker } from './ExercisePicker'
 
 export function AdHocAddButton({
@@ -10,13 +11,9 @@ export function AdHocAddButton({
   const [open, setOpen] = useState(false)
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="border-border text-muted h-10 rounded-lg border border-dashed text-sm"
-      >
+      <Button variant="dashed" size="md" className="w-full" onClick={() => setOpen(true)}>
         + Přidat cvik
-      </button>
+      </Button>
       <ExercisePicker
         open={open}
         onOpenChange={setOpen}

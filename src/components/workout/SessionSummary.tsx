@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button, Textarea } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
@@ -45,20 +46,16 @@ export function SessionSummary({
         <Stat label="Tuny" value={`${(totalVolume / 1000).toFixed(1)}`} />
         <Stat label="Cas" value={`${durationMin} min`} />
       </div>
-      <textarea
+      <Textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Poznamka (volitelne)"
-        className="border-border bg-background min-h-[80px] rounded-lg border p-2 text-sm"
+        rows={3}
+        className="min-h-[80px]"
       />
-      <button
-        type="button"
-        onClick={finish}
-        disabled={saving}
-        className="bg-primary text-background h-12 rounded-lg font-semibold"
-      >
-        {saving ? 'Ukladam...' : 'Dokoncit trenink'}
-      </button>
+      <Button variant="success" size="lg" loading={saving} onClick={finish}>
+        Dokoncit trenink
+      </Button>
     </div>
   )
 }

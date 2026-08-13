@@ -1,5 +1,7 @@
 'use client'
 import { useSyncExternalStore, useEffect, useRef, useState } from 'react'
+import { Play } from 'lucide-react'
+import { Button } from '@/components/ui'
 import { restTimerStore, remainingMs, requestWakeLock } from '@/lib/rest-timer'
 
 export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }) {
@@ -58,22 +60,25 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
           <div className="text-accent text-2xl font-bold">
             {mm}:{ss}
           </div>
-          <button
-            type="button"
-            className="text-muted mt-1 text-xs underline"
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted mt-1 underline"
             onClick={() => restTimerStore.stop()}
           >
             Přeskočit
-          </button>
+          </Button>
         </>
       ) : (
-        <button
-          type="button"
-          className="text-primary text-sm"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-primary"
+          iconLeft={<Play size={14} aria-hidden />}
           onClick={() => restTimerStore.start(defaultDurationSec)}
         >
-          ▶ Spustit rest ({defaultDurationSec} s)
-        </button>
+          Spustit rest ({defaultDurationSec} s)
+        </Button>
       )}
     </div>
   )
