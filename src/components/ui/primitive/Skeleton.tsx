@@ -7,7 +7,7 @@ const SHAPE_CLASS: Record<Shape, string> = {
   text: 'h-4 rounded',
   block: 'h-20 rounded-md',
   avatar: 'h-10 w-10 rounded-full',
-  card: 'h-32 rounded-2xl',
+  card: 'h-32 rounded-lg',
 }
 
 type Props = {

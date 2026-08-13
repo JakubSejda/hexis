@@ -19,7 +19,12 @@ type Props = {
 export function Container({ as: As = 'div', size = 'md', className, children, ...rest }: Props) {
   return (
     <As
-      className={cn('w-full px-4', size !== 'full' && 'mx-auto', SIZE_CLASS[size], className)}
+      className={cn(
+        'w-full px-4 md:px-6',
+        size !== 'full' && 'mx-auto',
+        SIZE_CLASS[size],
+        className
+      )}
       {...rest}
     >
       {children}

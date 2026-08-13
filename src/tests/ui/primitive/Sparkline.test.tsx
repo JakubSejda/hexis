@@ -19,7 +19,7 @@ describe('Sparkline', () => {
   it('uses muted tone color by default', () => {
     const { container } = render(<Sparkline values={[1, 2, 3]} />)
     const path = container.querySelector('path')
-    expect(path?.getAttribute('stroke')).toBe('#6b7280')
+    expect(path?.getAttribute('stroke')).toBe('#9ca3af')
   })
 
   it('maps tone="primary" to emerald', () => {

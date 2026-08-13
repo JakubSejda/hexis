@@ -11,13 +11,14 @@ describe('Card', () => {
     expect(el).toHaveTextContent('body')
   })
 
-  it('applies default variant classes (bg-surface, border, rounded-2xl)', () => {
+  it('applies default variant classes (bg-surface, border, rounded-lg, shadow-md)', () => {
     render(<Card data-testid="c">x</Card>)
     const el = screen.getByTestId('c')
     expect(el).toHaveClass('bg-surface')
     expect(el).toHaveClass('border')
     expect(el).toHaveClass('border-border')
-    expect(el).toHaveClass('rounded-2xl')
+    expect(el).toHaveClass('rounded-lg')
+    expect(el).toHaveClass('shadow-md')
   })
 
   it('applies interactive variant classes (hover + cursor + focus ring)', () => {
@@ -40,7 +41,7 @@ describe('Card', () => {
     )
     const el = screen.getByTestId('c')
     expect(el).toHaveClass('border')
-    expect(el).toHaveClass('rounded-2xl')
+    expect(el).toHaveClass('rounded-lg')
     expect(el).not.toHaveClass('p-4')
     expect(el).not.toHaveClass('p-2')
   })
@@ -109,7 +110,7 @@ describe('Card', () => {
     )
     const el = screen.getByTestId('c')
     expect(el).toHaveClass('rounded-none')
-    expect(el).not.toHaveClass('rounded-2xl')
+    expect(el).not.toHaveClass('rounded-lg')
   })
 
   it('lets explicit padding override flush default (variant="flush" + padding="md" applies p-4)', () => {

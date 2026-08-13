@@ -21,11 +21,11 @@ export function BottomNav() {
             href={meta.href}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
-              'flex flex-1 flex-col items-center justify-center gap-1 text-[10px] transition-colors',
+              'flex flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors',
               isActive ? 'text-accent' : 'text-muted hover:text-foreground'
             )}
           >
-            <Icon className="h-5 w-5" aria-hidden />
+            <Icon className="h-6 w-6" aria-hidden />
             <span>{meta.label}</span>
           </Link>
         )

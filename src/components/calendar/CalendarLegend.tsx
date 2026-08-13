@@ -1,8 +1,8 @@
 const ITEMS: Array<{ label: string; dot: string }> = [
   { label: 'Training', dot: 'bg-accent' },
-  { label: 'Návyk', dot: 'bg-emerald-500' },
-  { label: 'Vážení', dot: 'bg-blue-500' },
-  { label: 'Foto', dot: 'bg-purple-500' },
+  { label: 'Návyk', dot: 'bg-cal-habit' },
+  { label: 'Vážení', dot: 'bg-cal-weigh' },
+  { label: 'Foto', dot: 'bg-cal-photo' },
 ]
 
 export function CalendarLegend() {

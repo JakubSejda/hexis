@@ -148,7 +148,7 @@ export default async function DashboardPage() {
   const weekPeekDays = resolveWeekPeek(sessionsLast8Weeks, today)
 
   return (
-    <Container size="full">
+    <Container size="md">
       <Stack gap={6} className="py-4">
         <StatusWindow
           level={level}
