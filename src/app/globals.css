@@ -7,6 +7,7 @@
  * into invalid generated CSS, breaking the whole stylesheet build.
  */
 @source not "../../docs";
+@source not "../../.playwright-mcp";
 
 @theme {
   /* Surfaces */

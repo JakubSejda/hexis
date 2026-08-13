@@ -69,3 +69,7 @@ public/sw.js.map
 public/swe-worker-*.js
 public/workbox-*.js
 public/workbox-*.js.map
+
+# Playwright MCP artifacts (snapshots/console logs) — never commit; also keeps
+# Tailwind v4 source auto-detection from scanning them (see globals.css @source)
+.playwright-mcp/
