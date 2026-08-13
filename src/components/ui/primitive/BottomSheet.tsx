@@ -14,7 +14,7 @@ export function BottomSheet({ open, onOpenChange, title, description, children }
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="data-[state=open]:animate-in data-[state=open]:fade-in-0 fixed inset-0 z-40 bg-black/50" />
-        <Dialog.Content className="data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom border-border bg-surface text-foreground fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl border-t p-4 pb-8 focus:outline-none">
+        <Dialog.Content className="data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom border-border bg-surface text-foreground fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl border-t p-4 pb-[max(2rem,env(safe-area-inset-bottom))] focus:outline-none">
           <div className="bg-border mx-auto mb-3 h-1 w-10 rounded-full" />
           {title ? (
             <Dialog.Title className="mb-1 text-base font-semibold">{title}</Dialog.Title>

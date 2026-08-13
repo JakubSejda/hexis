@@ -17,7 +17,7 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
   const initial = (userName ?? userEmail).trim().charAt(0).toUpperCase() || '?'
 
   return (
-    <header className="border-border bg-surface-sunken flex h-14 items-center justify-between border-b px-4 md:px-6">
+    <header className="border-border bg-surface-sunken flex h-14 items-center justify-between border-b px-4 pt-[env(safe-area-inset-top)] md:px-6">
       <div className="flex items-center gap-3">
         <span className="text-muted hidden text-xs tracking-[0.25em] uppercase md:inline">
           Life

@@ -93,51 +93,61 @@ export function MeasurementGrid({ initialRows }: Props) {
   }
 
   return (
-    <div className="overflow-x-auto p-4">
-      <table className="w-full border-collapse text-sm">
-        <thead>
-          <tr className="border-border border-b">
-            {HEADERS.map((h) => (
-              <th
-                key={h}
-                className="text-muted px-1.5 py-2 text-right text-[11px] font-medium first:text-left"
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {displayWeeks.map((weekStart) => {
-            const r = byWeek.get(weekStart)
-            const idx = displayWeeks.indexOf(weekStart)
-            const prevWeekStart = displayWeeks[idx + 1]
-            const prev = prevWeekStart ? byWeek.get(prevWeekStart) : undefined
-            const values: MeasurementValues = {
-              weightKg: r?.weightKg ? Number(r.weightKg) : null,
-              waistCm: r?.waistCm ? Number(r.waistCm) : null,
-              chestCm: r?.chestCm ? Number(r.chestCm) : null,
-              thighCm: r?.thighCm ? Number(r.thighCm) : null,
-              bicepsCm: r?.bicepsCm ? Number(r.bicepsCm) : null,
-              targetKcal: r?.targetKcal ?? null,
-              note: r?.note ?? null,
-            }
-            return (
-              <MeasurementRow
-                key={weekStart}
-                weekStart={weekStart}
-                isCurrent={weekStart === todayWeek}
-                values={values}
-                prevWeightKg={prev?.weightKg ? Number(prev.weightKg) : null}
-                onCommitValue={(k, v) =>
-                  upsert(weekStart, { [k]: v } as Partial<MeasurementValues>)
+    <div className="py-4">
+      <div className="relative">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-border border-b">
+                {HEADERS.map((h) => (
+                  <th
+                    key={h}
+                    className="text-muted px-1.5 py-2 text-right text-[11px] font-medium first:text-left"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {displayWeeks.map((weekStart) => {
+                const r = byWeek.get(weekStart)
+                const idx = displayWeeks.indexOf(weekStart)
+                const prevWeekStart = displayWeeks[idx + 1]
+                const prev = prevWeekStart ? byWeek.get(prevWeekStart) : undefined
+                const values: MeasurementValues = {
+                  weightKg: r?.weightKg ? Number(r.weightKg) : null,
+                  waistCm: r?.waistCm ? Number(r.waistCm) : null,
+                  chestCm: r?.chestCm ? Number(r.chestCm) : null,
+                  thighCm: r?.thighCm ? Number(r.thighCm) : null,
+                  bicepsCm: r?.bicepsCm ? Number(r.bicepsCm) : null,
+                  targetKcal: r?.targetKcal ?? null,
+                  note: r?.note ?? null,
                 }
-                onCommitNote={(note) => upsert(weekStart, { note } as Partial<MeasurementValues>)}
-              />
-            )
-          })}
-        </tbody>
-      </table>
+                return (
+                  <MeasurementRow
+                    key={weekStart}
+                    weekStart={weekStart}
+                    isCurrent={weekStart === todayWeek}
+                    values={values}
+                    prevWeightKg={prev?.weightKg ? Number(prev.weightKg) : null}
+                    onCommitValue={(k, v) =>
+                      upsert(weekStart, { [k]: v } as Partial<MeasurementValues>)
+                    }
+                    onCommitNote={(note) =>
+                      upsert(weekStart, { note } as Partial<MeasurementValues>)
+                    }
+                  />
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div
+          aria-hidden
+          className="from-background pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l to-transparent sm:hidden"
+        />
+      </div>
       <div className="text-muted py-3 text-center text-xs">
         {done ? (
           'Žádné starší týdny.'

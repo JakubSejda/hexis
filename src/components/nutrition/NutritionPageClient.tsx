@@ -78,10 +78,18 @@ export function NutritionPageClient({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <button onClick={() => changeMonth(-1)} className="text-muted" aria-label="Předchozí měsíc">
+        <button
+          onClick={() => changeMonth(-1)}
+          className="text-muted flex h-11 w-11 items-center justify-center"
+          aria-label="Předchozí měsíc"
+        >
           <ChevronLeft size={24} aria-hidden />
         </button>
-        <button onClick={() => changeMonth(1)} className="text-muted" aria-label="Další měsíc">
+        <button
+          onClick={() => changeMonth(1)}
+          className="text-muted flex h-11 w-11 items-center justify-center"
+          aria-label="Další měsíc"
+        >
           <ChevronRight size={24} aria-hidden />
         </button>
       </div>
