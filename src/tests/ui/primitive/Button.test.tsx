@@ -25,6 +25,27 @@ describe('Button', () => {
     expect(el).toHaveClass('text-background')
   })
 
+  it('applies outline variant (neutral border + foreground text)', () => {
+    render(<Button variant="outline">Zrušit</Button>)
+    const el = screen.getByRole('button', { name: 'Zrušit' })
+    expect(el).toHaveClass('border-border')
+    expect(el).toHaveClass('text-foreground')
+  })
+
+  it('applies danger-outline variant', () => {
+    render(<Button variant="danger-outline">Smazat</Button>)
+    const el = screen.getByRole('button', { name: 'Smazat' })
+    expect(el).toHaveClass('border-danger')
+    expect(el).toHaveClass('text-danger')
+  })
+
+  it('applies dashed variant', () => {
+    render(<Button variant="dashed">+ Přidat cvik</Button>)
+    const el = screen.getByRole('button', { name: '+ Přidat cvik' })
+    expect(el).toHaveClass('border-dashed')
+    expect(el).toHaveClass('text-muted')
+  })
+
   it('applies emerald outline secondary styling when variant="secondary"', () => {
     render(<Button variant="secondary">Cancel</Button>)
     const el = screen.getByRole('button')
