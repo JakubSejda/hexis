@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui'
 import { toCsv } from '@/lib/csv'
 
 type Status = 'idle' | 'fetching' | 'zipping' | 'done' | 'error'
@@ -121,13 +122,15 @@ export function ExportClient() {
         Stáhne ZIP archiv se všemi tvými daty ve formátu CSV (sessions, sets, measurements,
         nutrition).
       </p>
-      <button
-        onClick={handleExport}
+      <Button
+        variant="success"
+        size="lg"
         disabled={status === 'fetching' || status === 'zipping'}
-        className="bg-primary text-background flex h-12 items-center justify-center rounded-lg font-semibold disabled:opacity-50"
+        className="w-full"
+        onClick={handleExport}
       >
         {label[status]}
-      </button>
+      </Button>
     </div>
   )
 }

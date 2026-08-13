@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button, Input, Select } from '@/components/ui'
 
 export type ProfileInitial = {
   name: string | null
@@ -85,123 +86,90 @@ export function ProfileFormClient({ initial }: { initial: ProfileInitial }) {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
-      <Field label="Jméno" htmlFor="name" error={err('name')}>
-        <input
-          id="name"
-          type="text"
-          maxLength={100}
-          value={form.name}
-          onChange={(e) => update('name', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="name"
+        label="Jméno"
+        error={err('name') ?? undefined}
+        type="text"
+        maxLength={100}
+        value={form.name}
+        onChange={(e) => update('name', e.target.value)}
+      />
 
-      <Field label="Datum narození" htmlFor="birthDate" error={err('birthDate')}>
-        <input
-          id="birthDate"
-          type="date"
-          min="1900-01-01"
-          value={form.birthDate}
-          onChange={(e) => update('birthDate', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="birthDate"
+        label="Datum narození"
+        error={err('birthDate') ?? undefined}
+        type="date"
+        min="1900-01-01"
+        value={form.birthDate}
+        onChange={(e) => update('birthDate', e.target.value)}
+      />
 
-      <Field label="Pohlaví" htmlFor="gender" error={err('gender')}>
-        <select
-          id="gender"
-          value={form.gender}
-          onChange={(e) => update('gender', e.target.value as FormState['gender'])}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        >
-          <option value="">—</option>
-          <option value="male">muž</option>
-          <option value="female">žena</option>
-          <option value="other">jiné</option>
-        </select>
-      </Field>
+      <Select
+        id="gender"
+        label="Pohlaví"
+        error={err('gender') ?? undefined}
+        value={form.gender}
+        onChange={(e) => update('gender', e.target.value as FormState['gender'])}
+      >
+        <option value="">—</option>
+        <option value="male">muž</option>
+        <option value="female">žena</option>
+        <option value="other">jiné</option>
+      </Select>
 
-      <Field label="Výška (cm)" htmlFor="heightCm" error={err('heightCm')}>
-        <input
-          id="heightCm"
-          type="number"
-          inputMode="numeric"
-          min={50}
-          max={250}
-          step={1}
-          value={form.heightCm}
-          onChange={(e) => update('heightCm', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="heightCm"
+        label="Výška (cm)"
+        error={err('heightCm') ?? undefined}
+        type="number"
+        inputMode="numeric"
+        min={50}
+        max={250}
+        step={1}
+        value={form.heightCm}
+        onChange={(e) => update('heightCm', e.target.value)}
+      />
 
-      <Field label="Cíl (kg)" htmlFor="goalKg" error={err('goalKg')}>
-        <input
-          id="goalKg"
-          type="number"
-          inputMode="decimal"
-          min={30}
-          max={300}
-          step={0.1}
-          value={form.goalKg}
-          onChange={(e) => update('goalKg', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="goalKg"
+        label="Cíl (kg)"
+        error={err('goalKg') ?? undefined}
+        type="number"
+        inputMode="decimal"
+        min={30}
+        max={300}
+        step={0.1}
+        value={form.goalKg}
+        onChange={(e) => update('goalKg', e.target.value)}
+      />
 
-      <Field label="Cíl (text)" htmlFor="goalText" error={err('goalText')}>
-        <input
-          id="goalText"
-          type="text"
-          maxLength={120}
-          value={form.goalText}
-          onChange={(e) => update('goalText', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="goalText"
+        label="Cíl (text)"
+        error={err('goalText') ?? undefined}
+        type="text"
+        maxLength={120}
+        value={form.goalText}
+        onChange={(e) => update('goalText', e.target.value)}
+      />
 
-      <Field label="Datum startu" htmlFor="startedAt" error={err('startedAt')}>
-        <input
-          id="startedAt"
-          type="date"
-          value={form.startedAt}
-          onChange={(e) => update('startedAt', e.target.value)}
-          className="border-border bg-surface text-foreground rounded-md border px-3 py-2"
-        />
-      </Field>
+      <Input
+        id="startedAt"
+        label="Datum startu"
+        error={err('startedAt') ?? undefined}
+        type="date"
+        value={form.startedAt}
+        onChange={(e) => update('startedAt', e.target.value)}
+      />
 
       <div className="flex items-center justify-between">
-        <button
-          type="submit"
-          disabled={saving}
-          className="bg-accent text-background hover:bg-accent/90 rounded-md px-4 py-2 font-semibold disabled:opacity-50"
-        >
-          {saving ? 'Ukládám…' : 'Uložit'}
-        </button>
+        <Button type="submit" variant="primary" size="md" loading={saving}>
+          Uložit
+        </Button>
         {savedAt !== null && <span className="text-muted text-xs">Uloženo</span>}
       </div>
     </form>
-  )
-}
-
-function Field({
-  label,
-  htmlFor,
-  error,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  error: string | null
-  children: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={htmlFor} className="text-muted text-xs tracking-[0.2em] uppercase">
-        {label}
-      </label>
-      {children}
-      {error && <span className="text-xs text-red-500">{error}</span>}
-    </div>
   )
 }

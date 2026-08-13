@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Avatar } from '@/components/avatar/Avatar'
+import { Button } from '@/components/ui'
 import { TIERS, type Tier } from '@/lib/tiers'
 
 type Props = { levelAfter: number; tier: Tier; onDismiss: () => void }
@@ -32,13 +33,9 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
           Tier {tier}: {meta.name} odemknuty!
         </div>
         <div className="text-muted mt-1 text-sm">Dosahl jsi Level {levelAfter}</div>
-        <button
-          type="button"
-          onClick={onDismiss}
-          className="bg-primary text-background mt-6 rounded-lg px-6 py-2 text-sm font-semibold"
-        >
+        <Button variant="success" size="md" className="mt-6 px-6" onClick={onDismiss}>
           Pokracovat
-        </button>
+        </Button>
       </div>
     </div>
   )
