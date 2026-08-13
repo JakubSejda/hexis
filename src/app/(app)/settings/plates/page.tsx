@@ -1,5 +1,6 @@
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
+import { Container } from '@/components/ui'
 import { PlateInventoryForm } from '@/components/workout/PlateInventoryForm'
 import { db } from '@/db/client'
 import { plateInventories } from '@/db/schema'
@@ -21,11 +22,13 @@ export default async function PlatesPage() {
     row = await db.query.plateInventories.findFirst({ where: eq(plateInventories.userId, user.id) })
   }
   return (
-    <PlateInventoryForm
-      initial={{
-        barKg: Number(row!.barKg),
-        plates: row!.plates as { weightKg: number; pairs: number }[],
-      }}
-    />
+    <Container className="py-4">
+      <PlateInventoryForm
+        initial={{
+          barKg: Number(row!.barKg),
+          plates: row!.plates as { weightKg: number; pairs: number }[],
+        }}
+      />
+    </Container>
   )
 }

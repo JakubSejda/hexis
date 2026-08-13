@@ -39,7 +39,7 @@ export function SessionSummary({
   }
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="flex flex-col gap-3">
       <h2 className="text-lg">Shrnuti</h2>
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label="Serii" value={String(totalSets)} />

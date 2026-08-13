@@ -116,7 +116,7 @@ export function ExportClient() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">Export dat</h1>
       <p className="text-muted text-sm">
         Stáhne ZIP archiv se všemi tvými daty ve formátu CSV (sessions, sets, measurements,

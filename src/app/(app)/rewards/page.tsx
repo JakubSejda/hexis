@@ -8,6 +8,7 @@ import {
 } from '@/lib/queries/rewards'
 import { rewardRedemptions } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
+import { Container, Stack } from '@/components/ui'
 import { RewardsPageClient } from '@/components/rewards/RewardsPageClient'
 
 export const dynamic = 'force-dynamic'
@@ -36,14 +37,16 @@ export default async function RewardsPage() {
   for (const row of countsRows) redemptionCounts[row.rewardId] = Number(row.n)
 
   return (
-    <main className="mx-auto w-full max-w-2xl space-y-6 p-4">
-      <h1 className="text-foreground text-2xl font-bold">Odměny</h1>
-      <RewardsPageClient
-        initialBalance={balance}
-        initialRewards={rewards}
-        initialHistory={history}
-        redemptionCounts={redemptionCounts}
-      />
-    </main>
+    <Container as="main">
+      <Stack gap={6} className="py-4">
+        <h1 className="text-foreground text-2xl font-bold">Odměny</h1>
+        <RewardsPageClient
+          initialBalance={balance}
+          initialRewards={rewards}
+          initialHistory={history}
+          redemptionCounts={redemptionCounts}
+        />
+      </Stack>
+    </Container>
   )
 }

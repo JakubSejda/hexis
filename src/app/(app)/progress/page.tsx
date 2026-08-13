@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/db/client'
 import { fetchRange } from '@/lib/queries/measurements'
 import { weekRange } from '@/lib/week'
+import { Container, Stack } from '@/components/ui'
 import { MeasurementGrid } from '@/components/measurements/MeasurementGrid'
 import { SparklineCard } from '@/components/measurements/SparklineCard'
 
@@ -33,45 +34,47 @@ export default async function BodyPage() {
   }))
 
   return (
-    <div className="space-y-3">
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        <SparklineCard
-          label="Váha"
-          values={series('weightKg')}
-          goal="lower-is-good"
-          unit="kg"
-          precision={1}
-        />
-        <SparklineCard
-          label="Pas"
-          values={series('waistCm')}
-          goal="lower-is-good"
-          unit="cm"
-          precision={1}
-        />
-        <SparklineCard
-          label="Hrudník"
-          values={series('chestCm')}
-          goal="higher-is-good"
-          unit="cm"
-          precision={1}
-        />
-        <SparklineCard
-          label="Stehno"
-          values={series('thighCm')}
-          goal="higher-is-good"
-          unit="cm"
-          precision={1}
-        />
-        <SparklineCard
-          label="Biceps"
-          values={series('bicepsCm')}
-          goal="higher-is-good"
-          unit="cm"
-          precision={1}
-        />
-      </div>
-      <MeasurementGrid initialRows={initialRows} />
-    </div>
+    <Container>
+      <Stack gap={3} className="py-4">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          <SparklineCard
+            label="Váha"
+            values={series('weightKg')}
+            goal="lower-is-good"
+            unit="kg"
+            precision={1}
+          />
+          <SparklineCard
+            label="Pas"
+            values={series('waistCm')}
+            goal="lower-is-good"
+            unit="cm"
+            precision={1}
+          />
+          <SparklineCard
+            label="Hrudník"
+            values={series('chestCm')}
+            goal="higher-is-good"
+            unit="cm"
+            precision={1}
+          />
+          <SparklineCard
+            label="Stehno"
+            values={series('thighCm')}
+            goal="higher-is-good"
+            unit="cm"
+            precision={1}
+          />
+          <SparklineCard
+            label="Biceps"
+            values={series('bicepsCm')}
+            goal="higher-is-good"
+            unit="cm"
+            precision={1}
+          />
+        </div>
+        <MeasurementGrid initialRows={initialRows} />
+      </Stack>
+    </Container>
   )
 }

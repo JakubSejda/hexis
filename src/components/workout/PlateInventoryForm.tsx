@@ -24,7 +24,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <h1 className="text-xl">Plate Inventory</h1>
       <div>
         <label className="text-muted text-xs">Bar</label>

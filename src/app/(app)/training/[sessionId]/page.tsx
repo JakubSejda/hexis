@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { Container, Stack } from '@/components/ui'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { db } from '@/db/client'
 import {
@@ -146,7 +147,9 @@ export default async function WorkoutSessionPage({
   // Finished session -> readonly view
   if (session.finishedAt) {
     return (
-      <SessionDetailView sessionId={sessionId} exercises={allExercises} editMode={edit === '1'} />
+      <Container className="py-4">
+        <SessionDetailView sessionId={sessionId} exercises={allExercises} editMode={edit === '1'} />
+      </Container>
     )
   }
 
@@ -234,21 +237,23 @@ export default async function WorkoutSessionPage({
   const durationMin = Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 60000)
 
   return (
-    <>
-      <details className="border-border rounded-lg border p-3">
-        <summary className="text-muted cursor-pointer text-sm">Svalová mapa</summary>
-        <div className="mt-2">
-          <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />
-        </div>
-      </details>
-      <WorkoutSessionClient sessionId={sessionId} exercises={exercisesWithSuggestions} />
-      <SessionSummary
-        sessionId={sessionId}
-        totalSets={totalSets}
-        totalVolume={totalVolume}
-        durationMin={durationMin}
-        note={session.note}
-      />
-    </>
+    <Container>
+      <Stack gap={4} className="py-4">
+        <details className="border-border rounded-lg border p-3">
+          <summary className="text-muted cursor-pointer text-sm">Svalová mapa</summary>
+          <div className="mt-2">
+            <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />
+          </div>
+        </details>
+        <WorkoutSessionClient sessionId={sessionId} exercises={exercisesWithSuggestions} />
+        <SessionSummary
+          sessionId={sessionId}
+          totalSets={totalSets}
+          totalVolume={totalVolume}
+          durationMin={durationMin}
+          note={session.note}
+        />
+      </Stack>
+    </Container>
   )
 }
