@@ -14,9 +14,10 @@
   --color-surface:          #141a22;
   --color-surface-raised:   #1a2230;
   --color-surface-sunken:   #070b10;
-  --color-border:           #1f2733;
+  --color-border:           #2d3b4f;
   --color-foreground:       #e5e7eb;
-  --color-muted:            #6b7280;
+  --color-muted:            #9ca3af;
+  --color-muted-strong:     #cbd5e1;
 
   /* Brand — emerald (completion/success) */
   --color-primary:          #10b981;
@@ -34,6 +35,11 @@
   --color-warning:          #f59e0b;
   --color-info:             #38bdf8;
 
+  /* Calendar day signals (training stays --color-accent) */
+  --color-cal-habit:        #10b981;
+  --color-cal-weigh:        #38bdf8;
+  --color-cal-photo:        #a78bfa;
+
   /* Focus ring — amber */
   --color-ring:             #f59e0b;
 
@@ -47,6 +53,11 @@
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.40);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.50);
+  --shadow-lg: 0 12px 28px -6px rgb(0 0 0 / 0.60);
 }
 
 html,
@@ -54,6 +65,7 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
 }
 
 @keyframes tier-glow {

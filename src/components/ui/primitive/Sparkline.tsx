@@ -16,7 +16,7 @@ const TONE: Record<Tone, string> = {
   success: '#10b981',
   warn: '#f59e0b',
   danger: '#ef4444',
-  muted: '#6b7280',
+  muted: '#9ca3af',
 }
 
 export function Sparkline({
