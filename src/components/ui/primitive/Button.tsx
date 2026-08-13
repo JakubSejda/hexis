@@ -8,7 +8,15 @@ import {
 import { Loader2 } from 'lucide-react'
 import { cn } from '../utils/cn'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success'
+type Variant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'success'
+  | 'outline'
+  | 'danger-outline'
+  | 'dashed'
 type Size = 'sm' | 'md' | 'lg'
 
 const VARIANT_CLASS: Record<Variant, string> = {
@@ -17,6 +25,9 @@ const VARIANT_CLASS: Record<Variant, string> = {
   secondary: 'border border-primary text-primary hover:bg-primary-soft',
   ghost: 'text-foreground hover:bg-surface-raised',
   danger: 'bg-danger text-background hover:opacity-90',
+  outline: 'border border-border text-foreground hover:bg-surface-raised',
+  'danger-outline': 'border border-danger text-danger hover:bg-danger/10',
+  dashed: 'border border-dashed border-border text-muted hover:bg-surface-raised',
 }
 
 const SIZE_CLASS: Record<Size, string> = {

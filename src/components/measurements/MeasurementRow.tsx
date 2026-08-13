@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Textarea } from '@/components/ui'
 import { MeasurementCell } from './MeasurementCell'
 import { calcDelta, deltaDirection } from '@/lib/measurement-delta'
 
@@ -104,12 +105,12 @@ export function MeasurementRow({
       {showNote && (
         <tr className="border-border border-b">
           <td colSpan={8} className="px-3 py-2">
-            <textarea
+            <Textarea
               value={draftNote}
               onChange={(e) => setDraftNote(e.target.value)}
               onBlur={() => void onCommitNote(draftNote.trim() === '' ? null : draftNote)}
               placeholder="Poznámka k týdnu…"
-              className="border-border bg-background text-foreground w-full rounded border p-2 text-sm outline-none"
+              className="text-xs"
               rows={2}
             />
           </td>

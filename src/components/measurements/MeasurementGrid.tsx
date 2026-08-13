@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { ArrowDown } from 'lucide-react'
+import { Button } from '@/components/ui'
 import { MeasurementRow, type MeasurementValues } from './MeasurementRow'
 import { toWeekStart, weekRange } from '@/lib/week'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
@@ -141,20 +142,16 @@ export function MeasurementGrid({ initialRows }: Props) {
         {done ? (
           'Žádné starší týdny.'
         ) : (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
+            loading={loadingMore}
+            iconLeft={<ArrowDown size={14} aria-hidden />}
+            className="text-muted gap-1 text-xs"
             onClick={loadMore}
-            disabled={loadingMore}
-            className="inline-flex items-center gap-1"
           >
-            {loadingMore ? (
-              'Načítání…'
-            ) : (
-              <>
-                <ArrowDown size={14} aria-hidden />
-                Načíst starší týdny
-              </>
-            )}
-          </button>
+            Načíst starší týdny
+          </Button>
         )}
       </div>
     </div>

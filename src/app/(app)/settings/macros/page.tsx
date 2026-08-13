@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Heading, Switch } from '@/components/ui'
+import { Container, Heading, Stack, Switch } from '@/components/ui'
 
 const ALL: { key: string; label: string; required?: boolean }[] = [
   { key: 'kcal', label: 'Kalorie', required: true },
@@ -41,28 +41,35 @@ export default function MacrosPage() {
     setSaving(false)
   }
 
-  if (loading) return <div className="text-muted p-4">Načítání…</div>
+  if (loading)
+    return (
+      <Container>
+        <div className="text-muted py-4">Načítání…</div>
+      </Container>
+    )
 
   return (
-    <div className="space-y-4 p-4">
-      <Heading level={1}>Sledovaná makra</Heading>
-      <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
-      <ul className="space-y-2">
-        {ALL.map((m) => (
-          <li
-            key={m.key}
-            className="border-border bg-surface flex items-center justify-between rounded-lg border p-3"
-          >
-            <span className="text-foreground">{m.label}</span>
-            <Switch
-              checked={macros.includes(m.key)}
-              disabled={m.required || saving}
-              onChange={() => toggle(m.key)}
-              label={m.label}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Container>
+      <Stack gap={4} className="py-4">
+        <Heading level={1}>Sledovaná makra</Heading>
+        <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
+        <ul className="space-y-2">
+          {ALL.map((m) => (
+            <li
+              key={m.key}
+              className="border-border bg-surface flex items-center justify-between rounded-lg border p-3"
+            >
+              <span className="text-foreground">{m.label}</span>
+              <Switch
+                checked={macros.includes(m.key)}
+                disabled={m.required || saving}
+                onChange={() => toggle(m.key)}
+                label={m.label}
+              />
+            </li>
+          ))}
+        </ul>
+      </Stack>
+    </Container>
   )
 }

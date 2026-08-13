@@ -1,8 +1,7 @@
 'use client'
-import Link from 'next/link'
 import { AREA_META, SIDEBAR_AREAS } from './area-meta'
 import { useActiveArea } from './use-active-area'
-import { cn } from '@/components/ui'
+import { cn, NavLink } from '@/components/ui'
 
 export function Sidebar() {
   const active = useActiveArea()
@@ -18,42 +17,30 @@ export function Sidebar() {
       <SectionLabel>Life Areas</SectionLabel>
       {SIDEBAR_AREAS.map((area) => {
         const meta = AREA_META[area]
-        const Icon = meta.icon
-        const isActive = active === area
         return (
-          <Link
+          <NavLink
             key={area}
             href={meta.href}
-            aria-current={isActive ? 'page' : undefined}
-            className={cn(
-              'flex items-center gap-2.5 px-4 py-2 text-sm transition-colors',
-              isActive
-                ? 'text-accent border-accent bg-surface border-l-2 pl-[14px]'
-                : 'text-muted hover:bg-surface hover:text-foreground'
-            )}
+            active={active === area}
+            variant="side"
+            icon={meta.icon}
           >
-            <Icon className="h-4 w-4" aria-hidden />
-            <span>{meta.label}</span>
-          </Link>
+            {meta.label}
+          </NavLink>
         )
       })}
 
       <div className="flex-1" />
 
       <div className="border-border border-t pt-2">
-        <Link
+        <NavLink
           href={AREA_META.settings.href}
-          aria-current={active === 'settings' ? 'page' : undefined}
-          className={cn(
-            'flex items-center gap-2.5 px-4 py-2 text-sm transition-colors',
-            active === 'settings'
-              ? 'text-accent border-accent bg-surface border-l-2 pl-[14px]'
-              : 'text-muted hover:bg-surface hover:text-foreground'
-          )}
+          active={active === 'settings'}
+          variant="side"
+          icon={AREA_META.settings.icon}
         >
-          <AREA_META.settings.icon className="h-4 w-4" aria-hidden />
-          <span>{AREA_META.settings.label}</span>
-        </Link>
+          {AREA_META.settings.label}
+        </NavLink>
       </div>
     </aside>
   )

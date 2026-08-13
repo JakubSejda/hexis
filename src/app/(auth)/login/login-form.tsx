@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { Heading, Input } from '@/components/ui'
+import { Button, Heading, Input } from '@/components/ui'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -69,13 +69,9 @@ export default function LoginForm() {
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-primary text-background hover:bg-primary/90 w-full rounded px-4 py-2 font-medium disabled:opacity-50"
-        >
-          {isPending ? 'Přihlašuji…' : 'Přihlásit'}
-        </button>
+        <Button type="submit" variant="success" size="md" loading={isPending} className="w-full">
+          Přihlásit
+        </Button>
       </form>
     </>
   )

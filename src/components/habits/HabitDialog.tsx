@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { Dialog, Button, Input } from '@/components/ui'
+import { Dialog, Button, Input, Radio } from '@/components/ui'
 import { MILESTONE_BASE_XP, WEIGHT_MULTIPLIER } from '@/lib/habits/milestone'
 
 type Cadence = 'daily' | 'weekly'
@@ -80,17 +80,15 @@ export function HabitDialog(props: Props) {
           <legend className="text-muted text-xs font-medium">Cadence</legend>
           <div className="flex gap-4">
             {(['daily', 'weekly'] as const).map((c) => (
-              <label key={c} className="flex items-center gap-2 text-sm">
-                <input
-                  type="radio"
-                  name="cadence"
-                  value={c}
-                  checked={cadence === c}
-                  onChange={() => setCadence(c)}
-                  disabled={isEdit}
-                />
-                {c === 'daily' ? 'Daily' : 'Weekly'}
-              </label>
+              <Radio
+                key={c}
+                name="cadence"
+                value={c}
+                label={c === 'daily' ? 'Daily' : 'Weekly'}
+                checked={cadence === c}
+                onChange={() => setCadence(c)}
+                disabled={isEdit}
+              />
             ))}
           </div>
           {isEdit && (
@@ -114,16 +112,15 @@ export function HabitDialog(props: Props) {
           <legend className="text-muted text-xs font-medium">Obtížnost</legend>
           <div className="flex gap-4">
             {(['light', 'standard', 'heavy'] as const).map((w) => (
-              <label key={w} className="flex items-center gap-2 text-sm capitalize">
-                <input
-                  type="radio"
-                  name="weight"
-                  value={w}
-                  checked={weight === w}
-                  onChange={() => setWeight(w)}
-                />
-                {w}
-              </label>
+              <Radio
+                key={w}
+                name="weight"
+                value={w}
+                label={w}
+                labelClassName="capitalize"
+                checked={weight === w}
+                onChange={() => setWeight(w)}
+              />
             ))}
           </div>
         </fieldset>

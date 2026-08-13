@@ -7,7 +7,7 @@ import { ResumeBanner } from '@/components/workout/ResumeBanner'
 import { PlanPicker } from '@/components/workout/PlanPicker'
 import { SessionHistoryList } from '@/components/workout/SessionHistoryList'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
-import { Heading } from '@/components/ui'
+import { Container, Heading, Stack } from '@/components/ui'
 
 export default async function WorkoutPage() {
   const user = await requireSessionUser()
@@ -44,20 +44,22 @@ export default async function WorkoutPage() {
     .limit(10)
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <ResumeBanner />
-      <Heading level={1}>Vyber trenink</Heading>
-      <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
-      <h2 className="text-muted mt-4 text-sm">Historie</h2>
-      <SessionHistoryList
-        items={history.map((h) => ({
-          ...h,
-          startedAt: h.startedAt.toISOString(),
-          finishedAt: h.finishedAt?.toISOString() ?? null,
-          volumeKg: Number(h.volumeKg),
-          setCount: Number(h.setCount),
-        }))}
-      />
-    </div>
+    <Container>
+      <Stack gap={4} className="py-4">
+        <ResumeBanner />
+        <Heading level={1}>Vyber trenink</Heading>
+        <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
+        <h2 className="text-muted mt-4 text-sm">Historie</h2>
+        <SessionHistoryList
+          items={history.map((h) => ({
+            ...h,
+            startedAt: h.startedAt.toISOString(),
+            finishedAt: h.finishedAt?.toISOString() ?? null,
+            volumeKg: Number(h.volumeKg),
+            setCount: Number(h.setCount),
+          }))}
+        />
+      </Stack>
+    </Container>
   )
 }

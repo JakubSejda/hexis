@@ -1,5 +1,5 @@
 'use client'
-import { EmptyState } from '@/components/ui'
+import { Button, EmptyState } from '@/components/ui'
 import { Gift } from 'lucide-react'
 import { RewardCard } from './RewardCard'
 import type { RewardRow } from '@/lib/queries/rewards'
@@ -32,13 +32,9 @@ export function RewardList({
         title="Žádné odměny"
         description="Vytvoř si první odměnu — co si chceš dopřát za odvedenou práci?"
         action={
-          <button
-            type="button"
-            onClick={onCreate}
-            className="bg-accent text-on-accent rounded-lg px-3 py-2 text-sm font-semibold"
-          >
+          <Button variant="primary" size="md" onClick={onCreate}>
             Vytvoř si první odměnu
-          </button>
+          </Button>
         }
       />
     )

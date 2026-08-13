@@ -5,6 +5,7 @@ import { getTotalXp } from '@/lib/xp'
 import { xpToLevel } from '@/lib/xp-events'
 import { levelToTier, levelToTierMeta, xpToProgress } from '@/lib/tiers'
 import { fetchXpHistory } from '@/lib/queries/xp-history'
+import { Container, Stack } from '@/components/ui'
 import { AvatarHeroCard } from '@/components/avatar/AvatarHeroCard'
 import { TierLadder } from '@/components/avatar/TierLadder'
 import { NextTierPreview } from '@/components/avatar/NextTierPreview'
@@ -24,25 +25,27 @@ export default async function AvatarPage() {
   const history = await fetchXpHistory(db, user.id, 30)
 
   return (
-    <div className="space-y-6 p-4">
-      <AvatarHeroCard level={level} tierMeta={tierMeta} totalXp={totalXp} progress={progress} />
+    <Container>
+      <Stack gap={6} className="py-4">
+        <AvatarHeroCard level={level} tierMeta={tierMeta} totalXp={totalXp} progress={progress} />
 
-      <section>
-        <RegionHeader>Avatar Progress</RegionHeader>
-        <TierLadder currentTier={levelToTier(level)} />
-        <NextTierPreview currentLevel={level} totalXp={totalXp} />
-      </section>
+        <section>
+          <RegionHeader>Avatar Progress</RegionHeader>
+          <TierLadder currentTier={levelToTier(level)} />
+          <NextTierPreview currentLevel={level} totalXp={totalXp} />
+        </section>
 
-      <section>
-        <RegionHeader>Muscle Rank</RegionHeader>
-        <MuscleRankSection userId={user.id} />
-      </section>
+        <section>
+          <RegionHeader>Muscle Rank</RegionHeader>
+          <MuscleRankSection userId={user.id} />
+        </section>
 
-      <section>
-        <RegionHeader>XP History</RegionHeader>
-        <XpHistoryChart daily={history.daily} days={30} />
-        <XpBreakdown byEventTotal={history.byEventTotal} total={history.total} />
-      </section>
-    </div>
+        <section>
+          <RegionHeader>XP History</RegionHeader>
+          <XpHistoryChart daily={history.daily} days={30} />
+          <XpBreakdown byEventTotal={history.byEventTotal} total={history.total} />
+        </section>
+      </Stack>
+    </Container>
   )
 }

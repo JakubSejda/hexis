@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { BottomSheet, Dialog, NumberInput, useToast } from '@/components/ui'
+import { BottomSheet, Button, Dialog, NumberInput, useToast } from '@/components/ui'
 
 type Props = {
   sessionId: number
@@ -41,20 +41,12 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
           <NumberInput value={reps} onChange={setReps} step={1} suffix="reps" />
           <NumberInput value={rpe} onChange={setRpe} step={1} min={1} max={10} suffix="RPE" />
           <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={save}
-              className="bg-primary text-background h-11 flex-1 rounded-lg font-semibold"
-            >
+            <Button variant="success" size="lg" className="flex-1" onClick={save}>
               Uložit
-            </button>
-            <button
-              type="button"
-              onClick={() => setConfirmOpen(true)}
-              className="border-danger text-danger h-11 rounded-lg border px-4"
-            >
+            </Button>
+            <Button variant="danger-outline" size="lg" onClick={() => setConfirmOpen(true)}>
               Smazat
-            </button>
+            </Button>
           </div>
         </div>
       </BottomSheet>
@@ -66,20 +58,17 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
         dismissible={false}
       >
         <div className="flex gap-2">
-          <button
-            type="button"
+          <Button
+            variant="outline"
+            size="lg"
+            className="flex-1"
             onClick={() => setConfirmOpen(false)}
-            className="border-border text-foreground h-11 flex-1 rounded-lg border font-semibold"
           >
             Zrušit
-          </button>
-          <button
-            type="button"
-            onClick={doDelete}
-            className="bg-danger text-background h-11 flex-1 rounded-lg font-semibold"
-          >
+          </Button>
+          <Button variant="danger" size="lg" className="flex-1" onClick={doDelete}>
             Smazat
-          </button>
+          </Button>
         </div>
       </Dialog>
     </>

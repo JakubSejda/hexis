@@ -5,7 +5,7 @@ import { fetchMuscleVolumesLast8Weeks } from '@/lib/queries/muscle-rank'
 import { MUSCLE_GROUPS } from '@/db/seed/muscle-groups'
 import { volumeToRank, type Rank, RANK_COLORS } from '@/lib/muscle-rank'
 import { MuscleRank } from './MuscleRank'
-import Link from 'next/link'
+import { Button } from '@/components/ui'
 
 type RankSummary =
   | { kind: 'empty' }
@@ -70,12 +70,9 @@ export async function MuscleRankSection({ userId }: Props) {
         <p className="text-foreground text-sm">
           Začni trénovat, rank se ti vykreslí po prvních pár tréninzích.
         </p>
-        <Link
-          href="/training"
-          className="bg-accent rounded-md px-3 py-1 text-xs font-medium text-white"
-        >
+        <Button as="a" href="/training" variant="primary" size="sm">
           Spustit trénink
-        </Link>
+        </Button>
       </div>
     )
   }

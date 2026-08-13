@@ -37,7 +37,7 @@ export function SessionDetailView({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <Button variant="ghost" size="sm" onClick={toggleEdit} className="text-primary self-end">
         {editMode ? 'Hotovo' : 'Upravit'}
       </Button>

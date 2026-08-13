@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Dialog, Input, NumberInput } from '@/components/ui'
+import { Button, Dialog, Input, NumberInput, Textarea } from '@/components/ui'
 
 type Initial = { name: string; costXp: number; description?: string | null }
 
@@ -77,17 +77,13 @@ export function RewardDialog({ open, mode, initial, onOpenChange, onSubmit }: Pr
             step={10}
           />
         </div>
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="text-muted text-xs font-medium">Popis</span>
-          <textarea
-            aria-label="Popis"
-            className="border-border bg-surface text-foreground rounded-md border px-3 py-2 text-sm focus:outline-none focus-visible:ring-2"
-            rows={3}
-            maxLength={280}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </label>
+        <Textarea
+          label="Popis"
+          rows={2}
+          maxLength={280}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
         {error && <div className="text-danger text-sm">{error}</div>}
         <div className="mt-2 flex justify-end gap-2">
           <Button variant="ghost" onClick={() => onOpenChange(false)}>

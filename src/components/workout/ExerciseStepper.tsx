@@ -1,6 +1,6 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { Dialog, useLongPress } from '@/components/ui'
+import { Button, Dialog, useLongPress } from '@/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ExerciseCard } from './ExerciseCard'
 import { StepperNav } from './StepperNav'
@@ -81,13 +81,9 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
         }}
       />
       {idx === exercises.length - 1 ? (
-        <button
-          type="button"
-          onClick={onFinish}
-          className="bg-primary text-background h-12 rounded-lg font-semibold"
-        >
+        <Button variant="success" size="lg" onClick={onFinish}>
           Dokončit trénink
-        </button>
+        </Button>
       ) : null}
       <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       {editSetId !== null ? (
@@ -108,20 +104,12 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
         dismissible={false}
       >
         <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setSkipOpen(false)}
-            className="border-border text-foreground h-11 flex-1 rounded-lg border font-semibold"
-          >
+          <Button variant="outline" size="lg" className="flex-1" onClick={() => setSkipOpen(false)}>
             Zrušit
-          </button>
-          <button
-            type="button"
-            onClick={doSkip}
-            className="bg-accent text-background h-11 flex-1 rounded-lg font-semibold"
-          >
+          </Button>
+          <Button variant="primary" size="lg" className="flex-1" onClick={doSkip}>
             Přeskočit
-          </button>
+          </Button>
         </div>
       </Dialog>
     </div>

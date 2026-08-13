@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { BottomSheet, Input, useToast } from '@/components/ui'
+import { BottomSheet, Button, Input, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
@@ -118,13 +118,16 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           ))}
         </div>
         <Input type="date" value={takenAt} onChange={(e) => setTakenAt(e.target.value)} />
-        <button
+        <Button
+          variant="success"
+          size="lg"
+          loading={uploading}
+          disabled={!file}
+          className="w-full"
           onClick={handleUpload}
-          disabled={!file || uploading}
-          className="bg-primary text-background flex h-12 items-center justify-center rounded-lg font-semibold disabled:opacity-50"
         >
-          {uploading ? 'Nahrávám…' : 'Nahrát'}
-        </button>
+          Nahrát
+        </Button>
       </div>
     </BottomSheet>
   )

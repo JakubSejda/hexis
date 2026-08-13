@@ -77,7 +77,7 @@ export function NutritionPageClient({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between px-4">
+      <div className="flex items-center justify-between">
         <button onClick={() => changeMonth(-1)} className="text-muted" aria-label="Předchozí měsíc">
           <ChevronLeft size={24} aria-hidden />
         </button>

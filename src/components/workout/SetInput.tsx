@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Check } from 'lucide-react'
-import { NumberInput } from '@/components/ui'
+import { Button, NumberInput } from '@/components/ui'
 
 type Props = {
   initialWeightKg: number | null
@@ -35,21 +35,17 @@ export function SetInput({
           <NumberInput value={rpe} onChange={setRpe} step={1} min={1} max={10} suffix="RPE" />
         ) : null}
       </div>
-      <button
-        type="button"
-        disabled={submitting || reps === null}
+      <Button
+        variant="success"
+        size="lg"
+        loading={submitting}
+        disabled={reps === null}
+        iconLeft={<Check size={14} aria-hidden />}
+        className="gap-1"
         onClick={() => onSubmit({ weightKg: weight, reps, rpe })}
-        className="bg-primary text-background inline-flex h-12 items-center justify-center gap-1 rounded-lg font-semibold disabled:opacity-50"
       >
-        {submitting ? (
-          'Ukládám…'
-        ) : (
-          <>
-            <Check size={14} aria-hidden />
-            Zapsat sérii
-          </>
-        )}
-      </button>
+        Zapsat sérii
+      </Button>
     </div>
   )
 }

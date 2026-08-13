@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { NumberInput, useToast } from '@/components/ui'
+import { Button, NumberInput, useToast } from '@/components/ui'
 
 type Plate = { weightKg: number; pairs: number }
 
@@ -24,7 +24,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <h1 className="text-xl">Plate Inventory</h1>
       <div>
         <label className="text-muted text-xs">Bar</label>
@@ -46,30 +46,29 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
               step={1}
               suffix="paru"
             />
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-danger"
               onClick={() => setPlates((prev) => prev.filter((_, j) => j !== i))}
-              className="text-danger text-xs"
+              aria-label={`Smazat talíř ${p.weightKg} kg`}
             >
               smaz
-            </button>
+            </Button>
           </div>
         ))}
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-primary self-start"
           onClick={() => setPlates((prev) => [...prev, { weightKg: 10, pairs: 1 }])}
-          className="text-primary self-start text-sm"
         >
           + Pridat talir
-        </button>
+        </Button>
       </div>
-      <button
-        type="button"
-        onClick={save}
-        className="bg-primary text-background h-12 rounded-lg font-semibold"
-      >
+      <Button variant="success" size="lg" onClick={save}>
         Ulozit
-      </button>
+      </Button>
     </div>
   )
 }

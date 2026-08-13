@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { BottomSheet, NumberInput, ProgressBar } from '@/components/ui'
+import { BottomSheet, Button, NumberInput, ProgressBar, Textarea } from '@/components/ui'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
@@ -162,23 +162,16 @@ export function DailyModal({
           </div>
         )}
 
-        <div>
-          <div className="text-muted mb-1.5 text-xs">Poznámka</div>
-          <textarea
-            value={draft.note ?? ''}
-            onChange={(e) => setDraft({ ...draft, note: e.target.value || null })}
-            className="border-border bg-background text-foreground min-h-[40px] w-full rounded-lg border p-2.5 text-sm"
-            rows={2}
-          />
-        </div>
+        <Textarea
+          label="Poznámka"
+          value={draft.note ?? ''}
+          onChange={(e) => setDraft({ ...draft, note: e.target.value || null })}
+          rows={3}
+        />
 
-        <button
-          type="button"
-          onClick={save}
-          className="bg-primary text-background w-full rounded-lg py-2.5 font-semibold"
-        >
+        <Button variant="success" size="md" className="w-full" onClick={save}>
           Uložit
-        </button>
+        </Button>
       </div>
     </BottomSheet>
   )

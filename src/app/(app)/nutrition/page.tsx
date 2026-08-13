@@ -5,6 +5,7 @@ import { fetchRange, monthBounds } from '@/lib/queries/nutrition'
 import { fetchRange as fetchMeasurements } from '@/lib/queries/measurements'
 import { getMacros } from '@/lib/queries/user-prefs'
 import { toWeekStart } from '@/lib/week'
+import { Container } from '@/components/ui'
 import { NutritionPageClient } from '@/components/nutrition/NutritionPageClient'
 
 export default async function NutritionPage() {
@@ -42,20 +43,22 @@ export default async function NutritionPage() {
   }
 
   return (
-    <NutritionPageClient
-      initialMonth={month}
-      initialDays={days.map((d) => ({
-        id: d.id,
-        date: d.date,
-        kcalActual: d.kcalActual ?? null,
-        proteinG: d.proteinG ?? null,
-        carbsG: d.carbsG ?? null,
-        fatG: d.fatG ?? null,
-        sugarG: d.sugarG ?? null,
-        note: d.note ?? null,
-      }))}
-      trackedMacros={macros}
-      targetsByWeek={targetsByWeek}
-    />
+    <Container className="py-4">
+      <NutritionPageClient
+        initialMonth={month}
+        initialDays={days.map((d) => ({
+          id: d.id,
+          date: d.date,
+          kcalActual: d.kcalActual ?? null,
+          proteinG: d.proteinG ?? null,
+          carbsG: d.carbsG ?? null,
+          fatG: d.fatG ?? null,
+          sugarG: d.sugarG ?? null,
+          note: d.note ?? null,
+        }))}
+        trackedMacros={macros}
+        targetsByWeek={targetsByWeek}
+      />
+    </Container>
   )
 }
