@@ -6,9 +6,9 @@ const SIGNAL_KEYS = ['training', 'habit', 'weigh', 'photo'] as const
 
 const DOT_BG: Record<(typeof SIGNAL_KEYS)[number], string> = {
   training: 'bg-accent',
-  habit: 'bg-emerald-500',
-  weigh: 'bg-blue-500',
-  photo: 'bg-purple-500',
+  habit: 'bg-cal-habit',
+  weigh: 'bg-cal-weigh',
+  photo: 'bg-cal-photo',
 }
 
 export function CalendarCell({ day }: Props) {
