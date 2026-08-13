@@ -7,7 +7,7 @@ type Padding = 'none' | 'sm' | 'md' | 'lg'
 const VARIANT_CLASS: Record<Variant, string> = {
   default: 'bg-surface',
   interactive:
-    'bg-surface cursor-pointer hover:bg-surface-raised focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'bg-surface cursor-pointer hover:bg-surface-raised hover:shadow-lg hover:border-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
   flush: 'bg-surface',
 }
 
@@ -18,7 +18,7 @@ const PADDING_CLASS: Record<Padding, string> = {
   lg: 'p-6',
 }
 
-const BASE = 'border border-border rounded-2xl'
+const BASE = 'border border-border rounded-lg shadow-md transition-shadow'
 
 type Props = {
   as?: ElementType

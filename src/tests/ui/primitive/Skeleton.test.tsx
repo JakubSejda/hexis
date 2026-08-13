@@ -40,10 +40,10 @@ describe('Skeleton', () => {
     expect(el).toHaveClass('w-10')
   })
 
-  it('renders shape=card (rounded-2xl, h-32 default)', () => {
+  it('renders shape=card (rounded-lg, h-32 default)', () => {
     render(<Skeleton shape="card" data-testid="s" />)
     const el = screen.getByTestId('s')
-    expect(el).toHaveClass('rounded-2xl')
+    expect(el).toHaveClass('rounded-lg')
     expect(el).toHaveClass('h-32')
   })
 
