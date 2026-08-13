@@ -12,21 +12,34 @@ async function login(page: Page) {
 }
 
 test.describe('SP2 navigation', () => {
-  test('all 4 bottom tabs navigate on mobile viewport', async ({ page }) => {
+  test('all 4 daily bottom tabs navigate on mobile viewport', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 700 })
     await login(page)
 
     await page.getByRole('link', { name: /training/i }).click()
     await expect(page).toHaveURL(/\/training/)
 
-    await page.getByRole('link', { name: /progress/i }).click()
-    await expect(page).toHaveURL(/\/progress/)
+    await page.getByRole('link', { name: /nutrition/i }).click()
+    await expect(page).toHaveURL(/\/nutrition/)
 
-    await page.getByRole('link', { name: /stats/i }).click()
-    await expect(page).toHaveURL(/\/stats/)
+    await page.getByRole('link', { name: /habits/i }).click()
+    await expect(page).toHaveURL(/\/habits/)
 
     await page.getByRole('link', { name: /dashboard/i }).click()
     await expect(page).toHaveURL(/\/dashboard/)
+  })
+
+  test('Více sheet reaches the remaining areas on mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 700 })
+    await login(page)
+
+    await page.getByRole('button', { name: /více/i }).click()
+    await page.getByRole('link', { name: /^progress$/i }).click()
+    await expect(page).toHaveURL(/\/progress/)
+
+    await page.getByRole('button', { name: /více/i }).click()
+    await page.getByRole('link', { name: /^stats$/i }).click()
+    await expect(page).toHaveURL(/\/stats/)
   })
 
   test('sidebar is visible on desktop viewport and nav links work', async ({ page }) => {

@@ -1,10 +1,16 @@
 'use client'
-import { AREA_META, MOBILE_TABS } from './area-meta'
+import { useState } from 'react'
+import { Menu } from 'lucide-react'
+import { AREA_META, MOBILE_TABS, MORE_AREAS } from './area-meta'
+import { MoreSheet } from './MoreSheet'
 import { useActiveArea } from './use-active-area'
-import { NavLink } from '@/components/ui'
+import { cn, NavLink } from '@/components/ui'
 
 export function BottomNav() {
   const active = useActiveArea()
+  const [moreOpen, setMoreOpen] = useState(false)
+  const moreActive = active != null && MORE_AREAS.includes(active)
+
   return (
     <nav
       aria-label="Primary"
@@ -24,6 +30,20 @@ export function BottomNav() {
           </NavLink>
         )
       })}
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={moreOpen}
+        onClick={() => setMoreOpen(true)}
+        className={cn(
+          'flex flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors',
+          moreActive ? 'text-accent' : 'text-muted hover:text-foreground'
+        )}
+      >
+        <Menu className="h-6 w-6" aria-hidden />
+        <span>Více</span>
+      </button>
+      <MoreSheet open={moreOpen} onOpenChange={setMoreOpen} activeArea={active} />
     </nav>
   )
 }

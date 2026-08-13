@@ -95,7 +95,22 @@ export const AREA_META: Record<Area, Meta> = {
   },
 }
 
-export const MOBILE_TABS: readonly Area[] = ['dashboard', 'training', 'progress', 'stats'] as const
+export const MOBILE_TABS: readonly Area[] = [
+  'dashboard',
+  'training',
+  'nutrition',
+  'habits',
+] as const
+
+/** Areas reachable on mobile only through the BottomNav "Více" sheet. */
+export const MORE_AREAS: readonly Area[] = [
+  'progress',
+  'stats',
+  'rewards',
+  'bio',
+  'calendar',
+  'settings',
+] as const
 export const SIDEBAR_AREAS: readonly Area[] = [
   'dashboard',
   'training',
