@@ -1,0 +1,84 @@
+# Hexis production stack — friends-and-family beta.
+#
+#   docker compose -f compose.prod.yml --env-file .env.production up -d --build
+#   docker compose -f compose.prod.yml --env-file .env.production --profile tools run --rm migrate
+#
+# See docs/deploy-runbook.md for the full procedure.
+
+services:
+  app:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      STORAGE_ROOT: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+    expose:
+      - '3000'
+
+  # One-off migration runner (full node_modules + tsx from the builder stage).
+  # Not started by default — invoke via `--profile tools run --rm migrate`.
+  migrate:
+    build:
+      context: .
+      target: builder
+    profiles: ['tools']
+    env_file: .env.production
+    command: npm run db:migrate
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # Beta account seeding, same pattern:
+  #   --profile tools run --rm seed-users alice@example.com bob@example.com
+  seed-users:
+    build:
+      context: .
+      target: builder
+    profiles: ['tools']
+    env_file: .env.production
+    entrypoint: ['npx', 'tsx', 'scripts/seed-beta-users.ts']
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set in .env.production}
+      MYSQL_DATABASE: hexis
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h localhost -uroot -p"$$MYSQL_ROOT_PASSWORD"']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMAIN: ${DOMAIN:?set in .env.production}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+
+volumes:
+  mysql-data:
+  uploads:
+  caddy-data:
+  caddy-config:

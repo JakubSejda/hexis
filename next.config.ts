@@ -8,6 +8,8 @@ const withSerwist = withSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  // Minimal self-contained server bundle for the production Docker image.
+  output: 'standalone',
   async redirects() {
     return [
       { source: '/workout', destination: '/training', permanent: true },
