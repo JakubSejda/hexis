@@ -1,6 +1,6 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { Button, Dialog, useLongPress } from '@/components/ui'
+import { Button, Dialog, Skeleton, useLongPress } from '@/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ExerciseCard } from './ExerciseCard'
 import { StepperNav } from './StepperNav'
@@ -128,7 +128,14 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
 
 export function ExerciseStepper(props: Props) {
   return (
-    <Suspense fallback={<div className="text-muted py-4">Načítám...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex flex-col gap-4 py-4">
+          <Skeleton shape="card" />
+          <Skeleton shape="block" />
+        </div>
+      }
+    >
       <StepperInner {...props} />
     </Suspense>
   )
