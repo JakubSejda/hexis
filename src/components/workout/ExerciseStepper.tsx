@@ -51,7 +51,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
 
   if (!current) {
     return (
-      <div className="flex flex-col gap-3 p-4">
+      <div className="flex flex-col gap-3">
         <p className="text-muted text-sm">Žádné cviky v této session.</p>
         <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       </div>
@@ -59,7 +59,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <div {...longPress}>
         <ExerciseCard
           sessionId={sessionId}
@@ -85,6 +85,16 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
           Dokončit trénink
         </Button>
       ) : null}
+      <div className="flex gap-2">
+        <Button variant="outline" size="md" className="flex-1" onClick={() => setSkipOpen(true)}>
+          Přeskočit cvik
+        </Button>
+        {idx !== exercises.length - 1 ? (
+          <Button variant="outline" size="md" className="flex-1" onClick={onFinish}>
+            Dokončit trénink
+          </Button>
+        ) : null}
+      </div>
       <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       {editSetId !== null ? (
         <EditSetSheet
@@ -118,7 +128,7 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
 
 export function ExerciseStepper(props: Props) {
   return (
-    <Suspense fallback={<div className="text-muted p-4">Načítám...</div>}>
+    <Suspense fallback={<div className="text-muted py-4">Načítám...</div>}>
       <StepperInner {...props} />
     </Suspense>
   )

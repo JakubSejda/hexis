@@ -53,11 +53,11 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
   const ss = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0')
 
   return (
-    <div className="bg-border rounded-lg p-3 text-center tabular-nums">
+    <div className="bg-surface-raised border-border rounded-lg border p-3 text-center tabular-nums shadow-sm">
       {state ? (
         <>
           <div className="text-muted text-xs tracking-wider uppercase">Rest</div>
-          <div className="text-accent text-2xl font-bold">
+          <div className="text-accent text-4xl font-bold">
             {mm}:{ss}
           </div>
           <Button

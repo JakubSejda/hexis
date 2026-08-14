@@ -12,7 +12,7 @@ type Props = {
 
 export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
   return (
-    <div className="text-muted flex items-center justify-between text-xs">
+    <div className="text-muted flex items-center justify-between text-sm">
       <button
         type="button"
         onClick={onPrev}
