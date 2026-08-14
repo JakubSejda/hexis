@@ -18,10 +18,10 @@ describe('Button', () => {
     expect(el).toHaveClass('text-background')
   })
 
-  it('applies emerald success styling when variant="success"', () => {
+  it('applies amber action styling when variant="success" (HUD grammar: action = amber)', () => {
     render(<Button variant="success">Save</Button>)
     const el = screen.getByRole('button')
-    expect(el).toHaveClass('bg-primary')
+    expect(el).toHaveClass('bg-accent')
     expect(el).toHaveClass('text-background')
   })
 
@@ -46,12 +46,12 @@ describe('Button', () => {
     expect(el).toHaveClass('text-muted')
   })
 
-  it('applies emerald outline secondary styling when variant="secondary"', () => {
+  it('applies cyan system outline styling when variant="secondary"', () => {
     render(<Button variant="secondary">Cancel</Button>)
     const el = screen.getByRole('button')
     expect(el).toHaveClass('border')
-    expect(el).toHaveClass('border-primary')
-    expect(el).toHaveClass('text-primary')
+    expect(el).toHaveClass('border-system')
+    expect(el).toHaveClass('text-system')
   })
 
   it('applies transparent ghost styling when variant="ghost"', () => {

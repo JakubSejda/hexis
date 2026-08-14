@@ -18,7 +18,7 @@ const SIZE_CLASS: Record<Size, string> = {
   md: 'h-6 px-3 text-sm',
 }
 
-const BASE = 'inline-flex items-center gap-1 rounded-md font-medium'
+const BASE = 'hud-clip-sm inline-flex items-center gap-1 font-medium tracking-[0.08em] uppercase'
 
 type PillProps = {
   variant?: Variant

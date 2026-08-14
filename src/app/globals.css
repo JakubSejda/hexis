@@ -10,39 +10,49 @@
 @source not "../../.playwright-mcp";
 
 @theme {
-  /* Surfaces */
-  --color-background:       #0a0e14;
-  --color-surface:          #141a22;
-  --color-surface-raised:   #1a2230;
-  --color-surface-sunken:   #070b10;
-  --color-border:           #2d3b4f;
-  --color-foreground:       #e5e7eb;
-  --color-muted:            #9ca3af;
-  --color-muted-strong:     #cbd5e1;
+  /* ============ REFORGE "HUD" palette ============
+   * Binding reference: docs/superpowers/prototypes/2026-08-14-reforge/variant-b.html
+   * Grammar: cyan (--color-system) = system/info · amber (--color-accent) =
+   * action/XP only · danger reserved. Never mix roles.
+   */
 
-  /* Brand — emerald (completion/success) */
-  --color-primary:          #10b981;
-  --color-primary-soft:     #064e3b;
-  --color-primary-muted:    #34d399;
+  /* Surfaces — void navy */
+  --color-background:       #05080f;
+  --color-surface:          #0b1220;
+  --color-surface-raised:   #111b2e;
+  --color-surface-sunken:   #030509;
+  --color-border:           #1e293b;
+  --color-foreground:       #e2f1f8;
+  --color-muted:            #7c8da6;
+  --color-muted-strong:     #a9bdd4;
 
-  /* Brand — amber (action/CTA/XP/movement) */
+  /* System — electric cyan (info, active edges, timers, nav) */
+  --color-system:           #22d3ee;
+  --color-system-soft:      #0b3540;
+
+  /* Action — signal amber (CTA, XP, quest) */
   --color-accent:           #f59e0b;
   --color-accent-soft:      #78350f;
   --color-accent-muted:     #fbbf24;
 
+  /* Semantic success (feedback only, never decorative) */
+  --color-primary:          #34d399;
+  --color-primary-soft:     #064e3b;
+  --color-primary-muted:    #6ee7b7;
+
   /* Status */
   --color-danger:           #ef4444;
-  --color-success:          #10b981;
+  --color-success:          #34d399;
   --color-warning:          #f59e0b;
-  --color-info:             #38bdf8;
+  --color-info:             #22d3ee;
 
   /* Calendar day signals (training stays --color-accent) */
-  --color-cal-habit:        #10b981;
-  --color-cal-weigh:        #38bdf8;
+  --color-cal-habit:        #34d399;
+  --color-cal-weigh:        #22d3ee;
   --color-cal-photo:        #a78bfa;
 
-  /* Focus ring — amber */
-  --color-ring:             #f59e0b;
+  /* Focus ring — cyan (system) */
+  --color-ring:             #22d3ee;
 
   /* Fonts */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
@@ -67,6 +77,72 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
+}
+
+/* HUD ground: faint hexagon grid behind everything (prototype ~3% opacity). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 0L56 16.17v32.33L28 64.67 0 48.5V16.17zM28 64.67L56 80.83v16.17M28 64.67L0 80.83V97' fill='none' stroke='%2322d3ee' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 56px 97px;
+}
+
+/* HUD plate clips (shared by Card/Button/Pill — one cut corner). */
+.hud-clip {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.hud-clip-sm {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+/* HUD motion (all guarded for reduced motion at the bottom). */
+@keyframes hud-power-on {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-hud-power-on {
+  animation: hud-power-on 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes hud-charge {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.animate-hud-charge {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: hud-charge 1.6s ease-out 0.2s 1;
+}
+
+@keyframes hud-pulse-ring {
+  from { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+  to { box-shadow: 0 0 0 18px rgba(245, 158, 11, 0); }
+}
+.animate-hud-pulse { animation: hud-pulse-ring 0.5s ease-out 1; }
+
+@keyframes hud-float-up {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-28px); }
+}
+.animate-hud-float { animation: hud-float-up 0.9s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hud-power-on,
+  .animate-hud-charge,
+  .animate-hud-pulse,
+  .animate-hud-float,
+  .animate-tier-glow {
+    animation: none;
+  }
 }
 
 @keyframes tier-glow {

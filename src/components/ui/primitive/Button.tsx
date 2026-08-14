@@ -19,10 +19,15 @@ type Variant =
   | 'dashed'
 type Size = 'sm' | 'md' | 'lg'
 
+/**
+ * HUD grammar (Reforge): amber = action (primary + success both act — one
+ * loud color for "do the thing"), cyan = system/secondary. Reference:
+ * docs/superpowers/prototypes/2026-08-14-reforge/variant-b.html
+ */
 const VARIANT_CLASS: Record<Variant, string> = {
   primary: 'bg-accent text-background hover:bg-accent-muted',
-  success: 'bg-primary text-background hover:bg-primary-muted',
-  secondary: 'border border-primary text-primary hover:bg-primary-soft',
+  success: 'bg-accent text-background hover:bg-accent-muted',
+  secondary: 'border border-system text-system hover:bg-system-soft',
   ghost: 'text-foreground hover:bg-surface-raised',
   danger: 'bg-danger text-background hover:opacity-90',
   outline: 'border border-border text-foreground hover:bg-surface-raised',
@@ -37,7 +42,7 @@ const SIZE_CLASS: Record<Size, string> = {
 }
 
 const BASE =
-  'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none'
+  'hud-clip-sm inline-flex items-center justify-center gap-2 font-semibold tracking-[0.12em] uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none'
 
 type CommonProps = {
   variant?: Variant

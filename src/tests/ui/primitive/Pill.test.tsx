@@ -81,9 +81,9 @@ describe('Pill', () => {
     expect(el).toHaveClass('h-6')
   })
 
-  it('uses rounded-md (8px per token scale)', () => {
+  it('uses the HUD clipped-corner shape', () => {
     render(<Pill data-testid="p">x</Pill>)
-    expect(screen.getByTestId('p')).toHaveClass('rounded-md')
+    expect(screen.getByTestId('p')).toHaveClass('hud-clip-sm')
   })
 
   it('merges user className via cn()', () => {

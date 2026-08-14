@@ -12,11 +12,11 @@ type Props = {
 }
 
 const TONE: Record<Tone, string> = {
-  primary: '#10b981',
-  success: '#10b981',
+  primary: '#34d399',
+  success: '#34d399',
   warn: '#f59e0b',
   danger: '#ef4444',
-  muted: '#9ca3af',
+  muted: '#7c8da6',
 }
 
 export function Sparkline({

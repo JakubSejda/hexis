@@ -66,7 +66,7 @@ describe('Heading', () => {
     expect(el).toHaveClass('font-semibold')
   })
 
-  it('display variant applies text-3xl font-semibold tracking-tight regardless of level', () => {
+  it('display variant applies HUD display treatment regardless of level', () => {
     render(
       <Heading level={1} variant="display" data-testid="h">
         Hero
@@ -74,7 +74,7 @@ describe('Heading', () => {
     )
     const el = screen.getByTestId('h')
     expect(el).toHaveClass('text-3xl')
-    expect(el).toHaveClass('font-semibold')
+    expect(el).toHaveClass('font-black')
     expect(el).toHaveClass('tracking-tight')
   })
 

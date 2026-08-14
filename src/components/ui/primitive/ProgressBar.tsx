@@ -13,11 +13,11 @@ type Props = {
 }
 
 const TONE: Record<Tone, string> = {
-  primary: '#10b981',
-  success: '#10b981',
+  primary: '#34d399',
+  success: '#34d399',
   warn: '#f59e0b',
   danger: '#ef4444',
-  muted: '#6b7280',
+  muted: '#7c8da6',
 }
 
 const XP_COLOR = '#f59e0b'
@@ -35,7 +35,7 @@ export function ProgressBar({
   const fillColor = variant === 'xp' ? XP_COLOR : TONE[tone]
   return (
     <div
-      className={cn('bg-border overflow-hidden rounded-full', className)}
+      className={cn('bg-border hud-clip-sm overflow-hidden', className)}
       style={{ height }}
       role="progressbar"
       aria-valuenow={value ?? undefined}
@@ -43,10 +43,10 @@ export function ProgressBar({
     >
       <div
         className={cn(
-          'h-full rounded-full transition-[width] duration-200',
+          'animate-hud-charge h-full transition-[width] duration-200',
           variant === 'xp' && XP_GLOW
         )}
-        style={{ width: `${pct}%`, background: fillColor }}
+        style={{ width: `${pct}%`, backgroundColor: fillColor }}
       />
     </div>
   )
