@@ -67,6 +67,11 @@ jobs:
       - name: Migrate dev schema
         run: npm run db:migrate
 
+      # heatmap/muscle-rank/volume-progress integration tests expect the
+      # seeded muscle_groups + exercises catalog in the dev schema.
+      - name: Seed dev schema
+        run: npm run db:seed
+
       - name: Migrate test schema
         run: DATABASE_URL="$TEST_DATABASE_URL" npm run db:migrate
 
