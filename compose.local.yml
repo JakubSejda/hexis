@@ -1,0 +1,6 @@
+# Local dress-rehearsal override: expose the app directly (no Caddy/TLS).
+# Usage: docker compose -f compose.prod.yml -f compose.local.yml --env-file .env.production up -d --build app mysql
+services:
+  app:
+    ports:
+      - '3005:3000'
