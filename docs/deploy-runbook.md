@@ -73,9 +73,26 @@ Photos: `uploads` volume — add a second cron line if photos matter:
 
 Restore drill (do it once before inviting people): `gunzip < backup.sql.gz | docker compose ... exec -T mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" hexis`.
 
-## 6. Troubleshooting
+## 6. Local dress rehearsal (no VPS needed)
+
+The whole production stack can be exercised locally — this is how the
+`AUTH_TRUST_HOST` requirement was caught before ever touching a server:
+
+```bash
+cp .env.production.example .env.production   # fill local values; NEXTAUTH_URL=http://localhost:3005
+docker compose -f compose.prod.yml -f compose.local.yml --env-file .env.production -p hexis-prod up -d --build app mysql
+docker compose -f compose.prod.yml -f compose.local.yml --env-file .env.production -p hexis-prod --profile tools run --rm migrate
+docker compose -f compose.prod.yml -f compose.local.yml --env-file .env.production -p hexis-prod --profile tools run --rm migrate npm run db:seed
+docker compose -f compose.prod.yml -f compose.local.yml --env-file .env.production -p hexis-prod --profile tools run --rm seed-users you@example.com
+# → http://localhost:3005 ; tear down: docker compose -p hexis-prod down -v
+```
+
+`compose.local.yml` only publishes the app port directly (Caddy/TLS stays out of the local run).
+
+## 7. Troubleshooting
 
 - **Caddy has no cert** → A record not propagated or port 80 blocked; `docker compose ... logs caddy`.
 - **App 500s with CSS parse error** → the Tailwind source-scan time-bomb (see memory/globals.css `@source not` comments): a stray un-ignored file with class-like strings.
 - **Login fails with CredentialsSignin after update** → migrations not applied (drizzle selects a missing column) — run the migrate one-off.
+- **Every auth request 500s with `UntrustedHost`** → `AUTH_TRUST_HOST=true` missing from `.env.production` (required behind the Caddy proxy).
 - **Logs**: `docker compose -f compose.prod.yml logs -f app`.
