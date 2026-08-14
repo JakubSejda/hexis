@@ -11,7 +11,7 @@ const DEFAULT_LEVEL_CLASS: Record<Level, string> = {
   3: 'text-base font-semibold',
 }
 
-const DISPLAY_CLASS = 'text-3xl font-semibold tracking-tight'
+const DISPLAY_CLASS = 'text-3xl font-black tracking-tight uppercase italic -skew-x-3'
 const REGION_CLASS = 'font-mono text-xs uppercase tracking-[0.2em] text-muted'
 
 export type HeadingProps = {

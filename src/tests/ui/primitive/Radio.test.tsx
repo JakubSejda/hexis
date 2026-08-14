@@ -14,7 +14,7 @@ describe('Radio', () => {
       </>
     )
     const weekly = screen.getByRole('radio', { name: 'Weekly' })
-    expect(weekly).toHaveClass('accent-accent')
+    expect(weekly).toHaveClass('peer')
     await userEvent.click(weekly)
     expect(onChange).toHaveBeenCalled()
   })

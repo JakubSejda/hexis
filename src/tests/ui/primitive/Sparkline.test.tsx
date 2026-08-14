@@ -19,12 +19,12 @@ describe('Sparkline', () => {
   it('uses muted tone color by default', () => {
     const { container } = render(<Sparkline values={[1, 2, 3]} />)
     const path = container.querySelector('path')
-    expect(path?.getAttribute('stroke')).toBe('#9ca3af')
+    expect(path?.getAttribute('stroke')).toBe('#7c8da6')
   })
 
   it('maps tone="primary" to emerald', () => {
     const { container } = render(<Sparkline values={[1, 2, 3]} tone="primary" />)
-    expect(container.querySelector('path')?.getAttribute('stroke')).toBe('#10b981')
+    expect(container.querySelector('path')?.getAttribute('stroke')).toBe('#34d399')
   })
 
   it('maps tone="danger" to red', () => {
@@ -35,7 +35,7 @@ describe('Sparkline', () => {
   it('renders end dot using the same tone by default', () => {
     const { container } = render(<Sparkline values={[1, 2, 3]} tone="primary" />)
     const circle = container.querySelector('circle')
-    expect(circle?.getAttribute('fill')).toBe('#10b981')
+    expect(circle?.getAttribute('fill')).toBe('#34d399')
   })
 
   it('omits end dot when showEndDot=false', () => {

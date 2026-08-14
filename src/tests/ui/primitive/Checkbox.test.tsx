@@ -9,7 +9,7 @@ describe('Checkbox', () => {
     const onChange = vi.fn()
     render(<Checkbox label="Ranní protein" checked={false} onChange={onChange} />)
     const el = screen.getByRole('checkbox', { name: 'Ranní protein' })
-    expect(el).toHaveClass('accent-accent')
+    expect(el).toHaveClass('peer')
     await userEvent.click(el)
     expect(onChange).toHaveBeenCalledOnce()
   })
