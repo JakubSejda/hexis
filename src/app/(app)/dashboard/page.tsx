@@ -1,7 +1,7 @@
 import { and, desc, eq, isNull } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { db } from '@/db/client'
-import { sessions, plans } from '@/db/schema'
+import { sessions, plans, users } from '@/db/schema'
 import { requireSessionUser } from '@/lib/auth-helpers'
 import { redirect } from 'next/navigation'
 import { fetchActiveHabitsWithStreak } from '@/lib/queries/habits'
@@ -44,6 +44,12 @@ import { resolveWeekPeek } from '@/lib/week-peek'
 export default async function DashboardPage() {
   const user = await requireSessionUser()
   if (user instanceof Response) redirect('/login')
+
+  const [userRow] = await db
+    .select({ onboardedAt: users.onboardedAt })
+    .from(users)
+    .where(eq(users.id, user.id))
+  if (userRow && !userRow.onboardedAt) redirect('/onboarding')
 
   await checkAndFinishStaleSessions(user.id, db)
 
