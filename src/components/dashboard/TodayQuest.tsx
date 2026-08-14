@@ -15,7 +15,7 @@ export function TodayQuest({ quest }: { quest: Quest }) {
     return (
       <Link
         href={`/training/${quest.sessionId}`}
-        className="bg-accent/10 hover:bg-accent/15 border-accent/40 block rounded-xl border p-4 transition-colors"
+        className="bg-accent/15 hover:bg-accent/25 border-accent/40 block rounded-xl border p-4 shadow-md transition-all hover:shadow-lg"
       >
         <Label />
         <div className="text-foreground mt-1 text-xl font-bold">▶ Pokračuj v {quest.planName}</div>
@@ -37,7 +37,7 @@ export function TodayQuest({ quest }: { quest: Quest }) {
 
   if (quest.kind === 'rest') {
     return (
-      <div className="bg-surface-raised border-border rounded-xl border p-4">
+      <div className="bg-surface-raised border-border rounded-xl border p-4 shadow-md">
         <Label />
         <div className="text-muted mt-1 text-xl font-bold">Rest day</div>
         <div className="text-muted mt-1 text-xs">
@@ -51,7 +51,7 @@ export function TodayQuest({ quest }: { quest: Quest }) {
     return (
       <Link
         href="/training"
-        className="bg-accent/10 hover:bg-accent/15 border-accent/40 block rounded-xl border p-4 transition-colors"
+        className="bg-accent/15 hover:bg-accent/25 border-accent/40 block rounded-xl border p-4 shadow-md transition-all hover:shadow-lg"
       >
         <Label />
         <div className="text-foreground mt-1 text-xl font-bold">▶ {quest.planName}</div>
@@ -64,7 +64,7 @@ export function TodayQuest({ quest }: { quest: Quest }) {
   return (
     <Link
       href="/training"
-      className="bg-accent/10 hover:bg-accent/15 border-accent/40 block rounded-xl border p-4 transition-colors"
+      className="bg-accent/15 hover:bg-accent/25 border-accent/40 block rounded-xl border p-4 shadow-md transition-all hover:shadow-lg"
     >
       <Label />
       <div className="text-foreground mt-1 text-xl font-bold">Začni svojí cestu</div>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { AREA_META } from './area-meta'
 import { useActiveArea } from './use-active-area'
-import { Menu } from '@/components/ui'
+import { Menu, Pill } from '@/components/ui'
 
 type Props = {
   streak: number
@@ -29,9 +29,9 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
       </div>
       <div className="flex items-center gap-3">
         {streak > 0 && (
-          <span className="text-muted hidden text-xs md:inline">
-            <span className="text-accent font-semibold">{streak}</span> day streak
-          </span>
+          <Pill variant="warning" size="sm" className="hidden md:inline-flex">
+            {streak} day streak
+          </Pill>
         )}
         <Menu.Root>
           <Menu.Trigger

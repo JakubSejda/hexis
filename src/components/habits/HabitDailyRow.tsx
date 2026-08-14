@@ -37,7 +37,7 @@ export function HabitDailyRow({ habit, onCheck, onUncheck }: Props) {
     >
       <Checkbox checked={habit.completedToday} onChange={handleClick} aria-label={habit.name} />
       <span className="text-foreground flex-1 truncate text-sm font-medium">{habit.name}</span>
-      <span className="text-muted-foreground rounded-full bg-black/5 px-2 py-0.5 text-xs">
+      <span className="text-muted bg-surface-raised rounded-full px-2 py-0.5 text-xs">
         {WEIGHT_LABEL[habit.weight]}
       </span>
       <span data-streak-count className="text-foreground text-xs tabular-nums">
