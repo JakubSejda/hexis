@@ -43,7 +43,7 @@ export function TransformationStrip({ photos }: Props) {
   return (
     <div className="flex flex-col gap-3">
       {showThenNow ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <PhotoTile label="THEN" photo={first} />
           <PhotoTile label="NOW" photo={last} />
         </div>
