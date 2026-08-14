@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Card } from '@/components/ui'
 
 type Props = {
   heightCm: number | null
@@ -35,13 +36,12 @@ export function VitalsStrip({ heightCm, age, gender, weightKg }: Props) {
   const grid = (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {slots.map((s) => (
-        <div
-          key={s.label}
-          className={`border-border bg-surface rounded-lg border p-3 ${s.empty ? 'opacity-60' : ''}`}
-        >
-          <div className="text-muted text-xs tracking-[0.2em] uppercase">{s.label}</div>
-          <div className="text-foreground mt-1 text-lg font-semibold">{s.value}</div>
-        </div>
+        <Card key={s.label} padding="sm" className={s.empty ? 'opacity-60' : undefined}>
+          <div className="text-muted font-mono text-[11px] tracking-[0.2em] uppercase">
+            {s.label}
+          </div>
+          <div className="text-foreground mt-1 font-mono text-lg font-bold">{s.value}</div>
+        </Card>
       ))}
     </div>
   )

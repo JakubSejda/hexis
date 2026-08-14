@@ -1,3 +1,4 @@
+import { Card } from '@/components/ui'
 import type { DailyXp } from '@/lib/queries/xp-history'
 
 type Props = { daily: DailyXp[]; days: number }
@@ -35,8 +36,10 @@ export function XpHistoryChart({ daily, days }: Props) {
   const barW = width / days - 1
 
   return (
-    <div className="border-border bg-surface rounded-lg border p-4">
-      <h2 className="text-foreground mb-3 text-sm font-semibold">XP za {days} dní</h2>
+    <Card>
+      <h2 className="text-muted mb-3 font-mono text-xs tracking-[0.2em] uppercase">
+        XP za {days} dní
+      </h2>
       <svg
         width={width}
         height={height}
@@ -58,9 +61,9 @@ export function XpHistoryChart({ daily, days }: Props) {
           )
         })}
       </svg>
-      <div className="text-muted mt-2 text-xs">
+      <div className="text-muted mt-2 font-mono text-xs">
         Celkem: {cells.reduce((a, c) => a + c.totalXp, 0).toLocaleString('cs-CZ')} XP
       </div>
-    </div>
+    </Card>
   )
 }

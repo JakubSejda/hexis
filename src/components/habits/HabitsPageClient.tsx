@@ -136,7 +136,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
 
       {daily.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-muted text-xs tracking-[0.2em] uppercase">Daily</h2>
+          <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Daily</h2>
           <div className="space-y-2">
             {daily.map((h) => (
               <HabitDailyRow
@@ -153,7 +153,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
 
       {weekly.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-muted text-xs tracking-[0.2em] uppercase">Weekly</h2>
+          <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Weekly</h2>
           <div className="space-y-2">
             {weekly.map((h) => (
               <HabitWeeklyRow
@@ -179,7 +179,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
           <button
             type="button"
             onClick={() => setArchiveOpen((s) => !s)}
-            className="text-muted flex w-full items-center justify-between text-xs tracking-[0.2em] uppercase"
+            className="text-muted flex w-full items-center justify-between font-mono text-xs tracking-[0.2em] uppercase"
           >
             <span>Archive ({initialArchived.length})</span>
             <span>{archiveOpen ? '▲' : '▼'}</span>
@@ -187,13 +187,11 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
           {archiveOpen && (
             <div className="space-y-2 opacity-60">
               {initialArchived.map((h) => (
-                <div
-                  key={h.id}
-                  data-archived-row
-                  className="border-border bg-surface flex items-center gap-3 rounded-lg border px-3 py-2.5"
-                >
-                  <span className="flex-1 text-sm">{h.name}</span>
-                  <span className="text-muted text-xs">🔥 {h.currentStreak}</span>
+                <div key={h.id} data-archived-row className="hud-clip-sm bg-border p-px">
+                  <div className="hud-clip-sm bg-surface flex items-center gap-3 px-3 py-2.5">
+                    <span className="flex-1 text-sm">{h.name}</span>
+                    <span className="text-muted font-mono text-xs">🔥 {h.currentStreak}</span>
+                  </div>
                 </div>
               ))}
             </div>

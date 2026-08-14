@@ -12,10 +12,12 @@ export function RedemptionList({ history, onDelete }: Props) {
     return <p className="text-muted text-sm">Zatím žádná vyzvednutí.</p>
   }
   return (
-    <div className="border-border bg-surface rounded-xl border px-3">
-      {history.map((r) => (
-        <RedemptionRow key={r.id} redemption={r} onDelete={onDelete} />
-      ))}
+    <div className="hud-clip bg-border p-px">
+      <div className="hud-clip bg-surface px-3">
+        {history.map((r) => (
+          <RedemptionRow key={r.id} redemption={r} onDelete={onDelete} />
+        ))}
+      </div>
     </div>
   )
 }

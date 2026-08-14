@@ -5,7 +5,7 @@ import { fetchMuscleVolumesLast8Weeks } from '@/lib/queries/muscle-rank'
 import { MUSCLE_GROUPS } from '@/db/seed/muscle-groups'
 import { volumeToRank, type Rank, RANK_COLORS } from '@/lib/muscle-rank'
 import { MuscleRank } from './MuscleRank'
-import { Button } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
 
 type RankSummary =
   | { kind: 'empty' }
@@ -66,14 +66,16 @@ export async function MuscleRankSection({ userId }: Props) {
 
   if (summary.kind === 'empty') {
     return (
-      <div className="border-border bg-surface flex flex-col items-center gap-3 rounded-xl border p-6 text-center">
-        <p className="text-foreground text-sm">
-          Začni trénovat, rank se ti vykreslí po prvních pár tréninzích.
-        </p>
-        <Button as="a" href="/training" variant="primary" size="sm">
-          Spustit trénink
-        </Button>
-      </div>
+      <Card padding="lg">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="text-foreground text-sm">
+            Začni trénovat, rank se ti vykreslí po prvních pár tréninzích.
+          </p>
+          <Button as="a" href="/training" variant="primary" size="sm">
+            Spustit trénink
+          </Button>
+        </div>
+      </Card>
     )
   }
 
@@ -85,8 +87,8 @@ export async function MuscleRankSection({ userId }: Props) {
       <div className="text-muted text-center text-xs">
         {(['S', 'A', 'B', 'C', 'D'] as const).map((r) => `${summary.counts[r]}× ${r}`).join(' · ')}
       </div>
-      <div className="border-border bg-surface rounded-xl border p-4">
-        <h4 className="text-foreground mb-2 text-xs font-medium tracking-wider uppercase">Doplň</h4>
+      <Card>
+        <h4 className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">Doplň</h4>
         <ul className="space-y-1">
           {summary.weakest3.map(({ slug, name, rank }) => (
             <li key={slug} className="flex items-center justify-between text-sm">
@@ -97,7 +99,7 @@ export async function MuscleRankSection({ userId }: Props) {
             </li>
           ))}
         </ul>
-      </div>
+      </Card>
     </div>
   )
 }

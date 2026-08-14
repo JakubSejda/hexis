@@ -17,7 +17,7 @@ export function CalendarCell({ day }: Props) {
   const baseClasses = [
     'relative',
     'aspect-square',
-    'rounded-md',
+    'hud-clip-sm',
     'border',
     'border-border',
     'bg-surface',
@@ -27,9 +27,9 @@ export function CalendarCell({ day }: Props) {
     'justify-between',
     'p-1',
   ]
-  if (day.isToday) baseClasses.push('ring-2', 'ring-accent')
   if (day.inStreak) baseClasses.push('bg-accent/10', 'border-accent/40')
   if (day.forecastPlanName) baseClasses.push('border-dashed', 'border-accent/60')
+  if (day.isToday) baseClasses.push('border-2', 'border-system')
   if (isDimmed) baseClasses.push('opacity-30')
 
   return (

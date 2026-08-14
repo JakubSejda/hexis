@@ -14,7 +14,7 @@ type Props = {
 
 export function TimeRangePicker({ value, onChange }: Props) {
   return (
-    <div role="tablist" className="bg-surface flex gap-1 rounded-lg p-1">
+    <div role="tablist" className="hud-clip-sm bg-surface flex gap-1 p-1">
       {OPTIONS.map((o) => (
         <button
           key={o.value}
@@ -22,9 +22,9 @@ export function TimeRangePicker({ value, onChange }: Props) {
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={
-            'flex-1 rounded-md px-3 py-1.5 text-center text-sm transition-colors ' +
+            'hud-clip-sm flex-1 px-3 py-1.5 text-center font-mono text-sm transition-colors ' +
             (value === o.value
-              ? 'bg-primary text-background font-semibold'
+              ? 'bg-system text-background font-semibold'
               : 'text-muted hover:text-foreground')
           }
         >

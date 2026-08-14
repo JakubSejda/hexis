@@ -1,4 +1,4 @@
-import { DataTable, type DataTableColumn } from '@/components/ui'
+import { Card, DataTable, type DataTableColumn } from '@/components/ui'
 import type { XpHistory } from '@/lib/queries/xp-history'
 
 const LABELS: Record<string, string> = {
@@ -47,14 +47,16 @@ export function XpBreakdown({ byEventTotal, total }: Props) {
   ]
 
   return (
-    <div className="border-border bg-surface rounded-lg border p-4">
-      <h2 className="text-foreground mb-3 text-sm font-semibold">Rozpis podle aktivity</h2>
+    <Card>
+      <h2 className="text-muted mb-3 font-mono text-xs tracking-[0.2em] uppercase">
+        Rozpis podle aktivity
+      </h2>
       <DataTable
         columns={columns}
         data={rows}
         getRowKey={(r) => r.event}
         empty={<span>Zatím žádná aktivita.</span>}
       />
-    </div>
+    </Card>
   )
 }

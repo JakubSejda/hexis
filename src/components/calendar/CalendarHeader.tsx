@@ -30,14 +30,16 @@ export function CalendarHeader({ ym, currentYm }: Props) {
       <Link
         href={`/calendar?ym=${prev}`}
         aria-label="Předchozí měsíc"
-        className="border-border text-muted hover:border-accent flex h-11 w-11 items-center justify-center rounded-md border"
+        className="hud-clip-sm bg-surface-raised text-muted hover:text-system flex h-11 w-11 items-center justify-center transition-colors"
       >
         <ChevronLeft className="h-4 w-4" aria-hidden />
       </Link>
       <div className="flex flex-col items-center gap-1">
-        <h1 className="text-foreground text-lg font-bold capitalize">{label}</h1>
+        <h1 className="text-foreground text-lg font-black tracking-tight uppercase italic">
+          {label}
+        </h1>
         {!onCurrent && (
-          <Link href="/calendar" className="text-muted hover:text-accent text-xs">
+          <Link href="/calendar" className="text-muted hover:text-system text-xs">
             Dnes
           </Link>
         )}
@@ -45,7 +47,7 @@ export function CalendarHeader({ ym, currentYm }: Props) {
       <Link
         href={`/calendar?ym=${next}`}
         aria-label="Další měsíc"
-        className="border-border text-muted hover:border-accent flex h-11 w-11 items-center justify-center rounded-md border"
+        className="hud-clip-sm bg-surface-raised text-muted hover:text-system flex h-11 w-11 items-center justify-center transition-colors"
       >
         <ChevronRight className="h-4 w-4" aria-hidden />
       </Link>

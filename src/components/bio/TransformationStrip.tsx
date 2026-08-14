@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Card } from '@/components/ui'
 import { Lightbox } from '@/components/photos/Lightbox'
 
 type Photo = {
@@ -26,13 +27,12 @@ export function TransformationStrip({ photos }: Props) {
 
   if (photos.length === 0) {
     return (
-      <Link
-        href="/progress"
-        className="border-border bg-surface text-muted hover:border-accent flex items-center justify-between rounded-lg border p-4 transition-colors"
-      >
-        <span>Přidej fotku</span>
-        <span aria-hidden>→</span>
-      </Link>
+      <Card as={Link} href="/progress" variant="interactive" className="block">
+        <div className="text-muted flex items-center justify-between">
+          <span>Přidej fotku</span>
+          <span aria-hidden>→</span>
+        </div>
+      </Card>
     )
   }
 
@@ -48,18 +48,20 @@ export function TransformationStrip({ photos }: Props) {
           <PhotoTile label="NOW" photo={last} />
         </div>
       ) : (
-        <div className="border-border bg-surface flex flex-col items-center gap-2 rounded-lg border p-4">
-          <span className="text-muted text-xs tracking-[0.2em] uppercase">Day 1</span>
-          <Image
-            src={first.thumbUrl}
-            alt={first.takenAt}
-            width={240}
-            height={320}
-            unoptimized
-            className="h-auto w-60 rounded object-cover"
-          />
-          <span className="text-muted text-xs">{fmtDate(first.takenAt)}</span>
-        </div>
+        <Card>
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Day 1</span>
+            <Image
+              src={first.thumbUrl}
+              alt={first.takenAt}
+              width={240}
+              height={320}
+              unoptimized
+              className="h-auto w-60 object-cover"
+            />
+            <span className="text-muted text-xs">{fmtDate(first.takenAt)}</span>
+          </div>
+        </Card>
       )}
 
       <div className="overflow-x-auto">
@@ -104,20 +106,22 @@ export function TransformationStrip({ photos }: Props) {
 
 function PhotoTile({ label, photo }: { label: string; photo: Photo }) {
   return (
-    <div className="border-border bg-surface flex flex-col gap-2 rounded-lg border p-3">
-      <span className="text-muted text-xs tracking-[0.2em] uppercase">{label}</span>
-      <Image
-        src={photo.thumbUrl}
-        alt={`${label} ${photo.takenAt}`}
-        width={240}
-        height={320}
-        unoptimized
-        className="h-auto w-full rounded object-cover"
-      />
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-foreground">{fmtDate(photo.takenAt)}</span>
-        {photo.weightKg !== null && <span className="text-muted">{photo.weightKg} kg</span>}
+    <Card padding="sm">
+      <div className="flex flex-col gap-2">
+        <span className="text-muted font-mono text-xs tracking-[0.2em] uppercase">{label}</span>
+        <Image
+          src={photo.thumbUrl}
+          alt={`${label} ${photo.takenAt}`}
+          width={240}
+          height={320}
+          unoptimized
+          className="h-auto w-full object-cover"
+        />
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-foreground">{fmtDate(photo.takenAt)}</span>
+          {photo.weightKg !== null && <span className="text-muted">{photo.weightKg} kg</span>}
+        </div>
       </div>
-    </div>
+    </Card>
   )
 }

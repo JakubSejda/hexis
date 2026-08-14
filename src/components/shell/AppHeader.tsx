@@ -19,13 +19,15 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
   return (
     <header className="border-border bg-surface-sunken flex h-14 items-center justify-between border-b px-4 pt-[env(safe-area-inset-top)] md:px-6">
       <div className="flex items-center gap-3">
-        <span className="text-muted hidden text-xs tracking-[0.25em] uppercase md:inline">
+        <span className="text-muted hidden font-mono text-xs tracking-[0.25em] uppercase md:inline">
           Life
         </span>
-        <span aria-hidden="true" className="text-muted hidden text-xs md:inline">
+        <span aria-hidden="true" className="text-muted hidden font-mono text-xs md:inline">
           ·
         </span>
-        <span className="text-accent text-xs font-medium tracking-[0.25em] uppercase">{label}</span>
+        <span className="text-accent font-mono text-xs font-medium tracking-[0.25em] uppercase">
+          {label}
+        </span>
       </div>
       <div className="flex items-center gap-3">
         {streak > 0 && (

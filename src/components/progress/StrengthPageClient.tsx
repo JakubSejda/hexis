@@ -81,7 +81,9 @@ export function StrengthPageClient() {
       <StagnationList items={stagnation} />
 
       <section>
-        <h2 className="text-foreground mb-2 text-base font-semibold">Estimated 1RM</h2>
+        <h2 className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">
+          Estimated 1RM
+        </h2>
         <ExercisePicker exercises={exercises} value={selectedExId} onChange={setSelectedExId} />
         <div className="mt-2">
           {loading ? <Skeleton shape="block" /> : <OneRmChart data={strengthData} />}
@@ -89,7 +91,9 @@ export function StrengthPageClient() {
       </section>
 
       <section>
-        <h2 className="text-foreground mb-2 text-base font-semibold">Objem per svalovou skupinu</h2>
+        <h2 className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">
+          Objem per svalovou skupinu
+        </h2>
         {loading ? <Skeleton shape="block" /> : <VolumeChart data={volumeData} />}
       </section>
     </Stack>

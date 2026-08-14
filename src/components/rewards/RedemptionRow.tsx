@@ -11,7 +11,9 @@ type Props = {
 export function RedemptionRow({ redemption, onDelete }: Props) {
   return (
     <div className="border-border flex items-center gap-3 border-b py-2 text-sm last:border-0">
-      <span className="text-muted w-12 shrink-0 text-xs">{fmt.format(redemption.redeemedAt)}</span>
+      <span className="text-muted w-12 shrink-0 font-mono text-xs">
+        {fmt.format(redemption.redeemedAt)}
+      </span>
       <span
         className={
           'min-w-0 flex-1 truncate ' + (redemption.rewardArchived ? 'text-muted italic' : '')
@@ -20,11 +22,11 @@ export function RedemptionRow({ redemption, onDelete }: Props) {
         {redemption.rewardName}
         {redemption.note && <span className="text-muted ml-2 text-xs">· {redemption.note}</span>}
       </span>
-      <span className="text-accent text-xs font-semibold">−{redemption.costXp} XP</span>
+      <span className="text-accent font-mono text-xs font-semibold">−{redemption.costXp} XP</span>
       <button
         type="button"
         aria-label="Smazat z historie"
-        className="text-muted hover:text-destructive text-xs"
+        className="text-muted hover:text-danger text-xs"
         onClick={() => onDelete(redemption)}
       >
         ×

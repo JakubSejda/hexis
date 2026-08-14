@@ -80,14 +80,14 @@ export function NutritionPageClient({
       <div className="flex items-center justify-between">
         <button
           onClick={() => changeMonth(-1)}
-          className="text-muted flex h-11 w-11 items-center justify-center"
+          className="text-muted hover:text-system flex h-11 w-11 items-center justify-center transition-colors"
           aria-label="Předchozí měsíc"
         >
           <ChevronLeft size={24} aria-hidden />
         </button>
         <button
           onClick={() => changeMonth(1)}
-          className="text-muted flex h-11 w-11 items-center justify-center"
+          className="text-muted hover:text-system flex h-11 w-11 items-center justify-center transition-colors"
           aria-label="Další měsíc"
         >
           <ChevronRight size={24} aria-hidden />

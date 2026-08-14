@@ -102,7 +102,7 @@ export function MeasurementGrid({ initialRows }: Props) {
                 {HEADERS.map((h) => (
                   <th
                     key={h}
-                    className="text-muted px-1.5 py-2 text-right text-xs font-medium first:text-left"
+                    className="text-muted px-1.5 py-2 text-right font-mono text-xs font-medium tracking-[0.2em] uppercase first:text-left"
                   >
                     {h}
                   </th>

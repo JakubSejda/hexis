@@ -24,36 +24,34 @@ export function HabitWeeklyRow({ habit, onCheck }: Props) {
   const pct = Math.min(100, Math.round((habit.completedThisWeek / habit.weeklyTarget) * 100))
 
   return (
-    <div
-      data-habit-row
-      data-habit-id={habit.id}
-      className="border-border bg-surface space-y-2 rounded-lg border px-3 py-2.5"
-    >
-      <div className="flex items-center gap-3">
-        <span className="text-foreground flex-1 truncate text-sm font-medium">{habit.name}</span>
-        <span className="text-muted-foreground rounded-full bg-black/5 px-2 py-0.5 text-xs">
-          {WEIGHT_LABEL[habit.weight]}
-        </span>
-        <span data-streak-count className="text-foreground text-xs tabular-nums">
-          🔥 {habit.currentStreak} t
-        </span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <div className="border-border h-2 flex-1 overflow-hidden rounded-full bg-black/5">
-          <div data-progress-fill className="bg-primary h-full" style={{ width: `${pct}%` }} />
+    <div data-habit-row data-habit-id={habit.id} className="hud-clip-sm bg-border p-px">
+      <div className="hud-clip-sm bg-surface space-y-2 px-3 py-2.5">
+        <div className="flex items-center gap-3">
+          <span className="text-foreground flex-1 truncate text-sm font-medium">{habit.name}</span>
+          <span className="hud-clip-sm text-muted bg-surface-raised px-2 py-0.5 font-mono text-xs">
+            {WEIGHT_LABEL[habit.weight]}
+          </span>
+          <span data-streak-count className="text-foreground font-mono text-xs tabular-nums">
+            🔥 {habit.currentStreak} t
+          </span>
         </div>
-        <span className="text-muted-foreground text-xs tabular-nums">
-          {habit.completedThisWeek}/{habit.weeklyTarget} tento týden
-        </span>
-        <Button
-          size="sm"
-          variant="secondary"
-          disabled={habit.completedToday}
-          onClick={() => onCheck(habit.id)}
-        >
-          Splněno dnes
-        </Button>
+
+        <div className="flex items-center gap-3">
+          <div className="bg-surface-raised h-2 flex-1 overflow-hidden">
+            <div data-progress-fill className="bg-system h-full" style={{ width: `${pct}%` }} />
+          </div>
+          <span className="text-muted font-mono text-xs tabular-nums">
+            {habit.completedThisWeek}/{habit.weeklyTarget} tento týden
+          </span>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={habit.completedToday}
+            onClick={() => onCheck(habit.id)}
+          >
+            Splněno dnes
+          </Button>
+        </div>
       </div>
     </div>
   )
