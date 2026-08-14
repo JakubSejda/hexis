@@ -11,7 +11,7 @@ import {
 } from '@/lib/queries/calendar'
 import { composeCalendarMonth } from '@/lib/calendar/compose'
 import { detectTrainingStreaks } from '@/lib/calendar/streaks'
-import { Container, Stack } from '@/components/ui'
+import { Button, Container, Stack } from '@/components/ui'
 import { CalendarHeader, CalendarGridClient, CalendarLegend } from '@/components/calendar'
 
 export const dynamic = 'force-dynamic'
@@ -95,9 +95,22 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         <CalendarHeader ym={ym} currentYm={currentYm} />
         <CalendarGridClient days={days} />
         {isEmptyUser && (
-          <p className="text-muted text-center text-sm">
-            Začni svoji cestu — první session, habit nebo váha se tu objeví.
-          </p>
+          <div className="space-y-3 text-center">
+            <p className="text-muted text-sm">
+              Začni svoji cestu — první session, habit nebo váha se tu objeví.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button as="a" href="/training" variant="outline" size="sm">
+                Začni trénink
+              </Button>
+              <Button as="a" href="/habits" variant="outline" size="sm">
+                Vytvoř návyk
+              </Button>
+              <Button as="a" href="/progress" variant="outline" size="sm">
+                Zapiš váhu
+              </Button>
+            </div>
+          </div>
         )}
         <CalendarLegend />
       </Stack>

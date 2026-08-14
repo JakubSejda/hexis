@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Tabs } from '@/components/ui'
+import { Skeleton, Tabs } from '@/components/ui'
 import { PhotoGrid } from './PhotoGrid'
 import { PhotoTimeline } from './PhotoTimeline'
 import { BeforeAfter } from './BeforeAfter'
@@ -72,7 +72,11 @@ export function PhotosPageClient() {
           <Tabs.Trigger value="compare">Před×Po</Tabs.Trigger>
         </Tabs.List>
         {loading ? (
-          <p className="text-muted py-8 text-center text-sm">Načítám...</p>
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} shape="card" />
+            ))}
+          </div>
         ) : (
           <>
             <Tabs.Content value="grid">

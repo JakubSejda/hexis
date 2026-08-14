@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Stack } from '@/components/ui'
+import { Skeleton, Stack } from '@/components/ui'
 import { TimeRangePicker } from './TimeRangePicker'
 import { ExercisePicker } from './ExercisePicker'
 import { OneRmChart } from './OneRmChart'
@@ -84,21 +84,13 @@ export function StrengthPageClient() {
         <h2 className="text-foreground mb-2 text-base font-semibold">Estimated 1RM</h2>
         <ExercisePicker exercises={exercises} value={selectedExId} onChange={setSelectedExId} />
         <div className="mt-2">
-          {loading ? (
-            <p className="text-muted py-8 text-center text-sm">Načítám...</p>
-          ) : (
-            <OneRmChart data={strengthData} />
-          )}
+          {loading ? <Skeleton shape="block" /> : <OneRmChart data={strengthData} />}
         </div>
       </section>
 
       <section>
         <h2 className="text-foreground mb-2 text-base font-semibold">Objem per svalovou skupinu</h2>
-        {loading ? (
-          <p className="text-muted py-8 text-center text-sm">Načítám...</p>
-        ) : (
-          <VolumeChart data={volumeData} />
-        )}
+        {loading ? <Skeleton shape="block" /> : <VolumeChart data={volumeData} />}
       </section>
     </Stack>
   )

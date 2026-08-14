@@ -95,11 +95,13 @@ export function RewardsPageClient({
     <div className="space-y-6">
       <BalanceCard balance={initialBalance} />
 
-      <div className="flex justify-end">
-        <Button variant="primary" onClick={() => setCreating(true)}>
-          + Nová odměna
-        </Button>
-      </div>
+      {initialRewards.length > 0 && (
+        <div className="flex justify-end">
+          <Button variant="primary" onClick={() => setCreating(true)}>
+            + Nová odměna
+          </Button>
+        </div>
+      )}
 
       <section className="space-y-3">
         <RegionHeader>Tvoje odměny</RegionHeader>

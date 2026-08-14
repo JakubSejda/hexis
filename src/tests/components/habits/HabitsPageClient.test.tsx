@@ -40,10 +40,10 @@ const dailyHabit = {
 }
 
 describe('HabitsPageClient — empty state', () => {
-  it('renders empty CTA when no active habits', () => {
+  it('renders empty CTA when no active habits (gesture hint moved to list view)', () => {
     render(<HabitsPageClient initialHabits={[]} initialArchived={[]} />)
     expect(screen.getByText(/založ první návyk/i)).toBeInTheDocument()
-    expect(screen.getByText(/tap = check, drž = vrátit zpět/i)).toBeInTheDocument()
+    expect(screen.queryByText(/tap = check, drž = vrátit zpět/i)).toBeNull()
   })
 })
 
