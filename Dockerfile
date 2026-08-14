@@ -22,6 +22,10 @@ ENV DATABASE_URL="mysql://build:build@localhost:3306/build" \
     AUTH_SECRET="build-time-placeholder" \
     NEXTAUTH_URL="http://localhost:3000" \
     NEXT_TELEMETRY_DISABLED=1
+# Client-side Sentry DSN is inlined into the browser bundle at build time
+# (NEXT_PUBLIC_*). Passed through compose build args; empty = Sentry off.
+ARG NEXT_PUBLIC_SENTRY_DSN=""
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 RUN npm run build
 
 FROM node:25-slim AS runner
