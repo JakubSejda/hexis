@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hexis — Tichá hra</title>
+<style>
+/* ============================================================
+   HEXIS · VARIANT A — „TICHÁ HRA"
+   Premium game-menu restraint. One loud thing: the Tier Emblem.
+   ============================================================ */
+
+:root{
+  --bg:        #0C0A09;
+  --bg-deep:   #080606;
+  --bone:      #F5F1E8;
+  --stone:     #8A8577;
+  --stone-dim: #57534A;
+  --ember:     #F59E0B;
+  --ember-deep:#7C2D12;
+  --gold:      #C9A227;
+  --hairline:  rgba(245,241,232,.10);
+  --hairline-soft: rgba(245,241,232,.06);
+  --display: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  font-family: var(--display);
+  color: var(--bone);
+  background:
+    radial-gradient(120% 55% at 50% -8%, rgba(124,45,18,.34), transparent 62%),
+    radial-gradient(90% 70% at 50% 115%, rgba(124,45,18,.14), transparent 60%),
+    var(--bg-deep);
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  line-height:1.45;
+}
+
+button{
+  font: inherit;
+  color: inherit;
+  background:none;
+  border:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible{
+  outline:1px solid var(--ember);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+/* ---------- App column ---------- */
+
+.app{
+  width:100%;
+  max-width:420px;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  background:
+    radial-gradient(140% 42% at 50% 0%, rgba(245,158,11,.05), transparent 70%),
+    var(--bg);
+  box-shadow: inset 0 0 120px rgba(0,0,0,.55);
+}
+@media (min-width: 421px){
+  .app{
+    border-left:1px solid var(--hairline-soft);
+    border-right:1px solid var(--hairline-soft);
+  }
+}
+
+.screen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding: 20px 24px calc(96px + env(safe-area-inset-bottom));
+}
+.screen[hidden]{ display:none; }
+
+/* ---------- Shared vocabulary ---------- */
+
+.label{
+  font-size:.625rem;
+  font-weight:700;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color: var(--stone);
+}
+
+.mono{ font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.rule-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.rule-head::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background: linear-gradient(90deg, var(--hairline), transparent);
+}
+
+/* Reveal choreography — elements fade up, staggered by --i */
+[data-reveal]{ opacity:1; }
+@media (prefers-reduced-motion: no-preference){
+  .entered [data-reveal]{
+    animation: rise .6s cubic-bezier(.22,1,.36,1) both;
+    animation-delay: calc(var(--i, 0) * 80ms + 350ms);
+  }
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(12px); }
+    to  { opacity:1; transform: translateY(0); }
+  }
+}
+
+/* ============================================================
+   DASHBOARD — save-file crest
+   ============================================================ */
+
+.crest{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding-top:6px;
+}
+
+.crest-date{
+  font-size:.6875rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color: var(--stone);
+  font-weight:600;
+}
+
+/* --- Tier Emblem --- */
+.emblem{
+  margin:18px 0 10px;
+  display:block;
+  overflow:visible;
+}
+.em-outer, .em-mid, .em-core{ fill:none; }
+.em-outer{ stroke: var(--gold); stroke-width:1.5; }
+.em-mid  { stroke: rgba(201,162,39,.42); stroke-width:1; }
+.em-core { stroke: url(#emberEdge); stroke-width:1; fill: rgba(124,45,18,.22); }
+.em-glow { fill:none; stroke: var(--gold); stroke-width:2.5; opacity:.22; }
+.em-tick { stroke: rgba(201,162,39,.5); stroke-width:1; }
+.em-lvl{
+  font-family: var(--display);
+  font-weight:900;
+  font-size:26px;
+  letter-spacing:.06em;
+  fill: var(--gold);
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .entered .em-outer{
+    stroke-dasharray:264; stroke-dashoffset:264;
+    animation: draw 1.1s cubic-bezier(.4,0,.2,1) .1s forwards;
+  }
+  .entered .em-mid{
+    stroke-dasharray:210; stroke-dashoffset:210;
+    animation: draw 1s cubic-bezier(.4,0,.2,1) .35s forwards;
+  }
+  .entered .em-core{
+    opacity:0;
+    animation: emerge .8s ease .75s forwards;
+  }
+  .entered .em-lvl, .entered .em-tick{
+    opacity:0;
+    animation: emerge .7s ease 1s forwards;
+  }
+  .entered .em-glow{
+    animation: breathe 4.5s ease-in-out 1.4s infinite alternate;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes emerge{ to{ opacity:1; } }
+  @keyframes breathe{
+    from{ opacity:.14; } to{ opacity:.42; }
+  }
+}
+
+.crest-level{
+  font-size: clamp(2.4rem, 12vw, 2.9rem);
+  font-weight:900;
+  letter-spacing:-.02em;
+  text-transform:uppercase;
+  line-height:1;
+}
+.crest-tier{
+  margin-top:10px;
+  font-size:.6875rem;
+  font-weight:700;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color: var(--gold);
+  text-indent:.4em; /* optically recentre the tracked text */
+}
+
+/* --- XP bar --- */
+.xp{
+  width:100%;
+  margin-top:22px;
+}
+.xp-track{
+  position:relative;
+  height:3px;
+  background: rgba(245,241,232,.08);
+  overflow:hidden;
+}
+.xp-fill{
+  position:absolute; inset:0 auto 0 0;
+  width:20%;
+  background: linear-gradient(90deg, var(--ember-deep), var(--ember));
+}
+.xp-shine{
+  position:absolute; inset:0 auto 0 0;
+  width:36px;
+  background: linear-gradient(90deg, transparent, rgba(245,241,232,.65), transparent);
+  opacity:0;
+  transform: translateX(-40px);
+}
+@media (prefers-reduced-motion: no-preference){
+  .entered .xp-fill{
+    width:0;
+    animation: xpfill 1.2s cubic-bezier(.16,1,.3,1) .9s forwards;
+  }
+  .entered .xp-shine{
+    animation: shine 1s ease 1.9s forwards;
+  }
+  @keyframes xpfill{ to{ width:20%; } }
+  @keyframes shine{
+    0%  { opacity:0; transform: translateX(-40px); }
+    30% { opacity:.9; }
+    100%{ opacity:0; transform: translateX(420px); }
+  }
+}
+.xp-meta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:8px;
+  font-size:.75rem;
+}
+.xp-meta .have{ color: var(--ember); font-weight:600; }
+.xp-meta .need{ color: var(--stone); }
+
+/* ============================================================
+   DNEŠNÍ QUEST — the call to action
+   ============================================================ */
+
+.quest{
+  margin-top:38px;
+}
+.quest-body{
+  margin-top:18px;
+  padding-left:18px;
+  border-left:2px solid;
+  border-image: linear-gradient(180deg, var(--ember), var(--ember-deep)) 1;
+}
+.quest-title{
+  font-size: clamp(1.35rem, 6.4vw, 1.55rem);
+  font-weight:800;
+  letter-spacing:-.02em;
+  line-height:1.15;
+}
+.quest-title .arrow{ color: var(--ember); margin-right:.35em; }
+.quest-sub{
+  margin-top:6px;
+  font-size:.8125rem;
+  color: var(--stone);
+}
+
+.btn-primary{
+  display:block;
+  width:100%;
+  margin-top:20px;
+  padding:16px 18px;
+  font-size:.8125rem;
+  font-weight:800;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#140A02;
+  background: linear-gradient(135deg, var(--ember) 0%, #C2660E 55%, var(--ember-deep) 130%);
+  border:1px solid rgba(245,158,11,.5);
+  box-shadow:
+    0 0 0 1px rgba(12,10,9,.9),
+    0 10px 30px -12px rgba(245,158,11,.45),
+    inset 0 1px 0 rgba(245,241,232,.35);
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+.btn-primary:active{ transform: translateY(1px) scale(.995); }
+
+/* ============================================================
+   Quiet stat row
+   ============================================================ */
+
+.stats{
+  margin-top:38px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  border-top:1px solid var(--hairline-soft);
+  border-bottom:1px solid var(--hairline-soft);
+}
+.stat{
+  padding:16px 4px;
+  text-align:center;
+}
+.stat + .stat{ border-left:1px solid var(--hairline-soft); }
+.stat-value{
+  font-size:1.0625rem;
+  font-weight:600;
+  color: var(--bone);
+}
+.stat-value small{ font-size:.6875rem; color: var(--stone); font-weight:500; margin-left:2px; }
+.stat-name{
+  margin-top:5px;
+  font-size:.5625rem;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color: var(--stone-dim);
+}
+
+/* ============================================================
+   Návyky
+   ============================================================ */
+
+.habits{ margin-top:38px; }
+
+.habit{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  width:100%;
+  text-align:left;
+  padding:15px 2px;
+}
+.habit + .habit{ border-top:1px solid var(--hairline-soft); }
+.habits .rule-head + .habit{ margin-top:8px; }
+
+.hexbox{
+  flex:none;
+  width:26px; height:29px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(245,241,232,.12);
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+.hexbox::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: var(--bg);
+}
+.hexbox svg{ position:relative; z-index:1; opacity:0; transform:scale(.5); }
+
+.habit.done .hexbox{ background: linear-gradient(160deg, var(--ember), var(--ember-deep)); }
+.habit.done .hexbox::before{ background: linear-gradient(160deg, var(--ember), #9A4A16); }
+.habit.done .hexbox svg{ opacity:1; transform:scale(1); }
+@media (prefers-reduced-motion: no-preference){
+  .hexbox svg{ transition: opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+}
+
+.habit-name{ font-size:.9375rem; font-weight:600; }
+.habit.done .habit-name{ color: var(--stone); }
+.habit-state{
+  margin-top:2px;
+  font-size:.6875rem;
+  letter-spacing:.08em;
+  color: var(--stone-dim);
+}
+.habit.done .habit-state{ color: var(--ember); }
+
+/* ============================================================
+   WORKOUT — active session
+   ============================================================ */
+
+.wo-head{ padding-top:6px; }
+.wo-eyebrow{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+.wo-count{ font-size:.75rem; color: var(--stone); }
+.wo-title{
+  margin-top:10px;
+  font-size: clamp(1.5rem, 7.4vw, 1.8rem);
+  font-weight:900;
+  letter-spacing:-.02em;
+  text-transform:uppercase;
+  line-height:1.08;
+}
+
+.strip{
+  display:flex;
+  gap:4px;
+  margin-top:18px;
+}
+.strip i{
+  flex:1;
+  height:2px;
+  background: rgba(245,241,232,.10);
+}
+.strip i.on{ background: linear-gradient(90deg, var(--ember), var(--ember-deep)); }
+
+/* --- exercise --- */
+.exercise{ margin-top:34px; }
+.ex-name{
+  font-size: clamp(1.6rem, 8vw, 1.9rem);
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+.ex-target{
+  margin-top:4px;
+  font-size:.8125rem;
+  color: var(--stone);
+}
+.ex-suggest{
+  margin-top:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:.75rem;
+  color: var(--stone);
+}
+.ex-suggest b{
+  color: var(--ember);
+  font-weight:600;
+}
+.ex-suggest::before{
+  content:"";
+  width:14px; height:1px;
+  background: var(--ember);
+  opacity:.7;
+}
+
+/* --- steppers --- */
+.loggers{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+}
+.stepper{
+  border:1px solid var(--hairline);
+  background: rgba(245,241,232,.02);
+  padding:10px 6px 8px;
+  text-align:center;
+  box-shadow: inset 0 1px 8px rgba(0,0,0,.35);
+}
+.stepper-label{
+  font-size:.5625rem;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color: var(--stone-dim);
+}
+.stepper-row{
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.step-btn{
+  width:30px; height:34px;
+  display:grid; place-items:center;
+  color: var(--stone);
+  font-family: var(--mono);
+  font-size:1rem;
+  transition: color .15s ease;
+}
+.step-btn:active{ color: var(--ember); }
+.step-value{
+  font-size:1.125rem;
+  font-weight:600;
+  min-width:3ch;
+}
+
+.btn-log{
+  display:block;
+  width:100%;
+  margin-top:16px;
+  padding:15px;
+  position:relative;
+  font-size:.8125rem;
+  font-weight:800;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#140A02;
+  background: linear-gradient(135deg, var(--ember) 0%, #C2660E 55%, var(--ember-deep) 130%);
+  border:1px solid rgba(245,158,11,.5);
+  box-shadow:
+    0 10px 30px -12px rgba(245,158,11,.4),
+    inset 0 1px 0 rgba(245,241,232,.35);
+  transition: transform .12s ease;
+}
+.btn-log:active{ transform: translateY(1px); }
+.btn-log[disabled]{
+  filter:grayscale(.7) brightness(.6);
+  cursor:default;
+}
+
+/* --- set dots --- */
+.setrow{
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+.setrow .dots{ display:flex; gap:8px; }
+.setdot{
+  width:12px; height:14px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: rgba(245,241,232,.12);
+}
+.setdot.on{ background: linear-gradient(160deg, var(--ember), var(--ember-deep)); }
+@media (prefers-reduced-motion: no-preference){
+  .setdot{ transition: background .3s ease; }
+}
+.setrow .caption{ font-size:.6875rem; color: var(--stone-dim); letter-spacing:.1em; }
+
+/* --- floating +XP --- */
+.xp-float{
+  position:absolute;
+  left:50%;
+  top:-6px;
+  transform: translate(-50%, 0);
+  font-family: var(--mono);
+  font-size:.8125rem;
+  font-weight:700;
+  color: var(--ember);
+  text-shadow:0 0 12px rgba(245,158,11,.6);
+  pointer-events:none;
+  opacity:0;
+}
+@media (prefers-reduced-motion: no-preference){
+  .xp-float{ animation: floatxp 1.1s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes floatxp{
+    0%  { opacity:0; transform: translate(-50%, 4px); }
+    15% { opacity:1; }
+    100%{ opacity:0; transform: translate(-50%, -42px); }
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .xp-float{ animation: floatstill 1.1s ease forwards; }
+  @keyframes floatstill{
+    0%,60%{ opacity:1; } 100%{ opacity:0; }
+  }
+}
+
+/* --- rest timer --- */
+.rest{
+  margin-top:36px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.rest-ring{ position:relative; width:148px; height:148px; }
+.rest-ring svg{ display:block; transform: rotate(-90deg); }
+.ring-track{ fill:none; stroke: rgba(245,241,232,.08); stroke-width:2; }
+.ring-arc{
+  fill:none;
+  stroke: url(#ringGrad);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:414;
+  stroke-dashoffset:62;
+}
+@media (prefers-reduced-motion: no-preference){
+  .entered .ring-arc{
+    animation: ringin 1.2s cubic-bezier(.16,1,.3,1) .5s backwards;
+  }
+  @keyframes ringin{ from{ stroke-dashoffset:414; } }
+}
+.rest-time{
+  position:absolute; inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+.rest-time .t{
+  font-size:1.9rem;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+.rest-time .label{ font-size:.5625rem; }
+.btn-skip{
+  margin-top:10px;
+  padding:8px 14px;
+  font-size:.6875rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color: var(--stone);
+  transition: color .15s ease;
+}
+.btn-skip:active{ color: var(--bone); }
+
+/* --- workout footer actions --- */
+.wo-actions{
+  margin-top:auto;
+  padding-top:34px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.btn-ghost{
+  padding:13px 6px;
+  font-size:.625rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  white-space:nowrap;
+  text-transform:uppercase;
+  color: var(--stone);
+}
+.btn-outline{
+  padding:13px 6px;
+  font-size:.625rem;
+  font-weight:700;
+  letter-spacing:.1em;
+  white-space:nowrap;
+  text-transform:uppercase;
+  color: var(--bone);
+  border:1px solid var(--hairline);
+  transition: border-color .2s ease, color .2s ease;
+}
+.btn-outline:active{ border-color: var(--ember); color: var(--ember); }
+
+/* ============================================================
+   Bottom nav
+   ============================================================ */
+
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  max-width:420px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  background: rgba(12,10,9,.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top:1px solid var(--hairline-soft);
+  z-index:10;
+}
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding:6px 2px;
+  color: var(--stone-dim);
+  transition: color .2s ease;
+}
+.nav-item svg{ width:21px; height:21px; }
+.nav-item span{
+  font-size:.5625rem;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.nav-item[aria-current="page"]{ color: var(--ember); }
+.nav-item[aria-current="page"] svg{ filter: drop-shadow(0 0 6px rgba(245,158,11,.5)); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════════════ SCREEN: DASHBOARD ══════════════════ -->
+  <main class="screen entered" id="screen-dashboard" aria-label="Přehled">
+
+    <header class="crest">
+      <p class="crest-date" data-reveal style="--i:0">čtvrtek 14. srpna</p>
+
+      <!-- TIER EMBLEM -->
+      <svg class="emblem" viewBox="0 0 120 120" width="128" height="128" role="img" aria-label="Emblém úrovně: Level 3, Rookie">
+        <defs>
+          <linearGradient id="emberEdge" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#F59E0B"/>
+            <stop offset="1" stop-color="#7C2D12"/>
+          </linearGradient>
+          <filter id="emGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="4"/>
+          </filter>
+        </defs>
+        <polygon class="em-glow" filter="url(#emGlow)"
+          points="60,16 98.1,38 98.1,82 60,104 21.9,82 21.9,38"/>
+        <polygon class="em-outer"
+          points="60,16 98.1,38 98.1,82 60,104 21.9,82 21.9,38"/>
+        <polygon class="em-mid"
+          points="60,25 90.3,42.5 90.3,77.5 60,95 29.7,77.5 29.7,42.5"/>
+        <polygon class="em-core"
+          points="60,34 82.5,47 82.5,73 60,86 37.5,73 37.5,47"/>
+        <line class="em-tick" x1="60" y1="16" x2="60" y2="25"/>
+        <line class="em-tick" x1="60" y1="95" x2="60" y2="104"/>
+        <text class="em-lvl" x="60" y="69" text-anchor="middle">III</text>
+      </svg>
+
+      <h1 class="crest-level" data-reveal style="--i:0">Level 3</h1>
+      <p class="crest-tier" data-reveal style="--i:1">— Rookie —</p>
+
+      <div class="xp" data-reveal style="--i:2">
+        <div class="xp-track">
+          <div class="xp-fill"></div>
+          <div class="xp-shine"></div>
+        </div>
+        <div class="xp-meta mono">
+          <span class="have">100 XP</span>
+          <span class="need">400 do L4</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- DNEŠNÍ QUEST -->
+    <section class="quest" data-reveal style="--i:3">
+      <h2 class="label rule-head">Dnešní quest</h2>
+      <div class="quest-body">
+        <p class="quest-title"><span class="arrow" aria-hidden="true">▸</span>Lower A — Quad důraz</p>
+        <p class="quest-sub"><span class="mono">8</span> cviků · <span class="mono">~45</span> min</p>
+        <button class="btn-primary" type="button" data-goto="workout">Začít quest</button>
+      </div>
+    </section>
+
+    <!-- quiet stats -->
+    <section class="stats" data-reveal style="--i:4" aria-label="Souhrn">
+      <div class="stat">
+        <p class="stat-value mono">4 <small>dny</small></p>
+        <p class="stat-name">Streak</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value mono">500 <small>XP</small></p>
+        <p class="stat-name">K utracení</p>
+      </div>
+      <div class="stat">
+        <p class="stat-value mono">2/4</p>
+        <p class="stat-name">Týden · tréninky</p>
+      </div>
+    </section>
+
+    <!-- návyky -->
+    <section class="habits" data-reveal style="--i:5">
+      <h2 class="label rule-head">Návyky dnes</h2>
+
+      <button class="habit done" type="button" aria-pressed="true">
+        <span class="hexbox" aria-hidden="true">
+          <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+            <path d="M1 4.5 4 7.5 10 1" stroke="#140A02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>
+          <span class="habit-name">Ranní protein</span><br>
+          <span class="habit-state">✓ splněno</span>
+        </span>
+      </button>
+
+      <button class="habit" type="button" id="habit-steps" aria-pressed="false" style="position:relative">
+        <span class="hexbox" aria-hidden="true">
+          <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+            <path d="M1 4.5 4 7.5 10 1" stroke="#140A02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>
+          <span class="habit-name">10k kroků</span><br>
+          <span class="habit-state">klepnutím splnit</span>
+        </span>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════ SCREEN: WORKOUT ══════════════════ -->
+  <main class="screen" id="screen-workout" hidden aria-label="Trénink">
+
+    <header class="wo-head">
+      <div class="wo-eyebrow" data-reveal style="--i:0">
+        <span class="label">Aktivní quest</span>
+        <span class="wo-count mono">Cvik 1 / 8</span>
+      </div>
+      <h1 class="wo-title" data-reveal style="--i:0">Lower A — Quad&nbsp;důraz</h1>
+      <div class="strip" data-reveal style="--i:1" role="img" aria-label="Průběh: 1 z 8 cviků">
+        <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </header>
+
+    <section class="exercise" data-reveal style="--i:2">
+      <h2 class="ex-name">Leg Press</h2>
+      <p class="ex-target">Cíl: <span class="mono">8–12</span> × <span class="mono">4</span> série</p>
+      <p class="ex-suggest">Návrh: <b class="mono">80 kg × 8</b></p>
+
+      <div class="loggers" data-reveal style="--i:3">
+        <div class="stepper">
+          <p class="stepper-label">kg</p>
+          <div class="stepper-row">
+            <button class="step-btn" type="button" data-step="-2.5" data-target="kg" aria-label="Ubrat váhu">−</button>
+            <output class="step-value mono" id="val-kg">80</output>
+            <button class="step-btn" type="button" data-step="2.5" data-target="kg" aria-label="Přidat váhu">+</button>
+          </div>
+        </div>
+        <div class="stepper">
+          <p class="stepper-label">Opak.</p>
+          <div class="stepper-row">
+            <button class="step-btn" type="button" data-step="-1" data-target="reps" aria-label="Ubrat opakování">−</button>
+            <output class="step-value mono" id="val-reps">8</output>
+            <button class="step-btn" type="button" data-step="1" data-target="reps" aria-label="Přidat opakování">+</button>
+          </div>
+        </div>
+        <div class="stepper">
+          <p class="stepper-label">RPE</p>
+          <div class="stepper-row">
+            <button class="step-btn" type="button" data-step="-0.5" data-target="rpe" aria-label="Snížit RPE">−</button>
+            <output class="step-value mono" id="val-rpe">7</output>
+            <button class="step-btn" type="button" data-step="0.5" data-target="rpe" aria-label="Zvýšit RPE">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal style="position:relative; --i:4">
+        <button class="btn-log" type="button" id="btn-log">Zapsat sérii</button>
+      </div>
+
+      <div class="setrow" data-reveal style="--i:4">
+        <span class="dots" aria-hidden="true">
+          <i class="setdot"></i><i class="setdot"></i><i class="setdot"></i><i class="setdot"></i>
+        </span>
+        <span class="caption mono" id="set-caption">SÉRIE 0/4</span>
+      </div>
+    </section>
+
+    <!-- rest timer -->
+    <section class="rest" data-reveal style="--i:5" aria-label="Odpočinek">
+      <div class="rest-ring">
+        <svg viewBox="0 0 148 148" width="148" height="148" aria-hidden="true">
+          <defs>
+            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#F59E0B"/>
+              <stop offset="1" stop-color="#7C2D12"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-track" cx="74" cy="74" r="66"/>
+          <circle class="ring-arc"  cx="74" cy="74" r="66"/>
+        </svg>
+        <div class="rest-time">
+          <span class="t mono">02:47</span>
+          <span class="label">Odpočinek</span>
+        </div>
+      </div>
+      <button class="btn-skip" type="button">Přeskočit</button>
+    </section>
+
+    <div class="wo-actions" data-reveal style="--i:6">
+      <button class="btn-ghost" type="button">Přeskočit cvik</button>
+      <button class="btn-outline" type="button" data-goto="dashboard">Dokončit trénink</button>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════ BOTTOM NAV ══════════════════ -->
+  <nav class="nav" aria-label="Hlavní navigace">
+    <button class="nav-item" type="button" data-goto="dashboard" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+        <polygon points="12,2.5 20.2,7.25 20.2,16.75 12,21.5 3.8,16.75 3.8,7.25"/>
+        <polygon points="12,8 15.5,10 15.5,14 12,16 8.5,14 8.5,10" fill="currentColor" stroke="none" opacity=".85"/>
+      </svg>
+      <span>Přehled</span>
+    </button>
+    <button class="nav-item" type="button" data-goto="workout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M4 9v6M8 6.5v11M16 6.5v11M20 9v6M8 12h8"/>
+      </svg>
+      <span>Trénink</span>
+    </button>
+    <button class="nav-item" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M12 3c3.5 2.4 5.5 5.4 5.5 8.8A5.5 5.5 0 0 1 12 17.3a5.5 5.5 0 0 1-5.5-5.5C6.5 8.4 8.5 5.4 12 3Z" stroke-linejoin="round"/>
+        <path d="M12 17.3V21"/>
+      </svg>
+      <span>Výživa</span>
+    </button>
+    <button class="nav-item" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12.5 9.5 17 19 6.5"/>
+        <path d="M5 19h14" opacity=".4"/>
+      </svg>
+      <span>Návyky</span>
+    </button>
+    <button class="nav-item" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>
+      </svg>
+      <span>Více</span>
+    </button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---------- screen toggling with re-orchestrated entry ---------- */
+  var screens = {
+    dashboard: document.getElementById("screen-dashboard"),
+    workout:   document.getElementById("screen-workout")
+  };
+  var navItems = document.querySelectorAll(".nav .nav-item[data-goto]");
+
+  function show(name){
+    Object.keys(screens).forEach(function(k){
+      var s = screens[k];
+      if(k === name){
+        s.hidden = false;
+        /* restart the entry choreography */
+        s.classList.remove("entered");
+        void s.offsetWidth; /* reflow */
+        s.classList.add("entered");
+      }else{
+        s.hidden = true;
+      }
+    });
+    navItems.forEach(function(b){
+      if(b.dataset.goto === name){ b.setAttribute("aria-current","page"); }
+      else{ b.removeAttribute("aria-current"); }
+    });
+    window.scrollTo(0,0);
+  }
+
+  document.querySelectorAll("[data-goto]").forEach(function(btn){
+    btn.addEventListener("click", function(){ show(btn.dataset.goto); });
+  });
+
+  /* ---------- floating +XP ---------- */
+  function floatXP(anchor, text){
+    var old = anchor.querySelector(".xp-float");
+    if(old){ old.remove(); }
+    var el = document.createElement("span");
+    el.className = "xp-float mono";
+    el.textContent = text;
+    anchor.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 1200);
+  }
+
+  /* ---------- steppers ---------- */
+  var values = { kg:80, reps:8, rpe:7 };
+  var limits = { kg:[0,500], reps:[1,30], rpe:[5,10] };
+
+  function fmt(n){
+    return (n % 1 === 0) ? String(n) : n.toFixed(1).replace(".", ",");
+  }
+
+  document.querySelectorAll(".step-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var key = btn.dataset.target;
+      var next = Math.round((values[key] + parseFloat(btn.dataset.step)) * 10) / 10;
+      var lim = limits[key];
+      if(next < lim[0] || next > lim[1]){ return; }
+      values[key] = next;
+      document.getElementById("val-" + key).textContent = fmt(next);
+    });
+  });
+
+  /* ---------- zapsat sérii ---------- */
+  var setsDone = 0;
+  var dots = document.querySelectorAll(".setdot");
+  var caption = document.getElementById("set-caption");
+  var logBtn = document.getElementById("btn-log");
+
+  logBtn.addEventListener("click", function(){
+    if(setsDone >= 4){ return; }
+    setsDone++;
+    dots[setsDone - 1].classList.add("on");
+    caption.textContent = "SÉRIE " + setsDone + "/4";
+    floatXP(logBtn.parentElement, "+15 XP");
+    if(setsDone === 4){
+      logBtn.disabled = true;
+      logBtn.textContent = "Cvik dokončen";
+    }
+  });
+
+  /* ---------- habit toggle ---------- */
+  var habit = document.getElementById("habit-steps");
+  habit.addEventListener("click", function(){
+    var done = habit.classList.toggle("done");
+    habit.setAttribute("aria-pressed", String(done));
+    habit.querySelector(".habit-state").textContent = done ? "✓ splněno" : "klepnutím splnit";
+    if(done){ floatXP(habit, "+10 XP"); }
+  });
+
+  /* keep JS honest about reduced motion: nothing above spawns
+     continuous animation; the float element itself is CSS-guarded. */
+  void reduced;
+})();
+</script>
+
+</body>
+</html>

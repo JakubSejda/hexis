@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hexis — Variant C: Retro Quest</title>
+<style>
+/* ============================================================
+   HEXIS — VARIANT C "RETRO QUEST"
+   16-bit JRPG homage · pixel windows · ui-monospace · juice
+   ============================================================ */
+:root{
+  --night:      #0B1026;
+  --night-2:    #0D1330;
+  --panel:      #1A2456;
+  --panel-dark: #131A40;
+  --edge:       #05070F;   /* outer pixel frame (dark) */
+  --inner:      #4C5FB0;   /* inner pixel frame (light) */
+  --inner-dim:  #2E3B7A;
+  --gold:       #FFC53D;
+  --gold-dark:  #C98F16;
+  --gold-deep:  #7A5200;
+  --hp:         #4ADE80;
+  --hp-dark:    #1E8A4C;
+  --mana:       #38BDF8;
+  --mana-dark:  #1673A8;
+  --blood:      #F87171;
+  --ink:        #FFF7E0;   /* parchment */
+  --ink-dim:    rgba(255,247,224,.58);
+  --ink-faint:  rgba(255,247,224,.34);
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html,body{ background:var(--night); }
+
+body{
+  font-family:var(--mono);
+  color:var(--ink);
+  font-size:13px;
+  line-height:1.5;
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  /* faint pixel starfield on the page beyond the app column */
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,247,224,.20) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 9%,  rgba(255,247,224,.14) 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 64%, rgba(255,247,224,.18) 50%, transparent 51%),
+    radial-gradient(1px 1px at 6%  76%, rgba(255,247,224,.12) 50%, transparent 51%),
+    radial-gradient(1px 1px at 46% 92%, rgba(255,247,224,.10) 50%, transparent 51%),
+    radial-gradient(2px 2px at 30% 40%, rgba(255,197,61,.10) 50%, transparent 51%),
+    radial-gradient(2px 2px at 68% 84%, rgba(56,189,248,.10) 50%, transparent 51%);
+}
+
+/* CRT: very faint scanlines (≤4%) + soft vignette */
+body::before{
+  content:""; position:fixed; inset:0; z-index:90; pointer-events:none;
+  background:repeating-linear-gradient(0deg,
+    rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px,
+    transparent 1px, transparent 3px);
+}
+body::after{
+  content:""; position:fixed; inset:0; z-index:91; pointer-events:none;
+  background:radial-gradient(ellipse 90% 80% at 50% 45%,
+    transparent 55%, rgba(0,0,0,.30) 100%);
+}
+
+svg{ image-rendering:pixelated; shape-rendering:crispEdges; display:block; }
+
+/* ---------- App column ---------- */
+.app{
+  width:100%; max-width:420px; min-height:100dvh;
+  display:flex; flex-direction:column;
+  background:linear-gradient(180deg, var(--night) 0%, #0A0E20 100%);
+  box-shadow:-1px 0 0 0 var(--inner-dim), 1px 0 0 0 var(--inner-dim);
+  position:relative;
+}
+
+.screen{ flex:1; padding:18px 14px 26px; display:none; }
+.screen.active{ display:grid; gap:20px; align-content:start; }
+
+/* ---------- Pixel window (the signature frame) ----------
+   Outer dark frame drawn with 4 directional box-shadows →
+   corners stay empty = classic notched RPG dialog corner.
+   Inner light line via inset ring. */
+.win{
+  position:relative;
+  min-width:0;                /* let grid items shrink below content size */
+  margin:4px;                 /* room for the outer shadow frame */
+  background:var(--panel);
+  padding:14px;
+  box-shadow:
+     0 -4px 0 0 var(--edge),
+     0  4px 0 0 var(--edge),
+    -4px 0  0 0 var(--edge),
+     4px 0  0 0 var(--edge),
+    inset 0 0 0 3px var(--inner);
+  animation:winpop .22s steps(2,end) both;
+  animation-delay:calc(var(--d,0) * .07s);
+}
+@keyframes winpop{
+  0%  { transform:scale(.92); opacity:0; }
+  50% { transform:scale(1.03); opacity:1; }
+  100%{ transform:scale(1); opacity:1; }
+}
+
+/* window title bar */
+.win-title{
+  margin:-11px -11px 12px;
+  padding:7px 12px 6px;
+  background:var(--panel-dark);
+  border-bottom:3px solid var(--inner-dim);
+  font-size:11px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--gold);
+  text-shadow:2px 2px 0 rgba(0,0,0,.85);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.win-title .sub{ color:var(--ink-dim); text-shadow:none; font-weight:400; }
+
+/* headings */
+.h{
+  text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+  text-shadow:2px 2px 0 rgba(0,0,0,.85);
+}
+
+.dim{ color:var(--ink-dim); }
+.tiny{ font-size:10px; letter-spacing:.06em; }
+
+/* ---------- Segmented pixel bars ---------- */
+.seg{ display:flex; gap:3px; }
+.seg i{
+  flex:1; height:14px;
+  background:var(--night-2);
+  box-shadow:inset 0 0 0 2px var(--edge);
+}
+.seg i.on{
+  background:var(--gold);
+  box-shadow:inset 0 -5px 0 0 var(--gold-dark), inset 0 0 0 2px var(--edge);
+  animation:segtick .14s steps(2,end) both;
+  animation-delay:calc(.25s + var(--i,0) * .12s);
+}
+.seg.hp i.on{
+  background:var(--hp);
+  box-shadow:inset 0 -5px 0 0 var(--hp-dark), inset 0 0 0 2px var(--edge);
+}
+.seg.mana i.on{
+  background:var(--mana);
+  box-shadow:inset 0 -5px 0 0 var(--mana-dark), inset 0 0 0 2px var(--edge);
+  animation:none;
+}
+@keyframes segtick{
+  0%  { transform:scaleY(.4); }
+  50% { transform:scaleY(1.25); }
+  100%{ transform:scaleY(1); }
+}
+
+/* ---------- Pixel buttons ---------- */
+.btn{
+  font-family:inherit; font-size:12px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.08em;
+  border:0; cursor:pointer; user-select:none;
+  padding:11px 14px 13px;
+  margin:4px;
+  color:var(--ink);
+  background:var(--inner-dim);
+  text-shadow:1px 1px 0 rgba(0,0,0,.7);
+  box-shadow:
+     0 -3px 0 0 var(--edge), 0 3px 0 0 var(--edge),
+    -3px 0 0 0 var(--edge), 3px 0 0 0 var(--edge),
+    inset 0 -4px 0 0 rgba(0,0,0,.35);
+}
+.btn:active{
+  transform:translateY(1px);
+  box-shadow:
+     0 -3px 0 0 var(--edge), 0 3px 0 0 var(--edge),
+    -3px 0 0 0 var(--edge), 3px 0 0 0 var(--edge),
+    inset 0 -1px 0 0 rgba(0,0,0,.35);
+}
+.btn-gold{
+  background:var(--gold);
+  color:#241A00;
+  text-shadow:1px 1px 0 rgba(255,255,255,.25);
+  box-shadow:
+     0 -3px 0 0 var(--edge), 0 3px 0 0 var(--edge),
+    -3px 0 0 0 var(--edge), 3px 0 0 0 var(--edge),
+    inset 0 -5px 0 0 var(--gold-dark);
+}
+.btn-gold:active{
+  transform:translateY(1px);
+  box-shadow:
+     0 -3px 0 0 var(--edge), 0 3px 0 0 var(--edge),
+    -3px 0 0 0 var(--edge), 3px 0 0 0 var(--edge),
+    inset 0 -2px 0 0 var(--gold-dark);
+}
+.btn-block{ display:block; width:calc(100% - 8px); }
+.btn-sm{ padding:7px 10px 9px; font-size:10px; }
+.btn-danger{ color:var(--blood); }
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+
+/* hero window */
+.hero{ display:flex; gap:14px; align-items:center; }
+.hero-sprite{
+  flex:none; width:56px; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--night-2);
+  box-shadow:inset 0 0 0 2px var(--edge), inset 0 0 0 4px var(--inner-dim);
+}
+.sprite{ animation:bob .9s infinite; }
+@keyframes bob{                 /* 2-frame idle bob */
+  0%,49%  { transform:translateY(0); }
+  50%,100%{ transform:translateY(1px); }
+}
+.hero-body{ flex:1; min-width:0; }
+.hero-row1{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+.lv{ font-size:15px; color:var(--ink); }
+.lv b{ color:var(--gold); }
+.coins{ color:var(--gold); font-weight:700; display:flex; gap:6px; align-items:center; }
+.coins .tiny{ color:var(--ink-faint); font-weight:400; }
+.xp-row{ display:flex; align-items:center; gap:8px; }
+.xp-row .seg{ flex:1; }
+.xp-num{ font-size:10px; color:var(--ink-dim); letter-spacing:.04em; white-space:nowrap; }
+
+/* quest window */
+.quest-body{ display:grid; gap:12px; }
+.quest-name{ font-size:16px; }
+.quest-meta{ color:var(--ink-dim); font-size:11px; letter-spacing:.04em; }
+.quest-meta em{ font-style:normal; color:var(--gold); }
+
+/* stats strip */
+.stats{ display:flex; align-items:center; justify-content:space-evenly; gap:8px; padding:10px 8px; }
+.stat{ display:flex; align-items:center; gap:8px; font-size:12px; }
+.stat b{ font-size:16px; color:var(--ink); }
+.stat .lbl{ color:var(--ink-dim); font-size:10px; letter-spacing:.08em; }
+.stat-div{ color:var(--gold); font-size:10px; }
+.flame{ animation:flick .5s steps(1) infinite; }
+@keyframes flick{ 0%,100%{ opacity:1; } 50%{ opacity:.75; } }
+
+/* habits */
+.habit{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 4px; cursor:pointer; user-select:none;
+  border-bottom:2px solid var(--inner-dim);
+}
+.habit:last-child{ border-bottom:0; padding-bottom:2px; }
+.habit .box{
+  flex:none; width:18px; height:18px;
+  background:var(--night-2);
+  box-shadow:inset 0 0 0 2px var(--edge), inset 0 0 0 4px var(--inner-dim);
+  display:flex; align-items:center; justify-content:center;
+  color:transparent; font-size:12px; font-weight:700;
+}
+.habit.done .box{
+  background:var(--hp);
+  box-shadow:inset 0 -4px 0 0 var(--hp-dark), inset 0 0 0 2px var(--edge);
+  color:#04240F;
+}
+.habit .box.pop{ animation:boxpop .22s steps(2,end); }
+@keyframes boxpop{
+  0%{ transform:scale(.6); } 50%{ transform:scale(1.35); } 100%{ transform:scale(1); }
+}
+.habit .name{ flex:1; }
+.habit.done .name{ color:var(--ink-dim); text-decoration:line-through; text-decoration-thickness:2px; }
+.habit .st{ font-size:10px; letter-spacing:.08em; color:var(--ink-faint); }
+.habit.done .st{ color:var(--hp); }
+
+/* ============================================================
+   WORKOUT
+   ============================================================ */
+.boss-name{ font-size:14px; margin-bottom:4px; }
+.boss-name .boss{ color:var(--blood); }
+.boss-sub{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+.boss-sub .cvik{ color:var(--gold); font-weight:700; letter-spacing:.08em; font-size:11px; }
+
+.ex-name{ font-size:20px; margin-bottom:6px; }
+.ex-meta{ display:flex; gap:14px; flex-wrap:wrap; font-size:11px; color:var(--ink-dim); }
+.ex-meta em{ font-style:normal; color:var(--mana); }
+
+/* set squares */
+.setrow{ display:flex; align-items:center; gap:8px; margin:14px 0 12px; }
+.setrow .lbl{ font-size:10px; letter-spacing:.08em; color:var(--ink-dim); }
+.setsq{ display:flex; gap:5px; }
+.setsq i{
+  width:16px; height:16px;
+  background:var(--night-2);
+  box-shadow:inset 0 0 0 2px var(--edge), inset 0 0 0 4px var(--inner-dim);
+}
+.setsq i.on{
+  background:var(--gold);
+  box-shadow:inset 0 -4px 0 0 var(--gold-dark), inset 0 0 0 2px var(--edge);
+  animation:boxpop .22s steps(2,end);
+}
+
+/* steppers */
+.steppers{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:12px; }
+.stepper{
+  min-width:0;
+  margin:3px; padding:8px 3px 10px; text-align:center;
+  background:var(--night-2);
+  box-shadow:
+     0 -3px 0 0 var(--edge), 0 3px 0 0 var(--edge),
+    -3px 0 0 0 var(--edge), 3px 0 0 0 var(--edge),
+    inset 0 0 0 2px var(--inner-dim);
+}
+.stepper .lbl{ font-size:9px; letter-spacing:.12em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:4px; }
+.stepper .ctl{ display:flex; align-items:center; justify-content:center; gap:2px; }
+.stepper .val{ flex:1; min-width:0; font-size:15px; font-weight:700; color:var(--ink); }
+.stepbtn{
+  flex:none;
+  font-family:inherit; border:0; cursor:pointer;
+  width:22px; height:26px; font-size:14px; font-weight:700;
+  color:var(--gold); background:var(--panel);
+  box-shadow:inset 0 0 0 2px var(--edge), inset 0 -3px 0 0 rgba(0,0,0,.4);
+}
+.stepbtn:active{ transform:translateY(1px); box-shadow:inset 0 0 0 2px var(--edge); }
+
+/* rest window */
+.rest-time{
+  font-size:38px; font-weight:700; text-align:center;
+  letter-spacing:.06em; margin:2px 0 10px;
+  color:var(--mana);
+  text-shadow:3px 3px 0 rgba(0,0,0,.8);
+  font-variant-numeric:tabular-nums;
+}
+.rest-foot{ display:flex; justify-content:center; margin-top:10px; }
+
+.workout-actions{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+
+/* ============================================================
+   BOTTOM NAV — pixel tab bar
+   ============================================================ */
+.tabbar{
+  position:sticky; bottom:0; z-index:40;
+  display:flex;
+  background:var(--panel-dark);
+  border-top:3px solid var(--edge);
+  box-shadow:0 -3px 0 0 var(--inner-dim), 0 -6px 0 0 var(--edge);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+.tab{
+  flex:1; border:0; background:none; cursor:pointer;
+  font-family:inherit; font-size:8px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-faint);
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:6px 0 5px;
+}
+.tab svg{ width:20px; height:20px; }
+.tab.active{
+  color:var(--gold);
+  transform:translateY(-1px);
+  box-shadow:inset 0 -3px 0 0 var(--gold);
+  text-shadow:1px 1px 0 rgba(0,0,0,.8);
+}
+
+/* ============================================================
+   JUICE — toast, floating XP, pixel sparks
+   ============================================================ */
+.toast{
+  position:fixed; left:50%; bottom:96px; z-index:80;
+  transform:translateX(-50%);
+  background:var(--panel);
+  color:var(--gold);
+  font-family:var(--mono); font-size:12px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  text-shadow:2px 2px 0 rgba(0,0,0,.85);
+  padding:10px 18px;
+  box-shadow:
+     0 -4px 0 0 var(--edge), 0 4px 0 0 var(--edge),
+    -4px 0 0 0 var(--edge), 4px 0 0 0 var(--edge),
+    inset 0 0 0 3px var(--inner);
+  display:none; white-space:nowrap;
+}
+.toast.show{ display:block; animation:toastpop .2s steps(2,end); }
+@keyframes toastpop{
+  0%{ transform:translateX(-50%) scale(.7); } 50%{ transform:translateX(-50%) scale(1.15); }
+  100%{ transform:translateX(-50%) scale(1); }
+}
+
+.xpfloat{
+  position:fixed; z-index:81; pointer-events:none;
+  font-family:var(--mono); font-size:14px; font-weight:700;
+  color:var(--gold); letter-spacing:.06em;
+  text-shadow:2px 2px 0 rgba(0,0,0,.9);
+  animation:floatup .8s steps(8,end) forwards;
+}
+@keyframes floatup{
+  0%  { transform:translateY(0);    opacity:1; }
+  70% { opacity:1; }
+  100%{ transform:translateY(-46px); opacity:0; }
+}
+
+.spark{
+  position:fixed; z-index:81; pointer-events:none;
+  width:6px; height:6px; background:var(--gold);
+  box-shadow:0 0 0 1px var(--edge);
+  animation:sparkfly .45s steps(4,end) forwards;
+}
+@keyframes sparkfly{
+  0%  { transform:translate(0,0);                 opacity:1; }
+  100%{ transform:translate(var(--dx),var(--dy)); opacity:0; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .win{ opacity:1; transform:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============================ DASHBOARD ============================ -->
+  <main class="screen active" id="screen-dash">
+
+    <!-- HERO -->
+    <section class="win hero" style="--d:0">
+      <div class="hero-sprite">
+        <!-- 16×16 pixel knight-lifter, barbell overhead -->
+        <svg class="sprite" width="44" height="44" viewBox="0 0 16 16" aria-label="Hrdina">
+          <!-- barbell -->
+          <rect x="3"  y="2" width="10" height="1" fill="#7484C6"/>
+          <rect x="1"  y="1" width="2"  height="3" fill="#FFC53D"/>
+          <rect x="13" y="1" width="2"  height="3" fill="#FFC53D"/>
+          <rect x="1"  y="3" width="2"  height="1" fill="#C98F16"/>
+          <rect x="13" y="3" width="2"  height="1" fill="#C98F16"/>
+          <!-- hands + arms -->
+          <rect x="4"  y="3" width="1" height="1" fill="#F2C79A"/>
+          <rect x="11" y="3" width="1" height="1" fill="#F2C79A"/>
+          <rect x="4"  y="4" width="1" height="3" fill="#F2C79A"/>
+          <rect x="11" y="4" width="1" height="3" fill="#F2C79A"/>
+          <!-- helm + visor -->
+          <rect x="6" y="4" width="4" height="2" fill="#B9C4E8"/>
+          <rect x="6" y="6" width="4" height="1" fill="#0B1026"/>
+          <rect x="6" y="7" width="4" height="1" fill="#7484C6"/>
+          <!-- torso armor + belt -->
+          <rect x="5" y="8"  width="6" height="3" fill="#7484C6"/>
+          <rect x="7" y="8"  width="2" height="2" fill="#B9C4E8"/>
+          <rect x="5" y="11" width="6" height="1" fill="#FFC53D"/>
+          <rect x="7" y="11" width="2" height="1" fill="#C98F16"/>
+          <!-- legs + boots -->
+          <rect x="5" y="12" width="2" height="3" fill="#3B4A8F"/>
+          <rect x="9" y="12" width="2" height="3" fill="#3B4A8F"/>
+          <rect x="4" y="15" width="3" height="1" fill="#7A5230"/>
+          <rect x="9" y="15" width="3" height="1" fill="#7A5230"/>
+        </svg>
+      </div>
+      <div class="hero-body">
+        <div class="hero-row1">
+          <div class="lv h">LV.<b>3</b> ROOKIE</div>
+          <div class="coins">
+            <!-- pixel coin -->
+            <svg width="12" height="12" viewBox="0 0 8 8" aria-hidden="true">
+              <rect x="2" y="0" width="4" height="1" fill="#FFC53D"/>
+              <rect x="1" y="1" width="6" height="1" fill="#FFC53D"/>
+              <rect x="0" y="2" width="8" height="4" fill="#FFC53D"/>
+              <rect x="1" y="6" width="6" height="1" fill="#C98F16"/>
+              <rect x="2" y="7" width="4" height="1" fill="#C98F16"/>
+              <rect x="3" y="2" width="2" height="3" fill="#C98F16"/>
+            </svg>
+            500 <span class="tiny">K UTRACENÍ</span>
+          </div>
+        </div>
+        <div class="xp-row">
+          <div class="seg" aria-label="XP 100 z 500">
+            <i class="on" style="--i:0"></i><i class="on" style="--i:1"></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <span class="xp-num">100/500 XP</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUEST -->
+    <section class="win" style="--d:1">
+      <div class="win-title h">▼ Dnešní quest <span class="sub">◆ ČT 14. 8.</span></div>
+      <div class="quest-body">
+        <div class="quest-name h">Lower A — Quad důraz</div>
+        <div class="quest-meta">◆ <em>8 cviků</em> &nbsp;◆ <em>~45 min</em> &nbsp;◆ odměna <em>+120 XP</em></div>
+        <button class="btn btn-gold btn-block" id="startQuest">► Začít quest</button>
+      </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="win stats" style="--d:2">
+      <div class="stat">
+        <!-- pixel flame -->
+        <svg class="flame" width="18" height="18" viewBox="0 0 8 8" aria-hidden="true">
+          <rect x="4" y="1" width="1" height="1" fill="#F87171"/>
+          <rect x="3" y="2" width="2" height="1" fill="#F87171"/>
+          <rect x="2" y="3" width="4" height="1" fill="#F87171"/>
+          <rect x="1" y="4" width="6" height="1" fill="#F87171"/>
+          <rect x="1" y="5" width="6" height="1" fill="#F87171"/>
+          <rect x="2" y="6" width="4" height="1" fill="#F87171"/>
+          <rect x="3" y="4" width="2" height="3" fill="#FFC53D"/>
+        </svg>
+        <b>4</b> <span class="lbl">STREAK</span>
+      </div>
+      <span class="stat-div">◆</span>
+      <div class="stat">
+        <b>2/4</b> <span class="lbl">TÝDEN</span>
+      </div>
+    </section>
+
+    <!-- HABITS -->
+    <section class="win" style="--d:3">
+      <div class="win-title h">▼ Návyky <span class="sub" id="habitCount">1/2</span></div>
+      <div class="habit done" data-xp="5">
+        <span class="box">✓</span>
+        <span class="name">Ranní protein</span>
+        <span class="st">HOTOVO</span>
+      </div>
+      <div class="habit" data-xp="5">
+        <span class="box">✓</span>
+        <span class="name">10k kroků</span>
+        <span class="st">◆ +5 XP</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ WORKOUT ============================ -->
+  <main class="screen" id="screen-workout">
+
+    <!-- BOSS HEADER -->
+    <section class="win" style="--d:0">
+      <div class="boss-name h"><span class="boss">BOSS:</span> Lower A — Quad důraz</div>
+      <div class="boss-sub">
+        <span class="cvik h">CVIK <span id="cvikNum">1</span>/8</span>
+        <span class="tiny dim">POSTUP QUESTU</span>
+      </div>
+      <div class="seg" id="bossSeg" aria-label="Postup cviků">
+        <i class="on" style="--i:0"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </section>
+
+    <!-- EXERCISE + SET LOGGER -->
+    <section class="win" style="--d:1">
+      <div class="win-title h">▼ Aktuální cvik</div>
+      <div class="ex-name h" id="exName">Leg press</div>
+      <div class="ex-meta">
+        <span>Cíl: <em id="exTarget">8–12 × 4</em></span>
+        <span>Návrh: <em id="exSuggest">80 kg × 8</em></span>
+      </div>
+
+      <div class="setrow">
+        <span class="lbl h">SÉRIE</span>
+        <div class="setsq" id="setSquares">
+          <i></i><i></i><i></i><i></i>
+        </div>
+        <span class="tiny dim" id="setLabel">0/4</span>
+      </div>
+
+      <div class="steppers">
+        <div class="stepper">
+          <div class="lbl">KG</div>
+          <div class="ctl">
+            <button class="stepbtn" data-t="kg" data-d="-1" aria-label="Méně kg">−</button>
+            <span class="val" id="v-kg">80</span>
+            <button class="stepbtn" data-t="kg" data-d="1" aria-label="Více kg">+</button>
+          </div>
+        </div>
+        <div class="stepper">
+          <div class="lbl">OPAK.</div>
+          <div class="ctl">
+            <button class="stepbtn" data-t="reps" data-d="-1" aria-label="Méně opakování">−</button>
+            <span class="val" id="v-reps">8</span>
+            <button class="stepbtn" data-t="reps" data-d="1" aria-label="Více opakování">+</button>
+          </div>
+        </div>
+        <div class="stepper">
+          <div class="lbl">RPE</div>
+          <div class="ctl">
+            <button class="stepbtn" data-t="rpe" data-d="-1" aria-label="Nižší RPE">−</button>
+            <span class="val" id="v-rpe">8</span>
+            <button class="stepbtn" data-t="rpe" data-d="1" aria-label="Vyšší RPE">+</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-gold btn-block" id="logSet">► Zapsat sérii</button>
+    </section>
+
+    <!-- REST -->
+    <section class="win" style="--d:2">
+      <div class="win-title h">▼ Odpočinek</div>
+      <div class="rest-time" id="restTime">02:47</div>
+      <div class="seg mana" id="restSeg" aria-label="Zbývající odpočinek">
+        <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+        <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+      </div>
+      <div class="rest-foot">
+        <button class="btn btn-sm" id="skipRest">Přeskočit</button>
+      </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <section class="win workout-actions" style="--d:3">
+      <button class="btn btn-sm btn-danger" id="skipEx">Přeskočit cvik</button>
+      <button class="btn btn-sm" id="finish">Dokončit trénink</button>
+    </section>
+
+  </main>
+
+  <!-- ============================ TAB BAR ============================ -->
+  <nav class="tabbar" aria-label="Hlavní navigace">
+    <button class="tab active" data-screen="dash">
+      <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <rect x="4" y="1" width="2" height="5"/><rect x="2" y="6" width="6" height="1"/>
+        <rect x="4" y="7" width="2" height="2"/>
+      </svg>
+      Dashboard
+    </button>
+    <button class="tab" data-screen="workout">
+      <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <rect x="1" y="3" width="2" height="4"/><rect x="7" y="3" width="2" height="4"/>
+        <rect x="3" y="4" width="4" height="2"/>
+      </svg>
+      Trénink
+    </button>
+    <button class="tab" data-locked>
+      <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <rect x="5" y="1" width="1" height="2"/><rect x="6" y="1" width="2" height="1"/>
+        <rect x="3" y="3" width="4" height="1"/><rect x="2" y="4" width="6" height="4"/>
+        <rect x="3" y="8" width="4" height="1"/>
+      </svg>
+      Výživa
+    </button>
+    <button class="tab" data-locked>
+      <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <rect x="1" y="5" width="1" height="2"/><rect x="2" y="6" width="1" height="2"/>
+        <rect x="3" y="7" width="1" height="2"/><rect x="4" y="6" width="1" height="2"/>
+        <rect x="5" y="5" width="1" height="2"/><rect x="6" y="4" width="1" height="2"/>
+        <rect x="7" y="3" width="1" height="2"/><rect x="8" y="2" width="1" height="2"/>
+      </svg>
+      Návyky
+    </button>
+    <button class="tab" data-locked>
+      <svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <rect x="1" y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/>
+        <rect x="7" y="4" width="2" height="2"/>
+      </svg>
+      Více
+    </button>
+  </nav>
+
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $  = function(s){ return document.querySelector(s); };
+  var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------------- toast ---------------- */
+  var toastEl = $("#toast"), toastT = null;
+  function toast(msg, ms){
+    toastEl.textContent = msg;
+    toastEl.classList.remove("show");
+    void toastEl.offsetWidth;                    // restart pop animation
+    toastEl.classList.add("show");
+    clearTimeout(toastT);
+    toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, ms || 1400);
+  }
+
+  /* ---------------- juice: floating XP + pixel sparks ---------------- */
+  function floatXP(btn, text){
+    var r = btn.getBoundingClientRect();
+    var f = document.createElement("div");
+    f.className = "xpfloat";
+    f.textContent = text;
+    f.style.left = (r.left + r.width/2 - 28) + "px";
+    f.style.top  = (r.top - 10) + "px";
+    document.body.appendChild(f);
+    setTimeout(function(){ f.remove(); }, reduced ? 600 : 850);
+  }
+  function sparks(btn){
+    if (reduced) return;
+    var r = anchor(btn);
+    var dirs = [[-26,-24],[-12,-38],[14,-36],[28,-22]];
+    dirs.forEach(function(d, i){
+      var s = document.createElement("div");
+      s.className = "spark";
+      s.style.left = (r.x + (i-1.5)*6) + "px";
+      s.style.top  = r.y + "px";
+      s.style.setProperty("--dx", d[0] + "px");
+      s.style.setProperty("--dy", d[1] + "px");
+      document.body.appendChild(s);
+      setTimeout(function(){ s.remove(); }, 500);
+    });
+  }
+  function anchor(btn){
+    var r = btn.getBoundingClientRect();
+    return { x: r.left + r.width/2, y: r.top + 2 };
+  }
+
+  /* ---------------- screens + tab bar ---------------- */
+  var screens = { dash: $("#screen-dash"), workout: $("#screen-workout") };
+  function replayEntry(screen){
+    if (reduced) return;
+    $$(".win, .seg i.on", screen).length;         // (noop guard)
+    screen.querySelectorAll(".win, .seg i.on").forEach(function(el){
+      el.style.animation = "none";
+      void el.offsetWidth;
+      el.style.animation = "";
+    });
+  }
+  function show(name){
+    Object.keys(screens).forEach(function(k){
+      screens[k].classList.toggle("active", k === name);
+    });
+    $$(".tab[data-screen]").forEach(function(t){
+      t.classList.toggle("active", t.dataset.screen === name);
+    });
+    $$(".tab[data-locked]").forEach(function(t){ t.classList.remove("active"); });
+    replayEntry(screens[name]);
+    window.scrollTo(0, 0);
+  }
+  $$(".tab").forEach(function(t){
+    t.addEventListener("click", function(){
+      if (t.dataset.screen) show(t.dataset.screen);
+      else toast("◆ ZATÍM ZAMČENO ◆");
+    });
+  });
+  $("#startQuest").addEventListener("click", function(){ show("workout"); });
+
+  /* ---------------- habits ---------------- */
+  function habitCount(){
+    var all = $$(".habit"), done = $$(".habit.done");
+    $("#habitCount").textContent = done.length + "/" + all.length;
+  }
+  $$(".habit").forEach(function(h){
+    h.addEventListener("click", function(){
+      var box = h.querySelector(".box");
+      var wasDone = h.classList.contains("done");
+      h.classList.toggle("done");
+      box.classList.remove("pop");
+      void box.offsetWidth;
+      box.classList.add("pop");
+      if (!wasDone){
+        toast("HOTOVO! +" + (h.dataset.xp || 5) + " XP");
+        h.querySelector(".st").textContent = "HOTOVO";
+      } else {
+        h.querySelector(".st").textContent = "◆ +" + (h.dataset.xp || 5) + " XP";
+      }
+      habitCount();
+    });
+  });
+
+  /* ---------------- workout: exercise plan ---------------- */
+  var PLAN = [
+    { name:"Leg press",           target:"8–12 × 4",  suggest:"80 kg × 8",   kg:80 },
+    { name:"Hack dřep",           target:"8–10 × 3",  suggest:"60 kg × 8",   kg:60 },
+    { name:"Rumunský mrtvý tah",  target:"8–12 × 3",  suggest:"70 kg × 10",  kg:70 },
+    { name:"Výpady s činkami",    target:"10–12 × 3", suggest:"16 kg × 10",  kg:16 },
+    { name:"Leg extension",       target:"12–15 × 3", suggest:"45 kg × 12",  kg:45 },
+    { name:"Leg curl",            target:"10–12 × 3", suggest:"40 kg × 10",  kg:40 },
+    { name:"Lýtka ve stoje",      target:"12–15 × 4", suggest:"60 kg × 12",  kg:60 },
+    { name:"Plank",               target:"45–60 s × 3", suggest:"vlastní váha", kg:0 }
+  ];
+  var exIdx = 0, setsDone = 0;
+
+  /* ---------------- steppers ---------------- */
+  var vals  = { kg: 80, reps: 8, rpe: 8 };
+  var steps = { kg: 2.5, reps: 1, rpe: 0.5 };
+  var lims  = { kg:[0,400], reps:[1,30], rpe:[5,10] };
+  function fmt(t){
+    var v = vals[t];
+    return (v % 1 === 0) ? String(v) : v.toFixed(1);
+  }
+  function renderVals(){
+    ["kg","reps","rpe"].forEach(function(t){ $("#v-" + t).textContent = fmt(t); });
+  }
+  $$(".stepbtn").forEach(function(b){
+    b.addEventListener("click", function(){
+      var t = b.dataset.t, d = Number(b.dataset.d);
+      vals[t] = Math.min(lims[t][1], Math.max(lims[t][0], vals[t] + d * steps[t]));
+      renderVals();
+    });
+  });
+
+  /* ---------------- rest timer ---------------- */
+  var REST_TOTAL = 167;                            // 02:47
+  var restLeft = REST_TOTAL, restTick = null;
+  var restSegEls = $$("#restSeg i");
+  function renderRest(){
+    var m = Math.floor(restLeft / 60), s = restLeft % 60;
+    $("#restTime").textContent =
+      (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+    var lit = Math.ceil(restLeft / REST_TOTAL * restSegEls.length);
+    restSegEls.forEach(function(el, i){ el.classList.toggle("on", i < lit); });
+  }
+  function startRest(){
+    clearInterval(restTick);
+    restLeft = REST_TOTAL;
+    renderRest();
+    restTick = setInterval(function(){
+      restLeft -= 1;
+      if (restLeft <= 0){ restLeft = 0; clearInterval(restTick); toast("◆ ODPOČINEK U KONCE ◆"); }
+      renderRest();
+    }, 1000);
+  }
+  $("#skipRest").addEventListener("click", function(){
+    clearInterval(restTick);
+    restLeft = 0;
+    renderRest();
+  });
+
+  /* ---------------- set logging (the juicy one) ---------------- */
+  var setSq = $$("#setSquares i");
+  var logBtn = $("#logSet");
+  logBtn.addEventListener("click", function(){
+    if (setsDone >= setSq.length){
+      toast("◆ VŠECHNY SÉRIE HOTOVÉ ◆");
+      return;
+    }
+    setSq[setsDone].classList.add("on");
+    setsDone += 1;
+    $("#setLabel").textContent = setsDone + "/" + setSq.length;
+    floatXP(logBtn, "+15 XP");
+    sparks(logBtn);
+    startRest();
+    if (setsDone === setSq.length) toast("SÉRIE 4/4 — CVIK POKOŘEN!");
+  });
+
+  /* ---------------- exercise flow ---------------- */
+  var bossSeg = $$("#bossSeg i");
+  function loadExercise(i){
+    var ex = PLAN[i];
+    $("#exName").textContent    = ex.name;
+    $("#exTarget").textContent  = ex.target;
+    $("#exSuggest").textContent = ex.suggest;
+    vals.kg = ex.kg; vals.reps = 8; vals.rpe = 8;
+    renderVals();
+    setsDone = 0;
+    setSq.forEach(function(el){ el.classList.remove("on"); });
+    $("#setLabel").textContent = "0/" + setSq.length;
+    $("#cvikNum").textContent = (i + 1);
+    bossSeg.forEach(function(el, j){
+      el.classList.toggle("on", j <= i);
+      el.style.setProperty("--i", j);
+    });
+    clearInterval(restTick);
+    restLeft = REST_TOTAL;
+    renderRest();
+  }
+  $("#skipEx").addEventListener("click", function(){
+    if (exIdx >= PLAN.length - 1){
+      toast("◆ POSLEDNÍ CVIK ◆");
+      return;
+    }
+    exIdx += 1;
+    loadExercise(exIdx);
+    toast("CVIK PŘESKOČEN → " + PLAN[exIdx].name.toUpperCase());
+  });
+  $("#finish").addEventListener("click", function(){
+    toast("QUEST SPLNĚN! +120 XP ◆ +50 ZLAŤÁKŮ", 2200);
+    exIdx = 0;
+    loadExercise(0);
+    show("dash");
+  });
+
+  habitCount();
+  renderVals();
+  renderRest();
+})();
+</script>
+</body>
+</html>

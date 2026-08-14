@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HEXIS — Variant B „HUD"</title>
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --void:#05080F;
+  --panel:#0B1322;
+  --panel2:#070D18;
+  --grid:#1E293B;
+  --cyan:#22D3EE;
+  --cyan-dim:#5F7F93;
+  --amber:#F59E0B;
+  --red:#EF4444;
+  --ice:#E2F1F8;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--void)}
+body{
+  color:var(--ice);
+  font-family:var(--disp);
+  overflow-x:hidden;
+  min-height:100dvh;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+[hidden]{display:none !important}
+
+/* ============ PAGE ATMOSPHERE ============ */
+.bghex{position:fixed;inset:0;width:100%;height:100%;opacity:.05;pointer-events:none;z-index:0}
+.bgglow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(60% 38% at 50% -6%, rgba(34,211,238,.10), transparent 70%),
+    radial-gradient(50% 30% at 50% 108%, rgba(34,211,238,.05), transparent 70%);
+}
+
+/* ============ APP COLUMN ============ */
+.app{
+  position:relative;z-index:1;
+  max-width:420px;margin:0 auto;min-height:100dvh;
+  display:flex;flex-direction:column;
+  border-left:1px solid rgba(30,41,59,.55);
+  border-right:1px solid rgba(30,41,59,.55);
+  background:linear-gradient(180deg, rgba(8,13,24,.55), rgba(5,8,15,.2) 30%);
+}
+main{flex:1;padding:14px 14px 96px}
+
+/* ============ TYPE ============ */
+.lbl{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--cyan-dim);
+}
+.lbl.amb{color:var(--amber)}
+.lbl.cyn{color:var(--cyan)}
+.mono{font-family:var(--mono)}
+.val{font-family:var(--mono);font-weight:700}
+.disp{
+  font-family:var(--disp);font-weight:900;font-style:italic;
+  text-transform:uppercase;letter-spacing:.01em;
+  transform:skewX(-4deg);transform-origin:left bottom;display:inline-block;
+}
+
+/* ============ STATUS STRIP ============ */
+.strip{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:10px 14px 9px;
+  border-bottom:1px solid var(--grid);
+  font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan-dim);
+  background:rgba(5,8,15,.7);
+}
+.strip b{color:var(--cyan);font-weight:700}
+.strip .dot{display:inline-block;width:5px;height:5px;background:var(--cyan);margin-right:7px;vertical-align:1px;box-shadow:0 0 6px rgba(34,211,238,.8)}
+
+/* ============ PLATES (clipped HUD panels) ============ */
+.plate{
+  --cut:14px;
+  --edge:#1B2636;
+  position:relative;
+  padding:1px;
+  background:linear-gradient(160deg, var(--edge), rgba(30,41,59,.45) 55%);
+  clip-path:polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+}
+.pin{
+  position:relative;overflow:hidden;
+  clip-path:polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  background:linear-gradient(175deg, var(--panel), var(--panel2) 80%);
+  padding:14px;
+}
+/* thin edge-light sweep line (fires on power-on) */
+.pin::after{
+  content:"";position:absolute;top:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(34,211,238,.9), transparent);
+  transform:translateX(-101%);
+  pointer-events:none;
+}
+/* active plate — cyan edge-light */
+.plate.hot{
+  --edge:rgba(34,211,238,.6);
+  filter:drop-shadow(0 0 10px rgba(34,211,238,.14));
+}
+/* quest plate — amber edge-light, loudest thing on screen */
+.plate.quest{
+  --edge:rgba(245,158,11,.6);
+  filter:drop-shadow(0 0 14px rgba(245,158,11,.18));
+}
+.plate.quest .pin::after{
+  background:linear-gradient(90deg, transparent, rgba(245,158,11,.9), transparent);
+}
+
+/* corner brackets on the active panel (sit on wrapper, outside clip) */
+.frame{position:relative;--brk:var(--cyan)}
+.frame.amb{--brk:var(--amber)}
+.frame::before,.frame::after{
+  content:"";position:absolute;width:15px;height:15px;pointer-events:none;z-index:2;
+}
+.frame::before{top:-4px;left:-4px;border-top:1px solid var(--brk);border-left:1px solid var(--brk)}
+.frame::after{bottom:-4px;right:-4px;border-bottom:1px solid var(--brk);border-right:1px solid var(--brk)}
+
+/* power-on stagger */
+.pw{opacity:1}
+.powered .pw{
+  animation:pwr .5s cubic-bezier(.2,.7,.2,1) both;
+  animation-delay:calc(var(--i,0)*90ms);
+}
+.powered .pw .pin::after,
+.powered .pin::after{
+  animation:sweep .8s ease-out forwards;
+  animation-delay:calc(var(--i,0)*90ms + 180ms);
+}
+@keyframes pwr{from{opacity:0;transform:translateY(12px)}}
+@keyframes sweep{to{transform:translateX(101%)}}
+
+.stack{display:flex;flex-direction:column;gap:12px}
+
+/* ============ HERO ============ */
+.hero .pin{display:flex;gap:14px;align-items:center;padding:16px 14px}
+.emblem{position:relative;flex:0 0 auto;width:88px;height:88px}
+.emblem svg{display:block;width:100%;height:100%}
+/* scanline shimmer — emblem only */
+.emblem::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(34,211,238,.09) 0 1px, transparent 1px 3px);
+  animation:scan 7s linear infinite;
+  mix-blend-mode:screen;
+}
+@keyframes scan{to{background-position:0 -24px}}
+.hero-r{flex:1;min-width:0}
+.hero-r h1{font-size:26px;line-height:1;margin:3px 0 10px;color:var(--ice)}
+.xptrack{
+  --cut:6px;height:12px;padding:1px;background:var(--grid);
+  clip-path:polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+}
+.xptrack i{
+  display:block;height:100%;width:20%;
+  clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  background:linear-gradient(90deg,#B45309,var(--amber) 35%,#FDE68A 50%,var(--amber) 65%,#B45309);
+  background-size:220% 100%;background-position:100% 0;
+  box-shadow:0 0 10px rgba(245,158,11,.35);
+}
+.powered .xptrack i{
+  animation:charge .9s .45s cubic-bezier(.2,.7,.2,1) both, xscan 1.5s .45s ease-out 1;
+}
+@keyframes charge{from{width:0}}
+@keyframes xscan{from{background-position:220% 0}to{background-position:0% 0}}
+.xpread{display:flex;justify-content:space-between;margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.1em}
+.xpread .l{color:var(--amber);font-weight:700}
+.xpread .r{color:var(--cyan-dim)}
+
+/* ============ QUEST ============ */
+.quest h2{font-size:21px;line-height:1.1;margin:8px 0 6px}
+.quest .meta{font-family:var(--mono);font-size:11px;color:var(--cyan-dim);letter-spacing:.08em}
+
+/* ============ CLIPPED BUTTONS ============ */
+.cbtn{
+  --cut:10px;--edge:var(--grid);
+  display:block;width:100%;padding:1px;background:var(--edge);
+  clip-path:polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+.cbtn .cin{
+  clip-path:polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 12px;background:rgba(5,8,15,.9);
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ice);
+}
+.cbtn:active .cin{transform:translateY(1px)}
+/* amber = action */
+.cbtn.prime{--edge:var(--amber);filter:drop-shadow(0 0 10px rgba(245,158,11,.25))}
+.cbtn.prime .cin{background:linear-gradient(180deg,#FBBF24,var(--amber));color:#0A0602}
+.cbtn.prime:disabled{filter:none;opacity:.45}
+/* cyan outline = system confirm */
+.cbtn.cyan{--edge:rgba(34,211,238,.65)}
+.cbtn.cyan .cin{color:var(--cyan)}
+/* ghost */
+.cbtn.ghost{--edge:rgba(30,41,59,.9)}
+.cbtn.ghost .cin{color:var(--cyan-dim);background:rgba(7,13,24,.6)}
+
+/* pulse ring + XP float */
+.fx{position:relative}
+.pulse{
+  position:absolute;left:50%;top:50%;width:26px;height:26px;
+  border:2px solid var(--amber);border-radius:50%;
+  transform:translate(-50%,-50%);pointer-events:none;
+  animation:pulse .65s ease-out forwards;
+}
+@keyframes pulse{to{width:190px;height:190px;opacity:0}}
+.xpfloat{
+  position:absolute;left:50%;top:-4px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:13px;font-weight:700;color:var(--amber);
+  letter-spacing:.12em;pointer-events:none;text-shadow:0 0 10px rgba(245,158,11,.6);
+  animation:xfl 1s ease-out forwards;
+}
+@keyframes xfl{to{transform:translate(-50%,-34px);opacity:0}}
+
+/* ============ TELEMETRY ROW ============ */
+.telemetry{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.telemetry .pin{padding:11px 10px}
+.telemetry .lbl{font-size:9px;display:block;white-space:nowrap}
+.telemetry .val{font-size:16px;display:block;margin-top:6px}
+.telemetry .val.amb{color:var(--amber)}
+
+/* ============ HABITS ============ */
+.habit{display:flex;align-items:center;gap:12px;padding:9px 2px}
+.habit + .habit{border-top:1px solid rgba(30,41,59,.6)}
+.habit span{font-size:14px;font-weight:600;letter-spacing:.02em}
+.habit.done span{color:var(--cyan-dim);text-decoration:line-through;text-decoration-color:rgba(34,211,238,.5)}
+.hexchk{display:inline-flex;padding:2px}
+.hexchk svg .fillhex{fill:transparent;transition:fill .15s}
+.hexchk svg .tick{opacity:0}
+.hexchk[aria-pressed="true"] svg .fillhex{fill:rgba(34,211,238,.16)}
+.hexchk[aria-pressed="true"] svg .tick{opacity:1}
+.hexchk[aria-pressed="true"] svg{filter:drop-shadow(0 0 5px rgba(34,211,238,.5))}
+
+/* ============ MISSION HEADER (workout) ============ */
+.mission h2{font-size:20px;line-height:1.15;margin:7px 0 10px}
+.blade{display:flex;gap:4px;margin-top:11px}
+.blade i{
+  flex:1;height:6px;background:rgba(30,41,59,.9);
+  transform:skewX(-18deg);
+}
+.blade i.on{background:var(--cyan);box-shadow:0 0 8px rgba(34,211,238,.7)}
+.mhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+
+/* ============ EXERCISE / LOGGER ============ */
+.exo .lbl{display:block}
+.exo h3{font-size:24px;margin:7px 0 9px}
+.exo .goal{font-family:var(--mono);font-size:11px;color:var(--cyan-dim);letter-spacing:.06em}
+.exo .sugg{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--cyan);letter-spacing:.06em;margin-top:5px}
+.setdots{display:flex;gap:7px;margin-top:12px}
+.setdots svg polygon{fill:transparent;stroke:var(--grid);stroke-width:1.4}
+.setdots svg.on polygon{fill:var(--amber);stroke:var(--amber)}
+.setdots svg.on{filter:drop-shadow(0 0 5px rgba(245,158,11,.7))}
+
+.steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.step .pin{padding:9px 8px;--cut:8px}
+.step{--cut:8px}
+.step .lbl{display:block;text-align:center;font-size:9px}
+.steprow{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:2px}
+.sb{
+  width:26px;height:28px;flex:0 0 auto;
+  font-family:var(--mono);font-size:15px;font-weight:700;color:var(--cyan);
+  background:rgba(34,211,238,.07);
+  border:1px solid rgba(34,211,238,.25);
+}
+.sb:active{background:rgba(34,211,238,.2)}
+.stepval{font-family:var(--mono);font-size:15px;font-weight:700;min-width:0;text-align:center;flex:1}
+.stepval.danger{color:var(--red);text-shadow:0 0 8px rgba(239,68,68,.5)}
+
+/* ============ REST TIMER ============ */
+.rest .pin{display:flex;align-items:center;gap:16px}
+.hexring{position:relative;width:108px;height:108px;flex:0 0 auto}
+.hexring svg{width:100%;height:100%;display:block}
+.hexring .t{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:21px;font-weight:700;color:var(--ice);
+  letter-spacing:.06em;
+}
+.rest-r{flex:1;min-width:0}
+.rest-r .lbl{display:block;margin-bottom:8px}
+.rest-r p{font-family:var(--mono);font-size:11px;color:var(--cyan-dim);letter-spacing:.06em;margin-bottom:12px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ============ BOTTOM NAV ============ */
+nav.hud{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(420px,100%);z-index:10;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:rgba(5,8,15,.94);
+  border-top:1px solid var(--grid);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  backdrop-filter:blur(8px);
+}
+nav.hud button{
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:7px 2px 6px;color:var(--cyan-dim);
+}
+nav.hud button .nlbl{
+  font-family:var(--mono);font-size:8px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+}
+nav.hud button svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:square}
+nav.hud button.active{color:var(--cyan)}
+nav.hud button.active::after{
+  content:"";position:absolute;bottom:0;left:50%;
+  width:24px;height:2px;margin-left:-12px;
+  transform:skewX(-18deg);
+  background:var(--cyan);box-shadow:0 0 8px rgba(34,211,238,.8);
+}
+nav.hud button:disabled{opacity:.38;cursor:default}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .powered .pw{opacity:1;transform:none}
+  .pin::after{display:none}
+  .emblem::after{animation:none}
+  .xptrack i{width:20%}
+}
+@media (max-width:374px){
+  .hero-r h1{font-size:23px}
+  .exo h3{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<!-- faint hex-grid atmosphere -->
+<svg class="bghex" aria-hidden="true">
+  <defs>
+    <pattern id="hx" width="28" height="49" patternUnits="userSpaceOnUse">
+      <path d="M14 0 L28 8.17 L28 24.5 L14 32.67 L0 24.5 L0 8.17 Z M28 24.5 L14 32.67 L14 49 M0 24.5 L14 32.67"
+            fill="none" stroke="#22D3EE" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#hx)"/>
+</svg>
+<div class="bgglow" aria-hidden="true"></div>
+
+<div class="app">
+
+  <!-- STATUS STRIP -->
+  <header class="strip">
+    <span><span class="dot" aria-hidden="true"></span><b>HEXIS&nbsp;//</b></span>
+    <span>LVL&nbsp;3&nbsp;·&nbsp;ROOKIE&nbsp;·&nbsp;XP&nbsp;100/500</span>
+  </header>
+
+  <main>
+
+    <!-- ============ SCREEN 1 — DASHBOARD ============ -->
+    <section id="scr-dash" class="stack powered">
+
+      <!-- HERO PLATE -->
+      <div class="plate hero pw" style="--i:0">
+        <div class="pin">
+          <div class="emblem" aria-hidden="true">
+            <svg viewBox="0 0 96 96">
+              <g fill="none" stroke="#22D3EE">
+                <polygon points="48,4 86.1,26 86.1,70 48,92 9.9,70 9.9,26" stroke-width="1.6" opacity=".95"/>
+                <polygon points="82,48 65,77.4 31,77.4 14,48 31,18.6 65,18.6" stroke-width="1" opacity=".45"/>
+                <polygon points="48,28 65.3,38 65.3,58 48,68 30.7,58 30.7,38" stroke-width="1.2" fill="rgba(34,211,238,.08)"/>
+                <g stroke-width="1" opacity=".6">
+                  <line x1="48" y1="4"    x2="48"   y2="14"/>
+                  <line x1="86.1" y1="26" x2="77.4" y2="31"/>
+                  <line x1="86.1" y1="70" x2="77.4" y2="65"/>
+                  <line x1="48" y1="92"   x2="48"   y2="82"/>
+                  <line x1="9.9" y1="70"  x2="18.6" y2="65"/>
+                  <line x1="9.9" y1="26"  x2="18.6" y2="31"/>
+                </g>
+              </g>
+              <text x="48" y="56" text-anchor="middle"
+                    font-family="ui-monospace,Menlo,monospace" font-size="24" font-weight="700"
+                    fill="#E2F1F8">3</text>
+            </svg>
+          </div>
+          <div class="hero-r">
+            <span class="lbl">Operátor · Rank</span>
+            <h1 class="disp">Level 3</h1>
+            <div class="xptrack" role="progressbar" aria-label="XP" aria-valuenow="100" aria-valuemin="0" aria-valuemax="500">
+              <i></i>
+            </div>
+            <div class="xpread">
+              <span class="l">100&nbsp;XP</span>
+              <span class="r">400&nbsp;do&nbsp;L4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUEST PLATE (loudest) -->
+      <div class="frame amb pw" style="--i:1">
+        <div class="plate quest">
+          <div class="pin">
+            <span class="lbl amb">Dnešní quest</span>
+            <h2 class="disp">Lower A — Quad důraz</h2>
+            <p class="meta">8&nbsp;cviků&nbsp;·&nbsp;~45&nbsp;min</p>
+            <div style="height:13px"></div>
+            <button class="cbtn prime" id="btn-start">
+              <span class="cin">Začít quest&nbsp;▸</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TELEMETRY ROW -->
+      <div class="telemetry">
+        <div class="plate pw" style="--i:2;--cut:9px">
+          <div class="pin">
+            <span class="lbl">Streak</span>
+            <span class="val">4d</span>
+          </div>
+        </div>
+        <div class="plate pw" style="--i:3;--cut:9px">
+          <div class="pin">
+            <span class="lbl">K utracení</span>
+            <span class="val amb">500&nbsp;XP</span>
+          </div>
+        </div>
+        <div class="plate pw" style="--i:4;--cut:9px">
+          <div class="pin">
+            <span class="lbl">Týden</span>
+            <span class="val">2/4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HABITS -->
+      <div class="plate pw" style="--i:5">
+        <div class="pin">
+          <span class="lbl">Návyky dnes</span>
+          <div style="height:6px"></div>
+          <div class="habit done" id="hab-1">
+            <button class="hexchk" aria-pressed="true" aria-label="Ranní protein — hotovo">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <polygon class="fillhex" points="12,2 20.7,7 20.7,17 12,22 3.3,17 3.3,7"
+                         stroke="#22D3EE" stroke-width="1.4"/>
+                <path class="tick" d="M8 12 l3 3 l5.5 -6.5" fill="none" stroke="#22D3EE" stroke-width="2"/>
+              </svg>
+            </button>
+            <span>Ranní protein</span>
+          </div>
+          <div class="habit" id="hab-2">
+            <button class="hexchk" aria-pressed="false" aria-label="10k kroků — nesplněno">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <polygon class="fillhex" points="12,2 20.7,7 20.7,17 12,22 3.3,17 3.3,7"
+                         stroke="#3D5566" stroke-width="1.4"/>
+                <path class="tick" d="M8 12 l3 3 l5.5 -6.5" fill="none" stroke="#22D3EE" stroke-width="2"/>
+              </svg>
+            </button>
+            <span>10&nbsp;000 kroků</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ SCREEN 2 — WORKOUT ============ -->
+    <section id="scr-workout" class="stack" hidden>
+
+      <!-- MISSION HEADER -->
+      <div class="plate mission pw" style="--i:0">
+        <div class="pin">
+          <div class="mhead">
+            <span class="lbl cyn">Mise aktivní</span>
+            <span class="mono" style="font-size:10px;letter-spacing:.18em;color:var(--cyan-dim)">CVIK&nbsp;01/08</span>
+          </div>
+          <h2 class="disp">Lower A — Quad důraz</h2>
+          <div class="blade" aria-label="Průběh tréninku: 1 z 8">
+            <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXERCISE PLATE (active) -->
+      <div class="frame pw" style="--i:1">
+        <div class="plate hot exo">
+          <div class="pin">
+            <span class="lbl cyn">Aktuální cvik</span>
+            <h3 class="disp">Leg press</h3>
+            <p class="goal">Cíl:&nbsp;8–12&nbsp;×&nbsp;4&nbsp;série</p>
+            <p class="sugg">Návrh:&nbsp;80&nbsp;kg&nbsp;×&nbsp;8</p>
+            <div class="setdots" id="setdots" aria-label="Zapsané série: 0 ze 4">
+              <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1.5 13.6,4.75 13.6,11.25 8,14.5 2.4,11.25 2.4,4.75"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1.5 13.6,4.75 13.6,11.25 8,14.5 2.4,11.25 2.4,4.75"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1.5 13.6,4.75 13.6,11.25 8,14.5 2.4,11.25 2.4,4.75"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1.5 13.6,4.75 13.6,11.25 8,14.5 2.4,11.25 2.4,4.75"/></svg>
+            </div>
+
+            <!-- SET LOGGER -->
+            <div class="steps">
+              <div class="step plate" data-step="2.5" data-min="0" data-max="500">
+                <div class="pin">
+                  <span class="lbl">kg</span>
+                  <div class="steprow">
+                    <button class="sb" data-d="-1" aria-label="Ubrat kg">−</button>
+                    <span class="stepval" data-val="80">80</span>
+                    <button class="sb" data-d="1" aria-label="Přidat kg">+</button>
+                  </div>
+                </div>
+              </div>
+              <div class="step plate" data-step="1" data-min="1" data-max="50">
+                <div class="pin">
+                  <span class="lbl">Opak.</span>
+                  <div class="steprow">
+                    <button class="sb" data-d="-1" aria-label="Ubrat opakování">−</button>
+                    <span class="stepval" data-val="8">8</span>
+                    <button class="sb" data-d="1" aria-label="Přidat opakování">+</button>
+                  </div>
+                </div>
+              </div>
+              <div class="step plate" data-step="0.5" data-min="5" data-max="10" data-rpe="1">
+                <div class="pin">
+                  <span class="lbl">RPE</span>
+                  <div class="steprow">
+                    <button class="sb" data-d="-1" aria-label="Ubrat RPE">−</button>
+                    <span class="stepval" data-val="8">8</span>
+                    <button class="sb" data-d="1" aria-label="Přidat RPE">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx">
+              <button class="cbtn prime" id="btn-log">
+                <span class="cin">Zapsat sérii</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REST TIMER -->
+      <div class="plate rest pw" style="--i:2">
+        <div class="pin">
+          <div class="hexring">
+            <svg viewBox="0 0 120 120">
+              <polygon points="60,10 103.3,35 103.3,85 60,110 16.7,85 16.7,35"
+                       fill="none" stroke="#1E293B" stroke-width="3"/>
+              <polygon id="ringfill" points="60,10 103.3,35 103.3,85 60,110 16.7,85 16.7,35"
+                       fill="none" stroke="#22D3EE" stroke-width="3"
+                       pathLength="100" stroke-dasharray="100" stroke-dashoffset="0"
+                       style="filter:drop-shadow(0 0 6px rgba(34,211,238,.5))"/>
+            </svg>
+            <span class="t" id="timer">02:47</span>
+          </div>
+          <div class="rest-r">
+            <span class="lbl cyn">Odpočinek</span>
+            <p>Regenerace mezi sériemi.<br>Další série za&nbsp;chvíli.</p>
+            <button class="cbtn ghost" id="btn-skip-rest">
+              <span class="cin">Přeskočit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM ACTIONS -->
+      <div class="actions pw" style="--i:3">
+        <button class="cbtn ghost" id="btn-skip-ex">
+          <span class="cin">Přeskočit&nbsp;cvik</span>
+        </button>
+        <button class="cbtn cyan" id="btn-finish">
+          <span class="cin">Dokončit&nbsp;trénink</span>
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="hud" aria-label="Hlavní navigace">
+    <button id="nav-dash" class="active" aria-current="page">
+      <svg viewBox="0 0 22 22"><polygon points="11,2.5 18.4,6.75 18.4,15.25 11,19.5 3.6,15.25 3.6,6.75"/><circle cx="11" cy="11" r="2"/></svg>
+      <span class="nlbl">Přehled</span>
+    </button>
+    <button id="nav-train">
+      <svg viewBox="0 0 22 22"><path d="M3 8.5v5M6.5 6v10M15.5 6v10M19 8.5v5M6.5 11h9"/></svg>
+      <span class="nlbl">Trénink</span>
+    </button>
+    <button disabled aria-disabled="true">
+      <svg viewBox="0 0 22 22"><path d="M8 2.5h6M9.5 2.5v5l-4.6 8.2A1.8 1.8 0 0 0 6.5 18.5h9a1.8 1.8 0 0 0 1.6-2.8L12.5 7.5v-5"/></svg>
+      <span class="nlbl">Výživa</span>
+    </button>
+    <button disabled aria-disabled="true">
+      <svg viewBox="0 0 22 22"><polygon points="11,2.5 18.4,6.75 18.4,15.25 11,19.5 3.6,15.25 3.6,6.75"/><path d="M7.8 11.2l2.4 2.4 4-4.8"/></svg>
+      <span class="nlbl">Návyky</span>
+    </button>
+    <button disabled aria-disabled="true">
+      <svg viewBox="0 0 22 22"><circle cx="5" cy="11" r="1.4" fill="currentColor" stroke="none"/><circle cx="11" cy="11" r="1.4" fill="currentColor" stroke="none"/><circle cx="17" cy="11" r="1.4" fill="currentColor" stroke="none"/></svg>
+      <span class="nlbl">Více</span>
+    </button>
+  </nav>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- screen switching ---------- */
+  var scrDash = $("#scr-dash"), scrWork = $("#scr-workout");
+  var navDash = $("#nav-dash"), navTrain = $("#nav-train");
+
+  function show(which){
+    var showDash = which === "dash";
+    scrDash.hidden = !showDash;
+    scrWork.hidden = showDash;
+    navDash.classList.toggle("active", showDash);
+    navTrain.classList.toggle("active", !showDash);
+    navDash.toggleAttribute("aria-current", showDash);
+    navTrain.toggleAttribute("aria-current", !showDash);
+    var scr = showDash ? scrDash : scrWork;
+    if(!reduced){
+      scr.classList.remove("powered");
+      void scr.offsetWidth;              /* restart power-on stagger */
+      scr.classList.add("powered");
+    } else {
+      scr.classList.add("powered");
+    }
+    if(showDash){ stopTimer(); } else { startTimer(); }
+    window.scrollTo(0,0);
+  }
+  navDash.addEventListener("click", function(){ show("dash"); });
+  navTrain.addEventListener("click", function(){ show("work"); });
+  $("#btn-start").addEventListener("click", function(){ show("work"); });
+  $("#btn-finish").addEventListener("click", function(){ show("dash"); });
+
+  /* ---------- habit hex checkboxes ---------- */
+  document.querySelectorAll(".hexchk").forEach(function(chk){
+    chk.addEventListener("click", function(){
+      var on = chk.getAttribute("aria-pressed") === "true";
+      chk.setAttribute("aria-pressed", String(!on));
+      chk.closest(".habit").classList.toggle("done", !on);
+      var hexStroke = chk.querySelector(".fillhex");
+      hexStroke.setAttribute("stroke", !on ? "#22D3EE" : "#3D5566");
+    });
+  });
+
+  /* ---------- steppers ---------- */
+  document.querySelectorAll(".step").forEach(function(st){
+    var step = parseFloat(st.dataset.step),
+        min  = parseFloat(st.dataset.min),
+        max  = parseFloat(st.dataset.max),
+        isRpe = !!st.dataset.rpe,
+        out  = st.querySelector(".stepval");
+    st.querySelectorAll(".sb").forEach(function(b){
+      b.addEventListener("click", function(){
+        var v = parseFloat(out.dataset.val) + step * parseFloat(b.dataset.d);
+        v = Math.min(max, Math.max(min, Math.round(v*10)/10));
+        out.dataset.val = v;
+        out.textContent = (v % 1 === 0) ? String(v) : v.toFixed(1);
+        if(isRpe){ out.classList.toggle("danger", v >= 9.5); }
+      });
+    });
+  });
+
+  /* ---------- rest timer (hex ring drains) ---------- */
+  var TOTAL = 167, remaining = TOTAL, tickId = null;
+  var timerEl = $("#timer"), ring = $("#ringfill");
+  function paintTimer(){
+    var m = Math.floor(remaining/60), s = remaining%60;
+    timerEl.textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+    ring.setAttribute("stroke-dashoffset", String(100*(1 - remaining/TOTAL)));
+    timerEl.style.color = remaining === 0 ? "var(--cyan)" : "var(--ice)";
+  }
+  function startTimer(){
+    stopTimer();
+    tickId = setInterval(function(){
+      if(remaining > 0){ remaining--; paintTimer(); }
+      else { stopTimer(); }
+    }, 1000);
+  }
+  function stopTimer(){ if(tickId){ clearInterval(tickId); tickId = null; } }
+  $("#btn-skip-rest").addEventListener("click", function(){
+    remaining = 0; paintTimer(); stopTimer();
+  });
+  paintTimer();
+
+  /* ---------- set logging: pulse + XP float + hex dot ---------- */
+  var sets = 0;
+  var dots = document.querySelectorAll("#setdots svg");
+  var logBtn = $("#btn-log"), fxBox = logBtn.parentElement;
+  logBtn.addEventListener("click", function(){
+    if(sets >= 4){ return; }
+    dots[sets].classList.add("on");
+    sets++;
+    $("#setdots").setAttribute("aria-label", "Zapsané série: "+sets+" ze 4");
+    remaining = TOTAL; paintTimer(); startTimer();
+    if(!reduced){
+      var p = document.createElement("span");
+      p.className = "pulse";
+      fxBox.appendChild(p);
+      setTimeout(function(){ p.remove(); }, 700);
+      var f = document.createElement("span");
+      f.className = "xpfloat";
+      f.textContent = "+15 XP";
+      fxBox.appendChild(f);
+      f.addEventListener("animationend", function(){ f.remove(); });
+    }
+    if(sets === 4){
+      logBtn.disabled = true;
+      logBtn.querySelector(".cin").textContent = "SÉRIE 4/4 · HOTOVO";
+    }
+  });
+
+  /* ---------- exercise skip (prototype: just advances the blade) ---------- */
+  $("#btn-skip-ex").addEventListener("click", function(){
+    var segs = document.querySelectorAll(".blade i");
+    for(var i=0;i<segs.length;i++){
+      if(!segs[i].classList.contains("on")){ segs[i].classList.add("on"); break; }
+    }
+  });
+})();
+</script>
+</body>
+</html>
