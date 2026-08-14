@@ -26,7 +26,7 @@ export function SetInput({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {!exerciseIsBodyweight ? (
           <NumberInput value={weight} onChange={setWeight} step={2.5} suffix="kg" />
         ) : null}

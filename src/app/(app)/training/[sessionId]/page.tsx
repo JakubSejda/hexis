@@ -6,6 +6,7 @@ import {
   sessions,
   sessionSets,
   planExercises,
+  plans,
   exercises,
   exerciseMuscleGroups,
   muscleGroups,
@@ -236,6 +237,10 @@ export default async function WorkoutSessionPage({
   // eslint-disable-next-line react-hooks/purity
   const durationMin = Math.floor((Date.now() - new Date(session.startedAt).getTime()) / 60000)
 
+  const activePlanName = session.planId
+    ? ((await db.query.plans.findFirst({ where: eq(plans.id, session.planId) }))?.name ?? null)
+    : null
+
   return (
     <Container>
       <Stack gap={4} className="py-4">
@@ -245,7 +250,11 @@ export default async function WorkoutSessionPage({
             <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />
           </div>
         </details>
-        <WorkoutSessionClient sessionId={sessionId} exercises={exercisesWithSuggestions} />
+        <WorkoutSessionClient
+          sessionId={sessionId}
+          planName={activePlanName}
+          exercises={exercisesWithSuggestions}
+        />
         <SessionSummary
           sessionId={sessionId}
           totalSets={totalSets}

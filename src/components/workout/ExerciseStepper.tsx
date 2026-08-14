@@ -12,6 +12,7 @@ type Exercise = React.ComponentProps<typeof ExerciseCard>['exercise']
 
 type Props = {
   sessionId: number
+  planName?: string | null
   exercises: Array<Exercise & { historyLabel: string | null; suggestion: Suggestion }>
   onRefresh: () => void
   onSkip: (exerciseId: number) => void
@@ -19,7 +20,15 @@ type Props = {
   onFinish: () => void
 }
 
-function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFinish }: Props) {
+function StepperInner({
+  sessionId,
+  planName,
+  exercises,
+  onRefresh,
+  onSkip,
+  onAdHoc,
+  onFinish,
+}: Props) {
   const router = useRouter()
   const search = useSearchParams()
   const exParam = search.get('ex')
@@ -60,6 +69,27 @@ function StepperInner({ sessionId, exercises, onRefresh, onSkip, onAdHoc, onFini
 
   return (
     <div className="flex flex-col gap-4">
+      <header className="animate-hud-power-on">
+        <div className="text-system flex items-center justify-between font-mono text-xs tracking-[0.2em] uppercase">
+          <span>Mise aktivní</span>
+          <span>
+            Cvik {String(idx + 1).padStart(2, '0')}/{String(exercises.length).padStart(2, '0')}
+          </span>
+        </div>
+        {planName ? (
+          <div className="text-foreground mt-1 text-xl font-black tracking-tight uppercase italic">
+            {planName}
+          </div>
+        ) : null}
+        <div className="mt-2 flex gap-1" aria-hidden>
+          {exercises.map((e, i) => (
+            <span
+              key={e.exerciseId}
+              className={`h-1 flex-1 ${i <= idx ? 'bg-system' : 'bg-border'}`}
+            />
+          ))}
+        </div>
+      </header>
       <div {...longPress}>
         <ExerciseCard
           sessionId={sessionId}
