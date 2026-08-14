@@ -8,8 +8,9 @@ describe('RegionHeader', () => {
     render(<RegionHeader>Life Areas</RegionHeader>)
     const el = screen.getByText('Life Areas')
     expect(el).toBeInTheDocument()
-    expect(el.className).toContain('uppercase')
-    expect(el.className).toContain('tracking-[0.2em]')
-    expect(el.className).toContain('text-muted')
+    const wrapper = el.parentElement as HTMLElement
+    expect(wrapper.className).toContain('uppercase')
+    expect(wrapper.className).toContain('tracking-[0.2em]')
+    expect(wrapper.className).toContain('text-muted')
   })
 })

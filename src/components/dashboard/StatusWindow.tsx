@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Avatar } from '@/components/avatar/Avatar'
-import { ProgressBar } from '@/components/ui'
+import { Card, Heading, ProgressBar } from '@/components/ui'
+import { HexEmblem } from './HexEmblem'
 import type { Tier } from '@/lib/tiers'
 
 type Props = {
@@ -30,27 +30,30 @@ export function StatusWindow({
     month: 'long',
   })
   return (
-    <Link
-      href="/stats"
-      className="border-border bg-surface hover:border-accent/60 block rounded-2xl border p-4 transition-colors"
-    >
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-muted">{today}</span>
+    <Card as={Link} href="/stats" variant="interactive" className="animate-hud-power-on block">
+      <div className="text-muted flex items-center justify-between font-mono text-xs tracking-[0.15em] uppercase">
+        <span>{today}</span>
         {streak > 0 && (
-          <span className="text-muted">
+          <span>
             🔥 <span className="text-accent font-semibold">{streak}</span> day streak
           </span>
         )}
       </div>
-      <div className="mt-2 flex flex-col items-center gap-2">
-        <Avatar tier={tier} size={140} ringPulse={tier >= 3} />
-        <div className="text-3xl font-bold" style={{ color: tierColor }}>
+      <div className="mt-3 flex flex-col items-center gap-2">
+        <HexEmblem
+          level={level}
+          tierColor={tierColor}
+          className={tier >= 3 ? 'animate-tier-glow' : undefined}
+        />
+        <Heading level={2} as="div" variant="display" className="text-foreground">
           Level {level}
+        </Heading>
+        <div className="text-system font-mono text-xs tracking-[0.2em] uppercase">
+          — {tierName} —
         </div>
-        <div className="text-muted text-xs tracking-[0.15em] uppercase">— {tierName} —</div>
         <div className="mt-2 w-full">
           <ProgressBar value={currentXp} max={xpToLevel} variant="xp" height={8} />
-          <div className="text-muted-strong mt-1 flex justify-between text-xs">
+          <div className="text-muted-strong mt-1.5 flex justify-between font-mono text-xs">
             <span>{currentXp} XP</span>
             <span>
               {xpForNext} do L{level + 1}
@@ -58,6 +61,6 @@ export function StatusWindow({
           </div>
         </div>
       </div>
-    </Link>
+    </Card>
   )
 }

@@ -69,29 +69,28 @@ export function TodaysChecksCard({ dailyHabits }: Props) {
   }
 
   return (
-    <section
-      data-todays-checks-card
-      className="border-border bg-surface space-y-3 rounded-xl border p-4"
-    >
-      <h2 className="text-muted text-xs tracking-[0.2em] uppercase">Today&apos;s Checks</h2>
-      <div className="space-y-2">
-        {visible.map((h) => (
-          <HabitDailyRow
-            key={h.id}
-            habit={{ ...h, completedToday: isChecked(h) }}
-            onCheck={handleCheck}
-            onUncheck={handleUncheck}
-          />
-        ))}
-      </div>
-      {overflow > 0 && <p className="text-muted text-xs">…a {overflow} další</p>}
-      <div className="border-border flex items-center justify-between border-t pt-3 text-xs">
-        <span className="text-muted tabular-nums">
-          {doneCount} ze {dailyHabits.length} hotovo
-        </span>
-        <Link href="/habits" className="text-primary hover:underline">
-          Otevřít
-        </Link>
+    <section data-todays-checks-card className="hud-clip bg-border animate-hud-power-on p-px">
+      <div className="hud-clip bg-surface space-y-3 p-4">
+        <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Návyky dnes</h2>
+        <div className="space-y-2">
+          {visible.map((h) => (
+            <HabitDailyRow
+              key={h.id}
+              habit={{ ...h, completedToday: isChecked(h) }}
+              onCheck={handleCheck}
+              onUncheck={handleUncheck}
+            />
+          ))}
+        </div>
+        {overflow > 0 && <p className="text-muted text-xs">…a {overflow} další</p>}
+        <div className="border-border flex items-center justify-between border-t pt-3 text-xs">
+          <span className="text-muted tabular-nums">
+            {doneCount} ze {dailyHabits.length} hotovo
+          </span>
+          <Link href="/habits" className="text-system hover:underline">
+            Otevřít
+          </Link>
+        </div>
       </div>
     </section>
   )
