@@ -43,6 +43,13 @@
       "when": 1779730914052,
       "tag": "0005_sp5_pr3_player_bio",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1786693831826,
+      "tag": "0006_p5_onboarding",
+      "breakpoints": true
     }
   ]
 }

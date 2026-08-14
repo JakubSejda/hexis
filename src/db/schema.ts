@@ -36,6 +36,7 @@ export const users = mysqlTable('users', {
   goalKg: decimal('goal_kg', { precision: 5, scale: 2 }),
   goalText: varchar('goal_text', { length: 120 }),
   startedAt: date('started_at', { mode: 'string' }),
+  onboardedAt: timestamp('onboarded_at'),
 })
 
 export const accounts = mysqlTable(
