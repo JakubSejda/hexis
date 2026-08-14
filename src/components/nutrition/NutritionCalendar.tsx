@@ -121,7 +121,7 @@ export function NutritionCalendar({
       </div>
       <div className="grid grid-cols-7 gap-1 px-4">
         {DAY_HEADERS.map((h) => (
-          <div key={h} className="text-muted py-1 text-center text-[11px]">
+          <div key={h} className="text-muted py-1 text-center text-xs">
             {h}
           </div>
         ))}

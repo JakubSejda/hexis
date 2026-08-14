@@ -4,7 +4,7 @@ import { ProgressBar } from '@/components/ui'
 
 function Label() {
   return (
-    <div className="text-muted text-[10px] font-medium tracking-[0.2em] uppercase">
+    <div className="text-muted text-xs font-medium tracking-[0.2em] uppercase">
       Today&apos;s Quest
     </div>
   )

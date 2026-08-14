@@ -132,7 +132,7 @@ export function DailyModal({
           trackedMacros.includes('fat') ||
           trackedMacros.includes('sugar')) && (
           <div className="bg-background rounded-lg p-3">
-            <div className="text-muted mb-2 text-[11px]">Volitelná makra</div>
+            <div className="text-muted mb-2 text-xs">Volitelná makra</div>
             <div className="grid grid-cols-2 gap-2">
               {trackedMacros.includes('carbs') && (
                 <SimpleMacro
@@ -225,7 +225,7 @@ function SimpleMacro({
 }) {
   return (
     <div>
-      <div className="text-muted text-[11px]">{label}</div>
+      <div className="text-muted text-xs">{label}</div>
       <NumberInput value={value} onChange={onChange} step={1} min={0} max={max} suffix=" g" />
     </div>
   )

@@ -43,7 +43,7 @@ export function CalendarCell({ day }: Props) {
     >
       <span className="text-foreground text-sm font-medium">{dayNum}</span>
       {day.forecastPlanName ? (
-        <span className="text-muted w-full truncate text-[10px]">{day.forecastPlanName}?</span>
+        <span className="text-muted w-full truncate text-xs">{day.forecastPlanName}?</span>
       ) : isDimmed ? null : (
         <div className="flex gap-[3px]">
           {SIGNAL_KEYS.map((key) => (

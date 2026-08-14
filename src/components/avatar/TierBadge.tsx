@@ -10,8 +10,8 @@ export function TierBadge({ tier, size = 48, dim, label }: Props) {
       <Avatar tier={tier} size={size} />
       {label && (
         <>
-          <span className="text-foreground text-[10px] font-semibold">{meta.name}</span>
-          <span className="text-muted text-[10px]">L{meta.levelMin}+</span>
+          <span className="text-foreground text-xs font-semibold">{meta.name}</span>
+          <span className="text-muted text-xs">L{meta.levelMin}+</span>
         </>
       )}
     </div>

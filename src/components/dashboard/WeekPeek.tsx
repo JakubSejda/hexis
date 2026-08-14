@@ -22,12 +22,12 @@ export function WeekPeek({ days }: { days: WeekPeekDay[] }) {
       <div className="grid grid-cols-7 gap-2 text-center">
         {days.map((d, i) => (
           <div key={i} data-day-status={d.status} className="flex flex-col items-center gap-1">
-            <span className="text-muted text-[10px]">{d.weekdayLabel}</span>
+            <span className="text-muted text-xs">{d.weekdayLabel}</span>
             <span className={`text-lg leading-none ${COLOR[d.status]}`}>{GLYPH[d.status]}</span>
           </div>
         ))}
       </div>
-      <div className="text-muted mt-3 text-center text-[10px]">
+      <div className="text-muted mt-3 text-center text-xs">
         <span className="text-accent">●</span> workout &middot;{' '}
         <span className="text-muted">○</span> rest &middot; <span className="text-border">·</span>{' '}
         future

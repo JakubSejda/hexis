@@ -20,7 +20,7 @@ export function LifeAreaCard({ label, value, secondary, visual, href, empty }: P
         empty && 'opacity-60'
       )}
     >
-      <div className="text-muted text-[10px] font-medium tracking-[0.2em] uppercase">{label}</div>
+      <div className="text-muted text-xs font-medium tracking-[0.2em] uppercase">{label}</div>
       <div className="text-foreground mt-1 text-2xl font-bold">{value}</div>
       <div className="text-muted mt-0.5 text-xs">{secondary}</div>
       {visual && <div className="mt-3">{visual}</div>}

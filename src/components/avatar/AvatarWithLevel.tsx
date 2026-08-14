@@ -11,7 +11,7 @@ export function AvatarWithLevel({ tier, level, size = 80, className }: Props) {
     >
       <Avatar tier={tier} size={size} />
       <span
-        className="border-background bg-background text-primary absolute right-0 bottom-0 rounded-full border px-1.5 py-0.5 text-[10px] font-bold"
+        className="border-background bg-background text-primary absolute right-0 bottom-0 rounded-full border px-1.5 py-0.5 text-xs font-bold"
         style={{ transform: 'translate(25%, 25%)' }}
       >
         L{level}
