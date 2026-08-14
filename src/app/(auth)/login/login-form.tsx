@@ -38,9 +38,12 @@ export default function LoginForm() {
 
   return (
     <>
-      <Heading level={1} className="mb-6">
-        Hexis — Login
-      </Heading>
+      <div className="mb-6">
+        <Heading level={1} className="text-accent text-3xl font-bold tracking-[0.2em]">
+          HEXIS
+        </Heading>
+        <p className="text-muted mt-1 text-sm">Tvoje cesta. Tvoje XP.</p>
+      </div>
 
       <form onSubmit={onSubmit} className="space-y-4">
         <Input

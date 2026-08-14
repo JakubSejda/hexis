@@ -118,7 +118,6 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
       <div className="space-y-4 py-12 text-center">
         <p className="text-muted text-sm">Zatím nemáš žádné návyky.</p>
         <Button onClick={() => setCreating(true)}>+ Založ první návyk</Button>
-        <p className="text-muted text-xs">Tap = check, drž = vrátit zpět.</p>
         <HabitDialog
           open={creating}
           mode="create"
@@ -148,6 +147,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
               />
             ))}
           </div>
+          <p className="text-muted text-xs">Tap = check, drž = vrátit zpět.</p>
         </section>
       )}
 
