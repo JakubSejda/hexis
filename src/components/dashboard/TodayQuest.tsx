@@ -20,7 +20,7 @@ export function TodayQuest({ quest }: { quest: Quest }) {
         <Label />
         <div className="text-foreground mt-1 text-xl font-bold">▶ Pokračuj v {quest.planName}</div>
         <div className="mt-2 flex items-center gap-3 text-xs">
-          <span className="text-muted">
+          <span className="text-muted-strong">
             {quest.completed} ze {quest.total} cviků hotovo
           </span>
           <ProgressBar
