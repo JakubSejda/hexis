@@ -1,0 +1,15 @@
+# NOTE: docs/ stays in the build context on purpose — globals.css has
+# `@source not "../../docs"` and the safest contract is for the path to
+# exist wherever the CSS builds.
+.git
+.next
+node_modules
+.worktrees
+.playwright-mcp
+uploads
+tests
+.env*
+!.env.production.example
+docker-compose.yml
+compose.prod.yml
+Caddyfile

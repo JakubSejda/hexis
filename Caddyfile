@@ -1,0 +1,5 @@
+# TLS via Let's Encrypt is automatic for any real domain.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:3000
+}
