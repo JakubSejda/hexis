@@ -43,7 +43,7 @@ export function NumberInput({
       <button
         type="button"
         aria-label="snížit"
-        className="bg-border text-foreground active:bg-primary h-11 w-11 rounded-lg"
+        className="bg-border text-foreground active:bg-system hud-clip-sm h-11 w-11"
         onClick={() => handle(-step)}
       >
         −
@@ -61,7 +61,7 @@ export function NumberInput({
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={error || hint ? descriptionId : undefined}
         className={
-          'bg-background text-foreground h-11 w-20 rounded-lg border text-center ' +
+          'bg-background text-foreground hud-clip-sm h-11 w-20 border text-center font-mono ' +
           (error ? 'border-danger' : 'border-border')
         }
         step={step}
@@ -72,7 +72,7 @@ export function NumberInput({
       <button
         type="button"
         aria-label="zvýšit"
-        className="bg-border text-foreground active:bg-primary h-11 w-11 rounded-lg"
+        className="bg-border text-foreground active:bg-system hud-clip-sm h-11 w-11"
         onClick={() => handle(step)}
       >
         +
