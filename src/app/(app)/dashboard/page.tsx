@@ -29,7 +29,7 @@ import { fetchRange as fetchNutrition } from '@/lib/queries/nutrition'
 import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
 import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
 import { fetchRewardsBalance } from '@/lib/queries/rewards'
-import { RewardsBalanceCard } from '@/components/dashboard/RewardsBalanceCard'
+import { TelemetryRow } from '@/components/dashboard/TelemetryRow'
 import { toWeekStart, weekRange } from '@/lib/week'
 import { levelToTierMeta, xpToProgress } from '@/lib/tiers'
 import { resolveTodayQuest } from '@/lib/today-quest'
@@ -166,14 +166,13 @@ export default async function DashboardPage() {
           tierColor={tierMeta.color}
           streak={streak}
         />
-        {rewardsBalance.totalXp > 0 && (
-          <RewardsBalanceCard
-            balanceXp={rewardsBalance.balanceXp}
-            totalXp={rewardsBalance.totalXp}
-            spentXp={rewardsBalance.spentXp}
-          />
-        )}
         <TodayQuest quest={quest} />
+        <TelemetryRow
+          streak={streak}
+          balanceXp={rewardsBalance.balanceXp}
+          weekDone={weekPeekDays.filter((d) => d.status === 'workout').length}
+          weekTarget={sortedPlans.length > 0 ? sortedPlans.length : null}
+        />
         <TodaysChecksCard dailyHabits={dailyHabits} />
         <section>
           <RegionHeader>Life Areas</RegionHeader>

@@ -46,7 +46,7 @@ type Props = {
   edge?: Edge
   children: ReactNode
   className?: string
-} & Omit<AllHTMLAttributes<HTMLElement>, 'className'>
+} & Omit<AllHTMLAttributes<HTMLElement>, 'className' | 'as'>
 
 export const Card = forwardRef<HTMLElement, Props>(function Card(
   {

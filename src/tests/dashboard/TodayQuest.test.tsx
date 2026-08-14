@@ -42,7 +42,7 @@ describe('TodayQuest', () => {
     expect(screen.getByRole('link')).toHaveAttribute('href', '/training')
   })
 
-  it("all clickable states render the TODAY'S QUEST label", () => {
+  it('all clickable states render the Dnešní quest label', () => {
     const states = [
       { kind: 'active', sessionId: 1, planName: 'X', completed: 0, total: 0 } as const,
       { kind: 'scheduled', planName: 'Y', exerciseCount: 5 } as const,
@@ -50,7 +50,7 @@ describe('TodayQuest', () => {
     ]
     for (const quest of states) {
       const { unmount } = render(<TodayQuest quest={quest} />)
-      expect(screen.getByText(/TODAY'S QUEST/i)).toBeInTheDocument()
+      expect(screen.getByText(/dnešní quest/i)).toBeInTheDocument()
       unmount()
     }
   })
