@@ -45,13 +45,23 @@ export function OnboardingWizard() {
     <Card padding="lg">
       <Stack gap={6}>
         <div className="flex items-center justify-between">
-          <div className="flex gap-1.5" aria-label={`Krok ${step + 1} z ${TOTAL_STEPS}`}>
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-              <span
-                key={i}
-                className={`h-2 w-2 rounded-full ${i === step ? 'bg-primary' : 'bg-border'}`}
-              />
-            ))}
+          <div className="flex items-center gap-2" aria-label={`Krok ${step + 1} z ${TOTAL_STEPS}`}>
+            <span className="text-system font-mono text-xs tracking-[0.2em] uppercase">
+              Hexis // inicializace
+            </span>
+            <span className="flex gap-1.5" aria-hidden>
+              {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+                <span
+                  key={i}
+                  className={i === step ? 'bg-system' : 'bg-border'}
+                  style={{
+                    width: 10,
+                    height: 10,
+                    clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                  }}
+                />
+              ))}
+            </span>
           </div>
           <Button
             variant="ghost"
@@ -64,8 +74,10 @@ export function OnboardingWizard() {
         </div>
 
         {step === 0 && (
-          <Stack gap={3}>
-            <Heading level={1}>Vítej v Hexis</Heading>
+          <Stack gap={3} className="animate-hud-power-on">
+            <Heading level={1} variant="display">
+              Vítej v Hexis
+            </Heading>
             <p className="text-muted-strong text-sm">
               Trénink, návyky a progres jako RPG. Za skutečnou práci sbíráš XP, levely a odměny —
               žádné prázdné body, jen tvoje cesta.
@@ -74,8 +86,10 @@ export function OnboardingWizard() {
         )}
 
         {step === 1 && (
-          <Stack gap={4}>
-            <Heading level={1}>Profil</Heading>
+          <Stack gap={4} className="animate-hud-power-on">
+            <Heading level={1} variant="display">
+              Profil
+            </Heading>
             <p className="text-muted text-sm">Všechno je volitelné — můžeš doplnit později.</p>
             <Input label="Jméno" value={name} onChange={(e) => setName(e.target.value)} />
             <Input
@@ -96,8 +110,10 @@ export function OnboardingWizard() {
         )}
 
         {step === 2 && (
-          <Stack gap={3}>
-            <Heading level={1}>Vyber si svůj první quest</Heading>
+          <Stack gap={3} className="animate-hud-power-on">
+            <Heading level={1} variant="display">
+              Vyber si svůj první quest
+            </Heading>
             <p className="text-muted-strong text-sm">
               Začni tréninkem — vyber plán a zapiš první sérii. XP naskočí hned.
             </p>

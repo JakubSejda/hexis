@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Avatar } from '@/components/avatar/Avatar'
+import { HexEmblem } from '@/components/dashboard/HexEmblem'
 import { Button } from '@/components/ui'
 import { TIERS, type Tier } from '@/lib/tiers'
 
@@ -24,24 +24,36 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
       onClick={onDismiss}
     >
       <Confetti />
-      <div
-        className="border-border bg-surface relative mx-4 rounded-2xl border p-8 text-center shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Avatar tier={tier} size={120} ringPulse />
-        <div className="mt-4 text-2xl font-bold" style={{ color: meta.color }}>
-          Tier {tier}: {meta.name} odemknuty!
+      <div className="hud-clip bg-system relative mx-4 p-px" onClick={(e) => e.stopPropagation()}>
+        <div className="hud-clip bg-surface flex flex-col items-center p-8 text-center">
+          <HexEmblem
+            level={levelAfter}
+            tierColor={meta.accent}
+            size={140}
+            className="animate-tier-glow"
+          />
+          <div className="text-system mt-4 font-mono text-xs tracking-[0.3em] uppercase">
+            Nový tier odemknut
+          </div>
+          <div
+            className="mt-2 text-2xl font-black tracking-tight uppercase italic"
+            style={{ color: meta.color }}
+          >
+            Tier {tier}: {meta.name} odemknuty!
+          </div>
+          <div className="text-muted-strong mt-1 font-mono text-sm">
+            Dosahl jsi Level {levelAfter}
+          </div>
+          <Button variant="success" size="md" className="mt-6 px-6" onClick={onDismiss}>
+            Pokracovat
+          </Button>
         </div>
-        <div className="text-muted mt-1 text-sm">Dosahl jsi Level {levelAfter}</div>
-        <Button variant="success" size="md" className="mt-6 px-6" onClick={onDismiss}>
-          Pokracovat
-        </Button>
       </div>
     </div>
   )
 }
 
-const CONFETTI_COLORS = ['#10b981', '#f59e0b', '#0ea5e9', '#eab308', '#ef4444']
+const CONFETTI_COLORS = ['#22d3ee', '#f59e0b', '#34d399', '#e2f1f8', '#fbbf24']
 
 type ConfettiPiece = {
   left: number
