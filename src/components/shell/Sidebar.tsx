@@ -10,7 +10,7 @@ export function Sidebar() {
       aria-label="Primary"
       className="bg-surface-sunken border-border fixed top-0 left-0 z-40 hidden h-screen w-[220px] flex-col border-r py-4 md:flex"
     >
-      <div className="border-border text-accent mb-3 border-b px-4 pb-4 text-base font-bold tracking-[0.2em] uppercase">
+      <div className="border-border text-accent mb-3 border-b px-4 pb-4 font-mono text-base font-bold tracking-[0.2em] uppercase">
         Hexis
       </div>
 
@@ -48,7 +48,12 @@ export function Sidebar() {
 
 function SectionLabel({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn('text-muted px-4 pt-2 pb-1 text-xs tracking-[0.15em] uppercase', className)}>
+    <div
+      className={cn(
+        'text-muted px-4 pt-2 pb-1 font-mono text-xs tracking-[0.2em] uppercase',
+        className
+      )}
+    >
       {children}
     </div>
   )

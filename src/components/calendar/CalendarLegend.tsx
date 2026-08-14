@@ -7,7 +7,7 @@ const ITEMS: Array<{ label: string; dot: string }> = [
 
 export function CalendarLegend() {
   return (
-    <div className="text-muted flex flex-wrap items-center gap-4 text-xs">
+    <div className="text-muted flex flex-wrap items-center gap-4 font-mono text-xs">
       {ITEMS.map((it) => (
         <span key={it.label} className="inline-flex items-center gap-2">
           <span className={`h-[6px] w-[6px] rounded-full ${it.dot}`} aria-hidden />

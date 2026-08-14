@@ -18,7 +18,10 @@ export function CalendarGrid({ days }: Props) {
   return (
     <div className="grid grid-cols-7 gap-2">
       {WEEKDAYS.map((d) => (
-        <div key={d} className="text-muted text-center text-xs tracking-[0.2em] uppercase">
+        <div
+          key={d}
+          className="text-muted text-center font-mono text-xs tracking-[0.2em] uppercase"
+        >
           {d}
         </div>
       ))}

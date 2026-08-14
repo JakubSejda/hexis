@@ -131,33 +131,37 @@ export function DailyModal({
         {(trackedMacros.includes('carbs') ||
           trackedMacros.includes('fat') ||
           trackedMacros.includes('sugar')) && (
-          <div className="bg-background rounded-lg p-3">
-            <div className="text-muted mb-2 text-xs">Volitelná makra</div>
-            <div className="grid grid-cols-2 gap-2">
-              {trackedMacros.includes('carbs') && (
-                <SimpleMacro
-                  label="Sacharidy"
-                  value={draft.carbsG}
-                  max={2000}
-                  onChange={(v) => setDraft({ ...draft, carbsG: v })}
-                />
-              )}
-              {trackedMacros.includes('fat') && (
-                <SimpleMacro
-                  label="Tuky"
-                  value={draft.fatG}
-                  max={1000}
-                  onChange={(v) => setDraft({ ...draft, fatG: v })}
-                />
-              )}
-              {trackedMacros.includes('sugar') && (
-                <SimpleMacro
-                  label="Cukry"
-                  value={draft.sugarG}
-                  max={2000}
-                  onChange={(v) => setDraft({ ...draft, sugarG: v })}
-                />
-              )}
+          <div className="hud-clip bg-border p-px">
+            <div className="hud-clip bg-background p-3">
+              <div className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">
+                Volitelná makra
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {trackedMacros.includes('carbs') && (
+                  <SimpleMacro
+                    label="Sacharidy"
+                    value={draft.carbsG}
+                    max={2000}
+                    onChange={(v) => setDraft({ ...draft, carbsG: v })}
+                  />
+                )}
+                {trackedMacros.includes('fat') && (
+                  <SimpleMacro
+                    label="Tuky"
+                    value={draft.fatG}
+                    max={1000}
+                    onChange={(v) => setDraft({ ...draft, fatG: v })}
+                  />
+                )}
+                {trackedMacros.includes('sugar') && (
+                  <SimpleMacro
+                    label="Cukry"
+                    value={draft.sugarG}
+                    max={2000}
+                    onChange={(v) => setDraft({ ...draft, sugarG: v })}
+                  />
+                )}
+              </div>
             </div>
           </div>
         )}

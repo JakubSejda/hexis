@@ -1,4 +1,4 @@
-import { Sparkline } from '@/components/ui'
+import { Card, Sparkline } from '@/components/ui'
 import type { Goal, Direction } from '@/lib/measurement-delta'
 import { calcDelta, deltaDirection } from '@/lib/measurement-delta'
 
@@ -30,10 +30,10 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
   const sign =
     delta == null ? '—' : delta > 0 ? `+${delta.toFixed(precision)}` : delta.toFixed(precision)
   return (
-    <div className="border-border bg-surface min-w-[140px] rounded-lg border p-3">
-      <div className="text-muted text-xs">{label}</div>
+    <Card padding="sm" className="min-w-[140px]">
+      <div className="text-muted font-mono text-[11px] tracking-[0.2em] uppercase">{label}</div>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-foreground text-xl font-bold">
+        <span className="text-foreground font-mono text-xl font-bold">
           {last == null ? '—' : last.toFixed(precision)}
         </span>
         <span className="text-xs" style={{ color }}>
@@ -48,6 +48,6 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
         className="mt-1.5 block"
       />
       {unit && <div className="text-muted text-xs">{unit}</div>}
-    </div>
+    </Card>
   )
 }

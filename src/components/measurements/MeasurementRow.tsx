@@ -50,7 +50,7 @@ export function MeasurementRow({
         <td
           className={
             'px-1.5 py-2.5 text-xs whitespace-nowrap ' +
-            (isCurrent ? 'text-primary font-semibold' : 'text-muted')
+            (isCurrent ? 'text-system font-semibold' : 'text-muted')
           }
         >
           <button onClick={() => setShowNote((s) => !s)}>{dateLabel}</button>

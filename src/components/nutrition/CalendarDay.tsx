@@ -39,7 +39,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
         outline: isToday ? '2px solid #10b981' : 'none',
         outlineOffset: -2,
       }}
-      className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg"
+      className="hud-clip-sm flex aspect-square cursor-pointer flex-col items-center justify-center"
       aria-label={`Den ${dayNumber}`}
     >
       <span
