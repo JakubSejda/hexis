@@ -47,7 +47,7 @@ export function SparklineCard({ label, values, goal, unit, precision = 1 }: Prop
         tone={TONE[direction]}
         className="mt-1.5 block"
       />
-      {unit && <div className="text-muted text-[10px]">{unit}</div>}
+      {unit && <div className="text-muted text-xs">{unit}</div>}
     </div>
   )
 }

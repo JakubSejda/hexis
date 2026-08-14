@@ -38,7 +38,7 @@ export function DataTable<T>({ columns, data, getRowKey, className, empty }: Pro
               <th
                 key={c.key}
                 className={cn(
-                  'text-muted px-1.5 py-2 text-[11px] font-medium',
+                  'text-muted px-1.5 py-2 text-xs font-medium',
                   ALIGN[c.align ?? 'left'],
                   c.headerClassName
                 )}

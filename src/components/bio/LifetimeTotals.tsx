@@ -18,7 +18,7 @@ export function LifetimeTotals({ sessions, sets, liftedKg, totalXp }: Props) {
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {tiles.map((t) => (
         <div key={t.label} className="border-border bg-surface rounded-lg border p-3">
-          <div className="text-muted text-[10px] tracking-[0.2em] uppercase">{t.label}</div>
+          <div className="text-muted text-xs tracking-[0.2em] uppercase">{t.label}</div>
           <div className="text-foreground mt-1 text-2xl font-bold">{t.value}</div>
         </div>
       ))}

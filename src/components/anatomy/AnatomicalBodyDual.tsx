@@ -50,7 +50,7 @@ export function AnatomicalBodyDual({ highlights, className, bodyClassName }: Pro
             className={bodyClassName}
             ariaLabel="Anatomical body front view"
           />
-          <div className="text-muted mt-1 text-center text-[10px]">Zepředu</div>
+          <div className="text-muted mt-1 text-center text-xs">Zepředu</div>
         </div>
         <div className={active === 'back' ? 'block sm:block' : 'hidden sm:block'}>
           <AnatomicalBody
@@ -59,7 +59,7 @@ export function AnatomicalBodyDual({ highlights, className, bodyClassName }: Pro
             className={bodyClassName}
             ariaLabel="Anatomical body back view"
           />
-          <div className="text-muted mt-1 text-center text-[10px]">Zezadu</div>
+          <div className="text-muted mt-1 text-center text-xs">Zezadu</div>
         </div>
       </div>
     </div>

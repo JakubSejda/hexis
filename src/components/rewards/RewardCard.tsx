@@ -36,6 +36,7 @@ export function RewardCard({
         )}
         <div className="text-muted mt-1 text-xs">
           <span className="text-accent font-semibold">{reward.costXp} XP</span>
+          {cantAfford && <span className="text-danger ml-2">Chybí {missing} XP</span>}
         </div>
       </div>
       <div className="flex items-center gap-1.5">

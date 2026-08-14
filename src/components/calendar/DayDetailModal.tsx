@@ -88,7 +88,7 @@ export function DayDetailModal({ date, onClose }: Props) {
           <div className="mt-4 flex flex-col gap-4">
             {data.sessions.length > 0 && (
               <section>
-                <h3 className="text-muted text-[10px] tracking-[0.2em] uppercase">Training</h3>
+                <h3 className="text-muted text-xs tracking-[0.2em] uppercase">Training</h3>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.sessions.map((s) => (
                     <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
@@ -112,7 +112,7 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.habits.length > 0 && (
               <section>
-                <h3 className="text-muted text-[10px] tracking-[0.2em] uppercase">Návyky</h3>
+                <h3 className="text-muted text-xs tracking-[0.2em] uppercase">Návyky</h3>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.habits.map((h) => (
                     <li key={h.id} className="text-foreground text-sm">
@@ -125,7 +125,7 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.measurement && (
               <section>
-                <h3 className="text-muted text-[10px] tracking-[0.2em] uppercase">Vážení</h3>
+                <h3 className="text-muted text-xs tracking-[0.2em] uppercase">Vážení</h3>
                 <div className="text-foreground mt-2 flex items-center justify-between text-sm">
                   <span>
                     {data.measurement.weightKg !== null ? `${data.measurement.weightKg} kg` : '—'}
@@ -139,7 +139,7 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.photos.length > 0 && (
               <section>
-                <h3 className="text-muted text-[10px] tracking-[0.2em] uppercase">Fotky</h3>
+                <h3 className="text-muted text-xs tracking-[0.2em] uppercase">Fotky</h3>
                 <div className="mt-2 flex gap-2 overflow-x-auto">
                   {data.photos.map((p, i) => (
                     <button

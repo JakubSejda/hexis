@@ -48,9 +48,7 @@ export function Sidebar() {
 
 function SectionLabel({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div
-      className={cn('text-muted px-4 pt-2 pb-1 text-[10px] tracking-[0.15em] uppercase', className)}
-    >
+    <div className={cn('text-muted px-4 pt-2 pb-1 text-xs tracking-[0.15em] uppercase', className)}>
       {children}
     </div>
   )

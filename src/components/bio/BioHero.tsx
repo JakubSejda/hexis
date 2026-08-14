@@ -14,7 +14,7 @@ type Props = {
 export function BioHero({ name, tier, tierName, level, startedAt, today }: Props) {
   const day = daysSince(startedAt, today)
   return (
-    <div className="border-border bg-surface flex items-center gap-4 rounded-lg border p-4">
+    <div className="border-border bg-surface flex flex-col items-start gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:gap-4">
       <Avatar tier={tier} size={96} />
       <div className="flex flex-1 flex-col gap-1">
         <span className="text-foreground text-xl font-bold">{name ?? 'Hráč'}</span>

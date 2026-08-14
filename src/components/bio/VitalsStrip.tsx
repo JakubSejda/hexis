@@ -39,7 +39,7 @@ export function VitalsStrip({ heightCm, age, gender, weightKg }: Props) {
           key={s.label}
           className={`border-border bg-surface rounded-lg border p-3 ${s.empty ? 'opacity-60' : ''}`}
         >
-          <div className="text-muted text-[10px] tracking-[0.2em] uppercase">{s.label}</div>
+          <div className="text-muted text-xs tracking-[0.2em] uppercase">{s.label}</div>
           <div className="text-foreground mt-1 text-lg font-semibold">{s.value}</div>
         </div>
       ))}

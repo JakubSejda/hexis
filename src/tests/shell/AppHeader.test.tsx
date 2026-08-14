@@ -25,8 +25,7 @@ describe('AppHeader', () => {
   it('renders streak peek when streak > 0', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<AppHeader streak={7} userName="Jakub" userEmail="j@ex.com" />)
-    expect(screen.getByText('7')).toBeInTheDocument()
-    expect(screen.getByText(/day streak/i)).toBeInTheDocument()
+    expect(screen.getByText(/7 day streak/i)).toBeInTheDocument()
   })
 
   it('hides streak peek when streak === 0', () => {

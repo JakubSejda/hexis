@@ -23,7 +23,7 @@ function Stat({ value, label, color }: { value: number | string; label: string; 
       <div className="text-2xl font-bold" style={{ color }}>
         {value}
       </div>
-      <div className="text-muted text-[11px]">{label}</div>
+      <div className="text-muted text-xs">{label}</div>
     </div>
   )
 }

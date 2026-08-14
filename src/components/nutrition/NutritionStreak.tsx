@@ -26,7 +26,7 @@ export function NutritionStreak({ streak, thisWeek }: Props) {
           <div
             key={i}
             className={
-              'flex h-6 w-6 items-center justify-center rounded text-[10px] font-semibold ' +
+              'flex h-6 w-6 items-center justify-center rounded text-xs font-semibold ' +
               (d.klass === 'empty' ? 'text-muted' : 'text-white')
             }
             style={{ background: BG[d.klass] }}

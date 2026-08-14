@@ -47,10 +47,10 @@ export function StatusWindow({
         <div className="text-3xl font-bold" style={{ color: tierColor }}>
           Level {level}
         </div>
-        <div className="text-muted text-xs tracking-[0.3em] uppercase">— {tierName} —</div>
+        <div className="text-muted text-xs tracking-[0.15em] uppercase">— {tierName} —</div>
         <div className="mt-2 w-full">
           <ProgressBar value={currentXp} max={xpToLevel} variant="xp" height={8} />
-          <div className="text-muted mt-1 flex justify-between text-xs">
+          <div className="text-muted-strong mt-1 flex justify-between text-xs">
             <span>{currentXp} XP</span>
             <span>
               {xpForNext} do L{level + 1}
