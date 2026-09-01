@@ -6,8 +6,8 @@
  * in an audit finding) which Tailwind v4 auto-detection would otherwise turn
  * into invalid generated CSS, breaking the whole stylesheet build.
  */
-@source not "../../docs";
-@source not "../../.playwright-mcp";
+@source not '../../docs';
+@source not '../../.playwright-mcp';
 
 @theme {
   /* ============ REFORGE "HUD" palette ============
@@ -17,47 +17,46 @@
    */
 
   /* Surfaces — void navy */
-  --color-background:       #05080f;
-  --color-surface:          #0b1220;
-  --color-surface-raised:   #111b2e;
-  --color-surface-sunken:   #030509;
-  --color-border:           #1e293b;
-  --color-foreground:       #e2f1f8;
-  --color-muted:            #7c8da6;
-  --color-muted-strong:     #a9bdd4;
+  --color-background: #05080f;
+  --color-surface: #0b1220;
+  --color-surface-raised: #111b2e;
+  --color-surface-sunken: #030509;
+  --color-border: #1e293b;
+  --color-foreground: #e2f1f8;
+  --color-muted: #7c8da6;
+  --color-muted-strong: #a9bdd4;
 
   /* System — electric cyan (info, active edges, timers, nav) */
-  --color-system:           #22d3ee;
-  --color-system-soft:      #0b3540;
+  --color-system: #22d3ee;
+  --color-system-soft: #0b3540;
 
   /* Action — signal amber (CTA, XP, quest) */
-  --color-accent:           #f59e0b;
-  --color-accent-soft:      #78350f;
-  --color-accent-muted:     #fbbf24;
-
-  /* Semantic success (feedback only, never decorative) */
-  --color-primary:          #34d399;
-  --color-primary-soft:     #064e3b;
-  --color-primary-muted:    #6ee7b7;
+  --color-accent: #f59e0b;
+  --color-accent-soft: #78350f;
+  --color-accent-muted: #fbbf24;
 
   /* Status */
-  --color-danger:           #ef4444;
-  --color-success:          #34d399;
-  --color-warning:          #f59e0b;
-  --color-info:             #22d3ee;
+  --color-danger: #ef4444;
+
+  /* Semantic success (feedback only, never decorative — R7 retired the
+   * neutral-sounding `primary` alias so the grammar is enforceable). */
+  --color-success: #34d399;
+  --color-success-soft: #064e3b;
+  --color-success-muted: #6ee7b7;
+  --color-warning: #f59e0b;
+  --color-info: #22d3ee;
 
   /* Calendar day signals (training stays --color-accent) */
-  --color-cal-habit:        #34d399;
-  --color-cal-weigh:        #22d3ee;
-  --color-cal-photo:        #a78bfa;
+  --color-cal-habit: #34d399;
+  --color-cal-weigh: #22d3ee;
+  --color-cal-photo: #a78bfa;
 
   /* Focus ring — cyan (system) */
-  --color-ring:             #22d3ee;
+  --color-ring: #22d3ee;
 
   /* Fonts */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono:
-    var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Radius */
   --radius-sm: 0.5rem;
@@ -66,9 +65,9 @@
   --radius-xl: 1.5rem;
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.40);
-  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.50);
-  --shadow-lg: 0 12px 28px -6px rgb(0 0 0 / 0.60);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 12px 28px -6px rgb(0 0 0 / 0.6);
 }
 
 html,
@@ -98,18 +97,48 @@ body::before {
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
+/* HEXIS hexagon (shared by Checkbox/Radio, set dots, step markers). */
+.hud-hex {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Chrome paints autofilled inputs a hardcoded near-white (#e8f0fe) with black
+ * text, which blows a hole in the HUD on the very first screen a user sees.
+ * background-color is not overridable on :-webkit-autofill — an inset shadow
+ * large enough to cover the field is the only way to repaint it. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-background) inset;
+  box-shadow: 0 0 0 1000px var(--color-background) inset;
+  -webkit-text-fill-color: var(--color-foreground);
+  caret-color: var(--color-foreground);
+  transition: background-color 9999s ease-out 0s;
+}
+
 /* HUD motion (all guarded for reduced motion at the bottom). */
 @keyframes hud-power-on {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .animate-hud-power-on {
   animation: hud-power-on 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes hud-charge {
-  from { background-position: 200% 0; }
-  to { background-position: -200% 0; }
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 .animate-hud-charge {
   background-image: linear-gradient(
@@ -124,16 +153,30 @@ body::before {
 }
 
 @keyframes hud-pulse-ring {
-  from { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
-  to { box-shadow: 0 0 0 18px rgba(245, 158, 11, 0); }
+  from {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55);
+  }
+  to {
+    box-shadow: 0 0 0 18px rgba(245, 158, 11, 0);
+  }
 }
-.animate-hud-pulse { animation: hud-pulse-ring 0.5s ease-out 1; }
+.animate-hud-pulse {
+  animation: hud-pulse-ring 0.5s ease-out 1;
+}
 
 @keyframes hud-float-up {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-28px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
 }
-.animate-hud-float { animation: hud-float-up 0.9s ease-out both; }
+.animate-hud-float {
+  animation: hud-float-up 0.9s ease-out both;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .animate-hud-power-on,
@@ -146,11 +189,20 @@ body::before {
 }
 
 @keyframes tier-glow {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
-  50% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8)); }
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8));
+  }
 }
-.animate-tier-glow { animation: tier-glow 1.5s ease-in-out infinite; }
+.animate-tier-glow {
+  animation: tier-glow 1.5s ease-in-out infinite;
+}
 
 @keyframes confetti-fall {
-  to { transform: translateY(110vh) rotate(720deg); }
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
 }

@@ -244,7 +244,7 @@ export default async function WorkoutSessionPage({
   return (
     <Container>
       <Stack gap={4} className="py-4">
-        <details className="border-border rounded-lg border p-3">
+        <details className="hud-clip bg-surface-raised p-3">
           <summary className="text-muted cursor-pointer text-sm">Svalová mapa</summary>
           <div className="mt-2">
             <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />

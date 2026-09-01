@@ -138,12 +138,7 @@ export function ExerciseCard({
               {Array.from({ length: targetSets }).map((_, i) => (
                 <span
                   key={i}
-                  className={i < doneSets ? 'bg-accent' : 'bg-border'}
-                  style={{
-                    width: 12,
-                    height: 12,
-                    clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                  }}
+                  className={`hud-hex size-3 ${i < doneSets ? 'bg-accent' : 'bg-border'}`}
                 />
               ))}
             </span>

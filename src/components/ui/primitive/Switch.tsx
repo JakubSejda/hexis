@@ -19,15 +19,17 @@ export function Switch({ checked, onChange, disabled, label, id }: Props) {
       disabled={disabled}
       onClick={() => !disabled && onChange(!checked)}
       className={
-        'relative inline-flex h-6 w-10 items-center rounded-full transition-colors ' +
+        'hud-clip-sm focus-visible:ring-ring relative inline-flex h-6 w-10 items-center transition-colors focus-visible:ring-2 focus-visible:outline-none ' +
         (disabled ? 'cursor-not-allowed opacity-50 ' : 'cursor-pointer ') +
-        (checked ? 'bg-primary' : 'bg-border')
+        (checked ? 'bg-system' : 'bg-border')
       }
     >
       <span
         className={
-          'inline-block h-4 w-4 transform rounded-full bg-white transition-transform ' +
-          (checked ? 'translate-x-5' : 'translate-x-1')
+          // Square knob: the track already carries the HUD corner cut, and
+          // clipping both turned the "on" state into an unreadable glyph.
+          'inline-block h-4 w-4 transform transition-transform ' +
+          (checked ? 'bg-background translate-x-5' : 'bg-muted-strong translate-x-1')
         }
       />
     </button>

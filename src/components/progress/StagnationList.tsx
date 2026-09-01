@@ -10,7 +10,7 @@ export function StagnationList({ items }: Props) {
   if (items.length === 0) return null
 
   return (
-    <div className="border-accent/30 bg-accent/5 rounded-lg border p-3">
+    <div className="hud-clip border-accent bg-accent/5 border-l-2 p-3">
       <h3 className="text-accent mb-2 text-sm font-semibold">Stagnace</h3>
       <ul className="flex flex-col gap-1.5">
         {items.map((item) => (

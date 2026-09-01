@@ -92,7 +92,7 @@ export function MuscleRank({ ranks, className }: Props) {
           cy={CENTER}
           r={RADIUS * band}
           fill="none"
-          stroke="#1f2733"
+          stroke="#1e293b"
           strokeWidth={0.75}
         />
       ))}
@@ -109,7 +109,7 @@ export function MuscleRank({ ranks, className }: Props) {
               y1={CENTER}
               x2={tip.x}
               y2={tip.y}
-              stroke="#1f2733"
+              stroke="#1e293b"
               strokeWidth={0.5}
             />
             <text

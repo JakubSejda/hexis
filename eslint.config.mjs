@@ -2,6 +2,41 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 
+/**
+ * HUD grammar guard (Reforge R7). The retired `primary` token and the dead
+ * radius ladder fail SILENTLY — Tailwind simply emits no rule — so a
+ * regression looks like slightly-wrong styling instead of an error. These
+ * selectors are the only thing that makes it loud.
+ *
+ * Shared array rather than its own config block: ESLint REPLACES a rule's
+ * options when two blocks configure the same rule for the same file, so a
+ * standalone block would quietly disable the P2 form-control selectors.
+ */
+const PRIMARY_TOKEN_MSG =
+  'The `primary` colour token was retired in R7. Use `system` (cyan = system/info), `accent` (amber = action/XP) or `success` (emerald = semantic success only).'
+const RADIUS_MSG =
+  'The radius ladder died with Reforge: use the `hud-clip` / `hud-clip-sm` plate clips (or the Card primitive).'
+
+const hudGrammarSelectors = [
+  {
+    selector: 'Literal[value=/\\b(bg|text|border|ring|from|to|via|fill|stroke)-primary\\b/]',
+    message: PRIMARY_TOKEN_MSG,
+  },
+  {
+    selector:
+      'TemplateElement[value.raw=/\\b(bg|text|border|ring|from|to|via|fill|stroke)-primary\\b/]',
+    message: PRIMARY_TOKEN_MSG,
+  },
+  {
+    selector: 'Literal[value=/\\brounded-(lg|xl|2xl|3xl)\\b/]',
+    message: RADIUS_MSG,
+  },
+  {
+    selector: 'TemplateElement[value.raw=/\\brounded-(lg|xl|2xl|3xl)\\b/]',
+    message: RADIUS_MSG,
+  },
+]
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -60,7 +95,16 @@ const eslintConfig = defineConfig([
             "JSXOpeningElement[name.name='input']:has(JSXAttribute[name.name='type'][value.value='radio'])",
           message: 'Use the Radio primitive from @/components/ui.',
         },
+        ...hudGrammarSelectors,
       ],
+    },
+  },
+  // The block above deliberately ignores the UI kit, but the HUD grammar
+  // binds there too — Toast/Tabs/Dialog were exactly where it had rotted.
+  {
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': ['error', ...hudGrammarSelectors],
     },
   },
 ])

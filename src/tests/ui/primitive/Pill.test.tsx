@@ -26,8 +26,8 @@ describe('Pill', () => {
       </Pill>
     )
     const el = screen.getByTestId('p')
-    expect(el).toHaveClass('bg-primary-soft')
-    expect(el).toHaveClass('text-primary')
+    expect(el).toHaveClass('bg-success-soft')
+    expect(el).toHaveClass('text-success')
   })
 
   it('applies warning variant', () => {
@@ -170,7 +170,7 @@ describe('Tag', () => {
       </Tag>
     )
     const el = screen.getByTestId('t')
-    expect(el).toHaveClass('bg-primary-soft')
-    expect(el).toHaveClass('text-primary')
+    expect(el).toHaveClass('bg-success-soft')
+    expect(el).toHaveClass('text-success')
   })
 })

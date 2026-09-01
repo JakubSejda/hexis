@@ -60,7 +60,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
         <Button
           variant="ghost"
           size="sm"
-          className="text-primary self-start"
+          className="text-system self-start"
           onClick={() => setPlates((prev) => [...prev, { weightKg: 10, pairs: 1 }])}
         >
           + Pridat talir

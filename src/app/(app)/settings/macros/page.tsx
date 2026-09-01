@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Container, Heading, Stack, Switch } from '@/components/ui'
+import { Card, Container, Heading, Stack, Switch } from '@/components/ui'
 
 const ALL: { key: string; label: string; required?: boolean }[] = [
   { key: 'kcal', label: 'Kalorie', required: true },
@@ -55,18 +55,17 @@ export default function MacrosPage() {
         <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
         <ul className="space-y-2">
           {ALL.map((m) => (
-            <li
-              key={m.key}
-              className="border-border bg-surface flex items-center justify-between rounded-lg border p-3"
-            >
-              <span className="text-foreground">{m.label}</span>
-              <Switch
-                checked={macros.includes(m.key)}
-                disabled={m.required || saving}
-                onChange={() => toggle(m.key)}
-                label={m.label}
-              />
-            </li>
+            <Card as="li" key={m.key}>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">{m.label}</span>
+                <Switch
+                  checked={macros.includes(m.key)}
+                  disabled={m.required || saving}
+                  onChange={() => toggle(m.key)}
+                  label={m.label}
+                />
+              </div>
+            </Card>
           ))}
         </ul>
       </Stack>

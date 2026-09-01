@@ -35,23 +35,23 @@ export function OneRmChart({ data }: Props) {
     <div className="h-[240px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1f2733" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
           <XAxis
             dataKey="date"
             tickFormatter={formatDate}
-            tick={{ fill: '#6b7280', fontSize: 11 }}
-            stroke="#1f2733"
+            tick={{ fill: '#7c8da6', fontSize: 11 }}
+            stroke="#1e293b"
           />
           <YAxis
-            tick={{ fill: '#6b7280', fontSize: 11 }}
-            stroke="#1f2733"
+            tick={{ fill: '#7c8da6', fontSize: 11 }}
+            stroke="#1e293b"
             domain={['auto', 'auto']}
             unit=" kg"
           />
           <Tooltip
             contentStyle={{
               backgroundColor: '#141a22',
-              border: '1px solid #1f2733',
+              border: '1px solid #1e293b',
               borderRadius: '8px',
               fontSize: '13px',
             }}
@@ -65,7 +65,7 @@ export function OneRmChart({ data }: Props) {
           <Line
             type="monotone"
             dataKey="best1rm"
-            stroke="#10b981"
+            stroke="#34d399"
             strokeWidth={2}
             dot={(props: { cx?: number; cy?: number; payload?: DataPoint }) => {
               const isPr = (props.payload?.best1rm ?? 0) === globalMax
@@ -75,12 +75,12 @@ export function OneRmChart({ data }: Props) {
                   cx={props.cx ?? 0}
                   cy={props.cy ?? 0}
                   r={isPr ? 5 : 3}
-                  fill={isPr ? '#f59e0b' : '#10b981'}
+                  fill={isPr ? '#f59e0b' : '#34d399'}
                   stroke="none"
                 />
               )
             }}
-            activeDot={{ r: 5, fill: '#10b981' }}
+            activeDot={{ r: 5, fill: '#34d399' }}
           />
         </LineChart>
       </ResponsiveContainer>

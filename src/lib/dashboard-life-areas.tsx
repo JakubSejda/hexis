@@ -49,7 +49,7 @@ export function resolveTrainingCard(sessionDates: Date[], now: Date = new Date()
   return {
     value: `${thisWeek} sessions`,
     secondary: 'this week',
-    visual: <Sparkline values={weeks} tone="primary" width={120} height={32} />,
+    visual: <Sparkline values={weeks} tone="system" width={120} height={32} />,
     empty: false,
   }
 }
@@ -75,7 +75,7 @@ export function resolveNutritionCard(
   return {
     value,
     secondary,
-    visual: <ProgressBar value={kcal} max={target} tone="primary" height={6} />,
+    visual: <ProgressBar value={kcal} max={target} tone="system" height={6} />,
     empty: false,
   }
 }

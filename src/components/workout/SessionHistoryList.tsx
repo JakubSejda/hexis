@@ -22,7 +22,7 @@ export function SessionHistoryList({ items }: { items: Item[] }) {
           >
             <span>
               {new Date(s.startedAt).toLocaleDateString('cs-CZ')}{' '}
-              {s.planSlug ? <span className="text-primary">{s.planSlug}</span> : 'ad-hoc'}
+              {s.planSlug ? <span className="text-system">{s.planSlug}</span> : 'ad-hoc'}
             </span>
             <span className="text-muted text-xs">
               {s.setCount} sérií · {Number(s.volumeKg).toFixed(0)} kg

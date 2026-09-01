@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { Button, Pill } from '@/components/ui'
+import { Button, Card, Pill } from '@/components/ui'
 
 type Plan = { id: number; slug: string; name: string; order: number }
 
@@ -29,24 +29,27 @@ export function PlanPicker({
   return (
     <div className="flex flex-col gap-2">
       {plans.map((p) => (
-        <button
+        <Card
           key={p.id}
+          as="button"
           type="button"
+          variant="interactive"
+          edge={p.id === recommendedId ? 'system' : 'default'}
           onClick={() => start(p.id)}
-          className={`flex items-center justify-between rounded-lg border p-3 text-left ${
-            p.id === recommendedId ? 'border-primary' : 'border-border'
-          }`}
+          className="w-full text-left"
         >
-          <span>
-            <strong>{p.name}</strong>{' '}
-            {p.id === recommendedId ? (
-              <Pill variant="neutral" size="sm" className="text-primary ml-2">
-                doporučeno
-              </Pill>
-            ) : null}
+          <span className="flex items-center justify-between">
+            <span>
+              <strong>{p.name}</strong>{' '}
+              {p.id === recommendedId ? (
+                <Pill variant="neutral" size="sm" className="text-system ml-2">
+                  doporučeno
+                </Pill>
+              ) : null}
+            </span>
+            <span className="text-muted text-xs">{p.slug}</span>
           </span>
-          <span className="text-muted text-xs">{p.slug}</span>
-        </button>
+        </Card>
       ))}
       <Button variant="dashed" size="lg" className="w-full" onClick={() => start(null)}>
         + Ad-hoc trénink

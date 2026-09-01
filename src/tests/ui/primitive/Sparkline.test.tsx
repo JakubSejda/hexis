@@ -22,9 +22,16 @@ describe('Sparkline', () => {
     expect(path?.getAttribute('stroke')).toBe('#7c8da6')
   })
 
-  it('maps tone="primary" to emerald', () => {
-    const { container } = render(<Sparkline values={[1, 2, 3]} tone="primary" />)
+  it('maps tone="system" to cyan', () => {
+    const { container } = render(<Sparkline values={[1, 2, 3]} tone="system" />)
+    expect(container.querySelector('path')?.getAttribute('stroke')).toBe('#22d3ee')
+  })
+
+  it('maps tone="success" to emerald and tone="accent" to amber', () => {
+    const { container, rerender } = render(<Sparkline values={[1, 2, 3]} tone="success" />)
     expect(container.querySelector('path')?.getAttribute('stroke')).toBe('#34d399')
+    rerender(<Sparkline values={[1, 2, 3]} tone="accent" />)
+    expect(container.querySelector('path')?.getAttribute('stroke')).toBe('#f59e0b')
   })
 
   it('maps tone="danger" to red', () => {
@@ -33,9 +40,9 @@ describe('Sparkline', () => {
   })
 
   it('renders end dot using the same tone by default', () => {
-    const { container } = render(<Sparkline values={[1, 2, 3]} tone="primary" />)
+    const { container } = render(<Sparkline values={[1, 2, 3]} tone="system" />)
     const circle = container.querySelector('circle')
-    expect(circle?.getAttribute('fill')).toBe('#34d399')
+    expect(circle?.getAttribute('fill')).toBe('#22d3ee')
   })
 
   it('omits end dot when showEndDot=false', () => {

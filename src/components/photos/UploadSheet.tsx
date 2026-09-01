@@ -99,7 +99,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           // next/image does not support blob: / data: URLs used for client-side
           // previews before upload. Native <img> is intentional here.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Preview" className="mx-auto h-48 rounded-lg object-contain" />
+          <img src={preview} alt="Preview" className="hud-clip mx-auto h-48 object-contain" />
         ) : null}
         <div className="flex gap-2">
           {POSES.map((p) => (
@@ -109,7 +109,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
               className={
                 'flex-1 rounded-md px-2 py-1.5 text-sm transition-colors ' +
                 (pose === p.value
-                  ? 'bg-primary text-background font-semibold'
+                  ? 'bg-system text-background font-semibold'
                   : 'bg-border text-muted')
               }
             >

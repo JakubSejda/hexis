@@ -7,7 +7,7 @@ type Size = 'sm' | 'md'
 
 const VARIANT_CLASS: Record<Variant, string> = {
   neutral: 'bg-surface-raised text-foreground',
-  success: 'bg-primary-soft text-primary',
+  success: 'bg-success-soft text-success',
   warning: 'bg-accent-soft text-accent',
   danger: 'bg-danger text-background',
   accent: 'bg-accent text-background',

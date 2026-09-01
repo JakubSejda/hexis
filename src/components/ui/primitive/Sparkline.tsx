@@ -1,6 +1,6 @@
 import { sparklinePath } from '@/lib/sparkline'
 
-type Tone = 'primary' | 'success' | 'warn' | 'danger' | 'muted'
+type Tone = 'system' | 'accent' | 'success' | 'warn' | 'danger' | 'muted'
 
 type Props = {
   values: (number | null)[]
@@ -12,7 +12,8 @@ type Props = {
 }
 
 const TONE: Record<Tone, string> = {
-  primary: '#34d399',
+  system: '#22d3ee',
+  accent: '#f59e0b',
   success: '#34d399',
   warn: '#f59e0b',
   danger: '#ef4444',

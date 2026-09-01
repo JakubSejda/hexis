@@ -7,10 +7,6 @@ import { cn } from '../utils/cn'
  * visual with a cyan hex core when selected.
  */
 
-const HEX_CLIP = {
-  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-} as const
-
 type Props = {
   label?: string
   labelClassName?: string
@@ -29,16 +25,14 @@ export const Radio = forwardRef<HTMLInputElement, Props>(function Radio(
         className={cn('peer absolute inset-0 z-10 size-4 cursor-pointer opacity-0', className)}
         {...rest}
       />
-      <span aria-hidden className="bg-border absolute inset-0" style={HEX_CLIP} />
+      <span aria-hidden className="hud-hex bg-border absolute inset-0" />
       <span
         aria-hidden
-        className="bg-surface peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
-        style={HEX_CLIP}
+        className="hud-hex bg-surface peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
       />
       <span
         aria-hidden
-        className="bg-system invisible absolute inset-[5px] peer-checked:visible"
-        style={HEX_CLIP}
+        className="hud-hex bg-system invisible absolute inset-[5px] peer-checked:visible"
       />
     </span>
   )

@@ -1,6 +1,11 @@
 import { cn } from '../utils/cn'
 
-type Tone = 'primary' | 'success' | 'warn' | 'danger' | 'muted'
+/**
+ * HUD grammar (Reforge R7): a non-XP bar reports system state, so `system`
+ * (cyan) is the default. `accent` (amber) stays reserved for action/XP —
+ * `variant="xp"` forces it. Emerald is semantic success only.
+ */
+type Tone = 'system' | 'accent' | 'success' | 'warn' | 'danger' | 'muted'
 type Variant = 'default' | 'xp'
 
 type Props = {
@@ -13,7 +18,8 @@ type Props = {
 }
 
 const TONE: Record<Tone, string> = {
-  primary: '#34d399',
+  system: '#22d3ee',
+  accent: '#f59e0b',
   success: '#34d399',
   warn: '#f59e0b',
   danger: '#ef4444',
@@ -27,7 +33,7 @@ export function ProgressBar({
   value,
   max,
   height = 8,
-  tone = 'primary',
+  tone = 'system',
   variant = 'default',
   className,
 }: Props) {

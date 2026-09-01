@@ -4,12 +4,12 @@ import type { DailyXp } from '@/lib/queries/xp-history'
 type Props = { daily: DailyXp[]; days: number }
 
 const EVENT_COLOR: Record<string, string> = {
-  session_complete: '#10b981',
-  set_logged: '#065f46',
-  measurement_added: '#0ea5e9',
-  photo_uploaded: '#8b5cf6',
+  session_complete: '#34d399',
+  set_logged: '#064e3b',
+  measurement_added: '#22d3ee',
+  photo_uploaded: '#a78bfa',
   nutrition_logged: '#f59e0b',
-  pr_achieved: '#eab308',
+  pr_achieved: '#fbbf24',
   streak_day: '#ef4444',
 }
 
@@ -55,7 +55,7 @@ export function XpHistoryChart({ daily, days }: Props) {
               y={height - h}
               width={Math.max(barW, 1)}
               height={h}
-              fill={EVENT_COLOR[c.dominant] ?? '#10b981'}
+              fill={EVENT_COLOR[c.dominant] ?? '#34d399'}
               rx={1}
             />
           )
