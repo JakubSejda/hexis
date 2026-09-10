@@ -25,9 +25,9 @@ type Props = {
 }
 
 const DELTA_COLOR = {
-  good: '#10b981',
+  good: '#34d399',
   bad: '#ef4444',
-  neutral: '#6b7280',
+  neutral: '#7c8da6',
 }
 
 export function MeasurementRow({

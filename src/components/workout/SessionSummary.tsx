@@ -86,7 +86,7 @@ export function SessionSummary({
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-surface rounded-md p-2">
-      <div className="text-primary text-lg font-bold">{value}</div>
+      <div className="text-foreground font-mono text-lg font-bold">{value}</div>
       <div className="text-muted text-xs">{label}</div>
     </div>
   )

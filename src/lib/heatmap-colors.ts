@@ -1,9 +1,9 @@
-const INACTIVE = '#1f2733'
+const INACTIVE = '#1e293b'
 const THRESHOLDS: [number, string][] = [
   [0.76, '#ef4444'],
   [0.51, '#f59e0b'],
-  [0.26, '#10b981'],
-  [0.01, '#065f46'],
+  [0.26, '#34d399'],
+  [0.01, '#064e3b'],
 ]
 
 export function volumeToColor(volume: number, maxVolume: number): string {
@@ -18,5 +18,5 @@ export function volumeToColor(volume: number, maxVolume: number): string {
 export const WORKOUT_COLORS = {
   rest: INACTIVE,
   planned: '#f59e0b',
-  done: '#10b981',
+  done: '#34d399',
 } as const

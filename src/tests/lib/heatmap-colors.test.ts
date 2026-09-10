@@ -3,11 +3,11 @@ import { volumeToColor } from '@/lib/heatmap-colors'
 
 describe('volumeToColor', () => {
   it('returns INACTIVE color for 0 volume', () => {
-    expect(volumeToColor(0, 1000)).toBe('#1f2733')
+    expect(volumeToColor(0, 1000)).toBe('#1e293b')
   })
 
   it('returns INACTIVE color when maxVolume is 0', () => {
-    expect(volumeToColor(500, 0)).toBe('#1f2733')
+    expect(volumeToColor(500, 0)).toBe('#1e293b')
   })
 
   it('returns red for ratio >= 0.76', () => {
@@ -21,12 +21,12 @@ describe('volumeToColor', () => {
   })
 
   it('returns emerald for ratio in [0.26, 0.50]', () => {
-    expect(volumeToColor(260, 1000)).toBe('#10b981')
-    expect(volumeToColor(500, 1000)).toBe('#10b981')
+    expect(volumeToColor(260, 1000)).toBe('#34d399')
+    expect(volumeToColor(500, 1000)).toBe('#34d399')
   })
 
   it('returns dark green for ratio in [0.01, 0.25]', () => {
-    expect(volumeToColor(10, 1000)).toBe('#065f46')
-    expect(volumeToColor(250, 1000)).toBe('#065f46')
+    expect(volumeToColor(10, 1000)).toBe('#064e3b')
+    expect(volumeToColor(250, 1000)).toBe('#064e3b')
   })
 })

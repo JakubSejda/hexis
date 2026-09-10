@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Card } from '@/components/ui'
 import type { WeekPeekDay } from '@/lib/week-peek'
 
 const GLYPH: Record<WeekPeekDay['status'], string> = {
@@ -15,10 +16,7 @@ const COLOR: Record<WeekPeekDay['status'], string> = {
 
 export function WeekPeek({ days }: { days: WeekPeekDay[] }) {
   return (
-    <Link
-      href="/training"
-      className="border-border bg-surface hover:border-accent/60 block rounded-xl border p-4 transition-colors"
-    >
+    <Card as={Link} href="/training" variant="interactive" className="block">
       <div className="grid grid-cols-7 gap-2 text-center">
         {days.map((d, i) => (
           <div key={i} data-day-status={d.status} className="flex flex-col items-center gap-1">
@@ -32,6 +30,6 @@ export function WeekPeek({ days }: { days: WeekPeekDay[] }) {
         <span className="text-muted">○</span> rest &middot; <span className="text-border">·</span>{' '}
         future
       </div>
-    </Link>
+    </Card>
   )
 }

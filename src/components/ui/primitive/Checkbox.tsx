@@ -8,10 +8,6 @@ import { cn } from '../utils/cn'
  * a hexagon (clip-path) that fills cyan when checked.
  */
 
-const HEX_CLIP = {
-  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-} as const
-
 type Props = {
   label?: string
   labelClassName?: string
@@ -31,12 +27,11 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>(function Checkbox(
         {...rest}
       />
       {/* hex edge */}
-      <span aria-hidden className="bg-border absolute inset-0" style={HEX_CLIP} />
+      <span aria-hidden className="hud-hex bg-border absolute inset-0" />
       {/* hex body — cyan when checked */}
       <span
         aria-hidden
-        className="bg-surface peer-checked:bg-system peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
-        style={HEX_CLIP}
+        className="hud-hex bg-surface peer-checked:bg-system peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
       />
       {/* tick */}
       <svg

@@ -28,8 +28,8 @@ const CATEGORIES = [
   { key: 'chest', label: 'Chest', color: '#ef4444' },
   { key: 'back', label: 'Back', color: '#3b82f6' },
   { key: 'shoulders', label: 'Shoulders', color: '#f59e0b' },
-  { key: 'arms', label: 'Arms', color: '#8b5cf6' },
-  { key: 'legs', label: 'Legs', color: '#10b981' },
+  { key: 'arms', label: 'Arms', color: '#a78bfa' },
+  { key: 'legs', label: 'Legs', color: '#34d399' },
 ] as const
 
 function formatWeek(dateStr: string) {
@@ -46,18 +46,18 @@ export function VolumeChart({ data }: Props) {
     <div className="h-[280px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1f2733" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
           <XAxis
             dataKey="weekStart"
             tickFormatter={formatWeek}
-            tick={{ fill: '#6b7280', fontSize: 11 }}
-            stroke="#1f2733"
+            tick={{ fill: '#7c8da6', fontSize: 11 }}
+            stroke="#1e293b"
           />
-          <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} stroke="#1f2733" unit=" kg" />
+          <YAxis tick={{ fill: '#7c8da6', fontSize: 11 }} stroke="#1e293b" unit=" kg" />
           <Tooltip
             contentStyle={{
               backgroundColor: '#141a22',
-              border: '1px solid #1f2733',
+              border: '1px solid #1e293b',
               borderRadius: '8px',
               fontSize: '13px',
             }}

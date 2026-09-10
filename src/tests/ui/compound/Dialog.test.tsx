@@ -61,4 +61,19 @@ describe('Dialog', () => {
     const desc = document.getElementById(describedBy!)
     expect(desc?.textContent).toBe('D')
   })
+
+  it('renders as a two-layer HUD plate (edge + surface), not a rounded card', () => {
+    render(
+      <Dialog open onOpenChange={() => {}} title="T">
+        body
+      </Dialog>
+    )
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveClass('hud-clip')
+    expect(dialog).toHaveClass('bg-border')
+    expect(dialog.className).not.toMatch(/rounded-(lg|xl|2xl)/)
+    const inner = dialog.firstElementChild as HTMLElement
+    expect(inner).toHaveClass('hud-clip')
+    expect(inner).toHaveClass('bg-surface')
+  })
 })

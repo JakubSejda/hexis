@@ -42,7 +42,7 @@ export function BeforeAfter({ photos, dates }: Props) {
             className={
               'flex-1 rounded-md px-2 py-1.5 text-xs transition-colors ' +
               (poseFilter === p.value
-                ? 'bg-primary text-background font-semibold'
+                ? 'bg-system text-background font-semibold'
                 : 'bg-border text-muted')
             }
           >
@@ -72,7 +72,7 @@ export function BeforeAfter({ photos, dates }: Props) {
         </div>
       </div>
       {beforePhoto && afterPhoto ? (
-        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
+        <div className="hud-clip relative aspect-[3/4] w-full overflow-hidden">
           <Image
             src={afterPhoto.fullUrl}
             alt={`After ${afterDate}`}

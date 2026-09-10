@@ -31,7 +31,7 @@ describe('AnatomicalBody', () => {
   it('uses inactive fill for slugs not in highlights map', () => {
     const { container } = render(<AnatomicalBody view="front" highlights={{}} />)
     const path = container.querySelector('[data-muscle="quads"]')
-    expect(path?.getAttribute('fill')).toBe('#1f2733')
+    expect(path?.getAttribute('fill')).toBe('#1e293b')
   })
 
   it('always renders the outline path with stroke and no fill', () => {

@@ -2,13 +2,14 @@ import { Card, Sparkline } from '@/components/ui'
 import type { Goal, Direction } from '@/lib/measurement-delta'
 import { calcDelta, deltaDirection } from '@/lib/measurement-delta'
 
+/* HUD palette values (R7) — these were off-palette emerald/grey before. */
 const COLOR: Record<Direction, string> = {
-  good: '#10b981',
+  good: '#34d399',
   bad: '#ef4444',
-  neutral: '#6b7280',
+  neutral: '#7c8da6',
 }
 
-const TONE = { good: 'primary', bad: 'danger', neutral: 'muted' } as const
+const TONE = { good: 'success', bad: 'danger', neutral: 'muted' } as const
 
 type Props = {
   label: string

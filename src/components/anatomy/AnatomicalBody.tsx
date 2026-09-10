@@ -1,4 +1,4 @@
-const INACTIVE = '#1f2733'
+const INACTIVE = '#1e293b'
 
 type Props = {
   view: 'front' | 'back'
@@ -90,7 +90,7 @@ export function AnatomicalBody({ view, highlights, className, ariaLabel }: Props
   const label = ariaLabel ?? `Anatomical body ${view} view`
   return (
     <svg viewBox="0 0 200 370" className={className} role="img" aria-label={label}>
-      <path d={OUTLINE} fill="none" stroke="#1f2733" strokeWidth="1.5" data-outline="true" />
+      <path d={OUTLINE} fill="none" stroke="#1e293b" strokeWidth="1.5" data-outline="true" />
       {paths.map((p) => (
         <path
           key={`${view}-${p.slug}`}

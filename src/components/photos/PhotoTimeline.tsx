@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { Card } from '@/components/ui'
 
 type PhotoItem = {
   id: number
@@ -24,26 +25,32 @@ export function PhotoTimeline({ photos, onPhotoTap }: Props) {
   return (
     <div className="flex flex-col gap-3">
       {photos.map((p, i) => (
-        <button
+        <Card
           key={p.id}
+          as="button"
+          type="button"
+          variant="interactive"
+          padding="sm"
           onClick={() => onPhotoTap(i)}
-          className="border-border bg-surface flex gap-3 rounded-lg border p-2 text-left"
+          className="w-full text-left"
         >
-          <Image
-            src={p.thumbUrl}
-            alt={`${p.pose} ${p.takenAt}`}
-            width={96}
-            height={96}
-            className="h-24 w-24 rounded-md object-cover"
-            loading="lazy"
-            unoptimized
-          />
-          <div className="flex flex-col justify-center">
-            <span className="text-foreground text-sm font-medium">{formatDate(p.takenAt)}</span>
-            <span className="text-muted text-xs">{POSE_LABELS[p.pose] ?? p.pose}</span>
-            {p.note ? <span className="text-muted mt-1 text-xs">{p.note}</span> : null}
-          </div>
-        </button>
+          <span className="flex gap-3">
+            <Image
+              src={p.thumbUrl}
+              alt={`${p.pose} ${p.takenAt}`}
+              width={96}
+              height={96}
+              className="h-24 w-24 rounded-md object-cover"
+              loading="lazy"
+              unoptimized
+            />
+            <span className="flex flex-col justify-center">
+              <span className="text-foreground text-sm font-medium">{formatDate(p.takenAt)}</span>
+              <span className="text-muted text-xs">{POSE_LABELS[p.pose] ?? p.pose}</span>
+              {p.note ? <span className="text-muted mt-1 text-xs">{p.note}</span> : null}
+            </span>
+          </span>
+        </Card>
       ))}
     </div>
   )

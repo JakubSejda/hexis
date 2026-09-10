@@ -67,4 +67,34 @@ describe('Tabs', () => {
     await userEvent.click(screen.getByRole('tab', { name: 'Two' }))
     expect(onValueChange).toHaveBeenCalledWith('two')
   })
+
+  it('wears the HUD plate clip instead of the retired radius ladder', () => {
+    render(
+      <Tabs.Root defaultValue="one">
+        <Tabs.List>
+          <Tabs.Trigger value="one">One</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="one">a</Tabs.Content>
+      </Tabs.Root>
+    )
+    const list = screen.getByRole('tablist')
+    expect(list).toHaveClass('hud-clip')
+    expect(list.className).not.toMatch(/rounded-(lg|xl|2xl)/)
+    const trigger = screen.getByRole('tab', { name: 'One' })
+    expect(trigger).toHaveClass('hud-clip-sm')
+  })
+
+  it('marks the active trigger with cyan (nav accent), never emerald', () => {
+    render(
+      <Tabs.Root defaultValue="one">
+        <Tabs.List>
+          <Tabs.Trigger value="one">One</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="one">a</Tabs.Content>
+      </Tabs.Root>
+    )
+    const trigger = screen.getByRole('tab', { name: 'One' })
+    expect(trigger.className).toContain('data-[state=active]:bg-system')
+    expect(trigger.className).not.toContain('-primary')
+  })
 })

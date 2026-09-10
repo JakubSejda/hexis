@@ -53,12 +53,7 @@ export function OnboardingWizard() {
               {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                 <span
                   key={i}
-                  className={i === step ? 'bg-system' : 'bg-border'}
-                  style={{
-                    width: 10,
-                    height: 10,
-                    clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                  }}
+                  className={`hud-hex size-2.5 ${i === step ? 'bg-system' : 'bg-border'}`}
                 />
               ))}
             </span>

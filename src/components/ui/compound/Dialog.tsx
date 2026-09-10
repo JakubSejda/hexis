@@ -25,7 +25,7 @@ export function Dialog({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="data-[state=open]:animate-in data-[state=open]:fade-in-0 fixed inset-0 z-40 bg-black/50" />
         <DialogPrimitive.Content
-          className="border-border bg-surface text-foreground fixed top-1/2 left-1/2 z-50 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border p-4 shadow-xl focus:outline-none"
+          className="hud-clip bg-border text-foreground fixed top-1/2 left-1/2 z-50 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 p-px shadow-xl focus:outline-none"
           onEscapeKeyDown={(e) => {
             if (blockDismiss) e.preventDefault()
           }}
@@ -33,13 +33,18 @@ export function Dialog({
             if (blockDismiss) e.preventDefault()
           }}
         >
-          <DialogPrimitive.Title className="text-base font-semibold">{title}</DialogPrimitive.Title>
-          {description && (
-            <DialogPrimitive.Description className="text-muted mt-1 text-sm">
-              {description}
-            </DialogPrimitive.Description>
-          )}
-          {children && <div className="mt-4">{children}</div>}
+          {/* Inner surface layer — the outer element is the 1px edge-light (see Card). */}
+          <div className="hud-clip bg-surface h-full w-full p-4">
+            <DialogPrimitive.Title className="font-mono text-xs tracking-[0.2em] uppercase">
+              {title}
+            </DialogPrimitive.Title>
+            {description && (
+              <DialogPrimitive.Description className="text-muted mt-1 text-sm">
+                {description}
+              </DialogPrimitive.Description>
+            )}
+            {children && <div className="mt-4">{children}</div>}
+          </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

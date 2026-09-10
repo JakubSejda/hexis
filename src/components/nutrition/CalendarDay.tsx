@@ -1,12 +1,12 @@
 import type { DayClass, MacroClass } from '@/lib/nutrition-classify'
 
 const BG: Record<DayClass, string> = {
-  hit: '#065f46',
+  hit: '#064e3b',
   miss: '#7f1d1d',
-  empty: '#1f2733',
+  empty: '#1e293b',
 }
 const DOT: Record<MacroClass, string> = {
-  hit: '#10b981',
+  hit: '#34d399',
   near: '#f59e0b',
   miss: '#ef4444',
   none: 'transparent',
@@ -36,7 +36,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
       onClick={onClick}
       style={{
         background: BG[klass],
-        outline: isToday ? '2px solid #10b981' : 'none',
+        outline: isToday ? '2px solid #22d3ee' : 'none',
         outlineOffset: -2,
       }}
       className="hud-clip-sm flex aspect-square cursor-pointer flex-col items-center justify-center"
@@ -46,7 +46,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
         className={
           'text-sm ' +
           (isToday
-            ? 'text-primary font-bold'
+            ? 'text-success font-bold'
             : klass === 'empty'
               ? 'text-muted'
               : 'text-foreground font-semibold')

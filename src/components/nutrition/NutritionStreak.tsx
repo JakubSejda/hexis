@@ -2,9 +2,9 @@ import { Card } from '@/components/ui'
 import type { DayClass } from '@/lib/nutrition-classify'
 
 const BG: Record<DayClass, string> = {
-  hit: '#065f46',
+  hit: '#064e3b',
   miss: '#7f1d1d',
-  empty: '#1f2733',
+  empty: '#1e293b',
 }
 
 type Props = {

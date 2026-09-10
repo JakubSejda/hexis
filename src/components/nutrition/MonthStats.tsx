@@ -11,7 +11,7 @@ export function MonthStats({ hits, misses, empties }: Props) {
   const pct = denom > 0 ? Math.round((hits / denom) * 100) : 0
   return (
     <div className="mx-4 my-2 grid grid-cols-4 gap-2">
-      <Stat value={hits} label="dní hit" valueClass="text-primary" />
+      <Stat value={hits} label="dní hit" valueClass="text-success" />
       <Stat value={misses} label="dní miss" valueClass="text-danger" />
       <Stat value={empties} label="prázdných" valueClass="text-muted" />
       <Stat value={`${pct}%`} label="úspěšnost" valueClass="text-system" />
