@@ -16,7 +16,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext value={{ show }}>
       {children}
-      <div className="pointer-events-none fixed top-4 left-1/2 z-50 flex -translate-x-1/2 flex-col gap-2">
+      {/* The live region is mounted for the life of the provider: a region
+       * inserted together with its first message is commonly missed. */}
+      <div
+        role="status"
+        aria-live="polite"
+        className="pointer-events-none fixed top-4 left-1/2 z-50 flex -translate-x-1/2 flex-col gap-2"
+      >
         {toasts.map((t) => (
           <div
             key={t.id}
@@ -24,7 +30,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               t.tone === 'success'
                 ? 'bg-success text-background'
                 : t.tone === 'error'
-                  ? 'bg-danger text-white'
+                  ? 'bg-danger text-background'
                   : 'bg-surface-raised text-foreground'
             }`}
           >

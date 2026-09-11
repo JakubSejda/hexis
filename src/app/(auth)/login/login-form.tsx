@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { Button, Heading, Input } from '@/components/ui'
@@ -14,6 +14,15 @@ export default function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const emailRef = useRef<HTMLInputElement>(null)
+
+  // Focus moves to the first field at fault after a failed submit. It waits
+  // for the transition to settle: the inputs carry `disabled={isPending}`, and
+  // a disabled input cannot take focus — calling focus() any earlier is a
+  // silent no-op that leaves the caret on the submit button.
+  useEffect(() => {
+    if (error && !isPending) emailRef.current?.focus()
+  }, [error, isPending])
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -47,9 +56,13 @@ export default function LoginForm() {
 
       <form onSubmit={onSubmit} className="space-y-4">
         <Input
+          ref={emailRef}
           id="email"
+          name="email"
           label="Email"
           type="email"
+          autoComplete="email"
+          spellCheck={false}
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -58,8 +71,10 @@ export default function LoginForm() {
 
         <Input
           id="password"
+          name="password"
           label="Heslo"
           type="password"
+          autoComplete="current-password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -67,7 +82,10 @@ export default function LoginForm() {
         />
 
         {error && (
-          <p className="border-danger/40 bg-danger/10 text-danger rounded border px-3 py-2 text-sm">
+          <p
+            role="alert"
+            className="border-danger/40 bg-danger/10 text-danger rounded border px-3 py-2 text-sm"
+          >
             {error}
           </p>
         )}
