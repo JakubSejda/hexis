@@ -78,10 +78,15 @@ function Confetti() {
   // Randomised once per mount via lazy state initialiser.
   const [pieces] = useState<ConfettiPiece[]>(generateConfetti)
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      data-testid="confetti"
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
       {pieces.map((p, i) => (
         <span
           key={i}
+          className="hud-confetti"
           style={{
             position: 'absolute',
             top: '-20px',

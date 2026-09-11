@@ -19,7 +19,9 @@ export async function AppShell({ userId, userName, userEmail, children }: Props)
       <Sidebar />
       <div className="flex min-h-screen flex-col md:pl-[220px]">
         <AppHeader streak={streak} userName={userName} userEmail={userEmail} />
-        <main className="flex-1 pb-16 md:pb-0">{children}</main>
+        <main id="main" className="flex-1 pb-16 md:pb-0">
+          {children}
+        </main>
       </div>
       <BottomNav />
     </div>

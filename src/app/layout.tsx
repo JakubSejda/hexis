@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import './globals.css'
+import { SkipLink } from '@/components/shell/SkipLink'
 
 export const metadata: Metadata = {
   title: 'Hexis',
@@ -18,17 +19,19 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0A0E14',
+  themeColor: '#05080F',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
   viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="cs" className={`${GeistSans.variable} ${GeistMono.variable} dark`}>
-      <body className="bg-background text-foreground min-h-screen antialiased">{children}</body>
+      <body className="bg-background text-foreground min-h-screen antialiased">
+        <SkipLink />
+        {children}
+      </body>
     </html>
   )
 }
