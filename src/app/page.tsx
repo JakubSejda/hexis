@@ -13,7 +13,7 @@ export default async function Home() {
   if (session?.user) redirect('/dashboard')
 
   return (
-    <main className="min-h-dvh">
+    <main id="main" className="min-h-dvh">
       <Container size="md" className="flex min-h-dvh flex-col py-8">
         {/* status strip */}
         <div className="text-muted flex items-center justify-between font-mono text-xs tracking-[0.2em] uppercase">

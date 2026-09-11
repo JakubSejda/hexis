@@ -76,6 +76,26 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
+  /* Tells the UA to paint native scrollbars, form controls and date pickers
+   * dark. Without it Chrome renders a light scrollbar over the void navy. */
+  color-scheme: dark;
+}
+
+/* PWA touch behaviour: kill the 300 ms double-tap delay and the default blue
+ * tap flash on anything pressable. Deliberately scoped rather than `*` — a
+ * pan/zoom surface (the anatomy SVG is the candidate) needs its own
+ * touch-action and must not inherit `manipulation` from a blanket rule. */
+button,
+a,
+label,
+input,
+select,
+textarea,
+[role='button'],
+[role='tab'],
+[role='switch'] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* HUD ground: faint hexagon grid behind everything (prototype ~3% opacity). */
@@ -185,6 +205,12 @@ input:-webkit-autofill:active {
   .animate-hud-float,
   .animate-tier-glow {
     animation: none;
+  }
+
+  /* Confetti carries its animation as an inline style (per-piece duration and
+   * delay), so stopping it needs the override. */
+  .hud-confetti {
+    animation: none !important;
   }
 }
 
