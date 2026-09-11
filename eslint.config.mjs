@@ -17,6 +17,13 @@ const PRIMARY_TOKEN_MSG =
 const RADIUS_MSG =
   'The radius ladder died with Reforge: use the `hud-clip` / `hud-clip-sm` plate clips (or the Card primitive).'
 
+/**
+ * Directional arm added in the WIG audit (W3). The R7 regex matched
+ * `rounded-2xl` but not `rounded-t-2xl`, so `BottomSheet` kept a pre-Reforge
+ * radius through the very slice meant to remove them. Covered by
+ * src/tests/lint/hud-grammar-guard.test.ts.
+ */
+
 const hudGrammarSelectors = [
   {
     selector: 'Literal[value=/\\b(bg|text|border|ring|from|to|via|fill|stroke)-primary\\b/]',
@@ -28,11 +35,12 @@ const hudGrammarSelectors = [
     message: PRIMARY_TOKEN_MSG,
   },
   {
-    selector: 'Literal[value=/\\brounded-(lg|xl|2xl|3xl)\\b/]',
+    selector: 'Literal[value=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
     message: RADIUS_MSG,
   },
   {
-    selector: 'TemplateElement[value.raw=/\\brounded-(lg|xl|2xl|3xl)\\b/]',
+    selector:
+      'TemplateElement[value.raw=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
     message: RADIUS_MSG,
   },
 ]
@@ -105,6 +113,14 @@ const eslintConfig = defineConfig([
     files: ['src/components/ui/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-syntax': ['error', ...hudGrammarSelectors],
+    },
+  },
+  // The guard's own test feeds it the banned class names as data — linting
+  // them is a false positive on the one file that proves the guard works.
+  {
+    files: ['src/tests/lint/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': 'off',
     },
   },
 ])

@@ -1,6 +1,6 @@
 'use client'
 import { useState, Suspense } from 'react'
-import { Button, Dialog, Skeleton, useLongPress } from '@/components/ui'
+import { Button, Sheet, Skeleton, useLongPress } from '@/components/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ExerciseCard } from './ExerciseCard'
 import { StepperNav } from './StepperNav'
@@ -137,7 +137,7 @@ function StepperInner({
           }}
         />
       ) : null}
-      <Dialog
+      <Sheet
         open={skipOpen}
         onOpenChange={setSkipOpen}
         title={current ? `Přeskočit ${current.name}?` : 'Přeskočit cvik?'}
@@ -151,7 +151,7 @@ function StepperInner({
             Přeskočit
           </Button>
         </div>
-      </Dialog>
+      </Sheet>
     </div>
   )
 }

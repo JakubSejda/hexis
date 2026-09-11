@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import { Dialog, Button, Input, Radio } from '@/components/ui'
+import { Button, Input, Radio, Sheet, useDesktopAutoFocus } from '@/components/ui'
 import { MILESTONE_BASE_XP, WEIGHT_MULTIPLIER } from '@/lib/habits/milestone'
 
 type Cadence = 'daily' | 'weekly'
@@ -59,8 +59,10 @@ export function HabitDialog(props: Props) {
     }
   }
 
+  const nameRef = useDesktopAutoFocus<HTMLInputElement>(props.open)
+
   return (
-    <Dialog
+    <Sheet
       open={props.open}
       onOpenChange={(v) => {
         if (!v) props.onClose()
@@ -73,7 +75,7 @@ export function HabitDialog(props: Props) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={80}
-          autoFocus
+          ref={nameRef}
         />
 
         <fieldset className="flex flex-col gap-2" disabled={isEdit}>
@@ -138,6 +140,6 @@ export function HabitDialog(props: Props) {
           </Button>
         </div>
       </div>
-    </Dialog>
+    </Sheet>
   )
 }

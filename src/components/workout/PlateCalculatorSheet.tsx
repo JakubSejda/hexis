@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { BottomSheet, NumberInput } from '@/components/ui'
+import { NumberInput, Sheet } from '@/components/ui'
 import { calculatePlates } from '@/lib/plates'
 
 export function PlateCalculatorSheet({
@@ -30,7 +30,7 @@ export function PlateCalculatorSheet({
       : null
 
   return (
-    <BottomSheet open={open} onOpenChange={onOpenChange} title="Plate calculator">
+    <Sheet open={open} onOpenChange={onOpenChange} title="Plate calculator">
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <NumberInput value={target} onChange={setTarget} step={2.5} suffix="kg" />
@@ -52,6 +52,6 @@ export function PlateCalculatorSheet({
           </>
         ) : null}
       </div>
-    </BottomSheet>
+    </Sheet>
   )
 }

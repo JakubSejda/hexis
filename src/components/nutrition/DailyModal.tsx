@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { BottomSheet, Button, NumberInput, ProgressBar, Textarea } from '@/components/ui'
+import { Button, NumberInput, ProgressBar, Sheet, Textarea } from '@/components/ui'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
@@ -99,7 +99,7 @@ export function DailyModal({
   })
 
   return (
-    <BottomSheet open={open} onOpenChange={(v) => !v && onClose()} title={formatDate(date)}>
+    <Sheet open={open} onOpenChange={(v) => !v && onClose()} title={formatDate(date)}>
       <div className="space-y-4 p-4">
         <Field
           label="Kalorie"
@@ -177,7 +177,7 @@ export function DailyModal({
           Uložit
         </Button>
       </div>
-    </BottomSheet>
+    </Sheet>
   )
 }
 
