@@ -3,7 +3,7 @@
 import { useEffect, useReducer, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Sheet } from '@/components/ui'
+import { Heading, Sheet } from '@/components/ui'
 import { Lightbox } from '@/components/photos/Lightbox'
 import type { DayDetailData } from '@/lib/calendar/types'
 
@@ -70,7 +70,9 @@ export function DayDetailModal({ date, onClose }: Props) {
           <div className="mt-4 flex flex-col gap-4">
             {data.sessions.length > 0 && (
               <section>
-                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Trénink</h3>
+                <Heading level={3} variant="region">
+                  Trénink
+                </Heading>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.sessions.map((s) => (
                     <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
@@ -94,7 +96,9 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.habits.length > 0 && (
               <section>
-                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Návyky</h3>
+                <Heading level={3} variant="region">
+                  Návyky
+                </Heading>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.habits.map((h) => (
                     <li key={h.id} className="text-foreground text-sm">
@@ -107,7 +111,9 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.measurement && (
               <section>
-                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Vážení</h3>
+                <Heading level={3} variant="region">
+                  Vážení
+                </Heading>
                 <div className="text-foreground mt-2 flex items-center justify-between text-sm">
                   <span>
                     {data.measurement.weightKg !== null ? `${data.measurement.weightKg} kg` : '—'}
@@ -121,7 +127,9 @@ export function DayDetailModal({ date, onClose }: Props) {
 
             {data.photos.length > 0 && (
               <section>
-                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Fotky</h3>
+                <Heading level={3} variant="region">
+                  Fotky
+                </Heading>
                 <div className="mt-2 flex gap-2 overflow-x-auto">
                   {data.photos.map((p, i) => (
                     <button

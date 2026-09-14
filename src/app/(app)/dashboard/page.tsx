@@ -212,11 +212,11 @@ export default async function DashboardPage() {
           </div>
         </section>
         <section>
-          <RegionHeader>Muscle Volume</RegionHeader>
+          <RegionHeader>Objem svalů</RegionHeader>
           <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
         </section>
         <section>
-          <RegionHeader>This Week</RegionHeader>
+          <RegionHeader>Tento týden</RegionHeader>
           <WeekPeek days={weekPeekDays} />
         </section>
         {stagnation.length > 0 && <StagnationWarning items={stagnation} />}

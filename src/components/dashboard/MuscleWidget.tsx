@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui'
+import { Card, Heading } from '@/components/ui'
 import { MuscleHeatmap } from '@/components/heatmap/MuscleHeatmap'
 
 type Props = {
@@ -10,9 +10,9 @@ export function MuscleWidget({ data, maxVolume }: Props) {
   const hasData = Object.keys(data).length > 0
   return (
     <Card>
-      <h3 className="text-muted mb-2 text-center font-mono text-xs tracking-[0.2em] uppercase">
+      <Heading level={3} variant="region" className="mb-2 text-center">
         Posledních 7 dní
-      </h3>
+      </Heading>
       {hasData ? (
         <MuscleHeatmap data={data} maxVolume={maxVolume} />
       ) : (

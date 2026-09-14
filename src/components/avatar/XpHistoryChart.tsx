@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui'
+import { Card, Heading } from '@/components/ui'
 import type { DailyXp } from '@/lib/queries/xp-history'
 
 type Props = { daily: DailyXp[]; days: number }
@@ -37,9 +37,9 @@ export function XpHistoryChart({ daily, days }: Props) {
 
   return (
     <Card>
-      <h2 className="text-muted mb-3 font-mono text-xs tracking-[0.2em] uppercase">
+      <Heading level={2} variant="region" className="mb-3">
         XP za {days} dní
-      </h2>
+      </Heading>
       <svg
         width={width}
         height={height}

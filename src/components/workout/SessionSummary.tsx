@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, Textarea } from '@/components/ui'
+import { Button, Heading, Textarea } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
@@ -63,7 +63,9 @@ export function SessionSummary({
           </div>
         </div>
       )}
-      <h2 className="text-lg">Shrnutí</h2>
+      <Heading level={2} className="text-lg">
+        Shrnutí
+      </Heading>
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label="Serii" value={String(totalSets)} />
         <Stat label="Tuny" value={`${(totalVolume / 1000).toFixed(1)}`} />

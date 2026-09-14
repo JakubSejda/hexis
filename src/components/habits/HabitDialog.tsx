@@ -86,7 +86,7 @@ export function HabitDialog(props: Props) {
                 key={c}
                 name="cadence"
                 value={c}
-                label={c === 'daily' ? 'Daily' : 'Weekly'}
+                label={c === 'daily' ? 'Denní' : 'Týdenní'}
                 checked={cadence === c}
                 onChange={() => setCadence(c)}
                 disabled={isEdit}

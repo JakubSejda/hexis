@@ -15,7 +15,7 @@ describe('HabitDialog (create mode)', () => {
 
   it('shows weeklyTarget input when cadence=weekly is selected', async () => {
     render(<HabitDialog open mode="create" onClose={vi.fn()} onSubmit={vi.fn()} />)
-    await userEvent.click(screen.getByRole('radio', { name: /weekly/i }))
+    await userEvent.click(screen.getByRole('radio', { name: /^týdenní$/i }))
     expect(screen.getByLabelText(/×\/týden/i)).toBeInTheDocument()
   })
 
@@ -45,7 +45,7 @@ describe('HabitDialog (create mode)', () => {
     const onSubmit = vi.fn()
     render(<HabitDialog open mode="create" onClose={vi.fn()} onSubmit={onSubmit} />)
     await userEvent.type(screen.getByLabelText(/název návyku/i), 'Meditace')
-    await userEvent.click(screen.getByRole('radio', { name: /weekly/i }))
+    await userEvent.click(screen.getByRole('radio', { name: /^týdenní$/i }))
     const target = screen.getByLabelText(/×\/týden/i)
     await userEvent.clear(target)
     await userEvent.type(target, '4')
@@ -76,8 +76,8 @@ describe('HabitDialog (edit mode)', () => {
 
   it('disables cadence radios in edit mode', () => {
     render(<HabitDialog open mode="edit" habit={habit} onClose={vi.fn()} onSubmit={vi.fn()} />)
-    expect(screen.getByRole('radio', { name: /daily/i })).toBeDisabled()
-    expect(screen.getByRole('radio', { name: /weekly/i })).toBeDisabled()
+    expect(screen.getByRole('radio', { name: /^denní$/i })).toBeDisabled()
+    expect(screen.getByRole('radio', { name: /^týdenní$/i })).toBeDisabled()
   })
 
   it('submits only mutable fields (name + weight)', async () => {

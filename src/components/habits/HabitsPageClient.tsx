@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Button, useToast } from '@/components/ui'
+import { Button, Heading, useToast } from '@/components/ui'
 import { HabitDailyRow } from './HabitDailyRow'
 import { HabitWeeklyRow } from './HabitWeeklyRow'
 import { HabitDialog } from './HabitDialog'
@@ -136,7 +136,9 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
 
       {daily.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Daily</h2>
+          <Heading level={2} variant="region">
+            Denní
+          </Heading>
           <div className="space-y-2">
             {daily.map((h) => (
               <HabitDailyRow
@@ -153,7 +155,9 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
 
       {weekly.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Weekly</h2>
+          <Heading level={2} variant="region">
+            Týdenní
+          </Heading>
           <div className="space-y-2">
             {weekly.map((h) => (
               <HabitWeeklyRow

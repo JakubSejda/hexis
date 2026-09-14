@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { PoseBadge } from './PoseBadge'
+import { Heading } from '@/components/ui'
 
 type PhotoItem = {
   id: number
@@ -30,7 +31,9 @@ export function PhotoGrid({ photos, onPhotoTap }: Props) {
     <div className="flex flex-col gap-4">
       {Array.from(groups.entries()).map(([weekStart, group]) => (
         <div key={weekStart}>
-          <h3 className="text-muted mb-2 text-xs font-medium">Týden od {formatDate(weekStart)}</h3>
+          <Heading level={3} variant="region" className="mb-2">
+            Týden od {formatDate(weekStart)}
+          </Heading>
           <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4">
             {group.photos.map((p) => (
               <button
