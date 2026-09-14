@@ -19,7 +19,7 @@ describe('AppHeader', () => {
   it('renders the Life Area label for current pathname', () => {
     vi.mocked(usePathname).mockReturnValue('/progress')
     render(<AppHeader streak={5} userName="Jakub" userEmail="j@ex.com" />)
-    expect(screen.getByText(/progress/i)).toBeInTheDocument()
+    expect(screen.getByText(/progres/i)).toBeInTheDocument()
   })
 
   it('renders streak peek when streak > 0', () => {

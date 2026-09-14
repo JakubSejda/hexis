@@ -8,12 +8,12 @@ describe('MoreSheet', () => {
   it('lists all six sheet areas as links', () => {
     render(<MoreSheet open onOpenChange={() => {}} activeArea={null} />)
     for (const name of [
-      /progress/i,
-      /stats/i,
-      /rewards/i,
-      /player bio/i,
-      /quest calendar/i,
-      /settings/i,
+      /progres/i,
+      /statistiky/i,
+      /odměny/i,
+      /profil hráče/i,
+      /kalendář questů/i,
+      /nastavení/i,
     ]) {
       expect(screen.getByRole('link', { name })).toBeInTheDocument()
     }
@@ -21,14 +21,14 @@ describe('MoreSheet', () => {
 
   it('marks the active area with aria-current', () => {
     render(<MoreSheet open onOpenChange={() => {}} activeArea="rewards" />)
-    expect(screen.getByRole('link', { name: /rewards/i })).toHaveAttribute('aria-current', 'page')
-    expect(screen.getByRole('link', { name: /stats/i })).not.toHaveAttribute('aria-current')
+    expect(screen.getByRole('link', { name: /odměny/i })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: /statistiky/i })).not.toHaveAttribute('aria-current')
   })
 
   it('closes when a link is clicked', async () => {
     const onOpenChange = vi.fn()
     render(<MoreSheet open onOpenChange={onOpenChange} activeArea={null} />)
-    await userEvent.click(screen.getByRole('link', { name: /rewards/i }))
+    await userEvent.click(screen.getByRole('link', { name: /odměny/i }))
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 })

@@ -175,10 +175,10 @@ export default async function DashboardPage() {
         />
         <TodaysChecksCard dailyHabits={dailyHabits} />
         <section>
-          <RegionHeader>Life Areas</RegionHeader>
+          <RegionHeader>Oblasti života</RegionHeader>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <LifeAreaCard
-              label="TRAINING"
+              label="TRÉNINK"
               value={trainingCard.value}
               secondary={trainingCard.secondary}
               visual={trainingCard.visual}
@@ -186,7 +186,7 @@ export default async function DashboardPage() {
               href="/training"
             />
             <LifeAreaCard
-              label="NUTRITION"
+              label="VÝŽIVA"
               value={nutritionCard.value}
               secondary={nutritionCard.secondary}
               visual={nutritionCard.visual}
@@ -194,7 +194,7 @@ export default async function DashboardPage() {
               href="/nutrition"
             />
             <LifeAreaCard
-              label="PROGRESS"
+              label="PROGRES"
               value={progressCard.value}
               secondary={progressCard.secondary}
               visual={progressCard.visual}
@@ -202,7 +202,7 @@ export default async function DashboardPage() {
               href="/progress"
             />
             <LifeAreaCard
-              label="STATS"
+              label="STATISTIKY"
               value={statsCard.value}
               secondary={statsCard.secondary}
               visual={statsCard.visual}
