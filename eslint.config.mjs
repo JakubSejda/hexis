@@ -16,6 +16,8 @@ const PRIMARY_TOKEN_MSG =
   'The `primary` colour token was retired in R7. Use `system` (cyan = system/info), `accent` (amber = action/XP) or `success` (emerald = semantic success only).'
 const RADIUS_MSG =
   'The radius ladder died with Reforge: use the `hud-clip` / `hud-clip-sm` plate clips (or the Card primitive).'
+const CONTROL_SCALE_MSG =
+  'Control scale (2026-09-14): displays (inputs, cells, rows) are square, chassis (buttons, pills, menus) uses `hud-clip-sm`, lenses (avatars, dots) use `hud-hex`.'
 
 /**
  * Directional arm added in the WIG audit (W3). The R7 regex matched
@@ -42,6 +44,16 @@ const hudGrammarSelectors = [
     selector:
       'TemplateElement[value.raw=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
     message: RADIUS_MSG,
+  },
+  // Control scale. `rounded-full` stays legal until the tier-emblem slice
+  // converts the last lens (TierLadder's active ring).
+  {
+    selector: 'Literal[value=/\\brounded(-(sm|md))?(?!-)/]',
+    message: CONTROL_SCALE_MSG,
+  },
+  {
+    selector: 'TemplateElement[value.raw=/\\brounded(-(sm|md))?(?!-)/]',
+    message: CONTROL_SCALE_MSG,
   },
 ]
 

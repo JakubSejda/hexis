@@ -129,7 +129,7 @@ export function DayDetailModal({ date, onClose }: Props) {
                       type="button"
                       onClick={() => setLightboxIdx(i)}
                       aria-label={`Otevřít fotku ${i + 1}`}
-                      className="border-border hover:border-accent shrink-0 rounded border bg-black"
+                      className="border-border hover:border-accent shrink-0 border bg-black"
                     >
                       <Image
                         src={p.thumbUrl}

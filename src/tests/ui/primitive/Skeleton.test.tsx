@@ -16,7 +16,7 @@ describe('Skeleton', () => {
     render(<Skeleton data-testid="s" />)
     const el = screen.getByTestId('s')
     expect(el).toHaveClass('h-4')
-    expect(el).toHaveClass('rounded')
+    expect(el.className).not.toMatch(/rounded/)
   })
 
   it('renders multiple lines when shape=text + lines > 1', () => {
@@ -25,17 +25,17 @@ describe('Skeleton', () => {
     expect(wrapper.querySelectorAll('[data-testid="skeleton-line"]').length).toBe(3)
   })
 
-  it('renders shape=block (rounded-md, h-20 default)', () => {
+  it('renders shape=block (square, h-20 default)', () => {
     render(<Skeleton shape="block" data-testid="s" />)
     const el = screen.getByTestId('s')
-    expect(el).toHaveClass('rounded-md')
+    expect(el.className).not.toMatch(/rounded/)
     expect(el).toHaveClass('h-20')
   })
 
-  it('renders shape=avatar (rounded-full + square aspect)', () => {
+  it('renders shape=avatar (hexagonal lens + square aspect)', () => {
     render(<Skeleton shape="avatar" data-testid="s" />)
     const el = screen.getByTestId('s')
-    expect(el).toHaveClass('rounded-full')
+    expect(el).toHaveClass('hud-hex')
     expect(el).toHaveClass('h-10')
     expect(el).toHaveClass('w-10')
   })

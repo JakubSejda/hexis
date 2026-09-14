@@ -53,7 +53,7 @@ export function BeforeAfter({ photos, dates }: Props) {
             key={p.value}
             onClick={() => setPoseFilter(p.value)}
             className={
-              'flex-1 rounded-md px-2 py-1.5 text-xs transition-colors ' +
+              'hud-clip-sm flex-1 px-2 py-1.5 text-xs transition-colors ' +
               (poseFilter === p.value
                 ? 'bg-system text-background font-semibold'
                 : 'bg-border text-muted')
@@ -108,7 +108,7 @@ export function BeforeAfter({ photos, dates }: Props) {
             />
           </div>
           <div className="absolute top-0 bottom-0 w-0.5 bg-white" style={{ left: `${sliderPos}%` }}>
-            <div className="absolute top-1/2 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-black/50" />
+            <div className="hud-hex absolute top-1/2 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 border-2 border-white bg-black/50" />
           </div>
           <input
             type="range"
@@ -118,10 +118,10 @@ export function BeforeAfter({ photos, dates }: Props) {
             onChange={(e) => setSliderPos(Number(e.target.value))}
             className="absolute inset-0 h-full w-full cursor-col-resize opacity-0"
           />
-          <span className="absolute top-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">
+          <span className="hud-clip-sm absolute top-2 left-2 bg-black/60 px-2 py-0.5 text-xs text-white">
             Před
           </span>
-          <span className="absolute top-2 right-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">
+          <span className="hud-clip-sm absolute top-2 right-2 bg-black/60 px-2 py-0.5 text-xs text-white">
             Po
           </span>
         </div>

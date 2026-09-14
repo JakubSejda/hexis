@@ -11,7 +11,7 @@ type Props = {
 
 export function PoseBadge({ pose }: Props) {
   return (
-    <span className="absolute right-1 bottom-1 rounded bg-black/60 px-1.5 py-0.5 text-xs font-bold text-white">
+    <span className="hud-clip-sm absolute right-1 bottom-1 bg-black/60 px-1.5 py-0.5 text-xs font-bold text-white">
       {POSE_LABELS[pose] ?? pose[0]?.toUpperCase()}
     </span>
   )

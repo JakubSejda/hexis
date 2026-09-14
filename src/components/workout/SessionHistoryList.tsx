@@ -18,7 +18,7 @@ export function SessionHistoryList({ items }: { items: Item[] }) {
         <li key={s.id}>
           <Link
             href={`/training/${s.id}`}
-            className="bg-surface flex items-center justify-between rounded-md px-3 py-2 text-sm"
+            className="bg-surface flex items-center justify-between px-3 py-2 text-sm"
           >
             <span>
               {new Date(s.startedAt).toLocaleDateString('cs-CZ')}{' '}

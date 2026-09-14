@@ -104,4 +104,9 @@ describe('Input', () => {
     const el = screen.getByTestId('i')
     expect(el.getAttribute('aria-describedby')).toBeNull()
   })
+
+  it('is a display — square, no radius of its own', () => {
+    render(<Input label="Jméno" />)
+    expect(screen.getByLabelText('Jméno').className).not.toMatch(/rounded/)
+  })
 })

@@ -75,7 +75,7 @@ export function CalendarCell({ day, onSelect }: Props) {
               key={key}
               data-signal={key}
               data-active={day.signals[key] ? 'true' : 'false'}
-              className={`h-[6px] w-[6px] rounded-full ${day.signals[key] ? DOT_BG[key] : 'bg-border'}`}
+              className={`hud-hex h-[6px] w-[6px] ${day.signals[key] ? DOT_BG[key] : 'bg-border'}`}
             />
           ))}
         </div>

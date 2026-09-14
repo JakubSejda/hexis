@@ -51,7 +51,7 @@ export function RewardCard({
           <Menu.Root>
             <Menu.Trigger
               aria-label={`Možnosti pro ${reward.name}`}
-              className="hover:bg-surface-raised text-muted rounded p-1"
+              className="hover:bg-surface-raised text-muted hud-clip-sm p-1"
             >
               <MoreVertical className="h-4 w-4" />
             </Menu.Trigger>

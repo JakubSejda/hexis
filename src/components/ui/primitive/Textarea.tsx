@@ -2,7 +2,7 @@ import { forwardRef, useId, type TextareaHTMLAttributes } from 'react'
 import { cn } from '../utils/cn'
 
 const BASE =
-  'block w-full rounded-md border bg-background p-3 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50'
+  'block w-full border bg-background p-3 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50'
 
 type Props = {
   error?: string

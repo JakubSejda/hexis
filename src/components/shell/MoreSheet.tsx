@@ -24,7 +24,7 @@ export function MoreSheet({ open, onOpenChange, activeArea }: Props) {
               aria-current={isActive ? 'page' : undefined}
               onClick={() => onOpenChange(false)}
               className={cn(
-                'flex min-h-11 items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors',
+                'hud-clip-sm flex min-h-11 items-center gap-2.5 px-3 py-2 text-sm transition-colors',
                 isActive
                   ? 'text-accent bg-surface-raised'
                   : 'text-foreground hover:bg-surface-raised'

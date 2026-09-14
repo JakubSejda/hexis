@@ -38,7 +38,7 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
         <Menu.Root>
           <Menu.Trigger
             aria-label="Otevřít menu"
-            className="bg-accent text-background flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold"
+            className="bg-accent text-background hud-hex flex h-9 w-9 items-center justify-center text-sm font-semibold"
           >
             {initial}
           </Menu.Trigger>

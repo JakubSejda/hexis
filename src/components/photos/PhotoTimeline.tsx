@@ -40,7 +40,7 @@ export function PhotoTimeline({ photos, onPhotoTap }: Props) {
               alt={`${p.pose} ${p.takenAt}`}
               width={96}
               height={96}
-              className="h-24 w-24 rounded-md object-cover"
+              className="h-24 w-24 object-cover"
               loading="lazy"
               unoptimized
             />

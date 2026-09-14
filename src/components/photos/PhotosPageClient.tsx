@@ -111,7 +111,7 @@ export function PhotosPageClient() {
 
       <button
         onClick={() => setUploadOpen(true)}
-        className="bg-accent text-background fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-30 flex h-14 w-14 items-center justify-center rounded-full text-2xl font-bold shadow-lg"
+        className="bg-accent text-background hud-hex fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-30 flex h-14 w-14 items-center justify-center text-2xl font-bold shadow-lg"
         aria-label="Nahrát fotku"
       >
         +

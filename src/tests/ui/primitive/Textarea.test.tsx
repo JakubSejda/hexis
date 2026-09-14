@@ -8,7 +8,7 @@ describe('Textarea', () => {
     render(<Textarea label="Poznámka" />)
     const el = screen.getByLabelText('Poznámka')
     expect(el.tagName).toBe('TEXTAREA')
-    expect(el).toHaveClass('rounded-md')
+    expect(el.className).not.toMatch(/rounded/)
   })
 
   it('shows error state (border-danger + aria-invalid + message)', () => {

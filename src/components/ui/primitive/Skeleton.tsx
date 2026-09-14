@@ -4,9 +4,9 @@ import { cn } from '../utils/cn'
 type Shape = 'text' | 'block' | 'avatar' | 'card'
 
 const SHAPE_CLASS: Record<Shape, string> = {
-  text: 'h-4 rounded',
-  block: 'h-20 rounded-md',
-  avatar: 'h-10 w-10 rounded-full',
+  text: 'h-4',
+  block: 'h-20',
+  avatar: 'hud-hex h-10 w-10',
   card: 'hud-clip h-32',
 }
 

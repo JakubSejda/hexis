@@ -59,7 +59,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
           {macros.map((m, i) => (
             <span
               key={i}
-              className="block h-1.5 w-1.5 rounded-full"
+              className="hud-hex block h-1.5 w-1.5"
               style={{ background: DOT[m], display: m === 'none' ? 'none' : 'block' }}
             />
           ))}
