@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Skeleton, Tabs } from '@/components/ui'
 import { PhotoGrid } from './PhotoGrid'
 import { PhotoTimeline } from './PhotoTimeline'
@@ -23,8 +24,24 @@ type PhotoItem = {
 
 type ViewMode = 'grid' | 'timeline' | 'compare'
 
+const VIEWS: ViewMode[] = ['grid', 'timeline', 'compare']
+
 export function PhotosPageClient() {
-  const [view, setView] = useState<ViewMode>('grid')
+  // The open tab is in the URL, so a reload or a shared link lands on the same
+  // view (WIG audit, finding 37).
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const fromUrl = searchParams.get('view') as ViewMode | null
+  const view: ViewMode = fromUrl && VIEWS.includes(fromUrl) ? fromUrl : 'grid'
+
+  const setView = (next: ViewMode) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (next === 'grid') params.delete('view')
+    else params.set('view', next)
+    const query = params.toString()
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
+  }
   const [photos, setPhotos] = useState<PhotoItem[]>([])
   const [dates, setDates] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
@@ -67,8 +84,8 @@ export function PhotosPageClient() {
     <div className="flex flex-col gap-3">
       <Tabs.Root value={view} onValueChange={(v) => setView(v as ViewMode)}>
         <Tabs.List>
-          <Tabs.Trigger value="grid">Grid</Tabs.Trigger>
-          <Tabs.Trigger value="timeline">Timeline</Tabs.Trigger>
+          <Tabs.Trigger value="grid">Mřížka</Tabs.Trigger>
+          <Tabs.Trigger value="timeline">Časová osa</Tabs.Trigger>
           <Tabs.Trigger value="compare">Před×Po</Tabs.Trigger>
         </Tabs.List>
         {loading ? (

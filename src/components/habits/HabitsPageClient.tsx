@@ -179,10 +179,11 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
           <button
             type="button"
             onClick={() => setArchiveOpen((s) => !s)}
-            className="text-muted flex w-full items-center justify-between font-mono text-xs tracking-[0.2em] uppercase"
+            aria-expanded={archiveOpen}
+            className="text-muted flex min-h-11 w-full items-center justify-between font-mono text-xs tracking-[0.2em] uppercase"
           >
-            <span>Archive ({initialArchived.length})</span>
-            <span>{archiveOpen ? '▲' : '▼'}</span>
+            <span>Archiv ({initialArchived.length})</span>
+            <span aria-hidden="true">{archiveOpen ? '▲' : '▼'}</span>
           </button>
           {archiveOpen && (
             <div className="space-y-2 opacity-60">

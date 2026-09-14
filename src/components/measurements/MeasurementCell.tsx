@@ -6,11 +6,13 @@ import { Input } from '@/components/ui'
 type Props = {
   value: number | null
   precision: number
+  /** Names the cell for assistive tech, e.g. "Váha, 12. 5." — the bare value says nothing. */
+  label: string
   align?: 'left' | 'right'
   onCommit: (value: number | null) => Promise<void>
 }
 
-export function MeasurementCell({ value, precision, align = 'right', onCommit }: Props) {
+export function MeasurementCell({ value, precision, label, align = 'right', onCommit }: Props) {
   const [editing, setEditing] = useState(false)
   const formatted = value == null ? '' : value.toFixed(precision)
   const [draft, setDraft] = useState<string>(formatted)
@@ -40,6 +42,7 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
     return (
       <button
         type="button"
+        aria-label={label}
         onClick={() => setEditing(true)}
         className={
           'hover:bg-border block w-full rounded px-1 py-1 text-sm ' +
@@ -55,6 +58,7 @@ export function MeasurementCell({ value, precision, align = 'right', onCommit }:
   return (
     <Input
       ref={inputRef}
+      aria-label={label}
       type="number"
       inputMode="decimal"
       step={1 / Math.pow(10, precision)}

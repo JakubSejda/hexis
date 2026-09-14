@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Select } from '@/components/ui'
 
 type PhotoItem = { id: number; takenAt: string; pose: string; fullUrl: string; thumbUrl: string }
@@ -9,13 +10,25 @@ type Props = { photos: PhotoItem[]; dates: string[] }
 
 const POSES = [
   { value: '', label: 'Vše' },
-  { value: 'front', label: 'Front' },
-  { value: 'side', label: 'Side' },
-  { value: 'back', label: 'Back' },
+  { value: 'front', label: 'Zepředu' },
+  { value: 'side', label: 'Z boku' },
+  { value: 'back', label: 'Zezadu' },
 ] as const
 
 export function BeforeAfter({ photos, dates }: Props) {
-  const [poseFilter, setPoseFilter] = useState('')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const fromUrl = searchParams.get('pose') ?? ''
+  const poseFilter = POSES.some((p) => p.value === fromUrl) ? fromUrl : ''
+
+  const setPoseFilter = (next: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (next === '') params.delete('pose')
+    else params.set('pose', next)
+    const query = params.toString()
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
+  }
   const [beforeDate, setBeforeDate] = useState(dates[dates.length - 1] ?? '')
   const [afterDate, setAfterDate] = useState(dates[0] ?? '')
   const [sliderPos, setSliderPos] = useState(50)

@@ -57,4 +57,11 @@ describe('HabitWeeklyRow', () => {
     const bar = container.querySelector('[data-progress-fill]') as HTMLElement
     expect(bar.style.width).toBe('100%')
   })
+
+  it('lets a long name truncate — a flex child needs min-w-0 to shrink', () => {
+    render(<HabitWeeklyRow habit={baseHabit} onCheck={vi.fn()} />)
+    const name = screen.getByText('Pondělky meditace')
+    expect(name).toHaveClass('truncate')
+    expect(name).toHaveClass('min-w-0')
+  })
 })

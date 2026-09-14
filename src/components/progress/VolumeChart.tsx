@@ -25,11 +25,11 @@ type Props = {
 }
 
 const CATEGORIES = [
-  { key: 'chest', label: 'Chest', color: '#ef4444' },
-  { key: 'back', label: 'Back', color: '#3b82f6' },
-  { key: 'shoulders', label: 'Shoulders', color: '#f59e0b' },
-  { key: 'arms', label: 'Arms', color: '#a78bfa' },
-  { key: 'legs', label: 'Legs', color: '#34d399' },
+  { key: 'chest', label: 'Hrudník', color: '#ef4444' },
+  { key: 'back', label: 'Záda', color: '#3b82f6' },
+  { key: 'shoulders', label: 'Ramena', color: '#f59e0b' },
+  { key: 'arms', label: 'Paže', color: '#a78bfa' },
+  { key: 'legs', label: 'Nohy', color: '#34d399' },
 ] as const
 
 function formatWeek(dateStr: string) {

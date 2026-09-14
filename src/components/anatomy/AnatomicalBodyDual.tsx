@@ -1,8 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { SegmentedControl } from '@/components/ui'
 import { AnatomicalBody } from './AnatomicalBody'
 import { applyHighlights } from '@/lib/anatomy-zones'
+
+const VIEWS = [
+  { label: 'Zepředu', value: 'front' },
+  { label: 'Zezadu', value: 'back' },
+] as const
 
 type Props = {
   highlights: Record<string, string>
@@ -16,32 +22,14 @@ export function AnatomicalBodyDual({ highlights, className, bodyClassName }: Pro
 
   return (
     <div className={'flex flex-col items-center gap-2 ' + (className ?? '')}>
-      <div role="tablist" className="flex gap-1 sm:hidden">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={active === 'front'}
-          onClick={() => setActive('front')}
-          className={
-            'rounded-md px-3 py-1 text-xs font-medium ' +
-            (active === 'front' ? 'bg-surface text-foreground' : 'text-muted')
-          }
-        >
-          Zepředu
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={active === 'back'}
-          onClick={() => setActive('back')}
-          className={
-            'rounded-md px-3 py-1 text-xs font-medium ' +
-            (active === 'back' ? 'bg-surface text-foreground' : 'text-muted')
-          }
-        >
-          Zezadu
-        </button>
-      </div>
+      <SegmentedControl
+        name="anatomy-view"
+        label="Pohled na tělo"
+        options={VIEWS}
+        value={active}
+        onChange={(v) => setActive(v as 'front' | 'back')}
+        className="sm:hidden"
+      />
       <div className="flex items-center justify-center gap-2">
         <div className={active === 'front' ? 'block sm:block' : 'hidden sm:block'}>
           <AnatomicalBody

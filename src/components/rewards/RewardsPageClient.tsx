@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { RegionHeader } from '@/components/dashboard/RegionHeader'
-import { Button } from '@/components/ui'
+import { Button, ConfirmSheet } from '@/components/ui'
 import { BalanceCard } from './BalanceCard'
 import { RewardList } from './RewardList'
 import { RedemptionList } from './RedemptionList'
@@ -27,6 +27,8 @@ export function RewardsPageClient({
   const [editing, setEditing] = useState<RewardRow | null>(null)
   const [creating, setCreating] = useState(false)
   const [redeeming, setRedeeming] = useState<RewardRow | null>(null)
+  const [deleting, setDeleting] = useState<RewardRow | null>(null)
+  const [deletingRedemption, setDeletingRedemption] = useState<RedemptionWithReward | null>(null)
 
   const handleCreate = async (payload: { name: string; costXp: number; description?: string }) => {
     const res = await fetch('/api/rewards', {
@@ -61,9 +63,10 @@ export function RewardsPageClient({
     router.refresh()
   }
 
-  const handleDelete = async (r: RewardRow) => {
-    if (!confirm(`Trvale smazat "${r.name}"?`)) return
-    const res = await fetch(`/api/rewards/${r.id}`, { method: 'DELETE' })
+  const handleDelete = async () => {
+    if (!deleting) return
+    const res = await fetch(`/api/rewards/${deleting.id}`, { method: 'DELETE' })
+    setDeleting(null)
     if (!res.ok) return
     router.refresh()
   }
@@ -84,9 +87,12 @@ export function RewardsPageClient({
     router.refresh()
   }
 
-  const handleDeleteRedemption = async (r: RedemptionWithReward) => {
-    if (!confirm('Smazat z historie?')) return
-    const res = await fetch(`/api/rewards/redemptions/${r.id}`, { method: 'DELETE' })
+  const handleDeleteRedemption = async () => {
+    if (!deletingRedemption) return
+    const res = await fetch(`/api/rewards/redemptions/${deletingRedemption.id}`, {
+      method: 'DELETE',
+    })
+    setDeletingRedemption(null)
     if (!res.ok) return
     router.refresh()
   }
@@ -112,16 +118,32 @@ export function RewardsPageClient({
           onRedeem={(r) => setRedeeming(r)}
           onEdit={(r) => setEditing(r)}
           onArchive={handleArchive}
-          onDelete={handleDelete}
+          onDelete={(r) => setDeleting(r)}
           onCreate={() => setCreating(true)}
         />
       </section>
 
       <section className="space-y-3">
         <RegionHeader>Historie</RegionHeader>
-        <RedemptionList history={initialHistory} onDelete={handleDeleteRedemption} />
+        <RedemptionList history={initialHistory} onDelete={(r) => setDeletingRedemption(r)} />
       </section>
 
+      <ConfirmSheet
+        open={deleting != null}
+        onOpenChange={(v) => !v && setDeleting(null)}
+        title="Smazat odměnu?"
+        description={deleting ? `Odměnu „${deleting.name}" tím smažeš natrvalo.` : undefined}
+        confirmLabel="Smazat"
+        onConfirm={() => void handleDelete()}
+      />
+      <ConfirmSheet
+        open={deletingRedemption != null}
+        onOpenChange={(v) => !v && setDeletingRedemption(null)}
+        title="Smazat z historie?"
+        description="Záznam o vyzvednutí zmizí. XP se nevrací."
+        confirmLabel="Smazat"
+        onConfirm={() => void handleDeleteRedemption()}
+      />
       <RewardDialog
         open={creating}
         mode="create"

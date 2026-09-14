@@ -1,7 +1,7 @@
 import type { CalendarDay } from '@/lib/calendar/types'
 import { CalendarCell } from './CalendarCell'
 
-type Props = { days: CalendarDay[] }
+type Props = { days: CalendarDay[]; onSelect?: (date: string) => void }
 
 const WEEKDAYS = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
 
@@ -12,7 +12,7 @@ function isoWeekday(date: string): number {
   return (js + 6) % 7
 }
 
-export function CalendarGrid({ days }: Props) {
+export function CalendarGrid({ days, onSelect }: Props) {
   if (days.length === 0) return null
   const leading = isoWeekday(days[0]!.date)
   return (
@@ -29,7 +29,7 @@ export function CalendarGrid({ days }: Props) {
         <div key={`blank-${i}`} data-blank="true" aria-hidden />
       ))}
       {days.map((day) => (
-        <CalendarCell key={day.date} day={day} />
+        <CalendarCell key={day.date} day={day} onSelect={onSelect} />
       ))}
     </div>
   )

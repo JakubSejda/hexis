@@ -73,4 +73,11 @@ describe('Avatar', () => {
     render(<Avatar alt="jakub sejda" data-testid="a" />)
     expect(screen.getByTestId('a')).toHaveTextContent('JS')
   })
+
+  it('gives the image explicit dimensions so it cannot shift the layout', () => {
+    render(<Avatar src="/a.png" alt="Jakub Sejda" size="md" />)
+    const img = screen.getByAltText('Jakub Sejda')
+    expect(img).toHaveAttribute('width', '40')
+    expect(img).toHaveAttribute('height', '40')
+  })
 })

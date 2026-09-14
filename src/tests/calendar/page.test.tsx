@@ -52,8 +52,8 @@ describe('/calendar page', () => {
     const ui = await CalendarPage({ searchParams: Promise.resolve({}) })
     render(ui)
     expect(screen.getByText(/květen 2026/i)).toBeInTheDocument()
-    expect(screen.getByText('Training')).toBeInTheDocument()
-    expect(screen.getByText(/3\+ den streak/i)).toBeInTheDocument()
+    expect(screen.getByText('Trénink')).toBeInTheDocument()
+    expect(screen.getByText(/3\+ dní v řadě/i)).toBeInTheDocument()
   })
 
   it('honors ?ym param when valid', async () => {

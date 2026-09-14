@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { Card, Container, ProgressBar } from '@/components/ui'
+import { Card, Container, Heading, ProgressBar } from '@/components/ui'
 import { HexEmblem } from '@/components/dashboard/HexEmblem'
 
 /**
@@ -25,9 +25,9 @@ export default async function Home() {
         <section className="animate-hud-power-on flex flex-1 flex-col items-center justify-center gap-8 py-16 text-center">
           <HexEmblem level={4} tierColor="#f59e0b" size={140} className="animate-tier-glow" />
           <div>
-            <h1 className="text-foreground text-5xl font-black tracking-tight uppercase italic sm:text-6xl">
+            <Heading level={1} variant="display" className="text-5xl sm:text-6xl">
               Hexis
-            </h1>
+            </Heading>
             <p className="text-system mt-3 font-mono text-sm tracking-[0.2em] uppercase">
               Trénink, návyky a progres jako RPG
             </p>

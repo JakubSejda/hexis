@@ -89,4 +89,11 @@ describe('HabitDailyRow', () => {
     )
     expect(container.querySelector('[data-habit-row][data-habit-id="1"]')).toBeTruthy()
   })
+
+  it('lets a long name truncate — a flex child needs min-w-0 to shrink', () => {
+    render(<HabitDailyRow {...baseProps} onCheck={vi.fn()} onUncheck={vi.fn()} />)
+    const name = screen.getByText('Voda')
+    expect(name).toHaveClass('truncate')
+    expect(name).toHaveClass('min-w-0')
+  })
 })

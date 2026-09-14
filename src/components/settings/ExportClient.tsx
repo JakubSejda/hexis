@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui'
+import { Button, Heading } from '@/components/ui'
 import { toCsv } from '@/lib/csv'
 
 type Status = 'idle' | 'fetching' | 'zipping' | 'done' | 'error'
@@ -117,7 +117,7 @@ export function ExportClient() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-semibold">Export dat</h1>
+      <Heading level={1}>Export dat</Heading>
       <p className="text-muted text-sm">
         Stáhne ZIP archiv se všemi tvými daty ve formátu CSV (sessions, sets, measurements,
         nutrition).

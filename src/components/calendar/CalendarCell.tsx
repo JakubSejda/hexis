@@ -1,8 +1,22 @@
 import type { CalendarDay } from '@/lib/calendar/types'
 
-type Props = { day: CalendarDay }
+type Props = { day: CalendarDay; onSelect?: (date: string) => void }
+
+/** Czech long date, e.g. "15. května 2026" — the cell's accessible name. */
+const CS_DATE = new Intl.DateTimeFormat('cs-CZ', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
 
 const SIGNAL_KEYS = ['training', 'habit', 'weigh', 'photo'] as const
+
+const SIGNAL_LABEL: Record<(typeof SIGNAL_KEYS)[number], string> = {
+  training: 'trénink',
+  habit: 'návyk',
+  weigh: 'vážení',
+  photo: 'fotka',
+}
 
 const DOT_BG: Record<(typeof SIGNAL_KEYS)[number], string> = {
   training: 'bg-accent',
@@ -11,7 +25,7 @@ const DOT_BG: Record<(typeof SIGNAL_KEYS)[number], string> = {
   photo: 'bg-cal-photo',
 }
 
-export function CalendarCell({ day }: Props) {
+export function CalendarCell({ day, onSelect }: Props) {
   const dayNum = Number(day.date.slice(8, 10))
   const isDimmed = day.isFuture && !day.forecastPlanName
   const baseClasses = [
@@ -32,8 +46,18 @@ export function CalendarCell({ day }: Props) {
   if (day.isToday) baseClasses.push('border-2', 'border-system')
   if (isDimmed) baseClasses.push('opacity-30')
 
+  const label = CS_DATE.format(new Date(`${day.date}T00:00:00Z`))
+  const signals = SIGNAL_KEYS.filter((k) => day.signals[k])
+
   return (
-    <div
+    <button
+      type="button"
+      onClick={() => onSelect?.(day.date)}
+      aria-label={
+        label +
+        (day.isToday ? ' — dnes' : '') +
+        (signals.length ? ` — ${signals.map((s) => SIGNAL_LABEL[s]).join(', ')}` : '')
+      }
       data-date={day.date}
       data-today={day.isToday ? 'true' : undefined}
       data-future={day.isFuture ? 'true' : undefined}
@@ -56,6 +80,6 @@ export function CalendarCell({ day }: Props) {
           ))}
         </div>
       )}
-    </div>
+    </button>
   )
 }

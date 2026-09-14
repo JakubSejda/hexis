@@ -32,12 +32,12 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
       <div className="flex items-center gap-3">
         {streak > 0 && (
           <Pill variant="warning" size="sm" className="hidden md:inline-flex">
-            {streak} day streak
+            {streak} dní v řadě
           </Pill>
         )}
         <Menu.Root>
           <Menu.Trigger
-            aria-label="Open menu"
+            aria-label="Otevřít menu"
             className="bg-accent text-background flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold"
           >
             {initial}
@@ -46,14 +46,14 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
             <div className="text-muted px-2 py-1.5 text-xs">{userName ?? userEmail}</div>
             <Menu.Separator />
             <Menu.Item asChild>
-              <Link href="/nutrition">Nutrition</Link>
+              <Link href="/nutrition">Výživa</Link>
             </Menu.Item>
             <Menu.Item asChild>
-              <Link href="/settings">Settings</Link>
+              <Link href="/settings">Nastavení</Link>
             </Menu.Item>
             <Menu.Separator />
             <Menu.Item variant="danger" onSelect={() => signOut({ callbackUrl: '/login' })}>
-              Sign out
+              Odhlásit se
             </Menu.Item>
           </Menu.Content>
         </Menu.Root>
