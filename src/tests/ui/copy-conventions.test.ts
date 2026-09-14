@@ -16,7 +16,9 @@ function appSources(dir = resolve(root, 'src')): [string, string][] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = join(dir, entry.name)
     if (entry.isDirectory()) return entry.name === 'tests' ? [] : appSources(full)
-    return entry.name.endsWith('.tsx')
+    // .ts as well as .tsx: AREA_META lives in a .ts file, and a .tsx-only scan
+    // let ten English labels sit in the main navigation of a Czech app.
+    return entry.name.endsWith('.tsx') || entry.name.endsWith('.ts')
       ? [[full.replace(root + '/', ''), readFileSync(full, 'utf8')] as [string, string]]
       : []
   })
@@ -49,7 +51,7 @@ describe('copy', () => {
 
   it('keeps the interface in Czech', () => {
     const english =
-      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition)["'<]/
+      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition|Dashboard|Progress|Stats|Habits|Rewards|Player Bio|Quest Calendar|Life Areas)["'<]/
     expect(hits((l) => english.test(l))).toEqual([])
   })
 })

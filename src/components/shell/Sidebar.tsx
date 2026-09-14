@@ -14,7 +14,7 @@ export function Sidebar() {
         Hexis
       </div>
 
-      <SectionLabel>Life Areas</SectionLabel>
+      <SectionLabel>Oblasti života</SectionLabel>
       {SIDEBAR_AREAS.map((area) => {
         const meta = AREA_META[area]
         return (
