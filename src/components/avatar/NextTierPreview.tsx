@@ -1,4 +1,4 @@
-import { Avatar } from './Avatar'
+import { TierBadge } from './TierBadge'
 import { Card } from '@/components/ui'
 import { nextTierMeta } from '@/lib/tiers'
 
@@ -12,9 +12,7 @@ export function NextTierPreview({ currentLevel, totalXp }: Props) {
     <Card>
       <h2 className="text-muted mb-3 font-mono text-xs tracking-[0.2em] uppercase">Další tier</h2>
       <div className="flex items-center gap-3">
-        <div className="opacity-40">
-          <Avatar tier={next.tier} size={64} />
-        </div>
+        <TierBadge tier={next.tier} size={64} dim />
         <div>
           <div className="text-lg font-bold" style={{ color: next.color }}>
             {next.name}

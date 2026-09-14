@@ -45,14 +45,15 @@ const hudGrammarSelectors = [
       'TemplateElement[value.raw=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
     message: RADIUS_MSG,
   },
-  // Control scale. `rounded-full` stays legal until the tier-emblem slice
-  // converts the last lens (TierLadder's active ring).
+  // Control scale — complete since the tier-emblem slice. No radius of any
+  // kind survives in src: displays are square, chassis is clipped, lenses are
+  // hexagons.
   {
-    selector: 'Literal[value=/\\brounded(-(sm|md))?(?!-)/]',
+    selector: 'Literal[value=/\\brounded(-(sm|md|full))?(?!-)/]',
     message: CONTROL_SCALE_MSG,
   },
   {
-    selector: 'TemplateElement[value.raw=/\\brounded(-(sm|md))?(?!-)/]',
+    selector: 'TemplateElement[value.raw=/\\brounded(-(sm|md|full))?(?!-)/]',
     message: CONTROL_SCALE_MSG,
   },
 ]

@@ -62,7 +62,7 @@ describe('BioHero', () => {
     expect(screen.getByText(/Day 1/)).toBeInTheDocument()
   })
 
-  it('renders an avatar image for the tier', () => {
+  it('renders the HUD tier emblem', () => {
     render(
       <BioHero
         name="Jakub"
@@ -73,7 +73,7 @@ describe('BioHero', () => {
         today={new Date('2026-05-07')}
       />
     )
-    const img = screen.getByAltText(/Tier 3/i)
+    const img = screen.getByRole('img', { name: /level 10/i })
     expect(img).toBeInTheDocument()
   })
 })

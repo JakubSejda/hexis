@@ -1,4 +1,4 @@
-import { Avatar } from '@/components/avatar/Avatar'
+import { HexEmblem } from '@/components/dashboard/HexEmblem'
 import { Card, Heading, ProgressBar } from '@/components/ui'
 import type { TierMeta } from '@/lib/tiers'
 
@@ -16,7 +16,7 @@ export function AvatarHeroCard({ level, tierMeta, totalXp, progress }: Props) {
         <Heading level={2} as="div" variant="region" className="mb-2">
           Tvůj avatar
         </Heading>
-        <Avatar tier={tierMeta.tier} size={160} />
+        <HexEmblem level={level} tierColor={tierMeta.color} size={160} />
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-2xl font-bold" style={{ color: tierMeta.color }}>
             Level {level}

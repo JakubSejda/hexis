@@ -7,6 +7,10 @@ type Props = {
   tierColor: string
   size?: number
   className?: string
+  /** Text shown instead of the level — tier badges show a roman numeral. */
+  label?: string
+  /** Overrides the accessible name when `label` is not a level. */
+  ariaLabel?: string
 }
 
 function hexPoints(cx: number, cy: number, r: number): string {
@@ -18,14 +22,14 @@ function hexPoints(cx: number, cy: number, r: number): string {
   return pts.join(' ')
 }
 
-export function HexEmblem({ level, tierColor, size = 120, className }: Props) {
+export function HexEmblem({ level, tierColor, size = 120, className, label, ariaLabel }: Props) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 120 120"
       role="img"
-      aria-label={`Level ${level}`}
+      aria-label={ariaLabel ?? `Level ${level}`}
       className={`drop-shadow-[0_0_12px_rgba(34,211,238,0.25)] ${className ?? ''}`}
     >
       <polygon
@@ -57,7 +61,7 @@ export function HexEmblem({ level, tierColor, size = 120, className }: Props) {
         fontWeight="800"
         fontFamily="var(--font-mono)"
       >
-        {level}
+        {label ?? level}
       </text>
     </svg>
   )
