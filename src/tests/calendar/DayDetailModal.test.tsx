@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { DayDetailModal } from '@/components/calendar/DayDetailModal'
 
 vi.mock('@/components/photos/Lightbox', () => ({
@@ -72,7 +73,7 @@ describe('DayDetailModal', () => {
       )
     )
     render(<DayDetailModal date="2026-05-15" onClose={() => {}} />)
-    await waitFor(() => expect(screen.getByText(/^training$/i)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/^trénink$/i)).toBeInTheDocument())
     expect(screen.getByText('90 min')).toBeInTheDocument()
     expect(screen.queryByText(/^návyky$/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/^vážení$/i)).not.toBeInTheDocument()
@@ -92,10 +93,44 @@ describe('DayDetailModal', () => {
         { status: 200 }
       )
     )
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          date: '2026-05-15',
+          sessions: [],
+          habits: [],
+          measurement: null,
+          photos: [],
+        }),
+        { status: 200 }
+      )
+    )
     const onClose = vi.fn()
     render(<DayDetailModal date="2026-05-15" onClose={onClose} />)
     await waitFor(() => screen.getByText(/nic se nedělo/i))
     fireEvent.click(screen.getByRole('button', { name: /zavřít/i }))
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('is a real dialog that closes on Escape', async () => {
+    // It used to be a bare <div> scrim with a close button: no dialog role, no
+    // focus trap, no Escape. Found while verifying the calendar in a browser.
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          date: '2026-05-15',
+          sessions: [],
+          habits: [],
+          measurement: null,
+          photos: [],
+        }),
+        { status: 200 }
+      )
+    )
+    const onClose = vi.fn()
+    render(<DayDetailModal date="2026-05-15" onClose={onClose} />)
+    expect(await screen.findByRole('dialog')).toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
     expect(onClose).toHaveBeenCalled()
   })
 })

@@ -122,4 +122,24 @@ describe('Sheet', () => {
     const inner = screen.getByRole('dialog').firstElementChild as HTMLElement
     expect(inner.className).toMatch(/safe-area-inset-bottom/)
   })
+
+  it('offers a visible way out — there is no Escape key on a phone', async () => {
+    const onOpenChange = vi.fn()
+    render(
+      <Sheet open onOpenChange={onOpenChange} title="T">
+        body
+      </Sheet>
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Zavřít' }))
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+  })
+
+  it('drops the close button when the sheet must be answered', () => {
+    render(
+      <Sheet open onOpenChange={() => {}} title="T" dismissible={false}>
+        body
+      </Sheet>
+    )
+    expect(screen.queryByRole('button', { name: 'Zavřít' })).toBeNull()
+  })
 })

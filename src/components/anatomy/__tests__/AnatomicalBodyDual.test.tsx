@@ -19,17 +19,18 @@ describe('AnatomicalBodyDual', () => {
     expect(backLats?.getAttribute('fill')).toBe('#0f0')
   })
 
-  it('renders tab controls labeled Zepředu / Zezadu', () => {
+  it('offers the view as a radio group, not a tablist without panels', () => {
     render(<AnatomicalBodyDual highlights={{}} />)
-    expect(screen.getByRole('tab', { name: 'Zepředu' })).toBeDefined()
-    expect(screen.getByRole('tab', { name: 'Zezadu' })).toBeDefined()
+    expect(screen.queryByRole('tablist')).toBeNull()
+    expect(screen.getByRole('radio', { name: 'Zepředu' })).toBeDefined()
+    expect(screen.getByRole('radio', { name: 'Zezadu' })).toBeDefined()
   })
 
-  it('toggles aria-selected when a tab is clicked', () => {
+  it('checks the picked view', () => {
     render(<AnatomicalBodyDual highlights={{}} />)
-    const back = screen.getByRole('tab', { name: 'Zezadu' })
+    const back = screen.getByRole('radio', { name: 'Zezadu' })
     fireEvent.click(back)
-    expect(back.getAttribute('aria-selected')).toBe('true')
-    expect(screen.getByRole('tab', { name: 'Zepředu' }).getAttribute('aria-selected')).toBe('false')
+    expect(back).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Zepředu' })).not.toBeChecked()
   })
 })

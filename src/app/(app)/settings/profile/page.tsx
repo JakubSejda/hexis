@@ -15,7 +15,7 @@ export default async function ProfileSettingsPage() {
   return (
     <Container>
       <Stack gap={4} className="py-6">
-        <Heading level={1}>Profile</Heading>
+        <Heading level={1}>Profil</Heading>
         <ProfileFormClient
           initial={{
             name: profile?.name ?? null,

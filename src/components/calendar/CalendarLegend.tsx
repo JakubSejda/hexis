@@ -1,5 +1,5 @@
 const ITEMS: Array<{ label: string; dot: string }> = [
-  { label: 'Training', dot: 'bg-accent' },
+  { label: 'Trénink', dot: 'bg-accent' },
   { label: 'Návyk', dot: 'bg-cal-habit' },
   { label: 'Vážení', dot: 'bg-cal-weigh' },
   { label: 'Foto', dot: 'bg-cal-photo' },
@@ -19,7 +19,7 @@ export function CalendarLegend() {
           className="border-accent/40 bg-accent/10 inline-block h-3 w-3 rounded-sm border"
           aria-hidden
         />
-        3+ den streak
+        3+ dní v řadě
       </span>
     </div>
   )

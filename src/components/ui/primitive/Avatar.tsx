@@ -13,6 +13,9 @@ const SIZE_CLASS: Record<Size, string> = {
 
 const BASE = 'inline-flex items-center justify-center overflow-hidden rounded-full select-none'
 
+/** Pixel equivalents of SIZE_CLASS, so <img> can carry width/height and not shift the layout. */
+const SIZE_PX: Record<Size, number> = { xs: 24, sm: 32, md: 40, lg: 48, xl: 64 }
+
 type Props = {
   src?: string
   alt: string
@@ -35,7 +38,14 @@ export function Avatar({ src, alt, size = 'md', fallback, className, ...rest }: 
     const imgRest = rest as ImgHTMLAttributes<HTMLImageElement>
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt={alt} className={cn(classes, 'object-cover')} {...imgRest} />
+      <img
+        src={src}
+        alt={alt}
+        width={SIZE_PX[size]}
+        height={SIZE_PX[size]}
+        className={cn(classes, 'object-cover')}
+        {...imgRest}
+      />
     )
   }
 

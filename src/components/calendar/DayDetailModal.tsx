@@ -3,8 +3,7 @@
 import { useEffect, useReducer, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { X } from 'lucide-react'
-import { Card } from '@/components/ui'
+import { Sheet } from '@/components/ui'
 import { Lightbox } from '@/components/photos/Lightbox'
 import type { DayDetailData } from '@/lib/calendar/types'
 
@@ -59,23 +58,8 @@ export function DayDetailModal({ date, onClose }: Props) {
     data.photos.length === 0
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center"
-      onClick={onClose}
-    >
-      <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between">
-          <h2 className="text-foreground font-semibold">{formatDate(date)}</h2>
-          <button
-            type="button"
-            aria-label="Zavřít"
-            onClick={onClose}
-            className="text-muted hover:text-foreground"
-          >
-            <X className="h-5 w-5" aria-hidden />
-          </button>
-        </div>
-
+    <Sheet open onOpenChange={(v) => !v && onClose()} title={formatDate(date)}>
+      <>
         {loading && <div className="text-muted py-6 text-center text-sm">Načítám…</div>}
 
         {!loading && data && isEmpty && (
@@ -86,9 +70,7 @@ export function DayDetailModal({ date, onClose }: Props) {
           <div className="mt-4 flex flex-col gap-4">
             {data.sessions.length > 0 && (
               <section>
-                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">
-                  Training
-                </h3>
+                <h3 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Trénink</h3>
                 <ul className="mt-2 flex flex-col gap-1">
                   {data.sessions.map((s) => (
                     <li key={s.id} className="flex items-center justify-between gap-2 text-sm">
@@ -177,7 +159,7 @@ export function DayDetailModal({ date, onClose }: Props) {
             )}
           </div>
         )}
-      </Card>
-    </div>
+      </>
+    </Sheet>
   )
 }

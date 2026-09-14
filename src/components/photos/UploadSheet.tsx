@@ -11,10 +11,10 @@ type Props = {
 }
 
 const POSES = [
-  { value: 'front', label: 'Front' },
-  { value: 'side', label: 'Side' },
-  { value: 'back', label: 'Back' },
-  { value: 'other', label: 'Other' },
+  { value: 'front', label: 'Zepředu' },
+  { value: 'side', label: 'Z boku' },
+  { value: 'back', label: 'Zezadu' },
+  { value: 'other', label: 'Jiné' },
 ] as const
 
 export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
@@ -87,7 +87,11 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title="Nahrát fotku">
       <div className="flex flex-col gap-3">
+        <label htmlFor="photo-file" className="text-muted text-xs font-medium">
+          Fotka
+        </label>
         <input
+          id="photo-file"
           ref={inputRef}
           type="file"
           accept="image/*"
@@ -99,7 +103,13 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           // next/image does not support blob: / data: URLs used for client-side
           // previews before upload. Native <img> is intentional here.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Preview" className="hud-clip mx-auto h-48 object-contain" />
+          <img
+            src={preview}
+            alt="Náhled nahrávané fotky"
+            width={192}
+            height={192}
+            className="hud-clip mx-auto h-48 w-auto object-contain"
+          />
         ) : null}
         <div className="flex gap-2">
           {POSES.map((p) => (

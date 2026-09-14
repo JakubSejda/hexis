@@ -1,5 +1,6 @@
 'use client'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 /**
@@ -50,13 +51,21 @@ export function Sheet({
           }}
         >
           {/* Inner surface layer — the outer element is the 1px edge-light (see Card). */}
-          <div className="hud-sheet bg-surface h-full w-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4">
+          <div className="hud-sheet bg-surface relative h-full w-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4">
             <div
               data-testid="sheet-grabber"
               aria-hidden="true"
               className="bg-border mx-auto mb-3 h-1 w-10 rounded-full md:hidden"
             />
-            <DialogPrimitive.Title className="font-mono text-xs tracking-[0.2em] uppercase">
+            {dismissible && (
+              <DialogPrimitive.Close
+                aria-label="Zavřít"
+                className="text-muted hover:text-foreground focus-visible:ring-ring absolute top-4 right-4 flex h-8 w-8 items-center justify-center focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <X className="h-5 w-5" aria-hidden />
+              </DialogPrimitive.Close>
+            )}
+            <DialogPrimitive.Title className="pr-10 font-mono text-xs tracking-[0.2em] uppercase">
               {title}
             </DialogPrimitive.Title>
             {description && (

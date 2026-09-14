@@ -58,6 +58,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.weightKg}
+            label={`Váha, ${dateLabel}`}
             precision={2}
             onCommit={(v) => onCommitValue('weightKg', v)}
           />
@@ -68,6 +69,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.waistCm}
+            label={`Pas, ${dateLabel}`}
             precision={1}
             onCommit={(v) => onCommitValue('waistCm', v)}
           />
@@ -75,6 +77,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.chestCm}
+            label={`Hrudník, ${dateLabel}`}
             precision={1}
             onCommit={(v) => onCommitValue('chestCm', v)}
           />
@@ -82,6 +85,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.thighCm}
+            label={`Stehno, ${dateLabel}`}
             precision={1}
             onCommit={(v) => onCommitValue('thighCm', v)}
           />
@@ -89,6 +93,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.bicepsCm}
+            label={`Biceps, ${dateLabel}`}
             precision={1}
             onCommit={(v) => onCommitValue('bicepsCm', v)}
           />
@@ -96,6 +101,7 @@ export function MeasurementRow({
         <td className="px-1.5 py-2.5">
           <MeasurementCell
             value={values.targetKcal}
+            label={`Cíl kcal, ${dateLabel}`}
             precision={0}
             align="right"
             onCommit={(v) => onCommitValue('targetKcal', v)}

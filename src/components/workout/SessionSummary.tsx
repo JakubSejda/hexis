@@ -63,7 +63,7 @@ export function SessionSummary({
           </div>
         </div>
       )}
-      <h2 className="text-lg">Shrnuti</h2>
+      <h2 className="text-lg">Shrnutí</h2>
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label="Serii" value={String(totalSets)} />
         <Stat label="Tuny" value={`${(totalVolume / 1000).toFixed(1)}`} />
@@ -72,12 +72,12 @@ export function SessionSummary({
       <Textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        placeholder="Poznamka (volitelne)"
+        placeholder="Poznámka (volitelné)…"
         rows={3}
         className="min-h-[80px]"
       />
       <Button variant="success" size="lg" loading={saving} onClick={finish}>
-        Dokoncit trenink
+        Dokončit trénink
       </Button>
     </div>
   )

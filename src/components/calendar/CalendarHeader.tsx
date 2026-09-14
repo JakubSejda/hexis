@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Heading } from '@/components/ui'
 
 type Props = {
   ym: string // YYYY-MM (visible month)
@@ -35,9 +36,9 @@ export function CalendarHeader({ ym, currentYm }: Props) {
         <ChevronLeft className="h-4 w-4" aria-hidden />
       </Link>
       <div className="flex flex-col items-center gap-1">
-        <h1 className="text-foreground text-lg font-black tracking-tight uppercase italic">
+        <Heading level={1} variant="display" className="text-lg">
           {label}
-        </h1>
+        </Heading>
         {!onCurrent && (
           <Link href="/calendar" className="text-muted hover:text-system text-xs">
             Dnes

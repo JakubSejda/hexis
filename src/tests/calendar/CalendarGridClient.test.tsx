@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { CalendarGridClient } from '@/components/calendar/CalendarGridClient'
 import type { CalendarDay } from '@/lib/calendar/types'
 
@@ -38,6 +39,20 @@ describe('CalendarGridClient', () => {
     const cell = document.querySelector('[data-date="2026-05-15"]') as HTMLElement
     fireEvent.click(cell)
     expect(await screen.findByRole('button', { name: /zavřít/i })).toBeInTheDocument()
+  })
+
+  it('opens the modal from the keyboard — a day is a real button', async () => {
+    const user = userEvent.setup()
+    render(<CalendarGridClient days={[day('2026-05-15'), day('2026-05-16')]} />)
+    const cell = screen.getByRole('button', { name: /15\. května 2026/ })
+    cell.focus()
+    await user.keyboard('{Enter}')
+    expect(await screen.findByRole('button', { name: /zavřít/i })).toBeInTheDocument()
+  })
+
+  it('names each day for screen readers', () => {
+    render(<CalendarGridClient days={[day('2026-05-15', { isToday: true })]} />)
+    expect(screen.getByRole('button', { name: /15\. května 2026/ })).toBeInTheDocument()
   })
 
   it('does not open modal for blank cells', () => {

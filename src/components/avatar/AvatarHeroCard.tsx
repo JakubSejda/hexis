@@ -1,5 +1,5 @@
 import { Avatar } from '@/components/avatar/Avatar'
-import { Card, ProgressBar } from '@/components/ui'
+import { Card, Heading, ProgressBar } from '@/components/ui'
 import type { TierMeta } from '@/lib/tiers'
 
 type Props = {
@@ -13,9 +13,9 @@ export function AvatarHeroCard({ level, tierMeta, totalXp, progress }: Props) {
   return (
     <Card padding="lg">
       <div className="flex flex-col items-center gap-2">
-        <h1 className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">
+        <Heading level={2} as="div" variant="region" className="mb-2">
           Tvůj avatar
-        </h1>
+        </Heading>
         <Avatar tier={tierMeta.tier} size={160} />
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-2xl font-bold" style={{ color: tierMeta.color }}>

@@ -67,10 +67,10 @@ describe('HabitsPageClient — sections', () => {
     expect(screen.getByText('Weekly')).toBeInTheDocument()
   })
 
-  it('renders Archive section header with count when archived exist', () => {
+  it('renders the archive section header with count when archived exist', () => {
     const arch = { ...dailyHabit, id: 3, archivedAt: new Date().toISOString() }
     render(<HabitsPageClient initialHabits={[]} initialArchived={[arch]} />)
-    expect(screen.getByText(/archive \(1\)/i)).toBeInTheDocument()
+    expect(screen.getByText(/archiv \(1\)/i)).toBeInTheDocument()
   })
 })
 
@@ -90,5 +90,24 @@ describe('HabitsPageClient — interactions', () => {
         expect.objectContaining({ method: 'POST' })
       )
     })
+  })
+
+  it('tells assistive tech whether the archive is open', async () => {
+    const user = userEvent.setup()
+    const arch = { ...dailyHabit, id: 99, name: 'Starý návyk', archivedAt: '2026-01-01' }
+    render(<HabitsPageClient initialHabits={[]} initialArchived={[arch]} />)
+
+    const toggle = screen.getByRole('button', { name: /Archiv/ })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('hides the decorative disclosure glyph from screen readers', () => {
+    const arch = { ...dailyHabit, id: 99, name: 'Starý návyk', archivedAt: '2026-01-01' }
+    render(<HabitsPageClient initialHabits={[]} initialArchived={[arch]} />)
+    const toggle = screen.getByRole('button', { name: /Archiv/ })
+    // "▲"/"▼" read out as "black up-pointing triangle" otherwise.
+    expect(toggle.querySelector('[aria-hidden="true"]')).not.toBeNull()
   })
 })

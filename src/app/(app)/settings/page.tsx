@@ -5,7 +5,7 @@ import { Scale, Utensils, Download, UserCircle2 } from 'lucide-react'
 const ITEMS = [
   {
     href: '/settings/profile',
-    label: 'Profile',
+    label: 'Profil',
     hint: 'Vitals, cíl, datum startu',
     icon: UserCircle2,
   },
@@ -23,7 +23,7 @@ export default function SettingsIndexPage() {
   return (
     <Container>
       <Stack gap={4} className="py-6">
-        <Heading level={1}>Settings</Heading>
+        <Heading level={1}>Nastavení</Heading>
         <Stack gap={3}>
           {ITEMS.map(({ href, label, hint, icon: Icon }) => (
             <Link key={href} href={href} className="block">
