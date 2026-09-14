@@ -23,7 +23,7 @@ export default function SettingsIndexPage() {
   return (
     <Container>
       <Stack gap={4} className="py-6">
-        <Heading level={1}>Nastavení</Heading>
+        <Heading level={2}>Nastavení</Heading>
         <Stack gap={3}>
           {ITEMS.map(({ href, label, hint, icon: Icon }) => (
             <Link key={href} href={href} className="block">

@@ -70,7 +70,7 @@ export function OnboardingWizard() {
 
         {step === 0 && (
           <Stack gap={3} className="animate-hud-power-on">
-            <Heading level={1} variant="display">
+            <Heading level={2} variant="display">
               Vítej v Hexis
             </Heading>
             <p className="text-muted-strong text-sm">
@@ -82,7 +82,7 @@ export function OnboardingWizard() {
 
         {step === 1 && (
           <Stack gap={4} className="animate-hud-power-on">
-            <Heading level={1} variant="display">
+            <Heading level={2} variant="display">
               Profil
             </Heading>
             <p className="text-muted text-sm">Všechno je volitelné — můžeš doplnit později.</p>
@@ -106,7 +106,7 @@ export function OnboardingWizard() {
 
         {step === 2 && (
           <Stack gap={3} className="animate-hud-power-on">
-            <Heading level={1} variant="display">
+            <Heading level={2} variant="display">
               Vyber si svůj první quest
             </Heading>
             <p className="text-muted-strong text-sm">

@@ -47,7 +47,7 @@ export default async function WorkoutPage() {
     <Container>
       <Stack gap={4} className="py-4">
         <ResumeBanner />
-        <Heading level={1}>Vyber trénink</Heading>
+        <Heading level={2}>Vyber trénink</Heading>
         <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
         <Heading level={2} variant="region" className="mt-4">
           Historie

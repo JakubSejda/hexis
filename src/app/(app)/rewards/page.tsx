@@ -39,7 +39,7 @@ export default async function RewardsPage() {
   return (
     <Container as="main">
       <Stack gap={6} className="py-4">
-        <Heading level={1}>Odměny</Heading>
+        <Heading level={2}>Odměny</Heading>
         <RewardsPageClient
           initialBalance={balance}
           initialRewards={rewards}

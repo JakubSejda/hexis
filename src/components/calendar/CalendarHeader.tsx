@@ -36,7 +36,7 @@ export function CalendarHeader({ ym, currentYm }: Props) {
         <ChevronLeft className="h-4 w-4" aria-hidden />
       </Link>
       <div className="flex flex-col items-center gap-1">
-        <Heading level={1} variant="display" className="text-lg">
+        <Heading level={2} variant="display" className="text-lg">
           {label}
         </Heading>
         {!onCurrent && (
