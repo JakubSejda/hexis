@@ -55,7 +55,7 @@ export function Sheet({
             <div
               data-testid="sheet-grabber"
               aria-hidden="true"
-              className="bg-border mx-auto mb-3 h-1 w-10 rounded-full md:hidden"
+              className="bg-border mx-auto mb-3 h-1 w-10 md:hidden"
             />
             {dismissible && (
               <DialogPrimitive.Close

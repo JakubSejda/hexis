@@ -29,7 +29,7 @@ function Content({
       <MenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          'border-border bg-surface-raised text-foreground z-50 min-w-[160px] rounded-md border p-1 shadow-lg',
+          'border-border bg-surface-raised text-foreground hud-clip-sm z-50 min-w-[160px] border p-1 shadow-lg',
           className
         )}
         {...rest}
@@ -46,7 +46,7 @@ type ItemProps = Omit<ComponentProps<typeof MenuPrimitive.Item>, 'className'> & 
 }
 
 const ITEM_BASE =
-  'flex cursor-pointer items-center rounded px-2 py-1.5 text-sm outline-none select-none data-[highlighted]:bg-border data-[disabled]:pointer-events-none data-[disabled]:opacity-40'
+  'flex cursor-pointer items-center px-2 py-1.5 text-sm outline-none select-none data-[highlighted]:bg-border data-[disabled]:pointer-events-none data-[disabled]:opacity-40'
 
 const ITEM_VARIANT: Record<ItemVariant, string> = {
   default: 'text-foreground',

@@ -10,13 +10,13 @@ export function CalendarLegend() {
     <div className="text-muted flex flex-wrap items-center gap-4 font-mono text-xs">
       {ITEMS.map((it) => (
         <span key={it.label} className="inline-flex items-center gap-2">
-          <span className={`h-[6px] w-[6px] rounded-full ${it.dot}`} aria-hidden />
+          <span className={`hud-hex h-[6px] w-[6px] ${it.dot}`} aria-hidden />
           {it.label}
         </span>
       ))}
       <span className="inline-flex items-center gap-2">
         <span
-          className="border-accent/40 bg-accent/10 inline-block h-3 w-3 rounded-sm border"
+          className="border-accent/40 bg-accent/10 hud-hex inline-block h-3 w-3 border"
           aria-hidden
         />
         3+ dní v řadě

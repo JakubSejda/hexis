@@ -14,7 +14,7 @@ export function SetRow({ set, onTap }: { set: SetData; onTap?: () => void }) {
     <button
       type="button"
       onClick={onTap}
-      className="bg-surface-raised text-foreground hover:bg-border flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors"
+      className="bg-surface-raised text-foreground hover:bg-border flex w-full items-center justify-between px-3 py-2 text-sm transition-colors"
     >
       <span className="text-muted">Série {set.setIndex + 1}</span>
       <span>

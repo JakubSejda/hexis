@@ -64,9 +64,9 @@ describe('Avatar', () => {
     expect(el).toHaveClass('w-16')
   })
 
-  it('renders as rounded-full', () => {
+  it('renders as a hexagonal lens', () => {
     render(<Avatar alt="X Y" data-testid="a" />)
-    expect(screen.getByTestId('a')).toHaveClass('rounded-full')
+    expect(screen.getByTestId('a')).toHaveClass('hud-hex')
   })
 
   it('uppercases initials automatically', () => {
@@ -79,5 +79,12 @@ describe('Avatar', () => {
     const img = screen.getByAltText('Jakub Sejda')
     expect(img).toHaveAttribute('width', '40')
     expect(img).toHaveAttribute('height', '40')
+  })
+
+  it('is a lens — hexagonal, not a circle', () => {
+    render(<Avatar alt="Jakub Sejda" />)
+    const el = screen.getByLabelText('Jakub Sejda')
+    expect(el).toHaveClass('hud-hex')
+    expect(el.className).not.toContain('rounded-full')
   })
 })

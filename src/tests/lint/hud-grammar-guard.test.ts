@@ -23,6 +23,7 @@ async function messagesFor(code: string): Promise<string[]> {
 }
 
 const radius = /radius ladder died/
+const controlScale = /Control scale \(2026-09-14\)/
 const primary = /`primary` colour token was retired/
 
 describe('radius ladder guard', () => {
@@ -47,12 +48,18 @@ describe('radius ladder guard', () => {
     expect(await messagesFor(code)).toContainEqual(expect.stringMatching(radius))
   })
 
-  it('leaves the control scale alone — that decision is still parked', async () => {
-    for (const cls of ['rounded-md', 'rounded-sm', 'rounded-full', 'rounded']) {
-      expect(await messagesFor(`export const a = <div className="${cls}" />`)).not.toContainEqual(
-        expect.stringMatching(radius)
+  it('bans the control scale too — displays are square, chassis is clipped', async () => {
+    for (const cls of ['rounded-md', 'rounded-sm', 'rounded']) {
+      expect(await messagesFor(`export const a = <div className="${cls}" />`)).toContainEqual(
+        expect.stringMatching(controlScale)
       )
     }
+  })
+
+  it('still allows rounded-full — the lens scale moves with the tier emblem slice', async () => {
+    const messages = await messagesFor('export const a = <div className="rounded-full" />')
+    expect(messages).not.toContainEqual(expect.stringMatching(radius))
+    expect(messages).not.toContainEqual(expect.stringMatching(controlScale))
   })
 })
 

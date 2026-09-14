@@ -72,7 +72,7 @@ export function TransformationStrip({ photos }: Props) {
               type="button"
               aria-label={`Open photo ${fmtDate(p.takenAt)}`}
               onClick={() => setOpenIdx(i)}
-              className="border-border hover:border-accent shrink-0 rounded border bg-black"
+              className="border-border hover:border-accent shrink-0 border bg-black"
             >
               <Image
                 src={p.thumbUrl}

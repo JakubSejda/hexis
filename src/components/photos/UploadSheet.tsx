@@ -97,7 +97,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           accept="image/*"
           capture="environment"
           onChange={handleFile}
-          className="text-muted file:bg-border file:text-foreground text-sm file:mr-2 file:rounded file:border-0 file:px-3 file:py-1.5 file:text-sm"
+          className="text-muted file:bg-border file:text-foreground text-sm file:mr-2 file:border-0 file:px-3 file:py-1.5 file:text-sm"
         />
         {preview ? (
           // next/image does not support blob: / data: URLs used for client-side
@@ -117,7 +117,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
               key={p.value}
               onClick={() => setPose(p.value)}
               className={
-                'flex-1 rounded-md px-2 py-1.5 text-sm transition-colors ' +
+                'hud-clip-sm flex-1 px-2 py-1.5 text-sm transition-colors ' +
                 (pose === p.value
                   ? 'bg-system text-background font-semibold'
                   : 'bg-border text-muted')

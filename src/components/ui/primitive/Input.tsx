@@ -12,7 +12,7 @@ const SIZE_CLASS: Record<Size, string> = {
 }
 
 const BASE =
-  'block w-full rounded-md border bg-background text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50'
+  'block w-full border bg-background text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50'
 
 type Props = {
   variant?: Variant

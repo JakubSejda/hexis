@@ -45,7 +45,7 @@ export function MeasurementCell({ value, precision, label, align = 'right', onCo
         aria-label={label}
         onClick={() => setEditing(true)}
         className={
-          'hover:bg-border block w-full rounded px-1 py-1 text-sm ' +
+          'hover:bg-border block w-full px-1 py-1 text-sm ' +
           (align === 'right' ? 'text-right ' : 'text-left ') +
           (value == null ? 'text-muted' : 'text-foreground')
         }

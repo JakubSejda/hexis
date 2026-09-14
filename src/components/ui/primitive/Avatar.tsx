@@ -11,7 +11,7 @@ const SIZE_CLASS: Record<Size, string> = {
   xl: 'h-16 w-16 text-lg',
 }
 
-const BASE = 'inline-flex items-center justify-center overflow-hidden rounded-full select-none'
+const BASE = 'hud-hex inline-flex items-center justify-center overflow-hidden select-none'
 
 /** Pixel equivalents of SIZE_CLASS, so <img> can carry width/height and not shift the layout. */
 const SIZE_PX: Record<Size, number> = { xs: 24, sm: 32, md: 40, lg: 48, xl: 64 }

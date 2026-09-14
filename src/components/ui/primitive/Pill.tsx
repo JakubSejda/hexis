@@ -108,10 +108,7 @@ export const Tag = forwardRef<HTMLSpanElement | HTMLButtonElement, TagProps>(fun
         data-testid="tag-remove"
         onClick={handleRemove}
         aria-label="Remove"
-        className={cn(
-          'inline-flex items-center justify-center rounded px-1',
-          VARIANT_CLASS[variant]
-        )}
+        className={cn('inline-flex items-center justify-center px-1', VARIANT_CLASS[variant])}
       >
         <X size={12} />
       </button>

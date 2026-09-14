@@ -38,14 +38,14 @@ export function PlateCalculatorSheet({
         </div>
         {result ? (
           <>
-            <div className="bg-border rounded-md p-3 text-sm">
+            <div className="bg-border p-3 text-sm">
               Per stranu:{' '}
               {result.perSide.length === 0
                 ? 'žádné'
                 : result.perSide.map((p) => `${p.weightKg}×${p.count}`).join(' + ')}
             </div>
             {result.missingKg > 0 ? (
-              <div className="bg-danger/20 text-danger rounded-md p-2 text-xs">
+              <div className="bg-danger/20 text-danger p-2 text-xs">
                 Chybí {result.missingKg} kg v inventáři
               </div>
             ) : null}

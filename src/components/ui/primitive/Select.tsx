@@ -11,7 +11,7 @@ const SIZE_CLASS: Record<Size, string> = {
 }
 
 const BASE =
-  'block w-full appearance-none rounded-md border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 pl-3 pr-9'
+  'block w-full appearance-none border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 pl-3 pr-9'
 
 type Props = {
   size?: Size
