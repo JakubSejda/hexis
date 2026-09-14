@@ -51,7 +51,7 @@ export default function MacrosPage() {
   return (
     <Container>
       <Stack gap={4} className="py-4">
-        <Heading level={1}>Sledovaná makra</Heading>
+        <Heading level={2}>Sledovaná makra</Heading>
         <p className="text-muted text-sm">Kalorie a protein jsou vždy zapnuté.</p>
         <ul className="space-y-2">
           {ALL.map((m) => (

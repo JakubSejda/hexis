@@ -39,7 +39,7 @@ export default async function HabitsPage() {
   return (
     <Container as="main">
       <Stack gap={6} className="py-4">
-        <Heading level={1}>Návyky</Heading>
+        <Heading level={2}>Návyky</Heading>
         <HabitsPageClient initialHabits={active} initialArchived={archived} />
       </Stack>
     </Container>
