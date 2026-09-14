@@ -41,7 +41,7 @@ export default async function AvatarPage() {
         </section>
 
         <section>
-          <RegionHeader>XP History</RegionHeader>
+          <RegionHeader>Historie XP</RegionHeader>
           <XpHistoryChart daily={history.daily} days={30} />
           <XpBreakdown byEventTotal={history.byEventTotal} total={history.total} />
         </section>

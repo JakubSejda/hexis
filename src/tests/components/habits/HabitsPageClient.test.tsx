@@ -48,12 +48,12 @@ describe('HabitsPageClient — empty state', () => {
 })
 
 describe('HabitsPageClient — sections', () => {
-  it('renders Daily section header when daily habits exist', () => {
+  it('renders the Denní section header when daily habits exist', () => {
     render(<HabitsPageClient initialHabits={[dailyHabit]} initialArchived={[]} />)
-    expect(screen.getByText('Daily')).toBeInTheDocument()
+    expect(screen.getByText('Denní')).toBeInTheDocument()
   })
 
-  it('renders Weekly section when weekly habits exist', () => {
+  it('renders the Týdenní section when weekly habits exist', () => {
     const w = {
       ...dailyHabit,
       id: 2,
@@ -64,7 +64,7 @@ describe('HabitsPageClient — sections', () => {
       completedThisWeek: 0,
     }
     render(<HabitsPageClient initialHabits={[w]} initialArchived={[]} />)
-    expect(screen.getByText('Weekly')).toBeInTheDocument()
+    expect(screen.getByText('Týdenní')).toBeInTheDocument()
   })
 
   it('renders the archive section header with count when archived exist', () => {

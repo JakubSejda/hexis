@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button } from '@/components/ui'
+import { Button, Heading } from '@/components/ui'
 import { SetRow } from './SetRow'
 import { EditSetSheet } from './EditSetSheet'
 import { useRouter } from 'next/navigation'
@@ -43,7 +43,9 @@ export function SessionDetailView({
       </Button>
       {exercises.map((ex) => (
         <div key={ex.exerciseId} className="flex flex-col gap-1">
-          <h3 className="text-sm font-semibold">{ex.name}</h3>
+          <Heading level={3} className="text-sm">
+            {ex.name}
+          </Heading>
           {ex.sets.map((s) => (
             <SetRow key={s.id} set={s} onTap={editMode ? () => setEditId(s.id) : undefined} />
           ))}

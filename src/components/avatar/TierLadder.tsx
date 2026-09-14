@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card } from '@/components/ui'
+import { Card, Heading } from '@/components/ui'
 import { TierBadge } from './TierBadge'
 import { TIERS, type Tier } from '@/lib/tiers'
 
@@ -11,7 +11,9 @@ export function TierLadder({ currentTier }: Props) {
   const [open, setOpen] = useState<Tier | null>(null)
   return (
     <div className="space-y-2">
-      <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Žebřík tierů</h2>
+      <Heading level={2} variant="region">
+        Žebřík tierů
+      </Heading>
       <div className="flex justify-around">
         {TIERS.map((t) => (
           <button

@@ -4,7 +4,7 @@ import { SetInput } from './SetInput'
 import { SetRow } from './SetRow'
 import { SuggestionHint } from './SuggestionHint'
 import { RestTimer } from './RestTimer'
-import { useToast } from '@/components/ui'
+import { Heading, useToast } from '@/components/ui'
 import { restTimerStore } from '@/lib/rest-timer'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 import type { Suggestion } from '@/lib/progression'
@@ -101,9 +101,9 @@ export function ExerciseCard({
           <div className="text-system font-mono text-xs tracking-[0.2em] uppercase">
             Aktuální cvik
           </div>
-          <h3 className="text-foreground mt-1 text-2xl font-black tracking-tight uppercase italic">
+          <Heading level={3} variant="display" className="mt-1 text-2xl">
             {exercise.name}
-          </h3>
+          </Heading>
           {stagnation ? (
             <StagnationBadge
               weeksSincePr={stagnation.weeksSincePr}

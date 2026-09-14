@@ -51,21 +51,22 @@ describe('copy', () => {
 
   it('keeps the interface in Czech', () => {
     const english =
-      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition|Dashboard|Progress|Stats|Habits|Rewards|Player Bio|Quest Calendar|Life Areas|Avatar Progress|Muscle Rank|Tier ladder)["'<]/
+      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition|Dashboard|Progress|Stats|Habits|Rewards|Player Bio|Quest Calendar|Life Areas|Avatar Progress|Muscle Rank|Tier ladder|Daily|Weekly|Muscle Volume|This Week|XP History)["'<]/
     expect(hits((l) => english.test(l))).toEqual([])
   })
 })
 
 describe('primitive adoption', () => {
-  it('routes page titles through the Heading primitive', () => {
-    // A raw <h1> skips the HUD display grammar — that is how six screens ended
-    // up with `text-2xl font-bold` instead of the display treatment. Scoped to
-    // <h1>: the mono <h2> region eyebrows already follow the grammar, and
-    // sweeping them into the primitive is a separate change.
+  it('routes headings through the Heading primitive', () => {
+    // A raw heading skips the HUD grammar — that is how six screens ended up
+    // with `text-2xl font-bold` instead of the display treatment, and how the
+    // mono region eyebrows drifted into four slightly different spellings of
+    // the same class list. The two primitives that render the tags are exempt.
     expect(
       hits(
-        (l) => /<h1[\s>]/.test(l),
-        (path) => path.endsWith('ui/primitive/Heading.tsx')
+        (l) => /<h[1-3][\s>]/.test(l),
+        (path) =>
+          path.endsWith('ui/primitive/Heading.tsx') || path.endsWith('ui/layout/Section.tsx')
       )
     ).toEqual([])
   })

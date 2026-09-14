@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useToast } from '@/components/ui'
+import { Heading, useToast } from '@/components/ui'
 import { HabitDailyRow } from '@/components/habits/HabitDailyRow'
 import type { HabitWithStreak } from '@/lib/queries/habits'
 
@@ -71,7 +71,9 @@ export function TodaysChecksCard({ dailyHabits }: Props) {
   return (
     <section data-todays-checks-card className="hud-clip bg-border animate-hud-power-on p-px">
       <div className="hud-clip bg-surface space-y-3 p-4">
-        <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Návyky dnes</h2>
+        <Heading level={2} variant="region">
+          Návyky dnes
+        </Heading>
         <div className="space-y-2">
           {visible.map((h) => (
             <HabitDailyRow

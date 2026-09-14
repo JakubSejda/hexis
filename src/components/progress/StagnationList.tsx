@@ -1,6 +1,7 @@
 'use client'
 
 import type { StagnationResult } from '@/lib/stagnation'
+import { Heading } from '@/components/ui'
 
 type Props = {
   items: StagnationResult[]
@@ -11,7 +12,9 @@ export function StagnationList({ items }: Props) {
 
   return (
     <div className="hud-clip border-accent bg-accent/5 border-l-2 p-3">
-      <h3 className="text-accent mb-2 text-sm font-semibold">Stagnace</h3>
+      <Heading level={3} className="text-accent mb-2 text-sm">
+        Stagnace
+      </Heading>
       <ul className="flex flex-col gap-1.5">
         {items.map((item) => (
           <li key={item.exerciseId} className="text-foreground text-sm">
