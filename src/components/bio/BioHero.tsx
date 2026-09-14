@@ -1,4 +1,5 @@
-import { Avatar } from '@/components/avatar/Avatar'
+import { HexEmblem } from '@/components/dashboard/HexEmblem'
+import { TIERS } from '@/lib/tiers'
 import { Card } from '@/components/ui'
 import { daysSince } from '@/lib/bio-day-count'
 import type { Tier } from '@/lib/tiers'
@@ -17,7 +18,7 @@ export function BioHero({ name, tier, tierName, level, startedAt, today }: Props
   return (
     <Card>
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <Avatar tier={tier} size={96} />
+        <HexEmblem level={level} tierColor={TIERS[tier - 1]!.color} size={96} />
         <div className="flex flex-1 flex-col gap-1">
           <span className="text-foreground text-xl font-bold">{name ?? 'Hráč'}</span>
           <span className="text-system font-mono text-xs tracking-[0.2em] uppercase">

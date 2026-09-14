@@ -85,6 +85,6 @@ describe('Avatar', () => {
     render(<Avatar alt="Jakub Sejda" />)
     const el = screen.getByLabelText('Jakub Sejda')
     expect(el).toHaveClass('hud-hex')
-    expect(el.className).not.toContain('rounded-full')
+    expect(el.className).not.toMatch(/rounded/)
   })
 })

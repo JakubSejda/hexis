@@ -30,13 +30,13 @@ export default async function AvatarPage() {
         <AvatarHeroCard level={level} tierMeta={tierMeta} totalXp={totalXp} progress={progress} />
 
         <section>
-          <RegionHeader>Avatar Progress</RegionHeader>
+          <RegionHeader>Postup avatara</RegionHeader>
           <TierLadder currentTier={levelToTier(level)} />
           <NextTierPreview currentLevel={level} totalXp={totalXp} />
         </section>
 
         <section>
-          <RegionHeader>Muscle Rank</RegionHeader>
+          <RegionHeader>Zatížení svalů</RegionHeader>
           <MuscleRankSection userId={user.id} />
         </section>
 

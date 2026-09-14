@@ -1,3 +1,9 @@
+/**
+ * Tier palette: the amber heat ramp. Progression reads as temperature, the
+ * same language the XP bar speaks. Cyan belongs to system and emerald to
+ * semantic success (R7), so neither can carry a tier — and the pre-Reforge
+ * bronze/slate/gold/emerald/sky set was off-palette on all five steps.
+ */
 export type Tier = 1 | 2 | 3 | 4 | 5
 
 export type TierMeta = {
@@ -10,11 +16,11 @@ export type TierMeta = {
 }
 
 export const TIERS: readonly TierMeta[] = [
-  { tier: 1, name: 'Rookie', levelMin: 1, levelMax: 5, color: '#b45309', accent: '#92400e' },
-  { tier: 2, name: 'Apprentice', levelMin: 6, levelMax: 15, color: '#64748b', accent: '#475569' },
-  { tier: 3, name: 'Warrior', levelMin: 16, levelMax: 30, color: '#ca8a04', accent: '#a16207' },
-  { tier: 4, name: 'Beast', levelMin: 31, levelMax: 50, color: '#10b981', accent: '#065f46' },
-  { tier: 5, name: 'Titan', levelMin: 51, levelMax: 999, color: '#0ea5e9', accent: '#0c4a6e' },
+  { tier: 1, name: 'Rookie', levelMin: 1, levelMax: 5, color: '#78350f', accent: '#451a03' },
+  { tier: 2, name: 'Apprentice', levelMin: 6, levelMax: 15, color: '#b45309', accent: '#78350f' },
+  { tier: 3, name: 'Warrior', levelMin: 16, levelMax: 30, color: '#d97706', accent: '#92400e' },
+  { tier: 4, name: 'Beast', levelMin: 31, levelMax: 50, color: '#f59e0b', accent: '#b45309' },
+  { tier: 5, name: 'Titan', levelMin: 51, levelMax: 999, color: '#fbbf24', accent: '#d97706' },
 ] as const
 
 export function levelToTier(level: number): Tier {

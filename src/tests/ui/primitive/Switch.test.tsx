@@ -33,7 +33,7 @@ describe('Switch', () => {
     expect(sw).toHaveClass('hud-clip-sm')
     expect(sw).toHaveClass('bg-system')
     expect(sw.className).not.toContain('-primary')
-    expect(sw.className).not.toContain('rounded-full')
+    expect(sw.className).not.toMatch(/rounded/)
   })
 
   it('falls back to the border track when off', () => {

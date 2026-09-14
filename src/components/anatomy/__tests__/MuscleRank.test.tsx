@@ -14,7 +14,7 @@ describe('MuscleRank', () => {
     const { container } = render(<MuscleRank ranks={{}} />)
     const svg = container.querySelector('svg')
     expect(svg?.getAttribute('role')).toBe('img')
-    expect(svg?.getAttribute('aria-label')).toBe('Muscle rank radar')
+    expect(svg?.getAttribute('aria-label')).toBe('Radar zatížení svalů')
   })
 
   it('renders one axis line per slug', () => {

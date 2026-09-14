@@ -51,7 +51,7 @@ describe('copy', () => {
 
   it('keeps the interface in Czech', () => {
     const english =
-      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition|Dashboard|Progress|Stats|Habits|Rewards|Player Bio|Quest Calendar|Life Areas)["'<]/
+      /["'>](Settings|Profile|Plate Inventory|Archive|Front|Side|Back|Other|Training|Grid|Timeline|Sign out|Nutrition|Dashboard|Progress|Stats|Habits|Rewards|Player Bio|Quest Calendar|Life Areas|Avatar Progress|Muscle Rank|Tier ladder)["'<]/
     expect(hits((l) => english.test(l))).toEqual([])
   })
 })

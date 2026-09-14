@@ -56,10 +56,10 @@ describe('radius ladder guard', () => {
     }
   })
 
-  it('still allows rounded-full — the lens scale moves with the tier emblem slice', async () => {
-    const messages = await messagesFor('export const a = <div className="rounded-full" />')
-    expect(messages).not.toContainEqual(expect.stringMatching(radius))
-    expect(messages).not.toContainEqual(expect.stringMatching(controlScale))
+  it('bans rounded-full too — the last lens went hexagonal with the tier emblem', async () => {
+    expect(await messagesFor('export const a = <div className="rounded-full" />')).toContainEqual(
+      expect.stringMatching(controlScale)
+    )
   })
 })
 

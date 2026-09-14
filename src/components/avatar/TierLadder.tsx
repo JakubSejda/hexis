@@ -11,7 +11,7 @@ export function TierLadder({ currentTier }: Props) {
   const [open, setOpen] = useState<Tier | null>(null)
   return (
     <div className="space-y-2">
-      <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Tier ladder</h2>
+      <h2 className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Žebřík tierů</h2>
       <div className="flex justify-around">
         {TIERS.map((t) => (
           <button
@@ -20,7 +20,11 @@ export function TierLadder({ currentTier }: Props) {
             onClick={() => setOpen(open === t.tier ? null : t.tier)}
             className="flex flex-col items-center"
           >
-            <div className={t.tier === currentTier ? 'ring-system rounded-full p-0.5 ring-2' : ''}>
+            <div
+              className={
+                t.tier === currentTier ? 'drop-shadow-[0_0_10px_rgba(34,211,238,0.55)]' : undefined
+              }
+            >
               <TierBadge tier={t.tier} size={48} dim={t.tier > currentTier} label />
             </div>
           </button>

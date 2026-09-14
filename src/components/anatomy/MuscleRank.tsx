@@ -81,7 +81,7 @@ export function MuscleRank({ ranks, className }: Props) {
       viewBox={`0 0 ${VIEW_SIZE} ${VIEW_SIZE}`}
       className={className}
       role="img"
-      aria-label="Muscle rank radar"
+      aria-label="Radar zatížení svalů"
     >
       {/* Grid rings for D, C, B, A (S = outer edge of axes) */}
       {[0.2, 0.4, 0.6, 0.8].map((band) => (
