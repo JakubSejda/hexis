@@ -83,3 +83,9 @@ jobs:
 
       - name: Tests
         run: npm run test:run
+
+      # The production build is the only check that exercises the Serwist CLI
+      # step and the Turbopack build. Nothing else in this workflow would
+      # notice if either broke.
+      - name: Build
+        run: npm run build
