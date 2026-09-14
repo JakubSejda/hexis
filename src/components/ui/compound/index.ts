@@ -1,5 +1,4 @@
 export {
-  Dialog,
   DialogRoot,
   DialogTrigger,
   DialogPortal,

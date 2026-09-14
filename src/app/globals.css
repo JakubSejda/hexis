@@ -117,6 +117,19 @@ body::before {
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
+/* Sheet geometry. One component, two framings: docked to the bottom edge on a
+ * phone (the cut moves to the top-left, the only corner that reads), a centred
+ * plate from md up (the cut returns to the top-right, like every other plate).
+ * Kept in CSS rather than a JS breakpoint so it survives SSR with no flash. */
+.hud-sheet {
+  clip-path: polygon(0 14px, 14px 0, 100% 0, 100% 100%, 0 100%);
+}
+@media (width >= 48rem) {
+  .hud-sheet {
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+}
+
 /* HEXIS hexagon (shared by Checkbox/Radio, set dots, step markers). */
 .hud-hex {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);

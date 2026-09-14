@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { BottomSheet, cn } from '@/components/ui'
+import { cn, Sheet } from '@/components/ui'
 import { AREA_META, MORE_AREAS, type Area } from './area-meta'
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export function MoreSheet({ open, onOpenChange, activeArea }: Props) {
   return (
-    <BottomSheet open={open} onOpenChange={onOpenChange} title="Více">
+    <Sheet open={open} onOpenChange={onOpenChange} title="Více">
       <nav aria-label="Více" className="grid grid-cols-2 gap-1">
         {MORE_AREAS.map((area) => {
           const meta = AREA_META[area]
@@ -36,6 +36,6 @@ export function MoreSheet({ open, onOpenChange, activeArea }: Props) {
           )
         })}
       </nav>
-    </BottomSheet>
+    </Sheet>
   )
 }

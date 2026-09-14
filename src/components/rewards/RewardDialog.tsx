@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Dialog, Input, NumberInput, Textarea } from '@/components/ui'
+import { Button, Input, NumberInput, Sheet, Textarea, useDesktopAutoFocus } from '@/components/ui'
 
 type Initial = { name: string; costXp: number; description?: string | null }
 
@@ -48,8 +48,10 @@ export function RewardDialog({ open, mode, initial, onOpenChange, onSubmit }: Pr
     })
   }
 
+  const nameRef = useDesktopAutoFocus<HTMLInputElement>(open)
+
   return (
-    <Dialog
+    <Sheet
       open={open}
       onOpenChange={onOpenChange}
       title={mode === 'create' ? 'Nová odměna' : 'Upravit odměnu'}
@@ -60,7 +62,7 @@ export function RewardDialog({ open, mode, initial, onOpenChange, onSubmit }: Pr
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={80}
-          autoFocus
+          ref={nameRef}
         />
         {/* Standalone label + NumberInput so getByLabelText uniquely matches the <input>.
             NumberInput's built-in label wraps the stepper buttons too, causing RTL ambiguity. */}
@@ -94,6 +96,6 @@ export function RewardDialog({ open, mode, initial, onOpenChange, onSubmit }: Pr
           </Button>
         </div>
       </div>
-    </Dialog>
+    </Sheet>
   )
 }

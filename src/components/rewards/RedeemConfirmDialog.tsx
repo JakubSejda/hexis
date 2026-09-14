@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Dialog, Input } from '@/components/ui'
+import { Button, Input, Sheet } from '@/components/ui'
 import type { RewardRow } from '@/lib/queries/rewards'
 
 type Props = {
@@ -23,7 +23,7 @@ export function RedeemConfirmDialog({ open, reward, onOpenChange, onConfirm }: P
 
   if (!reward) return null
   return (
-    <Dialog
+    <Sheet
       open={open}
       onOpenChange={onOpenChange}
       title="Vyzvednout odměnu"
@@ -48,6 +48,6 @@ export function RedeemConfirmDialog({ open, reward, onOpenChange, onConfirm }: P
           </Button>
         </div>
       </div>
-    </Dialog>
+    </Sheet>
   )
 }

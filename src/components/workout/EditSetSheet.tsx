@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { BottomSheet, Button, Dialog, NumberInput, useToast } from '@/components/ui'
+import { Button, NumberInput, Sheet, useToast } from '@/components/ui'
 
 type Props = {
   sessionId: number
@@ -35,7 +35,7 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
 
   return (
     <>
-      <BottomSheet open={true} onOpenChange={(v) => !v && onClose()} title="Upravit sérii">
+      <Sheet open={true} onOpenChange={(v) => !v && onClose()} title="Upravit sérii">
         <div className="flex flex-col gap-3">
           <NumberInput value={weight} onChange={setWeight} step={2.5} suffix="kg" />
           <NumberInput value={reps} onChange={setReps} step={1} suffix="reps" />
@@ -49,8 +49,8 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
             </Button>
           </div>
         </div>
-      </BottomSheet>
-      <Dialog
+      </Sheet>
+      <Sheet
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title="Smazat sérii?"
@@ -70,7 +70,7 @@ export function EditSetSheet({ setId, onClose, onChanged }: Props) {
             Smazat
           </Button>
         </div>
-      </Dialog>
+      </Sheet>
     </>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { BottomSheet, Input } from '@/components/ui'
+import { Input, Sheet } from '@/components/ui'
 
 type Exercise = { id: number; name: string; type: string; userId: string | null }
 
@@ -27,7 +27,7 @@ export function ExercisePicker({
   }, [open, q])
 
   return (
-    <BottomSheet open={open} onOpenChange={onOpenChange} title="Vyber cvik">
+    <Sheet open={open} onOpenChange={onOpenChange} title="Vyber cvik">
       <Input
         variant="search"
         placeholder="Hledej..."
@@ -50,6 +50,6 @@ export function ExercisePicker({
         ))}
         {items.length === 0 ? <li className="text-muted py-3 text-xs">Nic nenalezeno</li> : null}
       </ul>
-    </BottomSheet>
+    </Sheet>
   )
 }

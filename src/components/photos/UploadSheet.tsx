@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { BottomSheet, Button, Input, useToast } from '@/components/ui'
+import { Button, Input, Sheet, useToast } from '@/components/ui'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
 
 type Props = {
@@ -85,7 +85,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
   }
 
   return (
-    <BottomSheet open={open} onOpenChange={onOpenChange} title="Nahrát fotku">
+    <Sheet open={open} onOpenChange={onOpenChange} title="Nahrát fotku">
       <div className="flex flex-col gap-3">
         <input
           ref={inputRef}
@@ -129,6 +129,6 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
           Nahrát
         </Button>
       </div>
-    </BottomSheet>
+    </Sheet>
   )
 }
