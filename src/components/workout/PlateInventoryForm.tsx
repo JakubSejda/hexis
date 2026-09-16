@@ -25,7 +25,7 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
 
   return (
     <div className="flex flex-col gap-4">
-      <Heading level={1}>Inventář kotoučů</Heading>
+      <Heading level={2}>Inventář kotoučů</Heading>
       <div>
         <label className="text-muted text-xs">Bar</label>
         <NumberInput value={barKg} onChange={setBarKg} step={2.5} min={5} max={50} suffix="kg" />

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { AREA_META } from './area-meta'
 import { useActiveArea } from './use-active-area'
-import { Menu, Pill } from '@/components/ui'
+import { Heading, Menu, Pill } from '@/components/ui'
 
 type Props = {
   streak: number
@@ -25,9 +25,11 @@ export function AppHeader({ streak, userName, userEmail }: Props) {
         <span aria-hidden="true" className="text-muted hidden font-mono text-xs md:inline">
           ·
         </span>
-        <span className="text-accent font-mono text-xs font-medium tracking-[0.25em] uppercase">
+        {/* The page's h1. It is the only title every shell screen has — six of
+         * them had no h1 at all before this. */}
+        <Heading level={1} variant="region" className="text-accent font-medium tracking-[0.25em]">
           {label}
-        </span>
+        </Heading>
       </div>
       <div className="flex items-center gap-3">
         {streak > 0 && (

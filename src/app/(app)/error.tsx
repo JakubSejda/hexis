@@ -12,7 +12,7 @@ export default function AppError({
     <Container size="sm" className="py-8">
       <Card padding="lg">
         <Stack gap={3} className="items-start">
-          <Heading level={1}>Něco se pokazilo</Heading>
+          <Heading level={2}>Něco se pokazilo</Heading>
           <p className="text-muted text-sm">
             Zkus to prosím znovu. Pokud problém přetrvá, zkus obnovit stránku.
           </p>
