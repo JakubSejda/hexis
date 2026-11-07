@@ -69,8 +69,8 @@ export function TodaysChecksCard({ dailyHabits }: Props) {
   }
 
   return (
-    <section data-todays-checks-card className="hud-clip bg-border animate-hud-power-on p-px">
-      <div className="hud-clip bg-surface space-y-3 p-4">
+    <section data-todays-checks-card>
+      <div className="rounded-card border-border bg-surface space-y-3 border p-4">
         <Heading level={2} variant="region">
           Návyky dnes
         </Heading>
@@ -89,8 +89,8 @@ export function TodaysChecksCard({ dailyHabits }: Props) {
           <span className="text-muted tabular-nums">
             {doneCount} ze {dailyHabits.length} hotovo
           </span>
-          <Link href="/habits" className="text-system hover:underline">
-            Otevřít
+          <Link href="/habits" className="text-accent font-semibold hover:underline">
+            Všechny návyky
           </Link>
         </div>
       </div>

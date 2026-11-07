@@ -27,11 +27,11 @@ export function PlateInventoryForm({ initial }: { initial: { barKg: number; plat
     <div className="flex flex-col gap-4">
       <Heading level={2}>Inventář kotoučů</Heading>
       <div>
-        <label className="text-muted text-xs">Bar</label>
+        <label className="text-muted text-xs">Osa</label>
         <NumberInput value={barKg} onChange={setBarKg} step={2.5} min={5} max={50} suffix="kg" />
       </div>
       <div className="flex flex-col gap-2">
-        <label className="text-muted text-xs">Talire (parove)</label>
+        <label className="text-muted text-xs">Talíře (párové)</label>
         {plates.map((p, i) => (
           <div key={i} className="flex items-center gap-2">
             <NumberInput

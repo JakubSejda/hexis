@@ -45,6 +45,7 @@ export default async function NutritionPage() {
   return (
     <Container className="py-4">
       <NutritionPageClient
+        today={new Date().toISOString().slice(0, 10)}
         initialMonth={month}
         initialDays={days.map((d) => ({
           id: d.id,

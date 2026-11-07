@@ -6,20 +6,21 @@ type Variant = 'side' | 'bottom'
 
 const BASE: Record<Variant, string> = {
   side: 'flex items-center gap-2.5 px-4 py-2 text-sm transition-colors',
-  bottom: 'flex flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors',
+  bottom:
+    'flex flex-1 flex-col items-center justify-center gap-0.5 rounded-control text-[11px] font-semibold transition-colors',
 }
 
 const ACTIVE: Record<Variant, string> = {
-  side: 'text-accent border-accent bg-surface border-l-2 pl-[14px]',
-  bottom: 'text-accent',
+  side: 'bg-accent text-accent-foreground rounded-control font-semibold',
+  bottom: 'bg-accent text-accent-foreground',
 }
 
 const INACTIVE: Record<Variant, string> = {
-  side: 'text-muted hover:bg-surface hover:text-foreground',
+  side: 'text-muted rounded-control hover:bg-surface hover:text-foreground',
   bottom: 'text-muted hover:text-foreground',
 }
 
-const ICON: Record<Variant, string> = { side: 'h-4 w-4', bottom: 'h-6 w-6' }
+const ICON: Record<Variant, string> = { side: 'h-4 w-4', bottom: 'h-5 w-5' }
 
 type Props = {
   href: string

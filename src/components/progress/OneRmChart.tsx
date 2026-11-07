@@ -26,7 +26,11 @@ function formatDate(dateStr: string) {
 
 export function OneRmChart({ data }: Props) {
   if (data.length === 0) {
-    return <p className="text-muted py-8 text-center text-sm">Žádná data</p>
+    return (
+      <p className="text-muted py-8 text-center text-sm">
+        Graf se vykreslí po dvou trénincích tohoto cviku.
+      </p>
+    )
   }
 
   const globalMax = Math.max(...data.map((d) => d.best1rm))

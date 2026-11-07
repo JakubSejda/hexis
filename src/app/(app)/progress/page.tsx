@@ -5,6 +5,7 @@ import { fetchRange } from '@/lib/queries/measurements'
 import { weekRange } from '@/lib/week'
 import { Container, Stack } from '@/components/ui'
 import { MeasurementGrid } from '@/components/measurements/MeasurementGrid'
+import { ProgressTabs } from '@/components/progress/ProgressTabs'
 import { SparklineCard } from '@/components/measurements/SparklineCard'
 
 export default async function BodyPage() {
@@ -35,7 +36,19 @@ export default async function BodyPage() {
 
   return (
     <Container>
-      <Stack gap={3} className="py-4">
+      <Stack gap={4} className="py-4">
+        <ProgressTabs active="/progress" />
+        {initialRows.every((row) => row.weightKg == null) ? (
+          <div className="rounded-card border-accent/60 bg-surface border p-5">
+            <div className="font-display text-xl leading-tight font-black uppercase">
+              První měření
+            </div>
+            <p className="text-muted mt-2 text-sm">
+              Klepni do řádku tohoto týdne a zapiš váhu. Pas a hrudník stačí jednou týdně, ve stejný
+              den ráno. Každé měření +20 XP.
+            </p>
+          </div>
+        ) : null}
         <div className="flex gap-2 overflow-x-auto pb-2">
           <SparklineCard
             label="Váha"

@@ -37,7 +37,7 @@ export default async function WorkoutSessionPage({
     where: eq(sessions.id, sessionId),
   })
   if (!session || session.userId !== userId) {
-    return <div className="text-danger p-4 text-sm">Session nenalezena.</div>
+    return <div className="text-danger p-4 text-sm">Trénink nenalezen.</div>
   }
 
   // Fetch plan exercises
@@ -244,7 +244,7 @@ export default async function WorkoutSessionPage({
   return (
     <Container>
       <Stack gap={4} className="py-4">
-        <details className="hud-clip bg-surface-raised p-3">
+        <details className="rounded-card bg-surface-raised p-3">
           <summary className="text-muted cursor-pointer text-sm">Svalová mapa</summary>
           <div className="mt-2">
             <WorkoutHeatmap plannedMuscles={plannedMuscles} doneMuscles={doneMuscles} />

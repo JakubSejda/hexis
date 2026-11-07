@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { Check } from 'lucide-react'
 import { Button, NumberInput } from '@/components/ui'
+import { XP_DELTAS } from '@/lib/xp-events'
 
 type Props = {
   initialWeightKg: number | null
@@ -25,26 +25,44 @@ export function SetInput({
   const [rpe, setRpe] = useState<number | null>(null)
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col gap-3">
+      <div className={exerciseIsBodyweight ? 'grid grid-cols-1' : 'grid grid-cols-2 gap-3'}>
         {!exerciseIsBodyweight ? (
-          <NumberInput value={weight} onChange={setWeight} step={2.5} suffix="kg" />
+          <NumberInput
+            variant="hero"
+            label="Váha kg"
+            placeholder="0"
+            value={weight}
+            onChange={setWeight}
+            step={2.5}
+            suffix="kg"
+          />
         ) : null}
-        <NumberInput value={reps} onChange={setReps} step={1} suffix="reps" />
-        {showRpe ? (
-          <NumberInput value={rpe} onChange={setRpe} step={1} min={1} max={10} suffix="RPE" />
-        ) : null}
+        <NumberInput
+          variant="hero"
+          label="Opakování"
+          value={reps}
+          onChange={setReps}
+          step={1}
+          suffix="opak."
+        />
       </div>
+      {showRpe ? (
+        <div className="text-muted flex items-center justify-between gap-2 text-xs">
+          <span>Náročnost RPE (nepovinné)</span>
+          <NumberInput value={rpe} onChange={setRpe} step={1} min={1} max={10} />
+        </div>
+      ) : null}
       <Button
         variant="success"
         size="lg"
         loading={submitting}
         disabled={reps === null}
-        iconLeft={<Check size={14} aria-hidden />}
-        className="gap-1"
+        className="justify-between px-6"
         onClick={() => onSubmit({ weightKg: weight, reps, rpe })}
       >
         Zapsat sérii
+        <span>+{XP_DELTAS.set_logged} XP</span>
       </Button>
     </div>
   )

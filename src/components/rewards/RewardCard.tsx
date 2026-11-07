@@ -25,15 +25,15 @@ export function RewardCard({
   const missing = reward.costXp - balanceXp
   const cantAfford = missing > 0
   return (
-    <div data-reward-id={reward.id} className="hud-clip bg-border p-px">
-      <div className="hud-clip bg-surface flex items-start gap-3 p-3">
+    <div data-reward-id={reward.id} className="rounded-card bg-border p-px">
+      <div className="rounded-card bg-surface flex items-start gap-3 p-3">
         <div className="min-w-0 flex-1">
           <div className="text-foreground truncate text-sm font-semibold">{reward.name}</div>
           {reward.description && (
             <div className="text-muted mt-0.5 line-clamp-2 text-xs">{reward.description}</div>
           )}
           <div className="text-muted mt-1 text-xs">
-            <span className="text-accent font-mono font-semibold">{reward.costXp} XP</span>
+            <span className="text-accent font-display font-semibold">{reward.costXp} XP</span>
             {cantAfford && <span className="text-danger ml-2">Chybí {missing} XP</span>}
           </div>
         </div>
@@ -51,7 +51,7 @@ export function RewardCard({
           <Menu.Root>
             <Menu.Trigger
               aria-label={`Možnosti pro ${reward.name}`}
-              className="hover:bg-surface-raised text-muted hud-clip-sm p-1"
+              className="hover:bg-surface-raised text-muted rounded-control p-1"
             >
               <MoreVertical className="h-4 w-4" />
             </Menu.Trigger>

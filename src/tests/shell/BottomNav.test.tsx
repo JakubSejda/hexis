@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { BottomNav } from '@/components/shell'
 
 vi.mock('next/navigation', () => ({
@@ -11,14 +10,13 @@ vi.mock('next/navigation', () => ({
 import { usePathname } from 'next/navigation'
 
 describe('BottomNav', () => {
-  it('renders four daily tabs (Dashboard, Training, Nutrition, Habits) + Více button', () => {
+  it('renders the four daily tabs plus the player profile — no hidden "Více"', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<BottomNav />)
-    expect(screen.getByRole('link', { name: /přehled/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /trénink/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /výživa/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /návyky/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /více/i })).toBeInTheDocument()
+    for (const name of [/přehled/i, /trénink/i, /výživa/i, /návyky/i, /profil/i]) {
+      expect(screen.getByRole('link', { name })).toBeInTheDocument()
+    }
+    expect(screen.queryByRole('button', { name: /více/i })).toBeNull()
   })
 
   it('marks the Nutrition tab active when pathname is /nutrition', () => {
@@ -27,25 +25,12 @@ describe('BottomNav', () => {
     expect(screen.getByRole('link', { name: /výživa/i })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('marks no link active on /progress but highlights the Více button', () => {
-    vi.mocked(usePathname).mockReturnValue('/progress')
-    render(<BottomNav />)
-    expect(screen.queryByRole('link', { current: 'page' })).toBeNull()
-    expect(screen.getByRole('button', { name: /více/i })).toHaveClass('text-accent')
-  })
-
-  it('opens the Více sheet with the six remaining areas', async () => {
-    vi.mocked(usePathname).mockReturnValue('/dashboard')
-    render(<BottomNav />)
-    const more = screen.getByRole('button', { name: /více/i })
-    expect(more).toHaveAttribute('aria-expanded', 'false')
-    await userEvent.click(more)
-    expect(more).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByRole('link', { name: /progres/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /statistiky/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /odměny/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /profil hráče/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /kalendář questů/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /nastavení/i })).toBeInTheDocument()
+  it('keeps Profil lit on the areas that hang off the profile', () => {
+    for (const path of ['/bio', '/progress', '/stats', '/rewards', '/calendar', '/settings']) {
+      vi.mocked(usePathname).mockReturnValue(path)
+      const { unmount } = render(<BottomNav />)
+      expect(screen.getByRole('link', { name: /profil/i })).toHaveAttribute('aria-current', 'page')
+      unmount()
+    }
   })
 })

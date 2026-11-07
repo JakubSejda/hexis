@@ -1,18 +1,15 @@
 import { Heading } from '@/components/ui'
 
-type Props = { children: string; className?: string }
+type Props = { children: string; meta?: string; className?: string }
 
-/**
- * Section label with a rule line. The label itself is a real heading now — it
- * reads as one on screen, so it should read as one in the document outline too.
- */
-export function RegionHeader({ children, className }: Props) {
+/** Section title: wide display caps on the left, an optional quiet readout on the right. */
+export function RegionHeader({ children, meta, className }: Props) {
   return (
-    <div className={'flex items-center gap-2 px-1 pb-2 ' + (className ?? '')}>
-      <Heading level={2} variant="region" className="font-medium whitespace-nowrap">
+    <div className={'flex items-baseline justify-between gap-3 px-1 pb-2.5 ' + (className ?? '')}>
+      <Heading level={2} variant="region" className="whitespace-nowrap">
         {children}
       </Heading>
-      <span aria-hidden className="bg-border h-px flex-1" />
+      {meta ? <span className="text-muted text-xs font-semibold">{meta}</span> : null}
     </div>
   )
 }

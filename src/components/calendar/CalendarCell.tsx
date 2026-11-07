@@ -31,7 +31,7 @@ export function CalendarCell({ day, onSelect }: Props) {
   const baseClasses = [
     'relative',
     'aspect-square',
-    'hud-clip-sm',
+    'rounded-control',
     'border',
     'border-border',
     'bg-surface',
@@ -75,7 +75,7 @@ export function CalendarCell({ day, onSelect }: Props) {
               key={key}
               data-signal={key}
               data-active={day.signals[key] ? 'true' : 'false'}
-              className={`hud-hex h-[6px] w-[6px] ${day.signals[key] ? DOT_BG[key] : 'bg-border'}`}
+              className={`h-[6px] w-[6px] rounded-full ${day.signals[key] ? DOT_BG[key] : 'bg-border'}`}
             />
           ))}
         </div>

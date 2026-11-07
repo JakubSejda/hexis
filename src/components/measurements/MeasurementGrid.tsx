@@ -23,7 +23,7 @@ type Props = {
   initialRows: ApiRow[]
 }
 
-const HEADERS = ['Tyden', 'Vaha', '\u0394', 'Pas', 'Hrudnik', 'Stehno', 'Biceps', 'kcal cil']
+const HEADERS = ['Týden', 'Váha', '\u0394', 'Pas', 'Hrudník', 'Stehno', 'Biceps', 'Cíl kcal']
 
 export function MeasurementGrid({ initialRows }: Props) {
   const [rows, setRows] = useState<ApiRow[]>(initialRows)
@@ -102,7 +102,7 @@ export function MeasurementGrid({ initialRows }: Props) {
                 {HEADERS.map((h) => (
                   <th
                     key={h}
-                    className="text-muted px-1.5 py-2 text-right font-mono text-xs font-medium tracking-[0.2em] uppercase first:text-left"
+                    className="text-muted px-1.5 py-2 text-right text-xs font-semibold tracking-[0.12em] uppercase first:text-left"
                   >
                     {h}
                   </th>

@@ -26,7 +26,7 @@ beforeEach(() => {
 describe('LoginForm', () => {
   it('lets a password manager fill the credentials', () => {
     render(<LoginForm />)
-    const email = screen.getByLabelText('Email')
+    const email = screen.getByLabelText('E-mail')
     const password = screen.getByLabelText('Heslo')
 
     expect(email).toHaveAttribute('autocomplete', 'email')
@@ -37,14 +37,14 @@ describe('LoginForm', () => {
 
   it('does not spellcheck the email field', () => {
     render(<LoginForm />)
-    expect(screen.getByLabelText('Email')).toHaveAttribute('spellcheck', 'false')
+    expect(screen.getByLabelText('E-mail')).toHaveAttribute('spellcheck', 'false')
   })
 
   it('announces a rejected sign-in', async () => {
     signIn.mockResolvedValue({ error: 'CredentialsSignin' })
     render(<LoginForm />)
 
-    await userEvent.type(screen.getByLabelText('Email'), 'a@b.cz')
+    await userEvent.type(screen.getByLabelText('E-mail'), 'a@b.cz')
     await userEvent.type(screen.getByLabelText('Heslo'), 'wrong')
     await userEvent.click(screen.getByRole('button', { name: /přihlásit/i }))
 
@@ -57,12 +57,12 @@ describe('LoginForm', () => {
     signIn.mockResolvedValue({ error: 'CredentialsSignin' })
     render(<LoginForm />)
 
-    await userEvent.type(screen.getByLabelText('Email'), 'a@b.cz')
+    await userEvent.type(screen.getByLabelText('E-mail'), 'a@b.cz')
     await userEvent.type(screen.getByLabelText('Heslo'), 'wrong')
     await userEvent.click(screen.getByRole('button', { name: /přihlásit/i }))
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Email')).toHaveFocus()
+      expect(screen.getByLabelText('E-mail')).toHaveFocus()
     })
   })
 })

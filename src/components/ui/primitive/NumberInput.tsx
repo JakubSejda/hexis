@@ -14,6 +14,8 @@ type Props = {
   error?: string
   /** Explicit id for the inner <input>; auto-generated when omitted. */
   id?: string
+  /** `hero` = the big workout stepper: round buttons, display-size number, label above. */
+  variant?: 'default' | 'hero'
 }
 
 export function NumberInput({
@@ -28,7 +30,9 @@ export function NumberInput({
   hint,
   error,
   id: idProp,
+  variant = 'default',
 }: Props) {
+  const hero = variant === 'hero'
   const autoId = useId()
   const id = idProp ?? autoId
   const descriptionId = `${id}-desc`
@@ -39,11 +43,19 @@ export function NumberInput({
   }
 
   const core: ReactNode = (
-    <div className="inline-flex items-center gap-1">
+    <div
+      className={
+        hero ? 'flex items-center justify-between gap-1' : 'inline-flex items-center gap-1'
+      }
+    >
       <button
         type="button"
         aria-label="snížit"
-        className="bg-border text-foreground active:bg-system hud-clip-sm h-11 w-11"
+        className={
+          hero
+            ? 'bg-surface-raised text-foreground active:bg-border size-10 shrink-0 rounded-full text-xl'
+            : 'bg-surface-raised text-foreground active:bg-border h-11 w-11 rounded-full text-lg'
+        }
         onClick={() => handle(-step)}
       >
         −
@@ -61,18 +73,24 @@ export function NumberInput({
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={error || hint ? descriptionId : undefined}
         className={
-          'bg-background text-foreground hud-clip-sm h-11 w-20 border text-center font-mono ' +
-          (error ? 'border-danger' : 'border-border')
+          hero
+            ? 'font-display no-spin text-foreground w-full min-w-0 bg-transparent text-center text-[2.6rem] leading-none font-black focus-visible:outline-none'
+            : 'bg-surface-raised text-foreground rounded-control font-display no-spin h-11 w-16 border text-center font-black ' +
+              (error ? 'border-danger' : 'border-transparent')
         }
         step={step}
         min={min}
         max={max}
       />
-      {suffix ? <span className="text-muted text-xs">{suffix}</span> : null}
+      {suffix && !hero ? <span className="text-muted text-xs">{suffix}</span> : null}
       <button
         type="button"
         aria-label="zvýšit"
-        className="bg-border text-foreground active:bg-system hud-clip-sm h-11 w-11"
+        className={
+          hero
+            ? 'bg-surface-raised text-foreground active:bg-border size-10 shrink-0 rounded-full text-xl'
+            : 'bg-surface-raised text-foreground active:bg-border h-11 w-11 rounded-full text-lg'
+        }
         onClick={() => handle(step)}
       >
         +
@@ -86,7 +104,17 @@ export function NumberInput({
 
   return (
     <label htmlFor={id} className="flex flex-col gap-1">
-      {label ? <span className="text-muted text-xs font-medium">{label}</span> : null}
+      {label ? (
+        <span
+          className={
+            hero
+              ? 'text-muted text-center text-[11px] font-bold tracking-[0.12em] uppercase'
+              : 'text-muted text-xs font-medium'
+          }
+        >
+          {label}
+        </span>
+      ) : null}
       {core}
       {error ? (
         <span id={descriptionId} className="text-danger text-xs">

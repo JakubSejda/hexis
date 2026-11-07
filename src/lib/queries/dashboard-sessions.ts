@@ -1,7 +1,7 @@
 import { and, desc, eq, gte, inArray, sql } from 'drizzle-orm'
 import type { MySql2Database } from 'drizzle-orm/mysql2'
 import * as schema from '@/db/schema'
-import { sessions, planExercises, sessionSets } from '@/db/schema'
+import { sessions, planExercises, sessionSets, exercises } from '@/db/schema'
 
 type DB = MySql2Database<typeof schema>
 
@@ -72,4 +72,47 @@ export async function fetchActiveSessionProgress(
   const total = totalIds.size || completed || 0
 
   return { completed, total }
+}
+
+export type QuestObjective = {
+  exerciseId: number
+  name: string
+  targetSets: number
+  doneSets: number
+}
+
+/**
+ * The quest's checklist: the plan's exercises in order, each with the number
+ * of sets already logged in the active session (0 when there is none).
+ */
+export async function fetchQuestObjectives(
+  db: DB,
+  planId: number,
+  sessionId: number | null
+): Promise<QuestObjective[]> {
+  const rows = await db
+    .select({
+      exerciseId: planExercises.exerciseId,
+      name: exercises.name,
+      targetSets: planExercises.targetSets,
+    })
+    .from(planExercises)
+    .innerJoin(exercises, eq(exercises.id, planExercises.exerciseId))
+    .where(eq(planExercises.planId, planId))
+    .orderBy(planExercises.order)
+
+  const done = new Map<number, number>()
+  if (sessionId != null) {
+    const setRows = await db
+      .select({
+        exerciseId: sessionSets.exerciseId,
+        count: sql<number>`count(*)`.as('count'),
+      })
+      .from(sessionSets)
+      .where(eq(sessionSets.sessionId, sessionId))
+      .groupBy(sessionSets.exerciseId)
+    for (const r of setRows) done.set(r.exerciseId, Number(r.count))
+  }
+
+  return rows.map((r) => ({ ...r, doneSets: done.get(r.exerciseId) ?? 0 }))
 }

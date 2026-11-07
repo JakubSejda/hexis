@@ -24,7 +24,7 @@ describe('AvatarHeroCard', () => {
     expect(screen.getByText(/Apprentice/)).toBeDefined()
     expect(screen.getByText(/Tier 2 \(L10–24\)/)).toBeDefined()
     expect(screen.getByText(/1[ , ]234 XP/)).toBeDefined()
-    expect(screen.getByText(/300.*do L13/)).toBeDefined()
+    expect(screen.getByText(/300.*do levelu 13/)).toBeDefined()
   })
 
   it('renders ∞ for the top-tier upper bound', () => {

@@ -42,7 +42,7 @@ const dailyHabit = {
 describe('HabitsPageClient — empty state', () => {
   it('renders empty CTA when no active habits (gesture hint moved to list view)', () => {
     render(<HabitsPageClient initialHabits={[]} initialArchived={[]} />)
-    expect(screen.getByText(/založ první návyk/i)).toBeInTheDocument()
+    expect(screen.getByText(/založit první návyk/i)).toBeInTheDocument()
     expect(screen.queryByText(/tap = check, drž = vrátit zpět/i)).toBeNull()
   })
 })
@@ -77,8 +77,8 @@ describe('HabitsPageClient — sections', () => {
 describe('HabitsPageClient — interactions', () => {
   it('opens create dialog when "+ Nový" is clicked', async () => {
     render(<HabitsPageClient initialHabits={[dailyHabit]} initialArchived={[]} />)
-    await userEvent.click(screen.getByRole('button', { name: /\+ nový/i }))
-    expect(screen.getByText(/nový návyk/i)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /\+ nový návyk/i }))
+    expect(screen.getByRole('dialog')).toHaveTextContent(/nový návyk/i)
   })
 
   it('POSTs to /api/habits/[id]/check on row tap (optimistic)', async () => {

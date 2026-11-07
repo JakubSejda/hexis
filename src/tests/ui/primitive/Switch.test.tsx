@@ -27,13 +27,12 @@ describe('Switch', () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 
-  it('uses the HUD control clip and cyan when on — a switch is system state', () => {
+  it('is a pill track that lights up in the accent when on', () => {
     render(<Switch checked onChange={() => {}} label="X" />)
     const sw = screen.getByRole('switch')
-    expect(sw).toHaveClass('hud-clip-sm')
-    expect(sw).toHaveClass('bg-system')
+    expect(sw).toHaveClass('rounded-full')
+    expect(sw).toHaveClass('bg-accent')
     expect(sw.className).not.toContain('-primary')
-    expect(sw.className).not.toMatch(/rounded/)
   })
 
   it('falls back to the border track when off', () => {

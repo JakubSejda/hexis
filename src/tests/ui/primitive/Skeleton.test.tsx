@@ -40,10 +40,10 @@ describe('Skeleton', () => {
     expect(el).toHaveClass('w-10')
   })
 
-  it('renders shape=card (hud-clip, h-32 default)', () => {
+  it('renders shape=card (card radius, h-32 default)', () => {
     render(<Skeleton shape="card" data-testid="s" />)
     const el = screen.getByTestId('s')
-    expect(el).toHaveClass('hud-clip')
+    expect(el).toHaveClass('rounded-card')
     expect(el).toHaveClass('h-32')
   })
 

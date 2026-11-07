@@ -8,7 +8,7 @@ import {
 } from '@/lib/queries/rewards'
 import { rewardRedemptions } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
-import { Container, Heading, Stack } from '@/components/ui'
+import { Container, Stack } from '@/components/ui'
 import { RewardsPageClient } from '@/components/rewards/RewardsPageClient'
 
 export const dynamic = 'force-dynamic'
@@ -39,7 +39,6 @@ export default async function RewardsPage() {
   return (
     <Container as="main">
       <Stack gap={6} className="py-4">
-        <Heading level={2}>Odměny</Heading>
         <RewardsPageClient
           initialBalance={balance}
           initialRewards={rewards}

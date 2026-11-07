@@ -27,26 +27,27 @@ describe('ProgressBar', () => {
     expect(fill.style.width).toBe('0%')
   })
 
-  it('default variant uses the system tone (cyan) — a non-XP bar is system info', () => {
+  it('default variant uses the system tone — a non-XP bar is system info', () => {
     render(<ProgressBar value={50} max={100} />)
     const fill = screen.getByRole('progressbar').firstChild as HTMLElement
-    expect(fill.style.backgroundColor).toMatch(/rgb\(34,\s*211,\s*238\)/)
+    expect(fill).toHaveClass('bg-system')
     expect(fill.className).not.toContain('shadow-')
   })
 
-  it('maps tone="success" to emerald and tone="accent" to amber', () => {
+  it('maps tone="success" and tone="accent" to their tokens', () => {
     const { rerender } = render(<ProgressBar value={50} max={100} tone="success" />)
     let fill = screen.getByRole('progressbar').firstChild as HTMLElement
-    expect(fill.style.backgroundColor).toMatch(/rgb\(52,\s*211,\s*153\)/)
+    expect(fill).toHaveClass('bg-success')
     rerender(<ProgressBar value={50} max={100} tone="accent" />)
     fill = screen.getByRole('progressbar').firstChild as HTMLElement
-    expect(fill.style.backgroundColor).toMatch(/rgb\(245,\s*158,\s*11\)/)
+    expect(fill).toHaveClass('bg-accent')
   })
 
-  it('variant="xp" forces amber fill regardless of tone prop', () => {
+  it('variant="xp" forces the accent gradient regardless of tone prop', () => {
     render(<ProgressBar value={50} max={100} variant="xp" tone="danger" />)
     const fill = screen.getByRole('progressbar').firstChild as HTMLElement
-    expect(fill.style.backgroundColor).toMatch(/rgb\(245,\s*158,\s*11\)/)
+    expect(fill).toHaveClass('to-accent')
+    expect(fill).not.toHaveClass('bg-danger')
   })
 
   it('variant="xp" applies a glow shadow class', () => {

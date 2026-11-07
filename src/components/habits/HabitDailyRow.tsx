@@ -32,18 +32,18 @@ export function HabitDailyRow({ habit, onCheck, onUncheck }: Props) {
     <div
       data-habit-row
       data-habit-id={habit.id}
-      className="hud-clip-sm bg-border p-px"
+      className="rounded-control bg-border p-px"
       {...longPress}
     >
-      <div className="hud-clip-sm bg-surface flex items-center gap-3 px-3 py-3">
+      <div className="rounded-control bg-surface flex items-center gap-3 px-3 py-3">
         <Checkbox checked={habit.completedToday} onChange={handleClick} aria-label={habit.name} />
         <span className="text-foreground min-w-0 flex-1 truncate text-sm font-medium">
           {habit.name}
         </span>
-        <span className="hud-clip-sm text-muted bg-surface-raised px-2 py-0.5 font-mono text-xs">
+        <span className="rounded-control text-muted bg-surface-raised font-display px-2 py-0.5 text-xs">
           {WEIGHT_LABEL[habit.weight]}
         </span>
-        <span data-streak-count className="text-foreground font-mono text-xs tabular-nums">
+        <span data-streak-count className="text-foreground font-display text-xs tabular-nums">
           🔥 {habit.currentStreak}
         </span>
       </div>

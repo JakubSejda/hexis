@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { HexEmblem } from '@/components/dashboard/HexEmblem'
 import { TIERS, type Tier } from '@/lib/tiers'
 
 type Props = { levelAfter: number; tier: Tier; onDismiss: () => void }
 
 /**
- * HUD level-up moment (Reforge R4): a brief full-screen overlay — the
- * emblem powers on with the new level. Auto-dismisses; tap skips.
+ * Level-up moment: a brief full-screen overlay where the accent orb breathes
+ * around the new level. Auto-dismisses; tap skips.
  */
 export function LevelUpToast({ levelAfter, tier, onDismiss }: Props) {
   useEffect(() => {
@@ -23,18 +22,15 @@ export function LevelUpToast({ levelAfter, tier, onDismiss }: Props) {
       className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center gap-4 bg-black/80 backdrop-blur-sm"
     >
       <div className="animate-hud-power-on flex flex-col items-center gap-4">
-        <HexEmblem
-          level={levelAfter}
-          tierColor={meta.accent}
-          size={160}
-          className="animate-tier-glow"
-        />
-        <div className="text-accent font-mono text-xs tracking-[0.3em] uppercase">Level up</div>
-        <div className="text-foreground text-4xl font-black tracking-tight uppercase italic">
-          Level {levelAfter}
+        <div className="quest-orb border-accent grid size-52 place-items-center rounded-full border-2">
+          <span className="font-display text-center leading-none font-black uppercase">
+            <span className="text-accent block text-lg">Level</span>
+            <span className="hero-level block text-7xl">{levelAfter}</span>
+          </span>
         </div>
-        <div className="text-muted-strong font-mono text-sm">
-          L{levelAfter - 1} → L{levelAfter} · {meta.name}
+        <div className="font-display text-3xl font-black uppercase">Level up</div>
+        <div className="text-muted-strong text-sm">
+          Level {levelAfter - 1} → {levelAfter} · {meta.name}
         </div>
       </div>
     </div>

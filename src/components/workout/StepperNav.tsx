@@ -24,7 +24,10 @@ export function StepperNav({ total, current, onPrev, onNext, labels }: Props) {
       </button>
       <div className="flex gap-1">
         {Array.from({ length: total }).map((_, i) => (
-          <span key={i} className={`hud-hex size-2 ${i === current ? 'bg-system' : 'bg-border'}`} />
+          <span
+            key={i}
+            className={`size-2 rounded-full ${i === current ? 'bg-accent' : 'bg-surface-raised'}`}
+          />
         ))}
       </div>
       <button

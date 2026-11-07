@@ -7,6 +7,7 @@ import { ResumeBanner } from '@/components/workout/ResumeBanner'
 import { PlanPicker } from '@/components/workout/PlanPicker'
 import { SessionHistoryList } from '@/components/workout/SessionHistoryList'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
+import { fetchExerciseCountsByPlan } from '@/lib/queries/dashboard-sessions'
 import { Container, Heading, Stack } from '@/components/ui'
 
 export default async function WorkoutPage() {
@@ -25,6 +26,11 @@ export default async function WorkoutPage() {
     .limit(1)
   const lastIdx = sortedPlans.findIndex((p) => p.id === (lastFinished[0]?.planId ?? -1))
   const recommended = sortedPlans[(lastIdx + 1) % Math.max(sortedPlans.length, 1)] ?? null
+
+  const exerciseCounts = await fetchExerciseCountsByPlan(
+    db,
+    sortedPlans.map((p) => p.id)
+  )
 
   const history = await db
     .select({
@@ -47,10 +53,12 @@ export default async function WorkoutPage() {
     <Container>
       <Stack gap={4} className="py-4">
         <ResumeBanner />
-        <Heading level={2}>Vyber trénink</Heading>
-        <PlanPicker plans={sortedPlans} recommendedId={recommended?.id ?? null} />
+        <PlanPicker
+          plans={sortedPlans.map((p) => ({ ...p, exerciseCount: exerciseCounts.get(p.id) ?? 0 }))}
+          recommendedId={recommended?.id ?? null}
+        />
         <Heading level={2} variant="region" className="mt-4">
-          Historie
+          Historie questů
         </Heading>
         <SessionHistoryList
           items={history.map((h) => ({

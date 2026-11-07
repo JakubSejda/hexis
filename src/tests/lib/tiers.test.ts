@@ -19,9 +19,9 @@ describe('levelToTier', () => {
 })
 
 describe('levelToTierMeta', () => {
-  it('returns Warrior meta for L16', () => {
+  it('returns Bojovník meta for L16', () => {
     const m = levelToTierMeta(16)
-    expect(m.name).toBe('Warrior')
+    expect(m.name).toBe('Bojovník')
     expect(m.tier).toBe(3)
   })
 })

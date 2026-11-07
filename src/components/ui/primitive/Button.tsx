@@ -20,29 +20,29 @@ type Variant =
 type Size = 'sm' | 'md' | 'lg'
 
 /**
- * HUD grammar (Reforge): amber = action (primary + success both act — one
- * loud color for "do the thing"), cyan = system/secondary. Reference:
- * docs/superpowers/prototypes/2026-08-14-reforge/variant-b.html
+ * D grammar: accent = action (primary + success both act — one loud colour for
+ * "do the thing"), system = the blue secondary. Reference:
+ * docs/design/2026-11-redesign-d/D-kombinace.html
  */
 const VARIANT_CLASS: Record<Variant, string> = {
-  primary: 'bg-accent text-background hover:bg-accent-muted',
-  success: 'bg-accent text-background hover:bg-accent-muted',
+  primary: 'bg-accent text-accent-foreground shadow-glow hover:bg-accent-muted',
+  success: 'bg-accent text-accent-foreground shadow-glow hover:bg-accent-muted',
   secondary: 'border border-system text-system hover:bg-system-soft',
   ghost: 'text-foreground hover:bg-surface-raised',
   danger: 'bg-danger text-background hover:opacity-90',
-  outline: 'border border-border text-foreground hover:bg-surface-raised',
+  outline: 'bg-surface-raised text-foreground hover:bg-border',
   'danger-outline': 'border border-danger text-danger hover:bg-danger/10',
   dashed: 'border border-dashed border-border text-muted hover:bg-surface-raised',
 }
 
 const SIZE_CLASS: Record<Size, string> = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'h-9 px-4 text-xs',
+  md: 'h-11 px-5 text-xs',
+  lg: 'h-14 px-6 text-base',
 }
 
 const BASE =
-  'hud-clip-sm inline-flex items-center justify-center gap-2 font-semibold tracking-[0.12em] uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 disabled:pointer-events-none'
+  'font-display inline-flex items-center whitespace-nowrap justify-center gap-2 rounded-full font-black uppercase transition-[color,background-color,transform] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'
 
 type CommonProps = {
   variant?: Variant

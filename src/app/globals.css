@@ -10,64 +10,86 @@
 @source not '../../.playwright-mcp';
 
 @theme {
-  /* ============ REFORGE "HUD" palette ============
-   * Binding reference: docs/superpowers/prototypes/2026-08-14-reforge/variant-b.html
-   * Grammar: cyan (--color-system) = system/info · amber (--color-accent) =
-   * action/XP only · danger reserved. Never mix roles.
+  /* ============ D "System × Athlete" palette ============
+   * Binding reference: docs/design/2026-11-redesign-d/D-kombinace.html
+   * Grammar: accent = the one action colour (CTA, XP, active nav) and is
+   * user-switchable (blue | neon); system = the blue world/info layer;
+   * reward = gold, only for XP/odměna values; danger reserved.
    */
 
-  /* Surfaces — void navy */
-  --color-background: #05080f;
-  --color-surface: #0b1220;
-  --color-surface-raised: #111b2e;
-  --color-surface-sunken: #030509;
-  --color-border: #1e293b;
-  --color-foreground: #e2f1f8;
-  --color-muted: #7c8da6;
-  --color-muted-strong: #a9bdd4;
+  /* Surfaces — deep navy */
+  --color-background: #040814;
+  --color-surface: #0b1428;
+  --color-surface-raised: #111d38;
+  --color-surface-sunken: #02050d;
+  --color-border: #1a2742;
+  --color-foreground: #eef3ff;
+  --color-muted: #8193b6;
+  --color-muted-strong: #b3c2de;
 
-  /* System — electric cyan (info, active edges, timers, nav) */
-  --color-system: #22d3ee;
-  --color-system-soft: #0b3540;
+  /* System — the blue world (info, timers, rank lenses, glow) */
+  --color-system: #60a5fa;
+  --color-system-soft: #0f2a52;
 
-  /* Action — signal amber (CTA, XP, quest) */
-  --color-accent: #f59e0b;
-  --color-accent-soft: #78350f;
-  --color-accent-muted: #fbbf24;
+  /* Action — CTA, XP, active nav. Overridden by [data-accent='neon']. */
+  --color-accent: #38bdf8;
+  --color-accent-soft: #0c3550;
+  --color-accent-muted: #7dd3fc;
+  --color-accent-deep: #2563eb;
+  --color-accent-foreground: #03101f;
+
+  /* Reward — XP and odměna values only */
+  --color-reward: #fbbf24;
 
   /* Status */
-  --color-danger: #ef4444;
+  --color-danger: #fb7185;
 
-  /* Semantic success (feedback only, never decorative — R7 retired the
-   * neutral-sounding `primary` alias so the grammar is enforceable). */
-  --color-success: #34d399;
-  --color-success-soft: #064e3b;
-  --color-success-muted: #6ee7b7;
+  --color-success: #22c55e;
+  --color-success-soft: #0d3320;
+  --color-success-muted: #86efac;
   --color-warning: #f59e0b;
-  --color-info: #22d3ee;
+  --color-info: #60a5fa;
+
+  /* Rank lenses (muscle ranks D→S) */
+  --color-rank-s: #fde68a;
+  --color-rank-a: #c4b5fd;
+  --color-rank-b: #7dd3fc;
+  --color-rank-c: #86efac;
+  --color-rank-d: #94a3b8;
 
   /* Calendar day signals (training stays --color-accent) */
-  --color-cal-habit: #34d399;
-  --color-cal-weigh: #22d3ee;
+  --color-cal-habit: #22c55e;
+  --color-cal-weigh: #60a5fa;
   --color-cal-photo: #a78bfa;
 
-  /* Focus ring — cyan (system) */
-  --color-ring: #22d3ee;
+  --color-ring: #7dd3fc;
 
-  /* Fonts */
+  /* Fonts — display is wide Archivo for headings and numbers, sans for reading */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), var(--font-geist-sans), ui-sans-serif, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Radius */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
+  /* Shape — three geometries: card (plates, sheets), control (rows, inputs,
+   * chips), full (buttons, pills, nav). Rank lenses stay hexagonal. */
+  --radius-card: 1.5rem;
+  --radius-control: 0.875rem;
+  --radius-tick: 0.5rem;
 
   /* Elevation */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.5);
   --shadow-lg: 0 12px 28px -6px rgb(0 0 0 / 0.6);
+  --shadow-glow: 0 8px 24px -8px color-mix(in srgb, var(--color-accent) 60%, transparent);
+}
+
+/* Neon accent (Nastavení → Vzhled). Only the action role changes; the blue
+ * world stays. */
+[data-accent='neon'] {
+  --color-accent: #d7ff3d;
+  --color-accent-soft: #2c3a0a;
+  --color-accent-muted: #e8ff8a;
+  --color-accent-deep: #9bd400;
+  --color-accent-foreground: #0c0c0d;
 }
 
 html,
@@ -98,39 +120,38 @@ textarea,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* HUD ground: faint hexagon grid behind everything (prototype ~3% opacity). */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 0L56 16.17v32.33L28 64.67 0 48.5V16.17zM28 64.67L56 80.83v16.17M28 64.67L0 80.83V97' fill='none' stroke='%2322d3ee' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 56px 97px;
+/* World light: a blue glow from the top, like the character art behind the hub. */
+body {
+  background-image: radial-gradient(
+    120% 45rem at 50% -10rem,
+    #0b2463 0%,
+    #071026 45%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
 }
 
-/* HUD plate clips (shared by Card/Button/Pill — one cut corner). */
-.hud-clip {
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-}
-.hud-clip-sm {
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+/* Wide display face for headings and big numbers. */
+.font-display {
+  font-stretch: 125%;
 }
 
-/* Sheet geometry. One component, two framings: docked to the bottom edge on a
- * phone (the cut moves to the top-left, the only corner that reads), a centred
- * plate from md up (the cut returns to the top-right, like every other plate).
- * Kept in CSS rather than a JS breakpoint so it survives SSR with no flash. */
-.hud-sheet {
-  clip-path: polygon(0 14px, 14px 0, 100% 0, 100% 100%, 0 100%);
+/* Hub hero: the character art fades into the page, lit from below-left. */
+.hero-art {
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
 }
-@media (width >= 48rem) {
-  .hud-sheet {
-    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-  }
+.hero-glow {
+  background: radial-gradient(
+    55% 45% at 30% 78%,
+    color-mix(in srgb, var(--color-accent) 30%, transparent),
+    transparent 70%
+  );
+}
+.hero-level {
+  text-shadow: 0 0 24px color-mix(in srgb, var(--color-accent) 55%, transparent);
 }
 
-/* HEXIS hexagon (shared by Checkbox/Radio, set dots, step markers). */
+/* Hexagon lens — rank badges and tier emblems only. */
 .hud-hex {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
@@ -243,5 +264,36 @@ input:-webkit-autofill:active {
 @keyframes confetti-fall {
   to {
     transform: translateY(110vh) rotate(720deg);
+  }
+}
+
+/* Number fields drive their own −/+ buttons; hide the native spinners. */
+.no-spin {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Quest-complete / level-up orb: the accent breathes. */
+.quest-orb {
+  box-shadow:
+    0 0 50px color-mix(in srgb, var(--color-accent) 55%, transparent),
+    inset 0 0 60px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  animation: orb-breathe 1.6s ease-in-out infinite;
+}
+@keyframes orb-breathe {
+  50% {
+    box-shadow:
+      0 0 80px color-mix(in srgb, var(--color-accent) 65%, transparent),
+      inset 0 0 90px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quest-orb {
+    animation: none;
   }
 }

@@ -86,35 +86,32 @@ export function ExerciseCard({
     }
   }
 
-  const targetRange =
-    exercise.repMin && exercise.repMax
-      ? `${exercise.repMin}–${exercise.repMax} × ${exercise.targetSets}`
-      : 'ad-hoc'
+  const repRange =
+    exercise.repMin && exercise.repMax ? `${exercise.repMin}–${exercise.repMax}` : null
 
   const doneSets = exercise.sets.length
   const targetSets = Math.max(exercise.targetSets, doneSets)
+  const pending = Math.max(0, targetSets - doneSets)
 
   return (
-    <div className="hud-clip bg-system/60 p-px">
-      <div className="hud-clip bg-surface relative flex flex-col gap-3 p-4">
-        <header>
-          <div className="text-system font-mono text-xs tracking-[0.2em] uppercase">
-            Aktuální cvik
-          </div>
-          <Heading level={3} variant="display" className="mt-1 text-2xl">
-            {exercise.name}
-          </Heading>
-          {stagnation ? (
-            <StagnationBadge
-              weeksSincePr={stagnation.weeksSincePr}
-              suggestion={stagnation.suggestion}
-            />
-          ) : null}
-          <p className="text-muted mt-1 font-mono text-xs">Cíl: {targetRange}</p>
-          {historyLabel ? (
-            <p className="text-muted mt-1 font-mono text-xs">{historyLabel}</p>
-          ) : null}
-        </header>
+    <div className="flex flex-col gap-4">
+      <header>
+        <Heading level={2} variant="display" className="text-[2rem]">
+          {exercise.name}
+        </Heading>
+        {stagnation ? (
+          <StagnationBadge
+            weeksSincePr={stagnation.weeksSincePr}
+            suggestion={stagnation.suggestion}
+          />
+        ) : null}
+        <p className="text-muted mt-2 text-sm">
+          {repRange ? `${exercise.targetSets} série × ${repRange}` : 'Volný cvik'}
+          {exercise.restSec ? ` · pauza ${Math.round((exercise.restSec / 60) * 10) / 10} min` : ''}
+        </p>
+        {historyLabel ? <p className="text-muted mt-1 text-xs">{historyLabel}</p> : null}
+      </header>
+      <div className="rounded-card border-border bg-surface relative flex flex-col gap-4 border p-4">
         <SuggestionHint suggestion={suggestion} />
         <SetInput
           initialWeightKg={suggestion.weightKg}
@@ -126,33 +123,28 @@ export function ExerciseCard({
         {xpFloat ? (
           <span
             key={xpFloat.id}
-            className="animate-hud-float text-accent pointer-events-none absolute right-4 bottom-24 font-mono text-lg font-bold"
+            className="animate-hud-float bg-accent text-accent-foreground font-display rounded-tick pointer-events-none absolute right-6 bottom-40 px-2 py-0.5 text-base font-black"
           >
             +{xpFloat.xp} XP
           </span>
         ) : null}
-        {targetSets > 0 && (
-          <div className="text-muted flex items-center gap-2 font-mono text-xs tracking-[0.15em] uppercase">
-            <span>Série</span>
-            <span className="flex gap-1.5" aria-hidden>
-              {Array.from({ length: targetSets }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`hud-hex size-3 ${i < doneSets ? 'bg-accent' : 'bg-border'}`}
-                />
-              ))}
-            </span>
-            <span>
-              {doneSets}/{targetSets}
-            </span>
+        {targetSets > 0 ? (
+          <div className="flex flex-col gap-1.5">
+            {exercise.sets.map((s) => (
+              <SetRow key={s.id} set={s} onTap={() => onEditSet(s.id)} />
+            ))}
+            {Array.from({ length: pending }).map((_, i) => (
+              <div
+                key={`p${i}`}
+                className="rounded-control bg-surface-raised/50 text-muted grid grid-cols-[2rem_1fr] px-3 py-2.5 text-sm"
+              >
+                <span className="font-display font-black">{doneSets + i + 1}</span>
+                <span>{repRange ? `cíl ${repRange} opakování` : 'čeká'}</span>
+              </div>
+            ))}
           </div>
-        )}
+        ) : null}
         <RestTimer defaultDurationSec={exercise.restSec || 90} />
-        <div className="flex flex-col gap-1">
-          {exercise.sets.map((s) => (
-            <SetRow key={s.id} set={s} onTap={() => onEditSet(s.id)} />
-          ))}
-        </div>
       </div>
     </div>
   )

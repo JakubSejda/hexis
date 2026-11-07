@@ -29,7 +29,7 @@ function Content({
       <MenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          'border-border bg-surface-raised text-foreground hud-clip-sm z-50 min-w-[160px] border p-1 shadow-lg',
+          'border-border bg-surface-raised text-foreground rounded-control z-50 min-w-[160px] border p-1 shadow-lg',
           className
         )}
         {...rest}

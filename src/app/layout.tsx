@@ -1,9 +1,20 @@
 import type { Metadata, Viewport } from 'next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
+import { Archivo } from 'next/font/google'
 import './globals.css'
 import { ServiceWorkerProvider } from '@/components/pwa/ServiceWorkerProvider'
 import { SkipLink } from '@/components/shell/SkipLink'
+
+const archivo = Archivo({
+  subsets: ['latin', 'latin-ext'],
+  axes: ['wdth'],
+  variable: '--font-archivo',
+  display: 'swap',
+})
+
+// Applies the saved accent before first paint so the neon variant never flashes blue.
+const ACCENT_BOOT = `try{var a=localStorage.getItem('hexis-accent');if(a==='neon')document.documentElement.dataset.accent='neon'}catch(e){}`
 
 export const metadata: Metadata = {
   title: 'Hexis',
@@ -20,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#05080F',
+  themeColor: '#040814',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -28,7 +39,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="cs" className={`${GeistSans.variable} ${GeistMono.variable} dark`}>
+    <html
+      lang="cs"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${archivo.variable} dark`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT }} />
+      </head>
       <body className="bg-background text-foreground min-h-screen antialiased">
         {/* Registration used to be injected by the Serwist Next.js plugin;
          * configurator mode registers nothing on its own. */}

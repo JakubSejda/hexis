@@ -8,17 +8,17 @@ type Size = 'sm' | 'md'
 const VARIANT_CLASS: Record<Variant, string> = {
   neutral: 'bg-surface-raised text-foreground',
   success: 'bg-success-soft text-success',
-  warning: 'bg-accent-soft text-accent',
-  danger: 'bg-danger text-background',
-  accent: 'bg-accent text-background',
+  warning: 'bg-warning/15 text-warning',
+  danger: 'bg-danger/15 text-danger',
+  accent: 'bg-accent text-accent-foreground',
 }
 
 const SIZE_CLASS: Record<Size, string> = {
-  sm: 'h-5 px-2 text-xs',
-  md: 'h-6 px-3 text-sm',
+  sm: 'h-6 px-2.5 text-xs',
+  md: 'h-8 px-3 text-sm',
 }
 
-const BASE = 'hud-clip-sm inline-flex items-center gap-1 font-medium tracking-[0.08em] uppercase'
+const BASE = 'inline-flex items-center gap-1 rounded-full font-semibold'
 
 type PillProps = {
   variant?: Variant

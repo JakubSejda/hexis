@@ -8,45 +8,49 @@ import { fetchActiveHabitsWithStreak } from '@/lib/queries/habits'
 import { resolveUserToday } from '@/lib/habits/tz'
 import { TodaysChecksCard } from '@/components/dashboard/TodaysChecksCard'
 import { getTotalXp } from '@/lib/xp'
-import { xpToLevel } from '@/lib/xp-events'
+import { XP_DELTAS, xpToLevel } from '@/lib/xp-events'
 import { checkAndFinishStaleSessions } from '@/lib/session-auto-finish'
 import { Container, Stack } from '@/components/ui'
-import { StatusWindow } from '@/components/dashboard/StatusWindow'
-import { TodayQuest } from '@/components/dashboard/TodayQuest'
-import { LifeAreaCard } from '@/components/dashboard/LifeAreaCard'
+import { PlayerHero } from '@/components/dashboard/PlayerHero'
+import { QuestCard } from '@/components/dashboard/QuestCard'
+import { SideQuests, type SideQuest } from '@/components/dashboard/SideQuests'
 import { WeekPeek } from '@/components/dashboard/WeekPeek'
 import { RegionHeader } from '@/components/dashboard/RegionHeader'
 import { StagnationWarning } from '@/components/dashboard/StagnationWarning'
-import { MuscleWidget } from '@/components/dashboard/MuscleWidget'
+import { TelemetryRow } from '@/components/dashboard/TelemetryRow'
 import { fetchWorkoutStreak } from '@/lib/queries/workout-streak'
 import {
   fetchSessionsLast8Weeks,
   fetchExerciseCountsByPlan,
   fetchActiveSessionProgress,
+  fetchQuestObjectives,
 } from '@/lib/queries/dashboard-sessions'
 import { fetchRange as fetchMeasurements } from '@/lib/queries/measurements'
 import { fetchRange as fetchNutrition } from '@/lib/queries/nutrition'
 import { fetchStagnatingExercises } from '@/lib/queries/stagnation'
-import { fetchMuscleVolumes } from '@/lib/queries/heatmap'
 import { fetchRewardsBalance } from '@/lib/queries/rewards'
-import { TelemetryRow } from '@/components/dashboard/TelemetryRow'
-import { toWeekStart, weekRange } from '@/lib/week'
+import { fetchLifetimeTotals } from '@/lib/bio-lifetime'
+import { listPhotos } from '@/lib/queries/photos'
+import { toWeekStart } from '@/lib/week'
 import { levelToTierMeta, xpToProgress } from '@/lib/tiers'
 import { resolveTodayQuest } from '@/lib/today-quest'
-import {
-  resolveTrainingCard,
-  resolveNutritionCard,
-  resolveProgressCard,
-  resolveStatsCard,
-} from '@/lib/dashboard-life-areas'
 import { resolveWeekPeek } from '@/lib/week-peek'
+
+const nf = new Intl.NumberFormat('cs-CZ')
+
+function daysSince(startedAt: string | null, today: Date): number | null {
+  if (!startedAt) return null
+  const start = new Date(`${startedAt}T00:00:00Z`)
+  const diff = Math.floor((today.getTime() - start.getTime()) / 86_400_000)
+  return diff >= 0 ? diff + 1 : null
+}
 
 export default async function DashboardPage() {
   const user = await requireSessionUser()
   if (user instanceof Response) redirect('/login')
 
   const [userRow] = await db
-    .select({ onboardedAt: users.onboardedAt })
+    .select({ onboardedAt: users.onboardedAt, startedAt: users.startedAt })
     .from(users)
     .where(eq(users.id, user.id))
   if (userRow && !userRow.onboardedAt) redirect('/onboarding')
@@ -56,10 +60,10 @@ export default async function DashboardPage() {
   const today = new Date()
   const todayDate = today.toISOString().slice(0, 10)
   const thisWeekStart = toWeekStart(today)
-  const last8Weeks = weekRange(today, 8)
 
   const totalXp = await getTotalXp(db, user.id)
   const rewardsBalance = await fetchRewardsBalance(db, user.id)
+  const lifetime = await fetchLifetimeTotals(db, user.id)
   const level = xpToLevel(totalXp)
   const tierMeta = levelToTierMeta(level)
   const progress = xpToProgress(totalXp, level)
@@ -112,111 +116,103 @@ export default async function DashboardPage() {
     today,
   })
 
-  const [measurementsRows, recentNutrition] = await Promise.all([
-    fetchMeasurements(db, user.id, last8Weeks[0]!, last8Weeks[last8Weeks.length - 1]!),
-    (async () => {
-      const fromDate = new Date(today)
-      fromDate.setUTCDate(fromDate.getUTCDate() - 30)
-      const fromDateStr = fromDate.toISOString().slice(0, 10)
-      return fetchNutrition(db, user.id, fromDateStr, todayDate)
-    })(),
+  const questPlanId =
+    quest.kind === 'active'
+      ? (active?.planId ?? null)
+      : quest.kind === 'scheduled'
+        ? quest.planId
+        : null
+  const objectives =
+    questPlanId != null
+      ? await fetchQuestObjectives(
+          db,
+          questPlanId,
+          quest.kind === 'active' ? quest.sessionId : null
+        )
+      : []
+
+  const [measurementsRows, todayNutrition, latestPhoto] = await Promise.all([
+    fetchMeasurements(db, user.id, thisWeekStart, thisWeekStart),
+    fetchNutrition(db, user.id, todayDate, todayDate),
+    listPhotos(db, user.id, { limit: 1 }),
   ])
+  const lastPhotoAt = latestPhoto.items[0]?.takenAt.slice(0, 10) ?? null
 
   const stagnation = await fetchStagnatingExercises(db, user.id, today)
-  const heatmapData = await fetchMuscleVolumes(db, user.id, 7)
 
   const reqHeaders = await headers()
   const userToday = resolveUserToday(reqHeaders.get('x-user-tz-offset'))
   const habitRows = await fetchActiveHabitsWithStreak(db, user.id, userToday)
   const dailyHabits = habitRows.filter((r) => r.cadence === 'daily')
 
-  const byWeek = new Map(measurementsRows.map((m) => [m.weekStart, m]))
-  const thisWeekRow = byWeek.get(thisWeekStart) ?? null
-  const todayRow = recentNutrition.find((d) => d.date === todayDate) ?? null
-
-  const weightSeries = last8Weeks.map((w) => {
-    const v = byWeek.get(w)?.weightKg
-    return v == null ? null : Number(v)
-  })
-
-  const trainingCard = resolveTrainingCard(sessionsLast8Weeks, today)
-  const nutritionCard = resolveNutritionCard(
-    todayRow
-      ? {
-          kcalActual: todayRow.kcalActual ?? null,
-          targetKcal: thisWeekRow?.targetKcal ?? null,
-        }
-      : null,
-    thisWeekRow ? { targetKcal: thisWeekRow.targetKcal ?? null } : null
-  )
-  const progressCard = resolveProgressCard(weightSeries)
-  const statsCard = resolveStatsCard(level, totalXp)
+  const thisWeekRow = measurementsRows.find((m) => m.weekStart === thisWeekStart) ?? null
+  const todayRow = todayNutrition.find((d) => d.date === todayDate) ?? null
   const weekPeekDays = resolveWeekPeek(sessionsLast8Weeks, today)
+
+  const sideQuests: SideQuest[] = [
+    {
+      key: 'nutrition',
+      label: 'Zapsat jídlo',
+      detail: todayRow?.kcalActual
+        ? `${nf.format(todayRow.kcalActual)} kcal zapsáno`
+        : 'Kalorie a bílkoviny za dnešek',
+      xp: XP_DELTAS.nutrition_logged,
+      done: todayRow != null,
+      href: '/nutrition',
+    },
+    {
+      key: 'weigh',
+      label: 'Týdenní měření',
+      detail: thisWeekRow?.weightKg
+        ? `${String(thisWeekRow.weightKg).replace('.', ',')} kg tento týden`
+        : 'Váha a míry za tento týden',
+      xp: XP_DELTAS.measurement_added,
+      done: thisWeekRow?.weightKg != null,
+      href: '/progress',
+    },
+    {
+      key: 'photo',
+      label: 'Fotka proměny',
+      detail: lastPhotoAt
+        ? `Naposledy ${new Date(`${lastPhotoAt}T00:00:00Z`).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'numeric' })}`
+        : 'Stejná póza, stejné světlo',
+      xp: XP_DELTAS.photo_uploaded,
+      done: lastPhotoAt != null && lastPhotoAt >= thisWeekStart,
+      href: '/progress/photos',
+    },
+  ]
+  const sideDone = sideQuests.filter((q) => q.done).length
 
   return (
     <Container size="md">
-      <Stack gap={6} className="py-4">
-        <StatusWindow
+      <Stack gap={6} className="py-2">
+        <PlayerHero
           level={level}
-          currentXp={progress.current}
-          xpToLevel={progress.max}
-          xpForNext={progress.max - progress.current}
           tier={tierMeta.tier}
           tierName={tierMeta.name}
-          tierColor={tierMeta.color}
-          streak={streak}
+          currentXp={progress.current}
+          maxXp={progress.max}
+          xpForNext={progress.max - progress.current}
+          dayCount={daysSince(userRow?.startedAt ?? null, today)}
+          sessionsTotal={lifetime.sessions}
         />
-        <TodayQuest quest={quest} />
-        <TelemetryRow
-          streak={streak}
-          balanceXp={rewardsBalance.balanceXp}
-          weekDone={weekPeekDays.filter((d) => d.status === 'workout').length}
-          weekTarget={sortedPlans.length > 0 ? sortedPlans.length : null}
-        />
+        <QuestCard quest={quest} objectives={objectives} streak={streak} />
+        <section>
+          <RegionHeader meta={`${sideDone} / ${sideQuests.length}`}>Vedlejší questy</RegionHeader>
+          <SideQuests items={sideQuests} />
+        </section>
         <TodaysChecksCard dailyHabits={dailyHabits} />
         <section>
-          <RegionHeader>Oblasti života</RegionHeader>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <LifeAreaCard
-              label="TRÉNINK"
-              value={trainingCard.value}
-              secondary={trainingCard.secondary}
-              visual={trainingCard.visual}
-              empty={trainingCard.empty}
-              href="/training"
-            />
-            <LifeAreaCard
-              label="VÝŽIVA"
-              value={nutritionCard.value}
-              secondary={nutritionCard.secondary}
-              visual={nutritionCard.visual}
-              empty={nutritionCard.empty}
-              href="/nutrition"
-            />
-            <LifeAreaCard
-              label="PROGRES"
-              value={progressCard.value}
-              secondary={progressCard.secondary}
-              visual={progressCard.visual}
-              empty={progressCard.empty}
-              href="/progress"
-            />
-            <LifeAreaCard
-              label="STATISTIKY"
-              value={statsCard.value}
-              secondary={statsCard.secondary}
-              visual={statsCard.visual}
-              empty={statsCard.empty}
-              href="/stats"
-            />
-          </div>
+          <RegionHeader>Stav</RegionHeader>
+          <TelemetryRow
+            streak={streak}
+            balanceXp={rewardsBalance.balanceXp}
+            weekDone={weekPeekDays.filter((d) => d.status === 'workout').length}
+            weekTarget={sortedPlans.length > 0 ? sortedPlans.length : null}
+          />
         </section>
         <section>
-          <RegionHeader>Objem svalů</RegionHeader>
-          <MuscleWidget data={heatmapData.muscles} maxVolume={heatmapData.maxVolume} />
-        </section>
-        <section>
-          <RegionHeader>Tento týden</RegionHeader>
+          <RegionHeader>Týden</RegionHeader>
           <WeekPeek days={weekPeekDays} />
         </section>
         {stagnation.length > 0 && <StagnationWarning items={stagnation} />}

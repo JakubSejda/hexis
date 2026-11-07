@@ -3,28 +3,24 @@ import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 
 /**
- * HUD grammar guard (Reforge R7). The retired `primary` token and the dead
- * radius ladder fail SILENTLY — Tailwind simply emits no rule — so a
- * regression looks like slightly-wrong styling instead of an error. These
- * selectors are the only thing that makes it loud.
+ * Shape grammar guard (redesign D, 2026-11). Retired tokens and off-scale
+ * radii fail SILENTLY — Tailwind simply emits no rule, or a radius that is
+ * not part of the system — so these selectors are what makes them loud.
  *
  * Shared array rather than its own config block: ESLint REPLACES a rule's
  * options when two blocks configure the same rule for the same file, so a
  * standalone block would quietly disable the P2 form-control selectors.
+ * Covered by src/tests/lint/hud-grammar-guard.test.ts.
  */
 const PRIMARY_TOKEN_MSG =
-  'The `primary` colour token was retired in R7. Use `system` (cyan = system/info), `accent` (amber = action/XP) or `success` (emerald = semantic success only).'
+  'The `primary` colour token was retired in R7. Use `system` (blue = world/info), `accent` (action/XP) or `success` (semantic success only).'
 const RADIUS_MSG =
-  'The radius ladder died with Reforge: use the `hud-clip` / `hud-clip-sm` plate clips (or the Card primitive).'
-const CONTROL_SCALE_MSG =
-  'Control scale (2026-09-14): displays (inputs, cells, rows) are square, chassis (buttons, pills, menus) uses `hud-clip-sm`, lenses (avatars, dots) use `hud-hex`.'
+  'Shape scale (redesign D): use `rounded-card` (plates, sheets), `rounded-control` (rows, inputs, chips), `rounded-tick` (checkboxes) or `rounded-full` (buttons, pills, dots).'
+const HUD_CLIP_MSG =
+  'The HUD plate clips died with redesign D: use `rounded-card` / `rounded-control` (or the Card primitive).'
 
-/**
- * Directional arm added in the WIG audit (W3). The R7 regex matched
- * `rounded-2xl` but not `rounded-t-2xl`, so `BottomSheet` kept a pre-Reforge
- * radius through the very slice meant to remove them. Covered by
- * src/tests/lint/hud-grammar-guard.test.ts.
- */
+const RADIUS_LADDER =
+  '\\brounded(-(t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee))?(-(none|xs|sm|md|lg|xl|2xl|3xl|4xl))?(?![-\\w])'
 
 const hudGrammarSelectors = [
   {
@@ -36,26 +32,10 @@ const hudGrammarSelectors = [
       'TemplateElement[value.raw=/\\b(bg|text|border|ring|from|to|via|fill|stroke)-primary\\b/]',
     message: PRIMARY_TOKEN_MSG,
   },
-  {
-    selector: 'Literal[value=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
-    message: RADIUS_MSG,
-  },
-  {
-    selector:
-      'TemplateElement[value.raw=/\\brounded-((t|b|l|r|tl|tr|bl|br|s|e|ss|se|es|ee)-)?(lg|xl|2xl|3xl)\\b/]',
-    message: RADIUS_MSG,
-  },
-  // Control scale — complete since the tier-emblem slice. No radius of any
-  // kind survives in src: displays are square, chassis is clipped, lenses are
-  // hexagons.
-  {
-    selector: 'Literal[value=/\\brounded(-(sm|md|full))?(?!-)/]',
-    message: CONTROL_SCALE_MSG,
-  },
-  {
-    selector: 'TemplateElement[value.raw=/\\brounded(-(sm|md|full))?(?!-)/]',
-    message: CONTROL_SCALE_MSG,
-  },
+  { selector: `Literal[value=/${RADIUS_LADDER}/]`, message: RADIUS_MSG },
+  { selector: `TemplateElement[value.raw=/${RADIUS_LADDER}/]`, message: RADIUS_MSG },
+  { selector: 'Literal[value=/\\bhud-(clip|sheet)/]', message: HUD_CLIP_MSG },
+  { selector: 'TemplateElement[value.raw=/\\bhud-(clip|sheet)/]', message: HUD_CLIP_MSG },
 ]
 
 const eslintConfig = defineConfig([

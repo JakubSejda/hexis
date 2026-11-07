@@ -88,7 +88,7 @@ export async function MuscleRankSection({ userId }: Props) {
         {(['S', 'A', 'B', 'C', 'D'] as const).map((r) => `${summary.counts[r]}× ${r}`).join(' · ')}
       </div>
       <Card>
-        <h4 className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">Doplň</h4>
+        <h4 className="text-muted mb-2 text-xs font-semibold tracking-[0.12em] uppercase">Doplň</h4>
         <ul className="space-y-1">
           {summary.weakest3.map(({ slug, name, rank }) => (
             <li key={slug} className="flex items-center justify-between text-sm">

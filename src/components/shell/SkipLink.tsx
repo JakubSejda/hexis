@@ -7,7 +7,7 @@ export function SkipLink() {
   return (
     <a
       href="#main"
-      className="hud-clip-sm focus-visible:bg-system focus-visible:text-background sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:px-4 focus-visible:py-2 focus-visible:font-mono focus-visible:text-xs focus-visible:tracking-[0.2em] focus-visible:uppercase"
+      className="rounded-control focus-visible:bg-system focus-visible:text-background sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:px-4 focus-visible:py-2 focus-visible:text-xs focus-visible:font-semibold focus-visible:tracking-[0.12em] focus-visible:uppercase"
     >
       Přeskočit na obsah
     </a>

@@ -1,7 +1,7 @@
 export type Quest =
   | { kind: 'active'; sessionId: number; planName: string; completed: number; total: number }
   | { kind: 'rest'; nextPlanName: string | null }
-  | { kind: 'scheduled'; planName: string; exerciseCount: number }
+  | { kind: 'scheduled'; planId: number; planName: string; exerciseCount: number }
   | { kind: 'no-plan' }
 
 export type Plan = { id: number; name: string; order: number }
@@ -52,6 +52,7 @@ export function resolveTodayQuest(input: Input): Quest {
   if (!next) return { kind: 'no-plan' }
   return {
     kind: 'scheduled',
+    planId: next.id,
     planName: next.name,
     exerciseCount: exerciseCounts.get(next.id) ?? 0,
   }

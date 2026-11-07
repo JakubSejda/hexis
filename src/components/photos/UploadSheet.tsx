@@ -71,7 +71,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
       resetForm()
       onUploaded()
     } catch {
-      toast.show('Upload selhal', 'error')
+      toast.show('Nahrání selhalo', 'error')
     } finally {
       setUploading(false)
     }
@@ -108,7 +108,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
             alt="Náhled nahrávané fotky"
             width={192}
             height={192}
-            className="hud-clip mx-auto h-48 w-auto object-contain"
+            className="rounded-card mx-auto h-48 w-auto object-contain"
           />
         ) : null}
         <div className="flex gap-2">
@@ -117,7 +117,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
               key={p.value}
               onClick={() => setPose(p.value)}
               className={
-                'hud-clip-sm flex-1 px-2 py-1.5 text-sm transition-colors ' +
+                'rounded-control flex-1 px-2 py-1.5 text-sm transition-colors ' +
                 (pose === p.value
                   ? 'bg-system text-background font-semibold'
                   : 'bg-border text-muted')

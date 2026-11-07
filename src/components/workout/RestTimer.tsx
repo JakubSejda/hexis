@@ -51,40 +51,46 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
   const remaining = state ? remainingMs(state) : 0
   const mm = String(Math.floor(remaining / 60000)).padStart(2, '0')
   const ss = String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0')
-  // Hexagon ring drains with remaining time (pathLength trick — see prototype B).
+  // Ring drains with remaining time (pathLength trick).
   const ratio = state && state.durationMs > 0 ? remaining / state.durationMs : 0
 
   return (
-    <div className="bg-surface-raised border-border hud-clip-sm border p-3 text-center tabular-nums">
+    <div className="bg-surface-raised rounded-control p-3 tabular-nums">
       {state ? (
-        <div className="flex items-center justify-center gap-4">
-          <span className="relative inline-flex h-20 w-20 items-center justify-center">
-            <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
-              <polygon
-                points="50,4 90,27 90,73 50,96 10,73 10,27"
+        <div className="flex items-center gap-4">
+          <span className="relative inline-flex size-16 shrink-0 items-center justify-center">
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute inset-0 h-full w-full -rotate-90"
+              aria-hidden
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="44"
                 fill="none"
-                stroke="#1e293b"
-                strokeWidth="4"
+                className="stroke-border"
+                strokeWidth="8"
               />
-              <polygon
-                points="50,4 90,27 90,73 50,96 10,73 10,27"
+              <circle
+                cx="50"
+                cy="50"
+                r="44"
                 fill="none"
-                stroke="#22d3ee"
-                strokeWidth="4"
+                className="stroke-accent transition-[stroke-dashoffset] duration-1000 ease-linear"
+                strokeWidth="8"
                 pathLength={100}
                 strokeDasharray={100}
                 strokeDashoffset={100 - ratio * 100}
-                strokeLinecap="square"
+                strokeLinecap="round"
               />
             </svg>
-            <span className="text-system relative font-mono text-lg font-bold">
+            <span className="font-display relative text-sm font-black">
               {mm}:{ss}
             </span>
           </span>
           <div className="flex flex-col items-start gap-1">
-            <span className="text-muted font-mono text-xs tracking-[0.2em] uppercase">
-              Odpočinek
-            </span>
+            <span className="font-display text-sm font-black uppercase">Pauza</span>
             <Button
               variant="ghost"
               size="sm"
@@ -99,11 +105,11 @@ export function RestTimer({ defaultDurationSec }: { defaultDurationSec: number }
         <Button
           variant="ghost"
           size="sm"
-          className="text-system"
+          className="text-system w-full"
           iconLeft={<Play size={14} aria-hidden />}
           onClick={() => restTimerStore.start(defaultDurationSec)}
         >
-          Spustit rest ({defaultDurationSec} s)
+          Spustit pauzu ({defaultDurationSec} s)
         </Button>
       )}
     </div>

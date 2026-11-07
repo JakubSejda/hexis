@@ -59,7 +59,7 @@ export function HexEmblem({ level, tierColor, size = 120, className, label, aria
         fill="#e2f1f8"
         fontSize="30"
         fontWeight="800"
-        fontFamily="var(--font-mono)"
+        fontFamily="var(--font-display)"
       >
         {label ?? level}
       </text>

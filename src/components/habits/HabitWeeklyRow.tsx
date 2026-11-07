@@ -24,16 +24,16 @@ export function HabitWeeklyRow({ habit, onCheck }: Props) {
   const pct = Math.min(100, Math.round((habit.completedThisWeek / habit.weeklyTarget) * 100))
 
   return (
-    <div data-habit-row data-habit-id={habit.id} className="hud-clip-sm bg-border p-px">
-      <div className="hud-clip-sm bg-surface space-y-2 px-3 py-2.5">
+    <div data-habit-row data-habit-id={habit.id} className="rounded-control bg-border p-px">
+      <div className="rounded-control bg-surface space-y-2 px-3 py-2.5">
         <div className="flex items-center gap-3">
           <span className="text-foreground min-w-0 flex-1 truncate text-sm font-medium">
             {habit.name}
           </span>
-          <span className="hud-clip-sm text-muted bg-surface-raised px-2 py-0.5 font-mono text-xs">
+          <span className="rounded-control text-muted bg-surface-raised font-display px-2 py-0.5 text-xs">
             {WEIGHT_LABEL[habit.weight]}
           </span>
-          <span data-streak-count className="text-foreground font-mono text-xs tabular-nums">
+          <span data-streak-count className="text-foreground font-display text-xs tabular-nums">
             🔥 {habit.currentStreak} t
           </span>
         </div>
@@ -42,7 +42,7 @@ export function HabitWeeklyRow({ habit, onCheck }: Props) {
           <div className="bg-surface-raised h-2 flex-1 overflow-hidden">
             <div data-progress-fill className="bg-system h-full" style={{ width: `${pct}%` }} />
           </div>
-          <span className="text-muted font-mono text-xs tabular-nums">
+          <span className="text-muted font-display text-xs tabular-nums">
             {habit.completedThisWeek}/{habit.weeklyTarget} tento týden
           </span>
           <Button

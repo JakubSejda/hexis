@@ -26,7 +26,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`hud-clip-sm pointer-events-auto px-4 py-2 text-sm shadow-lg ${
+            className={`rounded-control pointer-events-auto px-4 py-2 text-sm shadow-lg ${
               t.tone === 'success'
                 ? 'bg-success text-background'
                 : t.tone === 'error'

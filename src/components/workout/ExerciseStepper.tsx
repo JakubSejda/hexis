@@ -61,7 +61,7 @@ function StepperInner({
   if (!current) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-muted text-sm">Žádné cviky v této session.</p>
+        <p className="text-muted text-sm">V tomhle tréninku zatím nejsou žádné cviky.</p>
         <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       </div>
     )
@@ -70,22 +70,26 @@ function StepperInner({
   return (
     <div className="flex flex-col gap-4">
       <header className="animate-hud-power-on">
-        <div className="text-system flex items-center justify-between font-mono text-xs tracking-[0.2em] uppercase">
-          <span>Mise aktivní</span>
+        <div className="text-muted flex items-center justify-between text-sm">
           <span>
-            Cvik {String(idx + 1).padStart(2, '0')}/{String(exercises.length).padStart(2, '0')}
+            Quest <b className="text-foreground">aktivní</b>
+            {planName ? ` · ${planName.split(' — ')[0]}` : ''}
+          </span>
+          <span className="font-display text-foreground font-black">
+            {idx + 1}/{exercises.length}
           </span>
         </div>
-        {planName ? (
-          <div className="text-foreground mt-1 text-xl font-black tracking-tight uppercase italic">
-            {planName}
-          </div>
-        ) : null}
-        <div className="mt-2 flex gap-1" aria-hidden>
+        <div className="mt-3 flex gap-1" aria-hidden>
           {exercises.map((e, i) => (
             <span
               key={e.exerciseId}
-              className={`h-1 flex-1 ${i <= idx ? 'bg-system' : 'bg-border'}`}
+              className={`h-1 flex-1 rounded-full ${
+                i === idx
+                  ? 'bg-accent'
+                  : e.sets.length >= e.targetSets && e.targetSets > 0
+                    ? 'bg-success'
+                    : 'bg-surface-raised'
+              }`}
             />
           ))}
         </div>
@@ -112,16 +116,16 @@ function StepperInner({
       />
       {idx === exercises.length - 1 ? (
         <Button variant="success" size="lg" onClick={onFinish}>
-          Dokončit trénink
+          Dokončit quest
         </Button>
       ) : null}
       <div className="flex gap-2">
         <Button variant="outline" size="md" className="flex-1" onClick={() => setSkipOpen(true)}>
-          Přeskočit cvik
+          Přeskočit
         </Button>
         {idx !== exercises.length - 1 ? (
           <Button variant="outline" size="md" className="flex-1" onClick={onFinish}>
-            Dokončit trénink
+            Dokončit
           </Button>
         ) : null}
       </div>

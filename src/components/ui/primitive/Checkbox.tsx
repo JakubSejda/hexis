@@ -26,12 +26,12 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>(function Checkbox(
         className={cn('peer absolute inset-0 z-10 size-5 cursor-pointer opacity-0', className)}
         {...rest}
       />
-      {/* hex edge */}
-      <span aria-hidden className="hud-hex bg-border absolute inset-0" />
-      {/* hex body — cyan when checked */}
+      {/* edge */}
+      <span aria-hidden className="rounded-tick bg-border absolute inset-0" />
+      {/* body — green when checked */}
       <span
         aria-hidden
-        className="hud-hex bg-surface peer-checked:bg-system peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
+        className="rounded-tick bg-surface peer-checked:bg-success peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
       />
       {/* tick */}
       <svg

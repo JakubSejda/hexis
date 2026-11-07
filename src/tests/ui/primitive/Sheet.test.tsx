@@ -58,7 +58,7 @@ describe('Sheet', () => {
     expect(onOpenChange).not.toHaveBeenCalled()
   })
 
-  it('is a two-layer HUD plate, like every other surface', () => {
+  it('is a two-layer plate: hairline edge + surface', () => {
     open()
     const dialog = screen.getByRole('dialog')
     expect(dialog).toHaveClass('bg-border')
@@ -66,19 +66,20 @@ describe('Sheet', () => {
     expect(inner).toHaveClass('bg-surface')
   })
 
-  it('carries the responsive sheet clip, never a radius', () => {
+  it('docks with a top radius on phones and a full card radius from md up', () => {
     open()
     const dialog = screen.getByRole('dialog')
-    expect(dialog).toHaveClass('hud-sheet')
-    expect(dialog.className).not.toMatch(/rounded-/)
+    expect(dialog).toHaveClass('rounded-t-card')
+    expect(dialog).toHaveClass('md:rounded-card')
+    expect(dialog.className).not.toMatch(/hud-sheet/)
   })
 
-  it('titles with a mono eyebrow, not a card heading', () => {
+  it('titles with the display face', () => {
     open()
     const title = screen.getByText('Upravit sérii')
-    expect(title).toHaveClass('font-mono')
+    expect(title).toHaveClass('font-display')
     expect(title).toHaveClass('uppercase')
-    expect(title.className).not.toMatch(/font-semibold/)
+    expect(title).not.toHaveClass('font-mono')
   })
 
   it('docks to the bottom edge on phones and centres from md up', () => {

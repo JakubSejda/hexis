@@ -37,8 +37,8 @@ describe('Pill', () => {
       </Pill>
     )
     const el = screen.getByTestId('p')
-    expect(el).toHaveClass('bg-accent-soft')
-    expect(el).toHaveClass('text-accent')
+    expect(el).toHaveClass('bg-warning/15')
+    expect(el).toHaveClass('text-warning')
   })
 
   it('applies danger variant', () => {
@@ -48,8 +48,8 @@ describe('Pill', () => {
       </Pill>
     )
     const el = screen.getByTestId('p')
-    expect(el).toHaveClass('bg-danger')
-    expect(el).toHaveClass('text-background')
+    expect(el).toHaveClass('bg-danger/15')
+    expect(el).toHaveClass('text-danger')
   })
 
   it('applies accent variant', () => {
@@ -60,17 +60,17 @@ describe('Pill', () => {
     )
     const el = screen.getByTestId('p')
     expect(el).toHaveClass('bg-accent')
-    expect(el).toHaveClass('text-background')
+    expect(el).toHaveClass('text-accent-foreground')
   })
 
-  it('applies size=sm by default (text-xs + h-5)', () => {
+  it('applies size=sm by default (text-xs + h-6)', () => {
     render(<Pill data-testid="p">x</Pill>)
     const el = screen.getByTestId('p')
     expect(el).toHaveClass('text-xs')
-    expect(el).toHaveClass('h-5')
+    expect(el).toHaveClass('h-6')
   })
 
-  it('applies size=md (text-sm + h-6)', () => {
+  it('applies size=md (text-sm + h-8)', () => {
     render(
       <Pill size="md" data-testid="p">
         x
@@ -78,12 +78,12 @@ describe('Pill', () => {
     )
     const el = screen.getByTestId('p')
     expect(el).toHaveClass('text-sm')
-    expect(el).toHaveClass('h-6')
+    expect(el).toHaveClass('h-8')
   })
 
-  it('uses the HUD clipped-corner shape', () => {
+  it('is a pill — full radius', () => {
     render(<Pill data-testid="p">x</Pill>)
-    expect(screen.getByTestId('p')).toHaveClass('hud-clip-sm')
+    expect(screen.getByTestId('p')).toHaveClass('rounded-full')
   })
 
   it('merges user className via cn()', () => {

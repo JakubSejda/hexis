@@ -27,7 +27,7 @@ type Props = {
 export function SegmentedControl({ name, label, options, value, onChange, className }: Props) {
   const id = useId()
   return (
-    <fieldset className={cn('hud-clip-sm bg-surface flex gap-1 p-1', className)}>
+    <fieldset className={cn('rounded-control bg-surface flex gap-1 p-1', className)}>
       <legend className="sr-only">{label}</legend>
       {options.map((o) => {
         const inputId = `${id}-${o.value}`
@@ -37,7 +37,7 @@ export function SegmentedControl({ name, label, options, value, onChange, classN
             key={o.value}
             htmlFor={inputId}
             className={cn(
-              'hud-clip-sm flex min-h-11 flex-1 cursor-pointer items-center justify-center px-3 text-center font-mono text-sm transition-colors',
+              'rounded-control font-display flex min-h-11 flex-1 cursor-pointer items-center justify-center px-3 text-center text-sm transition-colors',
               'has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2',
               active
                 ? 'bg-system text-background font-semibold'

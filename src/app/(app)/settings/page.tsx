@@ -1,12 +1,13 @@
 import Link from 'next/link'
-import { Container, Stack, Card, Heading } from '@/components/ui'
+import { Container, Stack, Card } from '@/components/ui'
+import { AccentSwitch } from '@/components/settings/AccentSwitch'
 import { Scale, Utensils, Download, UserCircle2 } from 'lucide-react'
 
 const ITEMS = [
   {
     href: '/settings/profile',
     label: 'Profil',
-    hint: 'Vitals, cíl, datum startu',
+    hint: 'Výška, cíl, datum startu',
     icon: UserCircle2,
   },
   {
@@ -23,11 +24,17 @@ export default function SettingsIndexPage() {
   return (
     <Container>
       <Stack gap={4} className="py-6">
-        <Heading level={2}>Nastavení</Heading>
+        <Card padding="md">
+          <div className="mb-3">
+            <div className="font-semibold">Vzhled</div>
+            <div className="text-muted text-sm">Barva tlačítek, XP a aktivní navigace</div>
+          </div>
+          <AccentSwitch />
+        </Card>
         <Stack gap={3}>
           {ITEMS.map(({ href, label, hint, icon: Icon }) => (
             <Link key={href} href={href} className="block">
-              <Card padding="md" className="hover:border-accent transition-colors">
+              <Card padding="md" variant="interactive">
                 <div className="flex items-center gap-4">
                   <Icon className="text-accent h-6 w-6" aria-hidden />
                   <div className="flex-1">

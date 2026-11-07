@@ -115,9 +115,22 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
 
   if (initialHabits.length === 0 && initialArchived.length === 0) {
     return (
-      <div className="space-y-4 py-12 text-center">
-        <p className="text-muted text-sm">Zatím nemáš žádné návyky.</p>
-        <Button onClick={() => setCreating(true)}>+ Založ první návyk</Button>
+      <div className="rounded-card border-border bg-surface space-y-4 border px-5 py-8 text-center">
+        <Heading level={2} className="text-2xl">
+          Hexis = návyky
+        </Heading>
+        <p className="text-muted text-sm">
+          Malé věci, které děláš každý den, z tebe udělají jiného hráče. Za každou sérii dní
+          dostaneš XP.
+        </p>
+        <ul className="text-muted-strong mx-auto grid max-w-xs gap-1.5 text-left text-sm">
+          <li className="rounded-control bg-surface-raised px-3 py-2">Vypít 2 l vody</li>
+          <li className="rounded-control bg-surface-raised px-3 py-2">10 000 kroků</li>
+          <li className="rounded-control bg-surface-raised px-3 py-2">Spánek 7 hodin</li>
+        </ul>
+        <Button size="lg" onClick={() => setCreating(true)}>
+          Založit první návyk
+        </Button>
         <HabitDialog
           open={creating}
           mode="create"
@@ -131,7 +144,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button onClick={() => setCreating(true)}>+ Nový</Button>
+        <Button onClick={() => setCreating(true)}>+ Nový návyk</Button>
       </div>
 
       {daily.length > 0 && (
@@ -149,7 +162,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
               />
             ))}
           </div>
-          <p className="text-muted text-xs">Tap = check, drž = vrátit zpět.</p>
+          <p className="text-muted text-xs">Klepnutím odškrtneš, podržením vrátíš zpět.</p>
         </section>
       )}
 
@@ -184,7 +197,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
             type="button"
             onClick={() => setArchiveOpen((s) => !s)}
             aria-expanded={archiveOpen}
-            className="text-muted flex min-h-11 w-full items-center justify-between font-mono text-xs tracking-[0.2em] uppercase"
+            className="text-muted flex min-h-11 w-full items-center justify-between text-xs font-semibold tracking-[0.12em] uppercase"
           >
             <span>Archiv ({initialArchived.length})</span>
             <span aria-hidden="true">{archiveOpen ? '▲' : '▼'}</span>
@@ -192,10 +205,10 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
           {archiveOpen && (
             <div className="space-y-2 opacity-60">
               {initialArchived.map((h) => (
-                <div key={h.id} data-archived-row className="hud-clip-sm bg-border p-px">
-                  <div className="hud-clip-sm bg-surface flex items-center gap-3 px-3 py-2.5">
+                <div key={h.id} data-archived-row className="rounded-control bg-border p-px">
+                  <div className="rounded-control bg-surface flex items-center gap-3 px-3 py-2.5">
                     <span className="flex-1 text-sm">{h.name}</span>
-                    <span className="text-muted font-mono text-xs">🔥 {h.currentStreak}</span>
+                    <span className="text-muted font-display text-xs">🔥 {h.currentStreak}</span>
                   </div>
                 </div>
               ))}

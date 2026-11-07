@@ -11,7 +11,7 @@ export function StagnationList({ items }: Props) {
   if (items.length === 0) return null
 
   return (
-    <div className="hud-clip border-accent bg-accent/5 border-l-2 p-3">
+    <div className="rounded-card border-accent bg-accent/5 border-l-2 p-3">
       <Heading level={3} className="text-accent mb-2 text-sm">
         Stagnace
       </Heading>

@@ -1,9 +1,8 @@
 import { cn } from '../utils/cn'
 
 /**
- * HUD grammar (Reforge R7): a non-XP bar reports system state, so `system`
- * (cyan) is the default. `accent` (amber) stays reserved for action/XP —
- * `variant="xp"` forces it. Emerald is semantic success only.
+ * D grammar: a non-XP bar reports system state, so `system` is the default.
+ * `variant="xp"` is the accent gradient with a glow. Green is semantic success only.
  */
 type Tone = 'system' | 'accent' | 'success' | 'warn' | 'danger' | 'muted'
 type Variant = 'default' | 'xp'
@@ -18,16 +17,15 @@ type Props = {
 }
 
 const TONE: Record<Tone, string> = {
-  system: '#22d3ee',
-  accent: '#f59e0b',
-  success: '#34d399',
-  warn: '#f59e0b',
-  danger: '#ef4444',
-  muted: '#7c8da6',
+  system: 'bg-system',
+  accent: 'bg-accent',
+  success: 'bg-success',
+  warn: 'bg-warning',
+  danger: 'bg-danger',
+  muted: 'bg-muted',
 }
 
-const XP_COLOR = '#f59e0b'
-const XP_GLOW = 'shadow-[0_0_8px_rgba(245,158,11,0.4)]'
+const XP_CLASS = 'from-accent-deep to-accent bg-linear-to-r shadow-glow'
 
 export function ProgressBar({
   value,
@@ -38,21 +36,18 @@ export function ProgressBar({
   className,
 }: Props) {
   const pct = value != null && max != null && max > 0 ? Math.min((value / max) * 100, 100) : 0
-  const fillColor = variant === 'xp' ? XP_COLOR : TONE[tone]
+  const fillClass = variant === 'xp' ? XP_CLASS : TONE[tone]
   return (
     <div
-      className={cn('bg-border hud-clip-sm overflow-hidden', className)}
+      className={cn('bg-surface-raised overflow-hidden rounded-full', className)}
       style={{ height }}
       role="progressbar"
       aria-valuenow={value ?? undefined}
       aria-valuemax={max ?? undefined}
     >
       <div
-        className={cn(
-          'animate-hud-charge h-full transition-[width] duration-200',
-          variant === 'xp' && XP_GLOW
-        )}
-        style={{ width: `${pct}%`, backgroundColor: fillColor }}
+        className={cn('h-full rounded-full transition-[width] duration-500 ease-out', fillClass)}
+        style={{ width: `${pct}%` }}
       />
     </div>
   )

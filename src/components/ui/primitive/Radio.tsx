@@ -25,14 +25,14 @@ export const Radio = forwardRef<HTMLInputElement, Props>(function Radio(
         className={cn('peer absolute inset-0 z-10 size-4 cursor-pointer opacity-0', className)}
         {...rest}
       />
-      <span aria-hidden className="hud-hex bg-border absolute inset-0" />
+      <span aria-hidden className="bg-border absolute inset-0 rounded-full" />
       <span
         aria-hidden
-        className="hud-hex bg-surface peer-focus-visible:bg-surface-raised absolute inset-[2px] transition-colors"
+        className="bg-surface peer-focus-visible:bg-surface-raised absolute inset-[2px] rounded-full transition-colors"
       />
       <span
         aria-hidden
-        className="hud-hex bg-system invisible absolute inset-[5px] peer-checked:visible"
+        className="bg-accent invisible absolute inset-[5px] rounded-full peer-checked:visible"
       />
     </span>
   )
