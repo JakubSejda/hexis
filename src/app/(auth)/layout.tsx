@@ -8,10 +8,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <main id="main" className={SHELL}>
       <Image
-        src="/images/hero-player.webp"
+        src="/images/hero-player.svg"
         alt=""
         fill
         priority
+        unoptimized
         sizes="100vw"
         className="hero-art object-cover object-[center_15%] opacity-80 md:opacity-50"
       />

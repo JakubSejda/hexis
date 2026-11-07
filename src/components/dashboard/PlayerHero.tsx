@@ -40,10 +40,11 @@ export function PlayerHero({
       className="animate-hud-power-on md:rounded-card relative -mx-4 -mt-2 flex h-80 flex-col justify-end px-4 pb-4 md:mx-0 md:mt-0 md:overflow-hidden"
     >
       <Image
-        src="/images/hero-player.webp"
+        src="/images/hero-player.svg"
         alt=""
         fill
         priority
+        unoptimized
         sizes="(min-width: 768px) 640px, 100vw"
         className="hero-art object-cover object-[center_22%]"
       />

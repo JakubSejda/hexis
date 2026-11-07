@@ -20,5 +20,5 @@ as the rank / tier lens (`RankLens`, avatars). ESLint enforces this (`eslint.con
 Type: `font-display` (Archivo, width 125 %, black, uppercase) for headings and big numbers;
 Geist Sans for reading. No tracked monospace labels.
 
-Character art in `public/images/` is AI-generated placeholder art (Pollinations) until a
-commissioned or licensed illustration replaces it.
+Character art in `public/images/*.svg` is original vector art drawn for Hexis (no third-party
+licence). The prototype's raster images in `img/` were AI placeholders and are not shipped.

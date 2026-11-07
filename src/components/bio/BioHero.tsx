@@ -22,10 +22,11 @@ export function BioHero({ name, tier, tierName, level, startedAt, today }: Props
     <div className="rounded-card border-border bg-surface relative overflow-hidden border">
       <div className="relative h-72">
         <Image
-          src="/images/player-portrait.webp"
+          src="/images/player-portrait.svg"
           alt=""
           fill
           priority
+          unoptimized
           sizes="(min-width: 768px) 640px, 100vw"
           className="object-cover object-[center_20%]"
         />

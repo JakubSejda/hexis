@@ -12,6 +12,11 @@ import { ageFromBirthDate } from '@/lib/bio-age'
 import { Container, Stack } from '@/components/ui'
 import { RegionHeader } from '@/components/dashboard/RegionHeader'
 import { ProfileAreaLinks } from '@/components/shell'
+import { headers } from 'next/headers'
+import { AttributeBars } from '@/components/dashboard/AttributeTiles'
+import { computeAttributes } from '@/lib/attributes'
+import { fetchAttributeInputs } from '@/lib/queries/attributes'
+import { resolveUserToday } from '@/lib/habits/tz'
 import {
   BioHero,
   VitalsStrip,
@@ -37,6 +42,8 @@ export default async function BioPage() {
   ])
 
   const level = xpToLevel(totalXp)
+  const userToday = resolveUserToday((await headers()).get('x-user-tz-offset'))
+  const attributes = computeAttributes(await fetchAttributeInputs(db, user.id, today, userToday))
   const tier = levelToTier(level)
   const tierMeta = levelToTierMeta(level)
   const age = ageFromBirthDate(profile?.birthDate ?? null, today)
@@ -61,6 +68,13 @@ export default async function BioPage() {
           startedAt={profile?.startedAt ?? null}
           today={today}
         />
+
+        <section>
+          <RegionHeader meta="rostou s tím, co zapisuješ">Atributy</RegionHeader>
+          <div className="rounded-card border-border bg-surface border p-4">
+            <AttributeBars attributes={attributes} />
+          </div>
+        </section>
 
         <section>
           <RegionHeader>Údaje</RegionHeader>
