@@ -49,6 +49,13 @@ npm run dev
 
 Otevřít `http://localhost:3000`.
 
+### Windows: po restartu PC / pádu Dockeru
+
+```powershell
+powershell -File scripts/dev-up.ps1   # Docker Desktop -> MySQL -> migrace (opraví i zaseknutý start Dockeru)
+npm run dev
+```
+
 ### Běžné příkazy
 
 ```bash
