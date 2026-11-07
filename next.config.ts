@@ -3,6 +3,8 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   // Minimal self-contained server bundle for the production Docker image.
   output: 'standalone',
+  // Lets a phone on the same Wi-Fi load dev assets, e.g. DEV_ORIGINS=192.168.1.178.
+  allowedDevOrigins: process.env.DEV_ORIGINS?.split(',').filter(Boolean) ?? [],
   async redirects() {
     return [
       { source: '/workout', destination: '/training', permanent: true },
