@@ -27,7 +27,7 @@ export function GoalCard({ goalKg, goalText, currentWeightKg, startedWeightKg }:
   return (
     <Card>
       {goalText && <div className="text-foreground text-base">{goalText}</div>}
-      <div className="text-foreground mt-1 font-mono text-2xl font-bold">→ {goalKg} kg</div>
+      <div className="text-foreground font-display mt-1 text-2xl font-bold">→ {goalKg} kg</div>
       <div className="mt-3">
         <div
           role="progressbar"
@@ -38,7 +38,7 @@ export function GoalCard({ goalKg, goalText, currentWeightKg, startedWeightKg }:
         >
           <div className="bg-accent h-full" style={{ width: `${percent}%` }} />
         </div>
-        <div className="text-muted mt-1 flex justify-between font-mono text-xs">
+        <div className="text-muted font-display mt-1 flex justify-between text-xs">
           <span>{startedWeightKg ?? '—'} kg</span>
           <span>{goalKg} kg</span>
         </div>

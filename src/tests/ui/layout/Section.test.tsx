@@ -13,11 +13,11 @@ describe('Section', () => {
     expect(screen.getByTestId('c')).toBeInTheDocument()
   })
 
-  it('renders a region-style header from title with expanded letter-spacing', () => {
+  it('renders a region-style header from title in display caps', () => {
     render(<Section title="Life Areas">x</Section>)
     const header = screen.getByRole('heading', { level: 2 })
-    expect(header).toHaveClass('font-mono')
-    expect(header.className).toMatch(/tracking-/)
+    expect(header).toHaveClass('font-display')
+    expect(header).toHaveClass('uppercase')
     expect(header.className).toMatch(/uppercase/)
     expect(header).toHaveTextContent(/life areas/i)
   })
@@ -36,13 +36,13 @@ describe('Section', () => {
     expect(screen.queryByRole('heading')).toBeNull()
   })
 
-  it('uses region variant by default (font-mono uppercase tracking)', () => {
+  it('uses region variant by default (display caps)', () => {
     render(<Section title="Life Areas">x</Section>)
     const header = screen.getByRole('heading', { level: 2 })
-    expect(header).toHaveClass('font-mono')
-    expect(header.className).toMatch(/tracking-/)
-    expect(header.className).toMatch(/uppercase/)
-    expect(header).not.toHaveClass('text-foreground')
+    expect(header).toHaveClass('font-display')
+    expect(header).toHaveClass('uppercase')
+    expect(header).toHaveClass('font-black')
+    expect(header).not.toHaveClass('font-mono')
   })
 
   it('applies default variant styling when variant="default"', () => {
@@ -55,7 +55,7 @@ describe('Section', () => {
     expect(header).toHaveClass('text-base')
     expect(header).toHaveClass('font-semibold')
     expect(header).toHaveClass('text-foreground')
-    expect(header).not.toHaveClass('font-mono')
+    expect(header).not.toHaveClass('font-display')
     expect(header).not.toHaveClass('uppercase')
   })
 
@@ -66,7 +66,7 @@ describe('Section', () => {
       </Section>
     )
     const header = screen.getByRole('heading', { level: 2 })
-    expect(header).toHaveClass('font-mono')
+    expect(header).toHaveClass('font-display')
     expect(header).toHaveClass('uppercase')
   })
 })

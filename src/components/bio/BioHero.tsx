@@ -21,13 +21,13 @@ export function BioHero({ name, tier, tierName, level, startedAt, today }: Props
         <HexEmblem level={level} tierColor={TIERS[tier - 1]!.color} size={96} />
         <div className="flex flex-1 flex-col gap-1">
           <span className="text-foreground text-xl font-bold">{name ?? 'Hráč'}</span>
-          <span className="text-system font-mono text-xs tracking-[0.2em] uppercase">
+          <span className="text-system text-xs font-semibold tracking-[0.12em] uppercase">
             Level {level} · {tierName}
           </span>
         </div>
         {day !== null && (
           <div className="text-right">
-            <div className="text-foreground font-mono text-3xl font-bold">Day {day}</div>
+            <div className="text-foreground font-display text-3xl font-bold">Day {day}</div>
           </div>
         )}
       </div>

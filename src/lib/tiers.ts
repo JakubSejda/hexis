@@ -16,11 +16,11 @@ export type TierMeta = {
 }
 
 export const TIERS: readonly TierMeta[] = [
-  { tier: 1, name: 'Rookie', levelMin: 1, levelMax: 5, color: '#78350f', accent: '#451a03' },
-  { tier: 2, name: 'Apprentice', levelMin: 6, levelMax: 15, color: '#b45309', accent: '#78350f' },
-  { tier: 3, name: 'Warrior', levelMin: 16, levelMax: 30, color: '#d97706', accent: '#92400e' },
-  { tier: 4, name: 'Beast', levelMin: 31, levelMax: 50, color: '#f59e0b', accent: '#b45309' },
-  { tier: 5, name: 'Titan', levelMin: 51, levelMax: 999, color: '#fbbf24', accent: '#d97706' },
+  { tier: 1, name: 'Nováček', levelMin: 1, levelMax: 5, color: '#78350f', accent: '#451a03' },
+  { tier: 2, name: 'Učeň', levelMin: 6, levelMax: 15, color: '#b45309', accent: '#78350f' },
+  { tier: 3, name: 'Bojovník', levelMin: 16, levelMax: 30, color: '#d97706', accent: '#92400e' },
+  { tier: 4, name: 'Bestie', levelMin: 31, levelMax: 50, color: '#f59e0b', accent: '#b45309' },
+  { tier: 5, name: 'Titán', levelMin: 51, levelMax: 999, color: '#fbbf24', accent: '#d97706' },
 ] as const
 
 export function levelToTier(level: number): Tier {

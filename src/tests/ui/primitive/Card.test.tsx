@@ -3,10 +3,8 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Card } from '@/components/ui'
 
-/** Reforge HUD plate contract: outer element = clipped edge-light layer
- * (hud-clip + p-px + edge color), first child = clipped surface layer
- * that carries bg + padding. data-testid and className land on the outer. */
-const inner = (el: HTMLElement) => el.firstElementChild as HTMLElement
+/** D plate contract: one rounded surface with a hairline edge; bg, padding,
+ * data-testid and className all land on the same element. */
 
 describe('Card', () => {
   it('renders children inside a <div> by default', () => {
@@ -16,32 +14,30 @@ describe('Card', () => {
     expect(el).toHaveTextContent('body')
   })
 
-  it('renders as a HUD plate (clipped edge layer + surface layer)', () => {
+  it('renders as a D plate (card radius, hairline edge, surface)', () => {
     render(<Card data-testid="c">x</Card>)
     const el = screen.getByTestId('c')
-    expect(el).toHaveClass('hud-clip')
-    expect(el).toHaveClass('p-px')
-    expect(el).toHaveClass('bg-border')
-    expect(inner(el)).toHaveClass('hud-clip')
-    expect(inner(el)).toHaveClass('bg-surface')
+    expect(el).toHaveClass('rounded-card', 'border', 'border-border', 'bg-surface')
+    expect(el.className).not.toMatch(/hud-clip/)
   })
 
-  it('edge="system" and edge="accent" recolor the edge layer', () => {
+  it('edge="system" and edge="accent" recolor the hairline', () => {
     const { rerender } = render(
       <Card edge="system" data-testid="c">
         x
       </Card>
     )
-    expect(screen.getByTestId('c')).toHaveClass('bg-system')
+    expect(screen.getByTestId('c').className).toMatch(/border-system/)
     rerender(
       <Card edge="accent" data-testid="c">
         x
       </Card>
     )
-    expect(screen.getByTestId('c')).toHaveClass('bg-accent')
+    expect(screen.getByTestId('c').className).toMatch(/border-accent/)
+    expect(screen.getByTestId('c')).toHaveClass('shadow-glow')
   })
 
-  it('applies interactive variant classes (cyan edge hover + cursor + focus ring)', () => {
+  it('applies interactive variant classes (raised hover + cursor + focus ring)', () => {
     render(
       <Card variant="interactive" data-testid="c">
         x
@@ -49,9 +45,8 @@ describe('Card', () => {
     )
     const el = screen.getByTestId('c')
     expect(el).toHaveClass('cursor-pointer')
-    expect(el.className).toMatch(/hover:bg-system/)
+    expect(el.className).toMatch(/hover:bg-surface-raised/)
     expect(el.className).toMatch(/focus-visible:ring-2/)
-    expect(inner(el).className).toMatch(/group-hover:bg-surface-raised/)
   })
 
   it('applies flush variant (plate, no padding)', () => {
@@ -61,14 +56,26 @@ describe('Card', () => {
       </Card>
     )
     const el = screen.getByTestId('c')
-    expect(el).toHaveClass('hud-clip')
-    expect(inner(el)).not.toHaveClass('p-4')
-    expect(inner(el)).not.toHaveClass('p-2')
+    expect(el).toHaveClass('rounded-card')
+    expect(el.className).not.toMatch(/\bp-\d/)
   })
 
-  it('applies padding=md by default (p-4 on the surface layer)', () => {
+  it.each([
+    ['sm', 'p-3'],
+    ['md', 'p-4'],
+    ['lg', 'p-5'],
+  ] as const)('applies padding=%s (%s)', (padding, cls) => {
+    render(
+      <Card padding={padding} data-testid="c">
+        x
+      </Card>
+    )
+    expect(screen.getByTestId('c')).toHaveClass(cls)
+  })
+
+  it('applies padding=md by default', () => {
     render(<Card data-testid="c">x</Card>)
-    expect(inner(screen.getByTestId('c'))).toHaveClass('p-4')
+    expect(screen.getByTestId('c')).toHaveClass('p-4')
   })
 
   it('applies padding=none (no padding classes)', () => {
@@ -77,28 +84,7 @@ describe('Card', () => {
         x
       </Card>
     )
-    const el = inner(screen.getByTestId('c'))
-    expect(el).not.toHaveClass('p-2')
-    expect(el).not.toHaveClass('p-4')
-    expect(el).not.toHaveClass('p-6')
-  })
-
-  it('applies padding=sm (p-2)', () => {
-    render(
-      <Card padding="sm" data-testid="c">
-        x
-      </Card>
-    )
-    expect(inner(screen.getByTestId('c'))).toHaveClass('p-2')
-  })
-
-  it('applies padding=lg (p-6)', () => {
-    render(
-      <Card padding="lg" data-testid="c">
-        x
-      </Card>
-    )
-    expect(inner(screen.getByTestId('c'))).toHaveClass('p-6')
+    expect(screen.getByTestId('c').className).not.toMatch(/\bp-\d/)
   })
 
   it('renders <a> with href when as="a"', () => {
@@ -121,15 +107,15 @@ describe('Card', () => {
     expect(screen.getByTestId('c').tagName).toBe('BUTTON')
   })
 
-  it('merges user className on the outer element via cn()', () => {
+  it('merges user className via cn(), letting it override the radius', () => {
     render(
-      <Card className="mt-4" data-testid="c">
+      <Card className="rounded-control mt-4" data-testid="c">
         x
       </Card>
     )
     const el = screen.getByTestId('c')
-    expect(el).toHaveClass('mt-4')
-    expect(el).toHaveClass('hud-clip')
+    expect(el).toHaveClass('mt-4', 'rounded-control')
+    expect(el).not.toHaveClass('rounded-card')
   })
 
   it('lets explicit padding override flush default (variant="flush" + padding="md" applies p-4)', () => {
@@ -138,6 +124,6 @@ describe('Card', () => {
         x
       </Card>
     )
-    expect(inner(screen.getByTestId('c'))).toHaveClass('p-4')
+    expect(screen.getByTestId('c')).toHaveClass('p-4')
   })
 })

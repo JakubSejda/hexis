@@ -30,8 +30,8 @@ function Stat({
 }) {
   return (
     <Card padding="sm" className="text-center">
-      <div className={`font-mono text-lg font-bold ${valueClass}`}>{value}</div>
-      <div className="text-muted mt-1 font-mono text-[10px] tracking-[0.2em] uppercase">
+      <div className={`font-display text-lg font-bold ${valueClass}`}>{value}</div>
+      <div className="text-muted mt-1 text-[10px] font-semibold tracking-[0.12em] uppercase">
         {label}
       </div>
     </Card>

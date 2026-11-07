@@ -9,7 +9,10 @@ function Root(props: ComponentProps<typeof TabsPrimitive.Root>) {
 
 function List({ className, ...rest }: ComponentProps<typeof TabsPrimitive.List>) {
   return (
-    <TabsPrimitive.List className={cn('hud-clip bg-surface flex gap-1 p-1', className)} {...rest} />
+    <TabsPrimitive.List
+      className={cn('rounded-card bg-surface flex gap-1 p-1', className)}
+      {...rest}
+    />
   )
 }
 
@@ -17,7 +20,7 @@ function Trigger({ className, ...rest }: ComponentProps<typeof TabsPrimitive.Tri
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'hud-clip-sm text-muted hover:text-foreground focus-visible:ring-ring flex-1 px-3 py-1.5 text-center text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none',
+        'rounded-control text-muted hover:text-foreground focus-visible:ring-ring flex-1 px-3 py-1.5 text-center text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none',
         'data-[state=active]:bg-system data-[state=active]:text-background data-[state=active]:font-semibold',
         className
       )}

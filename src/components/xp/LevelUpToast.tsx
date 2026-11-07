@@ -29,11 +29,13 @@ export function LevelUpToast({ levelAfter, tier, onDismiss }: Props) {
           size={160}
           className="animate-tier-glow"
         />
-        <div className="text-accent font-mono text-xs tracking-[0.3em] uppercase">Level up</div>
+        <div className="text-accent text-xs font-semibold tracking-[0.12em] uppercase">
+          Level up
+        </div>
         <div className="text-foreground text-4xl font-black tracking-tight uppercase italic">
           Level {levelAfter}
         </div>
-        <div className="text-muted-strong font-mono text-sm">
+        <div className="text-muted-strong font-display text-sm">
           L{levelAfter - 1} → L{levelAfter} · {meta.name}
         </div>
       </div>

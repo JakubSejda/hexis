@@ -131,9 +131,9 @@ export function DailyModal({
         {(trackedMacros.includes('carbs') ||
           trackedMacros.includes('fat') ||
           trackedMacros.includes('sugar')) && (
-          <div className="hud-clip bg-border p-px">
-            <div className="hud-clip bg-background p-3">
-              <div className="text-muted mb-2 font-mono text-xs tracking-[0.2em] uppercase">
+          <div className="rounded-card bg-border p-px">
+            <div className="rounded-card bg-background p-3">
+              <div className="text-muted mb-2 text-xs font-semibold tracking-[0.12em] uppercase">
                 Volitelná makra
               </div>
               <div className="grid grid-cols-2 gap-2">

@@ -37,10 +37,10 @@ export function VitalsStrip({ heightCm, age, gender, weightKg }: Props) {
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {slots.map((s) => (
         <Card key={s.label} padding="sm" className={s.empty ? 'opacity-60' : undefined}>
-          <div className="text-muted font-mono text-[11px] tracking-[0.2em] uppercase">
+          <div className="text-muted text-[11px] font-semibold tracking-[0.12em] uppercase">
             {s.label}
           </div>
-          <div className="text-foreground mt-1 font-mono text-lg font-bold">{s.value}</div>
+          <div className="text-foreground font-display mt-1 text-lg font-bold">{s.value}</div>
         </Card>
       ))}
     </div>

@@ -6,13 +6,13 @@ type As = 'h1' | 'h2' | 'h3' | 'div'
 type Variant = 'display' | 'default' | 'region'
 
 const DEFAULT_LEVEL_CLASS: Record<Level, string> = {
-  1: 'text-2xl font-semibold',
-  2: 'text-lg font-semibold',
+  1: 'font-display text-2xl leading-none font-black uppercase',
+  2: 'font-display text-lg leading-tight font-black uppercase',
   3: 'text-base font-semibold',
 }
 
-const DISPLAY_CLASS = 'text-3xl font-black tracking-tight uppercase italic -skew-x-3'
-const REGION_CLASS = 'font-mono text-xs uppercase tracking-[0.2em] text-muted'
+const DISPLAY_CLASS = 'font-display text-4xl leading-[0.95] font-black tracking-tight uppercase'
+const REGION_CLASS = 'font-display text-base font-black text-foreground uppercase'
 
 export type HeadingProps = {
   level: Level

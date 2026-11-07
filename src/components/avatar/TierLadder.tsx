@@ -35,7 +35,7 @@ export function TierLadder({ currentTier }: Props) {
       {open != null && (
         <Card padding="sm" className="text-foreground text-sm">
           <div className="font-semibold">{TIERS[open - 1]!.name}</div>
-          <div className="text-muted font-mono text-xs">
+          <div className="text-muted font-display text-xs">
             Level {TIERS[open - 1]!.levelMin}–
             {TIERS[open - 1]!.levelMax === 999 ? '∞' : TIERS[open - 1]!.levelMax}
           </div>

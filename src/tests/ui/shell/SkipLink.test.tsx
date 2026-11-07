@@ -20,10 +20,10 @@ describe('SkipLink', () => {
     expect(link.className).toMatch(/focus-visible:not-sr-only/)
   })
 
-  it('lands on the HUD plate when it does appear', () => {
+  it('lands on a control plate when it does appear', () => {
     render(<SkipLink />)
     const link = screen.getByRole('link')
-    expect(link).toHaveClass('hud-clip-sm')
+    expect(link).toHaveClass('rounded-control')
     expect(link.className).toMatch(/focus-visible:bg-system/)
   })
 })

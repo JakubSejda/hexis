@@ -184,7 +184,7 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
             type="button"
             onClick={() => setArchiveOpen((s) => !s)}
             aria-expanded={archiveOpen}
-            className="text-muted flex min-h-11 w-full items-center justify-between font-mono text-xs tracking-[0.2em] uppercase"
+            className="text-muted flex min-h-11 w-full items-center justify-between text-xs font-semibold tracking-[0.12em] uppercase"
           >
             <span>Archiv ({initialArchived.length})</span>
             <span aria-hidden="true">{archiveOpen ? '▲' : '▼'}</span>
@@ -192,10 +192,10 @@ export function HabitsPageClient({ initialHabits, initialArchived }: Props) {
           {archiveOpen && (
             <div className="space-y-2 opacity-60">
               {initialArchived.map((h) => (
-                <div key={h.id} data-archived-row className="hud-clip-sm bg-border p-px">
-                  <div className="hud-clip-sm bg-surface flex items-center gap-3 px-3 py-2.5">
+                <div key={h.id} data-archived-row className="rounded-control bg-border p-px">
+                  <div className="rounded-control bg-surface flex items-center gap-3 px-3 py-2.5">
                     <span className="flex-1 text-sm">{h.name}</span>
-                    <span className="text-muted font-mono text-xs">🔥 {h.currentStreak}</span>
+                    <span className="text-muted font-display text-xs">🔥 {h.currentStreak}</span>
                   </div>
                 </div>
               ))}

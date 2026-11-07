@@ -15,11 +15,11 @@ type Props = {
 export async function AppShell({ userId, userName, userEmail, children }: Props) {
   const streak = await fetchWorkoutStreak(db, userId)
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="text-foreground min-h-screen">
       <Sidebar />
       <div className="flex min-h-screen flex-col md:pl-[220px]">
         <AppHeader streak={streak} userName={userName} userEmail={userEmail} />
-        <main id="main" className="flex-1 pb-16 md:pb-0">
+        <main id="main" className="flex-1 pb-28 md:pb-0">
           {children}
         </main>
       </div>

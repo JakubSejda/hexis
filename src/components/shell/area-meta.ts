@@ -26,6 +26,8 @@ export type Area =
 
 type Meta = {
   label: string
+  /** shorter label for the bottom nav, when `label` does not fit */
+  short?: string
   href: string
   icon: ComponentType<SVGProps<SVGSVGElement>>
   /** routes whose pathname should mark this area active (primary + sub-routes) */
@@ -77,6 +79,7 @@ export const AREA_META: Record<Area, Meta> = {
   },
   bio: {
     label: 'Profil hráče',
+    short: 'Profil',
     href: '/bio',
     icon: UserCircle2,
     matches: (p) => p === '/bio' || p.startsWith('/bio/'),
@@ -100,25 +103,26 @@ export const MOBILE_TABS: readonly Area[] = [
   'training',
   'nutrition',
   'habits',
+  'bio',
 ] as const
 
-/** Areas reachable on mobile only through the BottomNav "Více" sheet. */
-export const MORE_AREAS: readonly Area[] = [
+/** Areas reached from the player profile; the Profil tab stays lit on them. */
+export const PROFILE_AREAS: readonly Area[] = [
   'progress',
   'stats',
   'rewards',
-  'bio',
   'calendar',
   'settings',
 ] as const
+
 export const SIDEBAR_AREAS: readonly Area[] = [
   'dashboard',
   'training',
   'nutrition',
+  'habits',
+  'bio',
   'progress',
   'stats',
-  'habits',
   'rewards',
-  'bio',
   'calendar',
 ] as const

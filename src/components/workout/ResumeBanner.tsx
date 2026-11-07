@@ -30,10 +30,10 @@ export function ResumeBanner() {
   return (
     <Link
       href={`/training/${active.id}`}
-      className="hud-clip-sm bg-accent text-background mb-3 flex items-center justify-between px-3 py-2 text-sm font-semibold"
+      className="rounded-card bg-accent text-accent-foreground shadow-glow flex items-center justify-between px-4 py-3.5 text-sm font-semibold"
     >
       <span>
-        Pokračuj v {active.planName ?? 'tréninku'} · {minutes} min
+        Quest probíhá: {active.planName?.split(' — ')[0] ?? 'trénink'} · {minutes} min
       </span>
       <ChevronRight size={14} aria-hidden />
     </Link>

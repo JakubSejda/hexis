@@ -50,7 +50,9 @@ export function TransformationStrip({ photos }: Props) {
       ) : (
         <Card>
           <div className="flex flex-col items-center gap-2">
-            <span className="text-muted font-mono text-xs tracking-[0.2em] uppercase">Day 1</span>
+            <span className="text-muted text-xs font-semibold tracking-[0.12em] uppercase">
+              Day 1
+            </span>
             <Image
               src={first.thumbUrl}
               alt={first.takenAt}
@@ -108,7 +110,9 @@ function PhotoTile({ label, photo }: { label: string; photo: Photo }) {
   return (
     <Card padding="sm">
       <div className="flex flex-col gap-2">
-        <span className="text-muted font-mono text-xs tracking-[0.2em] uppercase">{label}</span>
+        <span className="text-muted text-xs font-semibold tracking-[0.12em] uppercase">
+          {label}
+        </span>
         <Image
           src={photo.thumbUrl}
           alt={`${label} ${photo.takenAt}`}

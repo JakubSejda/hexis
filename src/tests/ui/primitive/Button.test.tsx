@@ -11,24 +11,24 @@ describe('Button', () => {
     expect(el.tagName).toBe('BUTTON')
   })
 
-  it('applies amber primary styling by default', () => {
+  it('applies accent primary styling by default', () => {
     render(<Button>Go</Button>)
     const el = screen.getByRole('button')
     expect(el).toHaveClass('bg-accent')
-    expect(el).toHaveClass('text-background')
+    expect(el).toHaveClass('text-accent-foreground')
   })
 
-  it('applies amber action styling when variant="success" (HUD grammar: action = amber)', () => {
+  it('applies accent action styling when variant="success" (D grammar: action = accent)', () => {
     render(<Button variant="success">Save</Button>)
     const el = screen.getByRole('button')
     expect(el).toHaveClass('bg-accent')
-    expect(el).toHaveClass('text-background')
+    expect(el).toHaveClass('text-accent-foreground')
   })
 
-  it('applies outline variant (neutral border + foreground text)', () => {
+  it('applies outline variant (raised surface + foreground text)', () => {
     render(<Button variant="outline">Zrušit</Button>)
     const el = screen.getByRole('button', { name: 'Zrušit' })
-    expect(el).toHaveClass('border-border')
+    expect(el).toHaveClass('bg-surface-raised')
     expect(el).toHaveClass('text-foreground')
   })
 
@@ -67,26 +67,26 @@ describe('Button', () => {
     expect(el).toHaveClass('text-background')
   })
 
-  it('applies size=sm classes (h-8 px-3 text-sm)', () => {
+  it('applies size=sm classes (h-9 px-4 text-xs)', () => {
     render(<Button size="sm">sm</Button>)
     const el = screen.getByRole('button')
-    expect(el).toHaveClass('h-8')
-    expect(el).toHaveClass('px-3')
-    expect(el).toHaveClass('text-sm')
+    expect(el).toHaveClass('h-9')
+    expect(el).toHaveClass('px-4')
+    expect(el).toHaveClass('text-xs')
   })
 
-  it('applies size=md classes by default (h-10 px-4 text-sm)', () => {
+  it('applies size=md classes by default (h-11 px-5 text-xs)', () => {
     render(<Button>md</Button>)
     const el = screen.getByRole('button')
-    expect(el).toHaveClass('h-10')
-    expect(el).toHaveClass('px-4')
-    expect(el).toHaveClass('text-sm')
+    expect(el).toHaveClass('h-11')
+    expect(el).toHaveClass('px-5')
+    expect(el).toHaveClass('text-xs')
   })
 
-  it('applies size=lg classes (h-12 px-6 text-base)', () => {
+  it('applies size=lg classes (h-14 px-6 text-base)', () => {
     render(<Button size="lg">lg</Button>)
     const el = screen.getByRole('button')
-    expect(el).toHaveClass('h-12')
+    expect(el).toHaveClass('h-14')
     expect(el).toHaveClass('px-6')
     expect(el).toHaveClass('text-base')
   })

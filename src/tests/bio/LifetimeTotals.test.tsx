@@ -6,9 +6,9 @@ import { LifetimeTotals } from '@/components/bio/LifetimeTotals'
 describe('LifetimeTotals', () => {
   it('renders 4 tile labels', () => {
     render(<LifetimeTotals sessions={12} sets={300} liftedKg={12480} totalXp={5400} />)
-    expect(screen.getByText(/sessions/i)).toBeInTheDocument()
-    expect(screen.getByText(/sets/i)).toBeInTheDocument()
-    expect(screen.getByText(/lifted/i)).toBeInTheDocument()
+    expect(screen.getByText(/tréninků/i)).toBeInTheDocument()
+    expect(screen.getByText(/sérií/i)).toBeInTheDocument()
+    expect(screen.getByText(/zvednuto/i)).toBeInTheDocument()
     expect(screen.getByText(/^xp$/i)).toBeInTheDocument()
   })
 

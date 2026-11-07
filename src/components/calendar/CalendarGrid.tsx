@@ -20,7 +20,7 @@ export function CalendarGrid({ days, onSelect }: Props) {
       {WEEKDAYS.map((d) => (
         <div
           key={d}
-          className="text-muted text-center font-mono text-xs tracking-[0.2em] uppercase"
+          className="text-muted text-center text-xs font-semibold tracking-[0.12em] uppercase"
         >
           {d}
         </div>

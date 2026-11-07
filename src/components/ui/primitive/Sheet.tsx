@@ -10,7 +10,7 @@ import type { ReactNode } from 'react'
  * grammar.
  *
  * Under md it docks to the bottom edge where the thumb is; from md up it is the
- * same centred two-layer plate as `Card`. Geometry lives in `.hud-sheet`, not in
+ * same centred two-layer plate (1px hairline + surface). Geometry is `rounded-t-card md:rounded-card`, not in
  * a JS breakpoint, so the server and client agree on first paint.
  */
 type SheetProps = {
@@ -36,7 +36,7 @@ export function Sheet({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="data-[state=open]:animate-in data-[state=open]:fade-in-0 fixed inset-0 z-40 bg-black/50" />
         <DialogPrimitive.Content
-          className="hud-sheet bg-border text-foreground focus-visible:ring-ring data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom fixed inset-x-0 bottom-0 z-50 overscroll-contain p-px shadow-xl focus-visible:ring-2 focus-visible:outline-none md:inset-x-auto md:top-1/2 md:bottom-auto md:left-1/2 md:w-[min(92vw,420px)] md:-translate-x-1/2 md:-translate-y-1/2"
+          className="rounded-t-card md:rounded-card bg-border text-foreground focus-visible:ring-ring data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom fixed inset-x-0 bottom-0 z-50 overscroll-contain p-px shadow-xl focus-visible:ring-2 focus-visible:outline-none md:inset-x-auto md:top-1/2 md:bottom-auto md:left-1/2 md:w-[min(92vw,420px)] md:-translate-x-1/2 md:-translate-y-1/2"
           onOpenAutoFocus={(e) => {
             // Radix focuses the first field on open, which raises the software
             // keyboard over a sheet the user has not read yet. Call sites that
@@ -51,7 +51,7 @@ export function Sheet({
           }}
         >
           {/* Inner surface layer — the outer element is the 1px edge-light (see Card). */}
-          <div className="hud-sheet bg-surface relative h-full w-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4">
+          <div className="rounded-t-card md:rounded-card bg-surface relative h-full w-full p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:pb-4">
             <div
               data-testid="sheet-grabber"
               aria-hidden="true"
@@ -65,7 +65,7 @@ export function Sheet({
                 <X className="h-5 w-5" aria-hidden />
               </DialogPrimitive.Close>
             )}
-            <DialogPrimitive.Title className="pr-10 font-mono text-xs tracking-[0.2em] uppercase">
+            <DialogPrimitive.Title className="font-display pr-10 text-lg font-black uppercase">
               {title}
             </DialogPrimitive.Title>
             {description && (

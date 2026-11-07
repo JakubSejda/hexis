@@ -7,16 +7,16 @@ const ITEMS: Array<{ label: string; dot: string }> = [
 
 export function CalendarLegend() {
   return (
-    <div className="text-muted flex flex-wrap items-center gap-4 font-mono text-xs">
+    <div className="text-muted font-display flex flex-wrap items-center gap-4 text-xs">
       {ITEMS.map((it) => (
         <span key={it.label} className="inline-flex items-center gap-2">
-          <span className={`hud-hex h-[6px] w-[6px] ${it.dot}`} aria-hidden />
+          <span className={`h-[6px] w-[6px] rounded-full ${it.dot}`} aria-hidden />
           {it.label}
         </span>
       ))}
       <span className="inline-flex items-center gap-2">
         <span
-          className="border-accent/40 bg-accent/10 hud-hex inline-block h-3 w-3 border"
+          className="border-accent/40 bg-accent/10 inline-block h-3 w-3 rounded-full border"
           aria-hidden
         />
         3+ dní v řadě

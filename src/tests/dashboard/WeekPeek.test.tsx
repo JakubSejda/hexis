@@ -22,16 +22,16 @@ describe('WeekPeek', () => {
     }
   })
 
-  it('renders legend line with all three glyphs', () => {
+  it('renders the Czech legend', () => {
     render(<WeekPeek days={days} />)
-    expect(screen.getByText(/workout/i)).toBeInTheDocument()
-    expect(screen.getByText(/rest/i)).toBeInTheDocument()
-    expect(screen.getByText(/future/i)).toBeInTheDocument()
+    expect(screen.getByText(/trénink/i)).toBeInTheDocument()
+    expect(screen.getByText(/volno/i)).toBeInTheDocument()
+    expect(screen.getByText(/zbývá/i)).toBeInTheDocument()
   })
 
-  it('wraps in a link to /training', () => {
+  it('wraps in a link to the quest calendar', () => {
     render(<WeekPeek days={days} />)
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/training')
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/calendar')
   })
 
   it('applies status-specific data attributes on each day cell', () => {

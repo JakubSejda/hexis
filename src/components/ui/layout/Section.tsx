@@ -4,7 +4,7 @@ import { cn } from '../utils/cn'
 type Variant = 'region' | 'default'
 
 const HEADER_CLASS: Record<Variant, string> = {
-  region: 'text-muted font-mono text-xs tracking-[0.2em] uppercase',
+  region: 'font-display text-foreground text-base font-black uppercase',
   default: 'text-foreground text-base font-semibold',
 }
 

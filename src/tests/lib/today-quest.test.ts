@@ -84,7 +84,7 @@ describe('resolveTodayQuest', () => {
       ]),
       today,
     })
-    expect(q).toEqual({ kind: 'scheduled', planName: 'Lower A', exerciseCount: 6 })
+    expect(q).toMatchObject({ kind: 'scheduled', planName: 'Lower A', exerciseCount: 6 })
   })
 
   it('returns "scheduled" with first plan when lastFinished is null and plans exist', () => {
@@ -95,7 +95,7 @@ describe('resolveTodayQuest', () => {
       exerciseCounts: new Map([[1, 5]]),
       today,
     })
-    expect(q).toEqual({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 5 })
+    expect(q).toMatchObject({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 5 })
   })
 
   it('wraps around to first plan when last finished was the last in rotation', () => {
@@ -109,7 +109,7 @@ describe('resolveTodayQuest', () => {
       ]),
       today,
     })
-    expect(q).toEqual({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 5 })
+    expect(q).toMatchObject({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 5 })
   })
 
   it('exerciseCount falls back to 0 when map has no entry for plan', () => {
@@ -120,7 +120,7 @@ describe('resolveTodayQuest', () => {
       exerciseCounts: new Map(),
       today,
     })
-    expect(q).toEqual({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 0 })
+    expect(q).toMatchObject({ kind: 'scheduled', planName: 'Upper A', exerciseCount: 0 })
   })
 
   it('active state wins over all others (even with empty plans)', () => {

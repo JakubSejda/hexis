@@ -61,7 +61,7 @@ export function XpHistoryChart({ daily, days }: Props) {
           )
         })}
       </svg>
-      <div className="text-muted mt-2 font-mono text-xs">
+      <div className="text-muted font-display mt-2 text-xs">
         Celkem: {cells.reduce((a, c) => a + c.totalXp, 0).toLocaleString('cs-CZ')} XP
       </div>
     </Card>

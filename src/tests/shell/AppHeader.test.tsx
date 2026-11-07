@@ -25,20 +25,20 @@ describe('AppHeader', () => {
   it('renders streak peek when streak > 0', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<AppHeader streak={7} userName="Jakub" userEmail="j@ex.com" />)
-    expect(screen.getByText(/7 dní v řadě/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/7 dní v řadě/i)).toHaveTextContent('7 dní')
   })
 
   it('hides streak peek when streak === 0', () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<AppHeader streak={0} userName="Jakub" userEmail="j@ex.com" />)
-    expect(screen.queryByText(/dní v řadě/i)).toBeNull()
+    expect(screen.queryByLabelText(/v řadě/i)).toBeNull()
   })
 
-  it('opens dropdown with Výživa, Nastavení, Odhlásit se on avatar click', async () => {
+  it('opens dropdown with Profil hráče, Nastavení, Odhlásit se on avatar click', async () => {
     vi.mocked(usePathname).mockReturnValue('/dashboard')
     render(<AppHeader streak={3} userName="Jakub" userEmail="j@ex.com" />)
     await userEvent.click(screen.getByRole('button', { name: /otevřít menu/i }))
-    expect(await screen.findByRole('menuitem', { name: /výživa/i })).toBeInTheDocument()
+    expect(await screen.findByRole('menuitem', { name: /profil hráče/i })).toBeInTheDocument()
     expect(screen.getByRole('menuitem', { name: /nastavení/i })).toBeInTheDocument()
     expect(screen.getByRole('menuitem', { name: /odhlásit se/i })).toBeInTheDocument()
   })

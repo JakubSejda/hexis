@@ -10,7 +10,7 @@
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
-import { resolve, join } from 'node:path'
+import { resolve, join, relative, sep } from 'node:path'
 
 const root = resolve(__dirname, '../../..')
 
@@ -26,7 +26,12 @@ function sources(dir = resolve(root, 'src')): [string, string][] {
     const full = join(dir, e.name)
     if (e.isDirectory()) return e.name === 'tests' || e.name === '__tests__' ? [] : sources(full)
     return e.name.endsWith('.tsx')
-      ? [[full.replace(root + '/', ''), readFileSync(full, 'utf8')] as [string, string]]
+      ? [
+          [relative(root, full).split(sep).join('/'), readFileSync(full, 'utf8')] as [
+            string,
+            string,
+          ],
+        ]
       : []
   })
 }

@@ -68,7 +68,7 @@ describe('Tabs', () => {
     expect(onValueChange).toHaveBeenCalledWith('two')
   })
 
-  it('wears the HUD plate clip instead of the retired radius ladder', () => {
+  it('wears the system radii, not the generic ladder', () => {
     render(
       <Tabs.Root defaultValue="one">
         <Tabs.List>
@@ -78,10 +78,10 @@ describe('Tabs', () => {
       </Tabs.Root>
     )
     const list = screen.getByRole('tablist')
-    expect(list).toHaveClass('hud-clip')
+    expect(list).toHaveClass('rounded-card')
     expect(list.className).not.toMatch(/rounded-(lg|xl|2xl)/)
     const trigger = screen.getByRole('tab', { name: 'One' })
-    expect(trigger).toHaveClass('hud-clip-sm')
+    expect(trigger).toHaveClass('rounded-control')
   })
 
   it('marks the active trigger with cyan (nav accent), never emerald', () => {

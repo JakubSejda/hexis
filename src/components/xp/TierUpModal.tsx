@@ -24,15 +24,18 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
       onClick={onDismiss}
     >
       <Confetti />
-      <div className="hud-clip bg-system relative mx-4 p-px" onClick={(e) => e.stopPropagation()}>
-        <div className="hud-clip bg-surface flex flex-col items-center p-8 text-center">
+      <div
+        className="rounded-card bg-system relative mx-4 p-px"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="rounded-card bg-surface flex flex-col items-center p-8 text-center">
           <HexEmblem
             level={levelAfter}
             tierColor={meta.accent}
             size={140}
             className="animate-tier-glow"
           />
-          <div className="text-system mt-4 font-mono text-xs tracking-[0.3em] uppercase">
+          <div className="text-system mt-4 text-xs font-semibold tracking-[0.12em] uppercase">
             Nový tier odemknut
           </div>
           <div
@@ -41,7 +44,7 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
           >
             Tier {tier}: {meta.name} odemknuty!
           </div>
-          <div className="text-muted-strong mt-1 font-mono text-sm">
+          <div className="text-muted-strong font-display mt-1 text-sm">
             Dosahl jsi Level {levelAfter}
           </div>
           <Button variant="success" size="md" className="mt-6 px-6" onClick={onDismiss}>

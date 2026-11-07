@@ -59,9 +59,9 @@ describe('TodaysChecksCard', () => {
     expect(screen.getByText(/2 ze 3 hotovo/)).toBeInTheDocument()
   })
 
-  it('links to /habits via "Otevřít"', () => {
+  it('links to /habits via "Všechny návyky"', () => {
     render(<TodaysChecksCard dailyHabits={[make()]} />)
-    expect(screen.getByRole('link', { name: /otevřít/i })).toHaveAttribute('href', '/habits')
+    expect(screen.getByRole('link', { name: /všechny návyky/i })).toHaveAttribute('href', '/habits')
   })
 
   it('calls /api/habits/[id]/check on tap', async () => {

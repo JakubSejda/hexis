@@ -9,17 +9,21 @@ type Props = {
 export function BalanceCard({ balance, className }: Props) {
   return (
     <Card padding="md" className={className}>
-      <div className="text-muted font-mono text-xs tracking-[0.2em] uppercase">K utracení</div>
-      <div data-testid="rewards-balance" className="text-accent mt-1 font-mono text-3xl font-bold">
+      <div className="text-muted text-xs font-semibold tracking-[0.12em] uppercase">K utracení</div>
+      <div
+        data-testid="rewards-balance"
+        className="text-accent font-display mt-1 text-3xl font-bold"
+      >
         {balance.balanceXp} XP
       </div>
       <div className="text-muted mt-3 flex justify-between text-xs">
         <span>
-          Získáno <span className="text-foreground font-mono font-semibold">{balance.totalXp}</span>
+          Získáno{' '}
+          <span className="text-foreground font-display font-semibold">{balance.totalXp}</span>
         </span>
         <span>
           Utraceno{' '}
-          <span className="text-foreground font-mono font-semibold">{balance.spentXp}</span>
+          <span className="text-foreground font-display font-semibold">{balance.spentXp}</span>
         </span>
       </div>
     </Card>

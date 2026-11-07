@@ -39,7 +39,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
         outline: isToday ? '2px solid #22d3ee' : 'none',
         outlineOffset: -2,
       }}
-      className="hud-clip-sm flex aspect-square cursor-pointer flex-col items-center justify-center"
+      className="rounded-control flex aspect-square cursor-pointer flex-col items-center justify-center"
       aria-label={`Den ${dayNumber}`}
     >
       <span
@@ -59,7 +59,7 @@ export function CalendarDay({ dayNumber, klass, macros, isToday, isFuture, onCli
           {macros.map((m, i) => (
             <span
               key={i}
-              className="hud-hex block h-1.5 w-1.5"
+              className="block h-1.5 w-1.5 rounded-full"
               style={{ background: DOT[m], display: m === 'none' ? 'none' : 'block' }}
             />
           ))}

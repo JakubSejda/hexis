@@ -46,14 +46,14 @@ export function OnboardingWizard() {
       <Stack gap={6}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2" aria-label={`Krok ${step + 1} z ${TOTAL_STEPS}`}>
-            <span className="text-system font-mono text-xs tracking-[0.2em] uppercase">
+            <span className="text-system text-xs font-semibold tracking-[0.12em] uppercase">
               Hexis // inicializace
             </span>
             <span className="flex gap-1.5" aria-hidden>
               {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                 <span
                   key={i}
-                  className={`hud-hex size-2.5 ${i === step ? 'bg-system' : 'bg-border'}`}
+                  className={`size-2.5 rounded-full ${i === step ? 'bg-system' : 'bg-border'}`}
                 />
               ))}
             </span>

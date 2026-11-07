@@ -50,15 +50,15 @@ export function SessionSummary({
           role="status"
           className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-black/80 backdrop-blur-sm"
         >
-          <div className="animate-hud-power-on flex flex-col items-center gap-3">
-            <div className="text-accent font-mono text-xs tracking-[0.3em] uppercase">
-              Dnešní quest
-            </div>
-            <div className="text-foreground text-4xl font-black tracking-tight uppercase italic">
-              Quest splněn!
+          <div className="animate-hud-power-on flex flex-col items-center gap-4">
+            <div className="quest-orb border-accent grid size-48 place-items-center rounded-full border-2">
+              <span className="font-display text-center leading-none font-black uppercase">
+                <span className="text-accent block text-sm">Denní quest</span>
+                <span className="mt-1 block text-3xl">Splněn</span>
+              </span>
             </div>
             {celebration > 0 && (
-              <div className="text-accent font-mono text-2xl font-bold">+{celebration} XP</div>
+              <div className="font-display text-reward text-3xl font-black">+{celebration} XP</div>
             )}
           </div>
         </div>
@@ -67,9 +67,9 @@ export function SessionSummary({
         Shrnutí
       </Heading>
       <div className="grid grid-cols-3 gap-2 text-center">
-        <Stat label="Serii" value={String(totalSets)} />
-        <Stat label="Tuny" value={`${(totalVolume / 1000).toFixed(1)}`} />
-        <Stat label="Cas" value={`${durationMin} min`} />
+        <Stat label="Sérií" value={String(totalSets)} />
+        <Stat label="Tun" value={(totalVolume / 1000).toFixed(1).replace('.', ',')} />
+        <Stat label="Minut" value={String(durationMin)} />
       </div>
       <Textarea
         value={note}
@@ -87,9 +87,11 @@ export function SessionSummary({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-surface p-2">
-      <div className="text-foreground font-mono text-lg font-bold">{value}</div>
-      <div className="text-muted text-xs">{label}</div>
+    <div className="rounded-card border-border bg-surface border px-2 py-3">
+      <div className="text-foreground font-display text-2xl leading-none font-black">{value}</div>
+      <div className="text-muted mt-1.5 text-[10px] font-bold tracking-[0.12em] uppercase">
+        {label}
+      </div>
     </div>
   )
 }

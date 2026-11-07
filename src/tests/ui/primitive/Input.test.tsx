@@ -105,8 +105,8 @@ describe('Input', () => {
     expect(el.getAttribute('aria-describedby')).toBeNull()
   })
 
-  it('is a display — square, no radius of its own', () => {
+  it('is a control — control radius on a raised surface', () => {
     render(<Input label="Jméno" />)
-    expect(screen.getByLabelText('Jméno').className).not.toMatch(/rounded/)
+    expect(screen.getByLabelText('Jméno')).toHaveClass('rounded-control')
   })
 })

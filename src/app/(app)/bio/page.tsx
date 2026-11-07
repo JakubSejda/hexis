@@ -11,6 +11,7 @@ import { levelToTier, levelToTierMeta } from '@/lib/tiers'
 import { ageFromBirthDate } from '@/lib/bio-age'
 import { Container, Stack } from '@/components/ui'
 import { RegionHeader } from '@/components/dashboard/RegionHeader'
+import { ProfileAreaLinks } from '@/components/shell'
 import {
   BioHero,
   VitalsStrip,
@@ -62,7 +63,7 @@ export default async function BioPage() {
         />
 
         <section>
-          <RegionHeader>Vitals</RegionHeader>
+          <RegionHeader>Údaje</RegionHeader>
           <VitalsStrip
             heightCm={profile?.heightCm ?? null}
             age={age}
@@ -72,7 +73,7 @@ export default async function BioPage() {
         </section>
 
         <section>
-          <RegionHeader>Goal</RegionHeader>
+          <RegionHeader>Cíl</RegionHeader>
           <GoalCard
             goalKg={profile?.goalKg ? Number(profile.goalKg) : null}
             goalText={profile?.goalText ?? null}
@@ -82,7 +83,7 @@ export default async function BioPage() {
         </section>
 
         <section>
-          <RegionHeader>Lifetime</RegionHeader>
+          <RegionHeader>Celkem</RegionHeader>
           <LifetimeTotals
             sessions={totals.sessions}
             sets={totals.sets}
@@ -92,8 +93,12 @@ export default async function BioPage() {
         </section>
 
         <section>
-          <RegionHeader>Transformation</RegionHeader>
+          <RegionHeader>Proměna</RegionHeader>
           <TransformationStrip photos={photos} />
+        </section>
+        <section>
+          <RegionHeader>Menu hráče</RegionHeader>
+          <ProfileAreaLinks />
         </section>
       </Stack>
     </Container>

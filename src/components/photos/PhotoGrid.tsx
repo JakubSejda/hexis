@@ -39,7 +39,7 @@ export function PhotoGrid({ photos, onPhotoTap }: Props) {
               <button
                 key={p.id}
                 onClick={() => onPhotoTap(p.globalIdx)}
-                className="hud-clip relative aspect-square overflow-hidden"
+                className="rounded-card relative aspect-square overflow-hidden"
               >
                 <Image
                   src={p.thumbUrl}

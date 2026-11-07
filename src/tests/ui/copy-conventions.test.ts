@@ -8,7 +8,7 @@
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
-import { resolve, join } from 'node:path'
+import { resolve, join, relative, sep } from 'node:path'
 
 const root = resolve(__dirname, '../../..')
 
@@ -19,7 +19,12 @@ function appSources(dir = resolve(root, 'src')): [string, string][] {
     // .ts as well as .tsx: AREA_META lives in a .ts file, and a .tsx-only scan
     // let ten English labels sit in the main navigation of a Czech app.
     return entry.name.endsWith('.tsx') || entry.name.endsWith('.ts')
-      ? [[full.replace(root + '/', ''), readFileSync(full, 'utf8')] as [string, string]]
+      ? [
+          [relative(root, full).split(sep).join('/'), readFileSync(full, 'utf8')] as [
+            string,
+            string,
+          ],
+        ]
       : []
   })
 }

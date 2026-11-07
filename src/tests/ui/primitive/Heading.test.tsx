@@ -30,10 +30,10 @@ describe('Heading', () => {
     const el = screen.getByTestId('h')
     expect(el.tagName).toBe('DIV')
     expect(el).toHaveClass('text-2xl')
-    expect(el).toHaveClass('font-semibold')
+    expect(el).toHaveClass('font-black')
   })
 
-  it('default variant level=1 → text-2xl font-semibold', () => {
+  it('default variant level=1 → display text-2xl font-black', () => {
     render(
       <Heading level={1} data-testid="h">
         x
@@ -41,10 +41,10 @@ describe('Heading', () => {
     )
     const el = screen.getByTestId('h')
     expect(el).toHaveClass('text-2xl')
-    expect(el).toHaveClass('font-semibold')
+    expect(el).toHaveClass('font-black')
   })
 
-  it('default variant level=2 → text-lg font-semibold', () => {
+  it('default variant level=2 → display text-lg font-black', () => {
     render(
       <Heading level={2} data-testid="h">
         x
@@ -52,7 +52,7 @@ describe('Heading', () => {
     )
     const el = screen.getByTestId('h')
     expect(el).toHaveClass('text-lg')
-    expect(el).toHaveClass('font-semibold')
+    expect(el).toHaveClass('font-black')
   })
 
   it('default variant level=3 → text-base font-semibold', () => {
@@ -66,29 +66,30 @@ describe('Heading', () => {
     expect(el).toHaveClass('font-semibold')
   })
 
-  it('display variant applies HUD display treatment regardless of level', () => {
+  it('display variant applies the wide display treatment regardless of level', () => {
     render(
       <Heading level={1} variant="display" data-testid="h">
         Hero
       </Heading>
     )
     const el = screen.getByTestId('h')
-    expect(el).toHaveClass('text-3xl')
+    expect(el).toHaveClass('font-display')
+    expect(el).toHaveClass('text-4xl')
     expect(el).toHaveClass('font-black')
     expect(el).toHaveClass('tracking-tight')
   })
 
-  it('region variant applies font-mono uppercase tracking-[0.2em] text-muted', () => {
+  it('region variant applies display caps in the foreground colour', () => {
     render(
       <Heading level={2} variant="region" data-testid="h">
         Life Areas
       </Heading>
     )
     const el = screen.getByTestId('h')
-    expect(el).toHaveClass('font-mono')
+    expect(el).toHaveClass('font-display')
     expect(el).toHaveClass('uppercase')
-    expect(el).toHaveClass('text-muted')
-    expect(el.className).toMatch(/tracking-/)
+    expect(el).toHaveClass('text-foreground')
+    expect(el).not.toHaveClass('font-mono')
   })
 
   it('forwards className through cn() (last-wins via tailwind-merge)', () => {

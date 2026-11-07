@@ -8,13 +8,13 @@ export function Sidebar() {
   return (
     <aside
       aria-label="Primary"
-      className="bg-surface-sunken border-border fixed top-0 left-0 z-40 hidden h-screen w-[220px] flex-col border-r py-4 md:flex"
+      className="bg-surface-sunken border-border fixed top-0 left-0 z-40 hidden h-screen w-[220px] flex-col gap-0.5 border-r px-2 py-4 md:flex"
     >
-      <div className="border-border text-accent mb-3 border-b px-4 pb-4 font-mono text-base font-bold tracking-[0.2em] uppercase">
+      <div className="text-accent font-display mb-3 px-4 pb-4 text-lg font-black uppercase">
         Hexis
       </div>
 
-      <SectionLabel>Oblasti života</SectionLabel>
+      <SectionLabel>Oblasti</SectionLabel>
       {SIDEBAR_AREAS.map((area) => {
         const meta = AREA_META[area]
         return (
@@ -50,7 +50,7 @@ function SectionLabel({ children, className }: { children: React.ReactNode; clas
   return (
     <div
       className={cn(
-        'text-muted px-4 pt-2 pb-1 font-mono text-xs tracking-[0.2em] uppercase',
+        'text-muted px-4 pt-2 pb-1 text-xs font-semibold tracking-[0.12em] uppercase',
         className
       )}
     >

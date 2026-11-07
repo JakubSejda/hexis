@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { Card } from '@/components/ui'
+import { czPlural, DAYS } from '@/lib/cz-plural'
 
-/** HUD telemetry row (Reforge R2): three mono readouts under the quest plate. */
+/** Three readouts under the quest: streak, spendable XP, this week's sessions. */
 
 type Props = {
   streak: number
@@ -10,20 +11,27 @@ type Props = {
   weekTarget: number | null
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
+const nf = new Intl.NumberFormat('cs-CZ')
+
+function Tile({ label, value, unit }: { label: string; value: string; unit?: string }) {
   return (
     <>
-      <div className="text-muted font-mono text-[11px] tracking-[0.2em] uppercase">{label}</div>
-      <div className="text-foreground mt-1 font-mono text-lg font-bold">{value}</div>
+      <div className="font-display text-2xl leading-none font-black">
+        {value}
+        {unit ? <span className="text-muted ml-1 text-xs font-bold">{unit}</span> : null}
+      </div>
+      <div className="text-muted mt-1.5 text-[10px] font-bold tracking-[0.12em] uppercase">
+        {label}
+      </div>
     </>
   )
 }
 
 export function TelemetryRow({ streak, balanceXp, weekDone, weekTarget }: Props) {
   return (
-    <div className="animate-hud-power-on grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 gap-2">
       <Card padding="sm" className="text-center">
-        <Tile label="Streak" value={`${streak}d`} />
+        <Tile label="Série" value={String(streak)} unit={czPlural(streak, DAYS)} />
       </Card>
       <Card
         as={Link}
@@ -32,7 +40,7 @@ export function TelemetryRow({ streak, balanceXp, weekDone, weekTarget }: Props)
         padding="sm"
         className="block text-center"
       >
-        <Tile label="K utracení" value={`${balanceXp} XP`} />
+        <Tile label="K utracení" value={nf.format(balanceXp)} unit="XP" />
       </Card>
       <Card padding="sm" className="text-center">
         <Tile label="Týden" value={weekTarget ? `${weekDone}/${weekTarget}` : String(weekDone)} />
