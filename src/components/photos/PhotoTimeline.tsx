@@ -20,7 +20,13 @@ const POSE_LABELS: Record<string, string> = {
 }
 
 export function PhotoTimeline({ photos, onPhotoTap }: Props) {
-  if (photos.length === 0) return <p className="text-muted py-8 text-center text-sm">Žádné fotky</p>
+  if (photos.length === 0)
+    return (
+      <p className="rounded-card border-border text-muted border border-dashed px-5 py-10 text-center text-sm">
+        Zatím žádná fotka. Vyfoť se zepředu a z boku, vždy ve stejném světle — za měsíc uvidíš
+        rozdíl. Tlačítko + vpravo dole.
+      </p>
+    )
 
   return (
     <div className="flex flex-col gap-3">

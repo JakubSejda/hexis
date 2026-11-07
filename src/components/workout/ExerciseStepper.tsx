@@ -61,7 +61,7 @@ function StepperInner({
   if (!current) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-muted text-sm">Žádné cviky v této session.</p>
+        <p className="text-muted text-sm">V tomhle tréninku zatím nejsou žádné cviky.</p>
         <AdHocAddButton onPicked={(id) => onAdHoc(id)} />
       </div>
     )

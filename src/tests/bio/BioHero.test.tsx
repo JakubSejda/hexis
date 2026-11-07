@@ -16,7 +16,7 @@ describe('BioHero', () => {
       />
     )
     expect(screen.getByText('Jakub')).toBeInTheDocument()
-    expect(screen.getByText(/Level 5/i)).toBeInTheDocument()
+    expect(screen.getByText('LVL 5')).toBeInTheDocument()
     expect(screen.getByText(/Silver/i)).toBeInTheDocument()
   })
 
@@ -34,7 +34,7 @@ describe('BioHero', () => {
     expect(screen.getByText('Hráč')).toBeInTheDocument()
   })
 
-  it('hides Day count when startedAt is null', () => {
+  it('hides the day count when startedAt is null', () => {
     render(
       <BioHero
         name="Jakub"
@@ -45,10 +45,10 @@ describe('BioHero', () => {
         today={new Date('2026-05-07')}
       />
     )
-    expect(screen.queryByText(/Day \d+/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Den \d+/)).not.toBeInTheDocument()
   })
 
-  it('renders Day N when startedAt is set (Day 1 inclusive)', () => {
+  it('renders Den N when startedAt is set (Den 1 inclusive)', () => {
     render(
       <BioHero
         name="Jakub"
@@ -59,10 +59,10 @@ describe('BioHero', () => {
         today={new Date('2026-05-07')}
       />
     )
-    expect(screen.getByText(/Day 1/)).toBeInTheDocument()
+    expect(screen.getByText(/Den 1 cesty/)).toBeInTheDocument()
   })
 
-  it('renders the HUD tier emblem', () => {
+  it('renders the tier lens', () => {
     render(
       <BioHero
         name="Jakub"
@@ -73,7 +73,7 @@ describe('BioHero', () => {
         today={new Date('2026-05-07')}
       />
     )
-    const img = screen.getByRole('img', { name: /level 10/i })
-    expect(img).toBeInTheDocument()
+    expect(screen.getByTitle(/^Tier /)).toBeInTheDocument()
+    expect(screen.getByText('LVL 10')).toBeInTheDocument()
   })
 })

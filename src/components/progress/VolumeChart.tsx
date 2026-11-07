@@ -39,7 +39,7 @@ function formatWeek(dateStr: string) {
 
 export function VolumeChart({ data }: Props) {
   if (data.length === 0) {
-    return <p className="text-muted py-8 text-center text-sm">Žádná data</p>
+    return <p className="text-muted py-8 text-center text-sm">Objem se ukáže po prvním tréninku.</p>
   }
 
   return (

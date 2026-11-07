@@ -79,7 +79,7 @@ export function HabitDialog(props: Props) {
         />
 
         <fieldset className="flex flex-col gap-2" disabled={isEdit}>
-          <legend className="text-muted text-xs font-medium">Cadence</legend>
+          <legend className="text-muted text-xs font-medium">Jak často</legend>
           <div className="flex gap-4">
             {(['daily', 'weekly'] as const).map((c) => (
               <Radio

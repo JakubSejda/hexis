@@ -48,10 +48,7 @@ describe('QuestCard', () => {
         streak={3}
       />
     )
-    expect(screen.getByRole('link', { name: /pokračovat v questu/i })).toHaveAttribute(
-      'href',
-      '/training/7'
-    )
+    expect(screen.getByRole('link', { name: /pokračovat/i })).toHaveAttribute('href', '/training/7')
     expect(screen.queryByText(/přeruší/)).toBeNull()
   })
 

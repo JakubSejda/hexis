@@ -8,7 +8,7 @@ const LABELS: Record<string, string> = {
   photo_uploaded: 'Fotky',
   nutrition_logged: 'Výživa',
   pr_achieved: 'PR překonán',
-  streak_day: 'Streak',
+  streak_day: 'Série dní',
 }
 
 type Row = { event: string; xp: number; count: number }

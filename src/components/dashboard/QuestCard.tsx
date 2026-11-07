@@ -169,7 +169,7 @@ export function QuestCard({ quest, objectives, streak }: Props) {
         </p>
       ) : null}
       <CtaLink href={active ? `/training/${quest.sessionId}` : '/training'}>
-        {active ? 'Pokračovat v questu' : 'Přijmout quest'}
+        {active ? 'Pokračovat' : 'Přijmout quest'}
       </CtaLink>
     </Card>
   )

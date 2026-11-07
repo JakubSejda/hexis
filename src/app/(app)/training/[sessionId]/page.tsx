@@ -37,7 +37,7 @@ export default async function WorkoutSessionPage({
     where: eq(sessions.id, sessionId),
   })
   if (!session || session.userId !== userId) {
-    return <div className="text-danger p-4 text-sm">Session nenalezena.</div>
+    return <div className="text-danger p-4 text-sm">Trénink nenalezen.</div>
   }
 
   // Fetch plan exercises

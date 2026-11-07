@@ -71,7 +71,7 @@ export function UploadSheet({ open, onOpenChange, onUploaded }: Props) {
       resetForm()
       onUploaded()
     } catch {
-      toast.show('Upload selhal', 'error')
+      toast.show('Nahrání selhalo', 'error')
     } finally {
       setUploading(false)
     }

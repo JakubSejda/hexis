@@ -18,12 +18,12 @@ export default async function Home() {
         {/* status strip */}
         <div className="text-muted flex items-center justify-between text-xs font-semibold tracking-[0.12em] uppercase">
           <span className="text-accent font-bold">Hexis //</span>
-          <span>Friends &amp; family beta</span>
+          <span>Beta pro přátele a rodinu</span>
         </div>
 
         {/* hero */}
         <section className="animate-hud-power-on flex flex-1 flex-col items-center justify-center gap-8 py-16 text-center">
-          <HexEmblem level={4} tierColor="#f59e0b" size={140} className="animate-tier-glow" />
+          <HexEmblem level={4} tierColor="#7dd3fc" size={140} className="animate-tier-glow" />
           <div>
             <Heading level={1} variant="display" className="text-5xl sm:text-6xl">
               Hexis

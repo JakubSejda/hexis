@@ -14,7 +14,13 @@ type PhotoItem = {
 type Props = { photos: PhotoItem[]; onPhotoTap: (index: number) => void }
 
 export function PhotoGrid({ photos, onPhotoTap }: Props) {
-  if (photos.length === 0) return <p className="text-muted py-8 text-center text-sm">Žádné fotky</p>
+  if (photos.length === 0)
+    return (
+      <p className="rounded-card border-border text-muted border border-dashed px-5 py-10 text-center text-sm">
+        Zatím žádná fotka. Vyfoť se zepředu a z boku, vždy ve stejném světle — za měsíc uvidíš
+        rozdíl. Tlačítko + vpravo dole.
+      </p>
+    )
 
   const groups = new Map<string, { photos: (PhotoItem & { globalIdx: number })[] }>()
   photos.forEach((p, i) => {

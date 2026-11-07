@@ -15,7 +15,11 @@ type Props = {
 
 export function ExercisePicker({ exercises, value, onChange }: Props) {
   if (exercises.length === 0) {
-    return <p className="text-muted text-sm">Žádné cviky s daty</p>
+    return (
+      <p className="text-muted text-sm">
+        Zatím žádné cviky s daty — po prvním tréninku se tu objeví.
+      </p>
+    )
   }
   return (
     <Select value={value ?? ''} onChange={(e) => onChange(Number(e.target.value))}>

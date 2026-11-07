@@ -7,7 +7,7 @@ const ITEMS = [
   {
     href: '/settings/profile',
     label: 'Profil',
-    hint: 'Vitals, cíl, datum startu',
+    hint: 'Výška, cíl, datum startu',
     icon: UserCircle2,
   },
   {

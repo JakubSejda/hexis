@@ -1,8 +1,10 @@
-import { HexEmblem } from '@/components/dashboard/HexEmblem'
-import { TIERS } from '@/lib/tiers'
-import { Card } from '@/components/ui'
-import { daysSince } from '@/lib/bio-day-count'
+import Image from 'next/image'
 import type { Tier } from '@/lib/tiers'
+import { daysSince } from '@/lib/bio-day-count'
+
+import { RankLens } from '@/components/dashboard/RankLens'
+import { Pill } from '@/components/ui'
+const ROMAN = ['I', 'II', 'III', 'IV', 'V'] as const
 
 type Props = {
   name: string | null
@@ -13,24 +15,40 @@ type Props = {
   today: Date
 }
 
+/** The player card: portrait, level, tier lens, name and day of the journey. */
 export function BioHero({ name, tier, tierName, level, startedAt, today }: Props) {
   const day = daysSince(startedAt, today)
   return (
-    <Card>
-      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <HexEmblem level={level} tierColor={TIERS[tier - 1]!.color} size={96} />
-        <div className="flex flex-1 flex-col gap-1">
-          <span className="text-foreground text-xl font-bold">{name ?? 'Hráč'}</span>
-          <span className="text-system text-xs font-semibold tracking-[0.12em] uppercase">
-            Level {level} · {tierName}
-          </span>
+    <div className="rounded-card border-border bg-surface relative overflow-hidden border">
+      <div className="relative h-72">
+        <Image
+          src="/images/player-portrait.webp"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 768px) 640px, 100vw"
+          className="object-cover object-[center_20%]"
+        />
+        <span
+          aria-hidden
+          className="from-surface absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent"
+        />
+        <div className="absolute inset-x-3 top-3 flex items-start justify-between">
+          <Pill variant="accent" size="md" className="font-display font-black">
+            LVL {level}
+          </Pill>
+          <RankLens label={ROMAN[tier - 1] ?? String(tier)} title={`Tier ${tierName}`} />
         </div>
-        {day !== null && (
-          <div className="text-right">
-            <div className="text-foreground font-display text-3xl font-bold">Day {day}</div>
-          </div>
-        )}
       </div>
-    </Card>
+      <div className="px-4 pb-4">
+        <div className="font-display text-3xl leading-none font-black uppercase">
+          {name ?? 'Hráč'}
+        </div>
+        <p className="text-muted mt-2 text-sm">
+          {tierName}
+          {day !== null ? ` · Den ${day} cesty` : ''}
+        </p>
+      </div>
+    </div>
   )
 }

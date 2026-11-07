@@ -63,7 +63,7 @@ describe('/bio page', () => {
     expect(screen.getByRole('heading', { name: 'Proměna' })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Oblasti hráče' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /nastav si svůj cíl/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /přidej fotku/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /přidej první fotku/i })).toBeInTheDocument()
   })
 
   it('renders populated data when profile and history exist', async () => {
@@ -122,9 +122,9 @@ describe('/bio page', () => {
     const ui = await BioPage()
     render(ui)
     expect(screen.getByText('Jakub')).toBeInTheDocument()
-    expect(screen.getByText(/Day \d+/)).toBeInTheDocument()
+    expect(screen.getByText(/Den \d+ cesty/)).toBeInTheDocument()
     expect(screen.getByText(/180 cm/)).toBeInTheDocument()
     expect(screen.getByText(/82\.5 kg/)).toBeInTheDocument()
-    expect(screen.getByText(/then/i)).toBeInTheDocument()
+    expect(screen.getByText(/začátek/i)).toBeInTheDocument()
   })
 })

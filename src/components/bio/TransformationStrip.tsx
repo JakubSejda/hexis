@@ -27,10 +27,20 @@ export function TransformationStrip({ photos }: Props) {
 
   if (photos.length === 0) {
     return (
-      <Card as={Link} href="/progress" variant="interactive" className="block">
-        <div className="text-muted flex items-center justify-between">
-          <span>Přidej fotku</span>
-          <span aria-hidden>→</span>
+      <Card as={Link} href="/progress/photos" variant="interactive" className="block">
+        <div className="flex items-center gap-3">
+          <span className="rounded-control bg-surface-raised text-system grid size-11 shrink-0 place-items-center text-lg">
+            ◐
+          </span>
+          <span className="flex-1">
+            <span className="block font-semibold">Přidej první fotku</span>
+            <span className="text-muted block text-xs">
+              Jedna fotka týdně ukáže změnu, kterou v zrcadle nevidíš. +15 XP
+            </span>
+          </span>
+          <span aria-hidden className="text-muted">
+            →
+          </span>
         </div>
       </Card>
     )
@@ -44,14 +54,14 @@ export function TransformationStrip({ photos }: Props) {
     <div className="flex flex-col gap-3">
       {showThenNow ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <PhotoTile label="THEN" photo={first} />
-          <PhotoTile label="NOW" photo={last} />
+          <PhotoTile label="Začátek" photo={first} />
+          <PhotoTile label="Teď" photo={last} />
         </div>
       ) : (
         <Card>
           <div className="flex flex-col items-center gap-2">
             <span className="text-muted text-xs font-semibold tracking-[0.12em] uppercase">
-              Day 1
+              Den 1
             </span>
             <Image
               src={first.thumbUrl}
@@ -72,9 +82,9 @@ export function TransformationStrip({ photos }: Props) {
             <button
               key={p.id}
               type="button"
-              aria-label={`Open photo ${fmtDate(p.takenAt)}`}
+              aria-label={`Otevřít fotku z ${fmtDate(p.takenAt)}`}
               onClick={() => setOpenIdx(i)}
-              className="border-border hover:border-accent shrink-0 border bg-black"
+              className="rounded-control border-border hover:border-accent shrink-0 overflow-hidden border bg-black"
             >
               <Image
                 src={p.thumbUrl}

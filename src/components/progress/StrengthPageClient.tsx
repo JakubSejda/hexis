@@ -82,7 +82,7 @@ export function StrengthPageClient() {
 
       <section>
         <Heading level={2} variant="region" className="mb-2">
-          Estimated 1RM
+          Odhad maxima (1RM)
         </Heading>
         <ExercisePicker exercises={exercises} value={selectedExId} onChange={setSelectedExId} />
         <div className="mt-2">
@@ -92,7 +92,7 @@ export function StrengthPageClient() {
 
       <section>
         <Heading level={2} variant="region" className="mb-2">
-          Objem per svalovou skupinu
+          Objem podle partií
         </Heading>
         {loading ? <Skeleton shape="block" /> : <VolumeChart data={volumeData} />}
       </section>

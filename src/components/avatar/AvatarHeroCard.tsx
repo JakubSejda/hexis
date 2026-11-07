@@ -14,7 +14,7 @@ export function AvatarHeroCard({ level, tierMeta, totalXp, progress }: Props) {
     <Card padding="lg">
       <div className="flex flex-col items-center gap-2">
         <Heading level={2} as="div" variant="region" className="mb-2">
-          Tvůj avatar
+          Tvůj level
         </Heading>
         <HexEmblem level={level} tierColor={tierMeta.color} size={160} />
         <div className="mt-3 flex items-baseline gap-2">
@@ -32,7 +32,7 @@ export function AvatarHeroCard({ level, tierMeta, totalXp, progress }: Props) {
           <div className="text-muted font-display mt-1 flex justify-between text-xs">
             <span>{totalXp.toLocaleString('cs-CZ')} XP</span>
             <span>
-              {(progress.max - progress.current).toLocaleString('cs-CZ')} do L{level + 1}
+              {(progress.max - progress.current).toLocaleString('cs-CZ')} do levelu {level + 1}
             </span>
           </div>
         </div>

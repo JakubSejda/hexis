@@ -6,7 +6,7 @@ import { habits } from '@/db/schema'
 import { and, desc, eq, isNotNull } from 'drizzle-orm'
 import { fetchActiveHabitsWithStreak, type HabitWithStreak } from '@/lib/queries/habits'
 import { resolveUserToday } from '@/lib/habits/tz'
-import { Container, Heading, Stack } from '@/components/ui'
+import { Container, Stack } from '@/components/ui'
 import { HabitsPageClient } from '@/components/habits/HabitsPageClient'
 
 export const dynamic = 'force-dynamic'
@@ -39,7 +39,6 @@ export default async function HabitsPage() {
   return (
     <Container as="main">
       <Stack gap={6} className="py-4">
-        <Heading level={2}>Návyky</Heading>
         <HabitsPageClient initialHabits={active} initialArchived={archived} />
       </Stack>
     </Container>

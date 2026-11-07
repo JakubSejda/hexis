@@ -39,15 +39,15 @@ describe('TierLadder', () => {
 })
 
 describe('tier palette', () => {
-  it('runs on the amber heat ramp — progression is temperature', () => {
+  it('runs on the D rank ladder — tiers read like ranks D→S', () => {
     // One family, coldest to hottest. Cyan stays system, emerald stays success
     // (R7), so neither can carry a tier.
     expect(TIERS.map((t) => t.color)).toEqual([
-      '#78350f',
-      '#b45309',
-      '#d97706',
-      '#f59e0b',
-      '#fbbf24',
+      '#94a3b8',
+      '#86efac',
+      '#7dd3fc',
+      '#c4b5fd',
+      '#fde68a',
     ])
   })
 
