@@ -49,7 +49,11 @@ export default async function BodyPage() {
             </p>
           </div>
         ) : null}
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div
+          tabIndex={0}
+          aria-label="Trendy měr za 8 týdnů"
+          className="focus-visible:ring-ring rounded-control flex gap-2 overflow-x-auto pb-2 focus-visible:ring-2 focus-visible:outline-none"
+        >
           <SparklineCard
             label="Váha"
             values={series('weightKg')}

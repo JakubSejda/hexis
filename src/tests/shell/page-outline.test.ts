@@ -19,6 +19,7 @@ const OUTSIDE_THE_SHELL = [
   'src/app/page.tsx',
   'src/app/(auth)/login/login-form.tsx',
   'src/components/shell/AppHeader.tsx',
+  'src/app/~offline/page.tsx',
 ]
 
 function sources(dir = resolve(root, 'src')): [string, string][] {

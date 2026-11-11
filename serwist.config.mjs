@@ -9,4 +9,6 @@ import { serwist } from '@serwist/next/config'
 export default serwist({
   swSrc: 'src/sw.ts',
   swDest: 'public/sw.js',
+  // Keep lazy giants (heic2any, ~1.3 MB) out of the install download; they cache on first use.
+  maximumFileSizeToCacheInBytes: 1024 * 1024,
 })

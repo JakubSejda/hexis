@@ -13,6 +13,8 @@ type Props = {
   height?: number
   tone?: Tone
   variant?: Variant
+  /** Accessible name; a progressbar without one is announced as just a number. */
+  label?: string
   className?: string
 }
 
@@ -33,6 +35,7 @@ export function ProgressBar({
   height = 8,
   tone = 'system',
   variant = 'default',
+  label = 'Postup',
   className,
 }: Props) {
   const pct = value != null && max != null && max > 0 ? Math.min((value / max) * 100, 100) : 0
@@ -42,6 +45,7 @@ export function ProgressBar({
       className={cn('bg-surface-raised overflow-hidden rounded-full', className)}
       style={{ height }}
       role="progressbar"
+      aria-label={label}
       aria-valuenow={value ?? undefined}
       aria-valuemax={max ?? undefined}
     >

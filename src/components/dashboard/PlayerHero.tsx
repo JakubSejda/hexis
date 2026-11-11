@@ -65,7 +65,13 @@ export function PlayerHero({
         </div>
       </div>
       <div className="relative mt-3">
-        <ProgressBar value={currentXp} max={maxXp} variant="xp" height={10} />
+        <ProgressBar
+          value={currentXp}
+          max={maxXp}
+          variant="xp"
+          height={10}
+          label={`XP do levelu ${level + 1}`}
+        />
         <div className="text-muted mt-1.5 flex justify-between text-xs font-semibold">
           <span>
             <b className="text-foreground">{nf.format(currentXp)}</b> / {nf.format(maxXp)} XP
