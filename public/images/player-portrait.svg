@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 390" width="330" height="390">
+  <defs>
+    <radialGradient id="aura" cx="165" cy="170" r="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.6"/>
+      <stop offset="0.45" stop-color="#2563eb" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#040814" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#15315f"/>
+      <stop offset="0.55" stop-color="#0a1a3a"/>
+      <stop offset="1" stop-color="#050b1c"/>
+    </linearGradient>
+    <linearGradient id="coat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1e40"/>
+      <stop offset="1" stop-color="#040814"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+
+  <rect width="330" height="390" fill="#040814"/>
+  <rect width="330" height="390" fill="url(#aura)"/>
+
+  <!-- coat and shoulders -->
+  <path d="M40 390 C46 320 82 292 130 280 L165 330 L200 280 C248 292 284 320 290 390 Z" fill="#38bdf8" opacity="0.5" filter="url(#soft)"/>
+  <path d="M40 390 C46 320 82 292 130 280 L165 330 L200 280 C248 292 284 320 290 390 Z" fill="url(#coat)" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M130 280 L118 312 L165 360 L212 312 L200 280" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- neck -->
+  <path d="M138 236 L138 284 L165 318 L192 284 L192 236 Z" fill="url(#skin)"/>
+
+  <!-- face -->
+  <path d="M110 150 C110 104 132 82 165 82 C198 82 220 104 220 150 C220 200 196 246 165 252 C134 246 110 200 110 150 Z" fill="url(#skin)"/>
+  <path d="M112 160 C116 204 136 240 165 252 C194 240 214 204 218 160" fill="none" stroke="#7dd3fc" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)" opacity="0.9"/>
+
+  <!-- hair -->
+  <path d="M100 162 L92 108 L118 118 L114 70 L142 98 L150 48 L170 92 L194 56 L198 100 L226 82 L222 126 L236 120 L228 170 C214 132 196 116 165 116 C134 116 116 132 100 162 Z"
+        fill="#0b1630" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M150 116 L138 150 L156 128 L162 160 L172 124 L190 148 L182 116 Z" fill="#0b1630"/>
+
+  <!-- eyes: the System's glow -->
+  <g filter="url(#glow)">
+    <path d="M128 168 L156 172 L150 178 L130 175 Z" fill="#e0f2fe"/>
+    <path d="M202 168 L174 172 L180 178 L200 175 Z" fill="#e0f2fe"/>
+  </g>
+  <g fill="#38bdf8" opacity="0.8">
+    <path d="M126 160 L158 166 L156 168 L126 163 Z"/>
+    <path d="M204 160 L172 166 L174 168 L204 163 Z"/>
+  </g>
+
+  <!-- particles -->
+  <g fill="#bae6fd" filter="url(#glow)">
+    <circle cx="50" cy="90" r="2"/><circle cx="282" cy="70" r="2.4"/><circle cx="300" cy="210" r="1.8"/>
+    <circle cx="30" cy="230" r="2"/><circle cx="250" cy="40" r="1.5"/>
+  </g>
+</svg>

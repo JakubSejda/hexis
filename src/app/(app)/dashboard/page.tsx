@@ -34,6 +34,9 @@ import { listPhotos } from '@/lib/queries/photos'
 import { toWeekStart } from '@/lib/week'
 import { levelToTierMeta, xpToProgress } from '@/lib/tiers'
 import { resolveTodayQuest } from '@/lib/today-quest'
+import { AttributeTiles } from '@/components/dashboard/AttributeTiles'
+import { computeAttributes } from '@/lib/attributes'
+import { fetchAttributeInputs } from '@/lib/queries/attributes'
 import { resolveWeekPeek } from '@/lib/week-peek'
 
 const nf = new Intl.NumberFormat('cs-CZ')
@@ -144,6 +147,7 @@ export default async function DashboardPage() {
   const userToday = resolveUserToday(reqHeaders.get('x-user-tz-offset'))
   const habitRows = await fetchActiveHabitsWithStreak(db, user.id, userToday)
   const dailyHabits = habitRows.filter((r) => r.cadence === 'daily')
+  const attributes = computeAttributes(await fetchAttributeInputs(db, user.id, today, userToday))
 
   const thisWeekRow = measurementsRows.find((m) => m.weekStart === thisWeekStart) ?? null
   const todayRow = todayNutrition.find((d) => d.date === todayDate) ?? null
@@ -202,6 +206,10 @@ export default async function DashboardPage() {
           <SideQuests items={sideQuests} />
         </section>
         <TodaysChecksCard dailyHabits={dailyHabits} />
+        <section>
+          <RegionHeader meta="rostou s tím, co zapisuješ">Atributy</RegionHeader>
+          <AttributeTiles attributes={attributes} />
+        </section>
         <section>
           <RegionHeader>Stav</RegionHeader>
           <TelemetryRow

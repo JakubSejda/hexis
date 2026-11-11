@@ -17,7 +17,7 @@ beforeEach(() => {
 describe('OnboardingWizard', () => {
   it('renders the welcome step first', () => {
     render(<OnboardingWizard />)
-    expect(screen.getByRole('heading', { name: 'Vítej v Hexis' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Tvoje probuzení začíná' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Pokračovat' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Přeskočit' })).toBeInTheDocument()
   })
@@ -28,7 +28,7 @@ describe('OnboardingWizard', () => {
     expect(screen.getByRole('heading', { name: 'Profil' })).toBeInTheDocument()
     expect(screen.getByLabelText('Jméno')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Zpět' }))
-    expect(screen.getByRole('heading', { name: 'Vítej v Hexis' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Tvoje probuzení začíná' })).toBeInTheDocument()
   })
 
   it('profile step saves filled fields via PUT /api/user/profile', async () => {
@@ -50,11 +50,11 @@ describe('OnboardingWizard', () => {
     expect(push).toHaveBeenCalledWith('/dashboard')
   })
 
-  it('final step: Otevřít Training completes and routes to /training', async () => {
+  it('final step: Vybrat první trénink completes and routes to /training', async () => {
     render(<OnboardingWizard />)
     await userEvent.click(screen.getByRole('button', { name: 'Pokračovat' }))
     await userEvent.click(screen.getByRole('button', { name: 'Pokračovat' }))
-    await userEvent.click(screen.getByRole('button', { name: 'Otevřít Training' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Vybrat první trénink' }))
     expect(fetch).toHaveBeenCalledWith('/api/user/onboarded', { method: 'POST' })
     expect(push).toHaveBeenCalledWith('/training')
   })

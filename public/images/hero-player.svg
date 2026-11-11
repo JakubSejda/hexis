@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 660" width="750" height="660">
+  <defs>
+    <radialGradient id="aura" cx="375" cy="290" r="370" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="0.3" stop-color="#2563eb" stop-opacity="0.5"/>
+      <stop offset="0.65" stop-color="#1e3a8a" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#040814" stop-opacity="0"/>
+    </radialGradient>
+    <!-- cylinder shading: dark flanks, lit centre -->
+    <linearGradient id="torso" x1="214" y1="0" x2="536" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#040a1a"/>
+      <stop offset="0.3" stop-color="#11285a"/>
+      <stop offset="0.5" stop-color="#1a3d7a"/>
+      <stop offset="0.7" stop-color="#11285a"/>
+      <stop offset="1" stop-color="#040a1a"/>
+    </linearGradient>
+    <linearGradient id="armL" x1="130" y1="0" x2="230" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1b4a8c"/>
+      <stop offset="0.45" stop-color="#0f2550"/>
+      <stop offset="1" stop-color="#030816"/>
+    </linearGradient>
+    <linearGradient id="armR" x1="620" y1="0" x2="520" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1b4a8c"/>
+      <stop offset="0.45" stop-color="#0f2550"/>
+      <stop offset="1" stop-color="#030816"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.55" stop-color="#040814" stop-opacity="0"/>
+      <stop offset="1" stop-color="#040814" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="head" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#060e22"/>
+      <stop offset="0.5" stop-color="#153264"/>
+      <stop offset="1" stop-color="#060e22"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="750" height="660" fill="#040814"/>
+  <rect width="750" height="660" fill="url(#aura)"/>
+
+  <!-- light shafts -->
+  <g stroke="#7dd3fc" stroke-linecap="round" opacity="0.28">
+    <line x1="110" y1="0" x2="190" y2="660" stroke-width="2"/>
+    <line x1="650" y1="0" x2="565" y2="660" stroke-width="2"/>
+    <line x1="40" y1="60" x2="120" y2="660" stroke-width="1"/>
+    <line x1="715" y1="40" x2="635" y2="660" stroke-width="1"/>
+  </g>
+
+  <!-- lightning -->
+  <g fill="none" stroke="#bae6fd" stroke-width="3" stroke-linejoin="round" filter="url(#glow)" opacity="0.85">
+    <polyline points="28,110 62,160 46,172 84,224 68,238 104,290"/>
+    <polyline points="722,100 688,150 704,162 666,214 682,228 646,280"/>
+  </g>
+
+  <!-- aura hugging the silhouette -->
+  <g fill="#38bdf8" opacity="0.6" filter="url(#soft)">
+    <path d="M300 255 C230 258 170 272 152 312 C140 340 134 380 132 420 L618 420 C616 380 610 340 598 312 C580 272 520 258 450 255 Z"/>
+    <ellipse cx="375" cy="150" rx="70" ry="80"/>
+  </g>
+
+  <!-- armpit shadow so the gap between arm and torso stays dark -->
+  <path d="M214 330 L232 660 L300 660 Z M536 330 L518 660 L450 660 Z" fill="#040814"/>
+
+  <!-- arms (behind the torso) -->
+  <path d="M296 260 C232 260 178 272 160 312 C144 350 138 420 138 480 L128 660 L210 660 L214 520 C216 450 222 404 228 372 L216 318 C222 292 250 270 296 260 Z" fill="url(#armL)"/>
+  <path d="M454 260 C518 260 572 272 590 312 C606 350 612 420 612 480 L622 660 L540 660 L536 520 C534 450 528 404 522 372 L534 318 C528 292 500 270 454 260 Z" fill="url(#armR)"/>
+
+  <!-- torso: V-taper -->
+  <path d="M350 212 C350 238 328 252 290 262 C252 272 226 286 216 318 L228 372 C248 462 284 562 298 660 L452 660 C466 562 502 462 522 372 L534 318 C524 286 498 272 460 262 C422 252 400 238 400 212 Z"
+        fill="url(#torso)" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- anatomy -->
+  <g fill="none" stroke-linecap="round">
+    <!-- spine groove: dark core, light edge -->
+    <path d="M375 250 C373 380 373 520 375 660" stroke="#040a1a" stroke-width="7" opacity="0.8"/>
+    <path d="M380 252 C378 380 378 520 380 660" stroke="#60a5fa" stroke-width="1.5" opacity="0.5"/>
+    <!-- trapezius -->
+    <path d="M300 262 C330 300 352 330 375 360 C398 330 420 300 450 262" stroke="#60a5fa" stroke-width="2.5" opacity="0.55"/>
+    <!-- scapulae -->
+    <path d="M292 300 C334 320 346 370 322 418 C312 436 296 444 280 446" stroke="#7dd3fc" stroke-width="3" opacity="0.6"/>
+    <path d="M458 300 C416 320 404 370 428 418 C438 436 454 444 470 446" stroke="#7dd3fc" stroke-width="3" opacity="0.6"/>
+    <!-- lats -->
+    <path d="M250 440 C292 486 326 540 342 620" stroke="#60a5fa" stroke-width="2.5" opacity="0.5"/>
+    <path d="M500 440 C458 486 424 540 408 620" stroke="#60a5fa" stroke-width="2.5" opacity="0.5"/>
+    <!-- deltoids -->
+    <path d="M176 300 C204 322 216 352 212 392" stroke="#93c5fd" stroke-width="2.5" opacity="0.6"/>
+    <path d="M574 300 C546 322 534 352 538 392" stroke="#93c5fd" stroke-width="2.5" opacity="0.6"/>
+    <!-- triceps -->
+    <path d="M168 420 C178 470 182 530 178 600" stroke="#60a5fa" stroke-width="2" opacity="0.45"/>
+    <path d="M582 420 C572 470 568 530 572 600" stroke="#60a5fa" stroke-width="2" opacity="0.45"/>
+  </g>
+
+  <!-- rim light on the outer contour -->
+  <g fill="none" stroke-linecap="round" filter="url(#glow)">
+    <path d="M128 620 L138 480 C138 420 144 350 160 312 C178 272 232 260 296 260 C330 252 350 238 350 214" stroke="#bae6fd" stroke-width="4"/>
+    <path d="M622 620 L612 480 C612 420 606 350 590 312 C572 272 518 260 454 260 C420 252 400 238 400 214" stroke="#bae6fd" stroke-width="4"/>
+  </g>
+
+  <!-- head -->
+  <ellipse cx="375" cy="150" rx="56" ry="66" fill="url(#head)"/>
+  <path d="M322 160 C320 192 334 214 356 222" fill="none" stroke="#bae6fd" stroke-width="3.5" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M428 160 C430 192 416 214 394 222" fill="none" stroke="#bae6fd" stroke-width="3.5" stroke-linecap="round" filter="url(#glow)"/>
+  <!-- hair -->
+  <path d="M312 176 L284 132 L318 136 L300 90 L338 108 L336 58 L364 96 L376 40 L392 92 L420 54 L420 104 L456 86 L440 132 L470 130 L438 176 C430 140 408 120 375 120 C342 120 320 140 312 176 Z"
+        fill="#081228" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow)"/>
+  <g fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round">
+    <path d="M346 96 L362 140"/><path d="M398 92 L388 140"/><path d="M322 132 L346 152"/><path d="M430 128 L406 150"/>
+  </g>
+
+  <!-- floor fade so the art melts into the page -->
+  <rect width="750" height="660" fill="url(#fade)"/>
+
+  <!-- particles -->
+  <g fill="#e0f2fe" filter="url(#glow)">
+    <circle cx="232" cy="186" r="3"/><circle cx="528" cy="166" r="2.6"/><circle cx="630" cy="390" r="2"/>
+    <circle cx="100" cy="300" r="2.5"/><circle cx="478" cy="74" r="2"/><circle cx="270" cy="70" r="1.8"/>
+    <circle cx="676" cy="480" r="2.2"/><circle cx="70" cy="450" r="2"/><circle cx="570" cy="230" r="1.6"/>
+    <circle cx="190" cy="120" r="1.5"/><circle cx="600" cy="110" r="1.8"/>
+  </g>
+</svg>

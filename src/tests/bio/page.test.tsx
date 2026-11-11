@@ -3,6 +3,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vites
 import { eq, like, inArray } from 'drizzle-orm'
 import { render, screen } from '@testing-library/react'
 
+vi.mock('next/headers', () => ({ headers: async () => new Headers() }))
 vi.mock('@/lib/auth-helpers', () => ({
   requireSessionUser: vi.fn(),
 }))
