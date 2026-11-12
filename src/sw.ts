@@ -16,6 +16,15 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: defaultCache,
+  // Pages that cannot load without a network land on a Czech offline screen.
+  fallbacks: {
+    entries: [
+      {
+        url: '/~offline',
+        matcher: ({ request }) => request.destination === 'document',
+      },
+    ],
+  },
 })
 
 // ─── Rest Timer Notification ──────────────────────────────────
@@ -28,7 +37,7 @@ self.addEventListener('message', (event) => {
   if (data.type === 'REST_TIMER_START' && typeof data.durationSec === 'number') {
     if (restTimerTimeout) clearTimeout(restTimerTimeout)
     restTimerTimeout = setTimeout(() => {
-      self.registration.showNotification('Hexis — Rest Timer', {
+      self.registration.showNotification('Hexis — pauza skončila', {
         body: 'Čas na další sérii!',
         icon: '/icons/icon-192.png',
         tag: 'rest-timer',

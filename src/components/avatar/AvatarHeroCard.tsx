@@ -28,7 +28,13 @@ export function AvatarHeroCard({ level, tierMeta, totalXp, progress }: Props) {
           {tierMeta.levelMax === 999 ? '∞' : tierMeta.levelMax})
         </div>
         <div className="mt-2 w-full max-w-md">
-          <ProgressBar value={progress.current} max={progress.max} variant="xp" height={10} />
+          <ProgressBar
+            value={progress.current}
+            max={progress.max}
+            variant="xp"
+            height={10}
+            label={`XP do levelu ${level + 1}`}
+          />
           <div className="text-muted font-display mt-1 flex justify-between text-xs">
             <span>{totalXp.toLocaleString('cs-CZ')} XP</span>
             <span>

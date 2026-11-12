@@ -1,7 +1,18 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { authLoginLimiter } from '@/lib/ratelimit'
 
-export function middleware(req: NextRequest) {
+function originOf(url: string | undefined): string | null {
+  if (!url) return null
+  try {
+    return new URL(url).origin
+  } catch {
+    return null
+  }
+}
+
+const SENTRY_ORIGIN = originOf(process.env.NEXT_PUBLIC_SENTRY_DSN)
+
+export function proxy(req: NextRequest) {
   // 1) Rate limit for credentials callback
   if (req.nextUrl.pathname === '/api/auth/callback/credentials' && req.method === 'POST') {
     const ip =
@@ -34,15 +45,17 @@ export function middleware(req: NextRequest) {
     res.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
   }
 
-  // CSP — permissive for dev; tighten in Phase 2
+  // CSP. eval only for the dev server's HMR; the Sentry ingest host must be
+  // reachable or client-side errors never leave the browser.
+  const dev = process.env.NODE_ENV !== 'production'
   res.headers.set(
     'Content-Security-Policy',
     [
       "default-src 'self'",
       "img-src 'self' data: blob:",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next.js dev requires
+      `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ''}`,
       "style-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
+      ['connect-src', "'self'", SENTRY_ORIGIN].filter(Boolean).join(' '),
       "font-src 'self' data:",
       "object-src 'none'",
       "base-uri 'self'",
@@ -53,6 +66,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Middleware runs on all routes except static assets
+  // Runs on all routes except static assets
   matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.svg).*)'],
 }
