@@ -1,9 +1,8 @@
-import path from 'node:path'
 import type { NextConfig } from 'next'
 
 // A stray lockfile higher up (e.g. on the Desktop) makes Next guess the wrong
 // workspace root, which breaks the standalone bundle's file tracing.
-const root = path.resolve(__dirname)
+const root = process.cwd()
 
 const nextConfig: NextConfig = {
   // Minimal self-contained server bundle for the production Docker image.
