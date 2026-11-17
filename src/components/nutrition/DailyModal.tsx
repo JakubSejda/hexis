@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import { Button, NumberInput, ProgressBar, Sheet, Textarea } from '@/components/ui'
 import { classifyDay, classifyMacro } from '@/lib/nutrition-classify'
 import { useXpFeedback } from '@/components/xp/XpFeedbackProvider'
@@ -198,11 +198,15 @@ function Field({
   max: number
   onChange: (v: number | null) => void
 }) {
+  const id = useId()
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-muted text-xs">{label}</span>
+        <label htmlFor={id} className="text-muted text-xs">
+          {label}
+        </label>
         <NumberInput
+          id={id}
           value={value}
           onChange={onChange}
           step={1}
@@ -211,7 +215,7 @@ function Field({
           suffix={target ? ` / ${target} ${unit}` : ` ${unit}`}
         />
       </div>
-      <ProgressBar value={value} max={target} tone={tone} />
+      <ProgressBar value={value} max={target} tone={tone} label={`${label} vůči cíli`} />
     </div>
   )
 }
@@ -227,10 +231,21 @@ function SimpleMacro({
   max: number
   onChange: (v: number | null) => void
 }) {
+  const id = useId()
   return (
     <div>
-      <div className="text-muted text-xs">{label}</div>
-      <NumberInput value={value} onChange={onChange} step={1} min={0} max={max} suffix=" g" />
+      <label htmlFor={id} className="text-muted text-xs">
+        {label}
+      </label>
+      <NumberInput
+        id={id}
+        value={value}
+        onChange={onChange}
+        step={1}
+        min={0}
+        max={max}
+        suffix=" g"
+      />
     </div>
   )
 }
