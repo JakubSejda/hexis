@@ -1,7 +1,8 @@
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { mkdir, unlink } from 'node:fs/promises'
 
-const UPLOADS_ROOT = join(process.cwd(), 'uploads')
+// STORAGE_ROOT points at persistent storage outside the app folder (Docker volume, hosting home dir).
+const UPLOADS_ROOT = resolve(process.env.STORAGE_ROOT ?? 'uploads')
 
 export function photoPath(storageKey: string): string {
   return join(UPLOADS_ROOT, `${storageKey}.jpg`)
