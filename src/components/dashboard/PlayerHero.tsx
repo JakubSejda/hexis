@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ProgressBar } from '@/components/ui'
-import { RankLens } from './RankLens'
+import { RankLens, tierTone } from './RankLens'
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V'] as const
 
@@ -52,6 +52,7 @@ export function PlayerHero({
       <RankLens
         label={ROMAN[tier - 1] ?? String(tier)}
         title={`Tier ${tierName}`}
+        tone={tierTone(tier)}
         className="absolute top-3 right-4"
       />
       <div className="relative flex items-end justify-between">

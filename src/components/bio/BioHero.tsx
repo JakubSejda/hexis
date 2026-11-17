@@ -2,7 +2,7 @@ import Image from 'next/image'
 import type { Tier } from '@/lib/tiers'
 import { daysSince } from '@/lib/bio-day-count'
 
-import { RankLens } from '@/components/dashboard/RankLens'
+import { RankLens, tierTone } from '@/components/dashboard/RankLens'
 import { Pill } from '@/components/ui'
 const ROMAN = ['I', 'II', 'III', 'IV', 'V'] as const
 
@@ -38,7 +38,11 @@ export function BioHero({ name, tier, tierName, level, startedAt, today }: Props
           <Pill variant="accent" size="md" className="font-display font-black">
             LVL {level}
           </Pill>
-          <RankLens label={ROMAN[tier - 1] ?? String(tier)} title={`Tier ${tierName}`} />
+          <RankLens
+            label={ROMAN[tier - 1] ?? String(tier)}
+            title={`Tier ${tierName}`}
+            tone={tierTone(tier)}
+          />
         </div>
       </div>
       <div className="px-4 pb-4">
