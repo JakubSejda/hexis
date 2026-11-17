@@ -9,8 +9,26 @@ vi.mock('@/lib/sw-rest-timer', () => ({
 
 import { restTimerStore } from '@/lib/rest-timer'
 
+// Node 25 ships its own half-initialised global localStorage that shadows jsdom's (CI runs Node 25).
+function memoryStorage(): Storage {
+  const m = new Map<string, string>()
+  return {
+    get length() {
+      return m.size
+    },
+    clear: () => m.clear(),
+    getItem: (k) => m.get(k) ?? null,
+    key: (i) => [...m.keys()][i] ?? null,
+    removeItem: (k) => void m.delete(k),
+    setItem: (k, v) => void m.set(k, String(v)),
+  }
+}
+
 describe('restTimerStore.getSnapshot', () => {
   beforeEach(() => {
+    const storage = memoryStorage()
+    vi.stubGlobal('localStorage', storage)
+    Object.defineProperty(window, 'localStorage', { value: storage, configurable: true })
     restTimerStore.stop()
   })
 
