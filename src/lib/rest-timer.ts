@@ -14,12 +14,19 @@ export type TimerState = {
 type Listener = () => void
 const listeners = new Set<Listener>()
 
+// useSyncExternalStore needs a stable snapshot: re-parsing would hand React a
+// new object on every read and loop the render forever while a timer runs.
+let cachedRaw: string | null = null
+let cachedState: TimerState = null
+
 function readStorage(): TimerState {
   if (typeof window === 'undefined') return null
   try {
     const raw = window.localStorage.getItem(KEY)
     if (!raw) return null
-    const parsed = JSON.parse(raw) as TimerState
+    const parsed = raw === cachedRaw ? cachedState : (JSON.parse(raw) as TimerState)
+    cachedRaw = raw
+    cachedState = parsed
     if (!parsed) return null
     // expired? clean up
     if (Date.now() > parsed.startedAt + parsed.durationMs) {
