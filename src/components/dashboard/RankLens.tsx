@@ -11,6 +11,11 @@ const TONE: Record<LensTone, string> = {
   system: 'text-system',
 }
 
+/** Tiers 1–5 read like ranks D→S, so they share the rank colours. */
+const TIER_TONE: readonly LensTone[] = ['d', 'c', 'b', 'a', 's']
+export const tierTone = (tier: number): LensTone => TIER_TONE[tier - 1] ?? 'system'
+export const TONE_TEXT = TONE
+
 const SIZE = { sm: 'h-12 w-11 text-lg', md: 'h-14 w-[3.25rem] text-2xl' } as const
 
 /** Hexagonal lens for ranks and tiers — the one shape that stays angular in D. */

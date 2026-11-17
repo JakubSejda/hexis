@@ -1,5 +1,6 @@
 import { TierBadge } from './TierBadge'
 import { Card, Heading } from '@/components/ui'
+import { TONE_TEXT, tierTone } from '@/components/dashboard/RankLens'
 import { nextTierMeta } from '@/lib/tiers'
 
 type Props = { currentLevel: number; totalXp: number }
@@ -16,10 +17,12 @@ export function NextTierPreview({ currentLevel, totalXp }: Props) {
       <div className="flex items-center gap-3">
         <TierBadge tier={next.tier} size={64} dim />
         <div>
-          <div className="text-lg font-bold" style={{ color: next.color }}>
+          <div
+            className={`font-display text-lg font-black uppercase ${TONE_TEXT[tierTone(next.tier)]}`}
+          >
             {next.name}
           </div>
-          <div className="text-muted text-xs">Odemkneš v Level {next.levelMin}</div>
+          <div className="text-muted text-xs">Odemkneš na levelu {next.levelMin}</div>
           <div className="text-muted text-xs">
             Zbývá {Math.max(0, xpNeeded).toLocaleString('cs-CZ')} XP
           </div>

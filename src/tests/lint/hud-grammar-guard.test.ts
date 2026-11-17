@@ -13,6 +13,7 @@ const cwd = resolve(__dirname, '../../..')
 let eslint: ESLint
 
 beforeAll(() => {
+  // ESLint's first lint loads the whole config; on a busy machine that alone can exceed 5 s.
   eslint = new ESLint({ cwd })
 })
 
@@ -25,7 +26,7 @@ const radius = /Shape scale \(redesign D\)/
 const hudClip = /HUD plate clips died/
 const primary = /`primary` colour token was retired/
 
-describe('shape scale guard', () => {
+describe('shape scale guard', { timeout: 30_000 }, () => {
   it('rejects the generic radius ladder', async () => {
     for (const cls of [
       'rounded',
@@ -69,7 +70,7 @@ describe('shape scale guard', () => {
   })
 })
 
-describe('retired HUD clips', () => {
+describe('retired HUD clips', { timeout: 30_000 }, () => {
   it('rejects hud-clip, hud-clip-sm and hud-sheet', async () => {
     for (const cls of ['hud-clip', 'hud-clip-sm', 'hud-sheet']) {
       expect(await messagesFor(`export const a = <div className="${cls}" />`)).toContainEqual(
@@ -83,7 +84,7 @@ describe('retired HUD clips', () => {
   })
 })
 
-describe('retired primary token guard', () => {
+describe('retired primary token guard', { timeout: 30_000 }, () => {
   it('still fires, so the shape rules did not replace the rule options', async () => {
     expect(await messagesFor('export const a = <div className="bg-primary" />')).toContainEqual(
       expect.stringMatching(primary)

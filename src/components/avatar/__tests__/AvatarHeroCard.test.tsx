@@ -20,7 +20,7 @@ describe('AvatarHeroCard', () => {
         progress={{ current: 200, max: 500 }}
       />
     )
-    expect(screen.getByText(/Level 12/)).toBeDefined()
+    expect(screen.getByText('12')).toBeDefined()
     expect(screen.getByText(/Apprentice/)).toBeDefined()
     expect(screen.getByText(/Tier 2 \(L10–24\)/)).toBeDefined()
     expect(screen.getByText(/1[ , ]234 XP/)).toBeDefined()

@@ -1,17 +1,22 @@
 /**
  * Client-side Sentry. NEXT_PUBLIC_SENTRY_DSN is inlined AT BUILD TIME —
  * changing it requires an image rebuild (see docs/deploy-runbook.md).
- * Without the DSN this whole file is a no-op.
+ * The SDK is imported lazily so a build without the DSN never loads it.
  */
-import * as Sentry from '@sentry/nextjs'
+type SentryModule = typeof import('@sentry/nextjs')
 
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN
+let sentry: SentryModule | null = null
 
 if (dsn) {
-  Sentry.init({
-    dsn,
-    tracesSampleRate: 0,
+  void import('@sentry/nextjs').then((mod) => {
+    mod.init({ dsn, tracesSampleRate: 0 })
+    sentry = mod
   })
 }
 
-export const onRouterTransitionStart = dsn ? Sentry.captureRouterTransitionStart : () => {}
+export function onRouterTransitionStart(
+  ...args: Parameters<SentryModule['captureRouterTransitionStart']>
+): void {
+  sentry?.captureRouterTransitionStart(...args)
+}

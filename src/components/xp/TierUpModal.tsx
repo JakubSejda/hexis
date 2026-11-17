@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { HexEmblem } from '@/components/dashboard/HexEmblem'
 import { Button } from '@/components/ui'
+import { TONE_TEXT, tierTone } from '@/components/dashboard/RankLens'
 import { TIERS, type Tier } from '@/lib/tiers'
 
 type Props = { levelAfter: number; tier: Tier; onDismiss: () => void }
@@ -39,8 +40,7 @@ export function TierUpModal({ levelAfter, tier, onDismiss }: Props) {
             Nový tier odemčen
           </div>
           <div
-            className="font-display mt-2 text-3xl font-black uppercase"
-            style={{ color: meta.color }}
+            className={`font-display mt-2 text-3xl font-black uppercase ${TONE_TEXT[tierTone(tier)]}`}
           >
             {meta.name}
           </div>
