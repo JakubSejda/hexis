@@ -15,7 +15,7 @@ import {
 import { auth } from '@/lib/auth'
 import { XP_DELTAS } from '@/lib/xp-events'
 import { TIERS } from '@/lib/tiers'
-import { Button, Card, Container, ProgressBar, cn } from '@/components/ui'
+import { Button, Card, Container, Heading, ProgressBar, cn } from '@/components/ui'
 import { RankLens, TONE_TEXT, tierTone } from '@/components/dashboard/RankLens'
 
 /**
@@ -111,12 +111,13 @@ function SectionTitle({
   return (
     <div className="max-w-2xl">
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2
+      <Heading
+        level={2}
         id={id}
         className="font-display mt-3 text-3xl leading-[1.05] font-black uppercase sm:text-4xl"
       >
         {title}
-      </h2>
+      </Heading>
       {lead && <p className="text-muted-strong mt-4 text-base leading-relaxed">{lead}</p>}
     </div>
   )
@@ -134,10 +135,13 @@ function Hero() {
             <span aria-hidden className="bg-accent animate-hud-pulse h-1.5 w-1.5 rounded-full" />
             Uzavřená beta
           </span>
-          <h1 className="font-display mt-5 text-[2.2rem] leading-[0.95] font-black uppercase sm:text-6xl md:text-[3.25rem] lg:text-7xl">
+          <Heading
+            level={1}
+            className="font-display mt-5 text-[2.2rem] leading-[0.95] font-black uppercase sm:text-6xl md:text-[3.25rem] lg:text-7xl"
+          >
             Z&nbsp;tréninku <br />
             se stane <span className="text-accent hero-level">hra</span>
-          </h1>
+          </Heading>
           <p className="text-muted-strong mt-5 max-w-md text-base leading-relaxed sm:text-lg">
             Hexis promění každou sérii, jídlo i&nbsp;návyk v&nbsp;XP. Tvoje postava roste
             s&nbsp;tebou: level, tier a&nbsp;čtyři atributy, které nejdou ošidit.
@@ -278,7 +282,9 @@ function Attributes() {
                   )}
                 />
               </div>
-              <h3 className="mt-4 text-sm font-bold">{a.label}</h3>
+              <Heading level={3} className="mt-4 text-sm font-bold">
+                {a.label}
+              </Heading>
               <p className="text-muted-strong mt-1 text-sm leading-relaxed">{a.text}</p>
             </Card>
           ))}
@@ -322,7 +328,9 @@ function HowItWorks() {
                 <span className="font-display text-accent hero-level text-5xl leading-none font-black">
                   {s.n}
                 </span>
-                <h3 className="font-display mt-5 text-xl font-black uppercase">{s.title}</h3>
+                <Heading level={3} className="font-display mt-5 text-xl font-black uppercase">
+                  {s.title}
+                </Heading>
                 <p className="text-muted-strong mt-2 text-sm leading-relaxed">{s.text}</p>
               </Card>
             </li>
@@ -464,7 +472,9 @@ function Features() {
                 <span className="bg-system-soft text-system grid h-10 w-10 place-items-center rounded-full">
                   <Icon aria-hidden size={20} />
                 </span>
-                <h3 className="mt-4 text-base font-bold">{title}</h3>
+                <Heading level={3} className="mt-4 text-base font-bold">
+                  {title}
+                </Heading>
                 <p className="text-muted-strong mt-1.5 text-sm leading-relaxed">{text}</p>
               </Card>
             </li>
@@ -489,9 +499,13 @@ function Pwa() {
               <Smartphone aria-hidden size={30} />
             </span>
             <div>
-              <h2 id="pwa-title" className="font-display text-2xl font-black uppercase sm:text-3xl">
+              <Heading
+                level={2}
+                id="pwa-title"
+                className="font-display text-2xl font-black uppercase sm:text-3xl"
+              >
                 Na plochu jako aplikace
-              </h2>
+              </Heading>
               <p className="text-muted-strong mt-3 max-w-2xl text-base leading-relaxed">
                 Hexis si přidáš na plochu telefonu bez obchodu s&nbsp;aplikacemi. Spouští se na
                 celou obrazovku, drží se i&nbsp;při slabém signálu v&nbsp;posilovně a&nbsp;data si
@@ -513,12 +527,13 @@ function FinalCta() {
     >
       <span aria-hidden className="hero-glow absolute inset-0" />
       <Container size="md" className="relative">
-        <h2
+        <Heading
+          level={2}
           id="cta-title"
           className="font-display text-4xl leading-none font-black uppercase sm:text-5xl"
         >
           Level 1 <span className="text-accent hero-level">čeká</span>
-        </h2>
+        </Heading>
         <p className="text-muted-strong mx-auto mt-4 max-w-md text-base leading-relaxed">
           Máš od nás účet? Přihlas se a&nbsp;zapiš první sérii. Prvních {XP_DELTAS.session_complete}{' '}
           XP je na jeden trénink.
