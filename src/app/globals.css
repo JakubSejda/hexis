@@ -140,6 +140,10 @@ body {
 .hero-art {
   mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
 }
+/* Landing hero: no page edge to sit on, so the art fades out on every side. */
+.landing-art {
+  mask-image: radial-gradient(60% 58% at 50% 42%, #000 55%, transparent 100%);
+}
 .hero-glow {
   background: radial-gradient(
     55% 45% at 30% 78%,
