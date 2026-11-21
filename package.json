@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build && serwist build serwist.config.mjs",
-    "build:hostinger": "npm run db:migrate && npm run db:seed && tsx scripts/ensure-owner.ts && npm run build",
+    "build:hostinger": "npm run db:migrate && npm run db:seed && tsx scripts/ensure-owner.ts && npm run build:webpack",
+    "build:webpack": "next build --webpack && serwist build serwist.config.mjs",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
